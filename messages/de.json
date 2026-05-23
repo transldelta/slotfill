@@ -53,6 +53,44 @@
     "clearConfirm": "Gesamte Warteliste wirklich leeren?",
     "since": "Auf Liste seit"
   },
+  "appointments": {
+    "title": "Termine",
+    "newAppointment": "Neuen Termin anlegen",
+    "all": "Alle",
+    "scheduled": "Geplant",
+    "cancelled": "Ausgefallen",
+    "filled": "Gefüllt",
+    "noAppointments": "Noch keine Termine vorhanden.",
+    "cancelConfirm": "Termin als ausgefallen markieren? Dadurch wird eine Terminlücke erzeugt.",
+    "created": "Termin erfolgreich angelegt.",
+    "createError": "Fehler beim Anlegen des Termins.",
+    "cancelledSuccess": "Termin wurde als ausgefallen markiert.",
+    "filledSuccess": "Termin wurde als gefüllt markiert.",
+    "dateLabel": "Datum & Uhrzeit",
+    "patientLabel": "Patient",
+    "notifyWaitlist": "Warteliste benachrichtigen"
+  },
+  "notification": {
+    "title": "Benachrichtigungen",
+    "notificationsPrepared": "Benachrichtigungen wurden vorbereitet.",
+    "waitlistEmpty": "Keine Patienten auf der Warteliste.",
+    "previewLinks": "Vorschau der generierten Links",
+    "sendError": "Fehler beim Vorbereiten der Benachrichtigungen.",
+    "whatsappPlaceholder": "WhatsApp-Versand wird in Schritt 5 aktiviert."
+  },
+  "fill": {
+    "title": "Termin verfügbar",
+    "practice": "Praxis",
+    "date": "Termin",
+    "expires": "Link gültig bis",
+    "claimButton": "Ich nehme den Termin",
+    "claimSuccess": "Termin erfolgreich gebucht! Die Praxis wird sich mit Ihnen in Verbindung setzen.",
+    "claimError": "Fehler bei der Buchung.",
+    "linkExpired": "Dieser Link ist leider abgelaufen.",
+    "linkAlreadyClaimed": "Dieser Termin wurde bereits vergeben.",
+    "loading": "Termin wird geladen...",
+    "retry": "Erneut versuchen"
+  },
   "errors": {
     "practiceNotFound": "Es konnte keine Praxis für dein Konto gefunden werden.",
     "validationError": "Die eingegebenen Daten sind ungültig.",

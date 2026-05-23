@@ -181,7 +181,7 @@ export default function AppointmentsPage() {
       {loading && (
         <div className="space-y-2">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-12 w-full animate-pulse rounded bg-gray-200" />
+            <div key={i} className="h-12 w-full animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
           ))}
         </div>
       )}

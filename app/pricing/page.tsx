@@ -85,7 +85,7 @@ export default function PricingPage() {
       {loading && (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="h-80 animate-pulse rounded-xl bg-gray-200" />
+            <div key={i} className="h-80 animate-pulse rounded-xl bg-gray-200 dark:bg-gray-700" />
           ))}
         </div>
       )}

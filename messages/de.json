@@ -1,0 +1,34 @@
+{
+  "auth": {
+    "loginTitle": "Anmelden",
+    "registerTitle": "Registrieren",
+    "nameLabel": "Name der Praxis",
+    "emailLabel": "E‑Mail‑Adresse",
+    "passwordLabel": "Passwort",
+    "loginButton": "Anmelden",
+    "registerButton": "Konto erstellen",
+    "forgotPassword": "Passwort vergessen?",
+    "resetPassword": "Passwort zurücksetzen",
+    "passwordResetSent": "Falls ein Konto mit dieser E‑Mail existiert, wurde ein Link gesendet.",
+    "invalidCredentials": "E‑Mail oder Passwort ungültig.",
+    "emailTaken": "Diese E‑Mail wird bereits verwendet.",
+    "registrationSuccess": "Konto erfolgreich erstellt. Du kannst dich jetzt anmelden.",
+    "logout": "Abmelden"
+  },
+  "dashboard": {
+    "welcome": "Willkommen, {praxisName}",
+    "overview": "Übersicht",
+    "patients": "Patienten",
+    "waitlist": "Warteliste",
+    "appointments": "Termine",
+    "notifications": "Benachrichtigungen",
+    "settings": "Einstellungen",
+    "subscription": "Abo"
+  },
+  "common": {
+    "loading": "Lädt...",
+    "error": "Ein Fehler ist aufgetreten.",
+    "save": "Speichern",
+    "cancel": "Abbrechen"
+  }
+}

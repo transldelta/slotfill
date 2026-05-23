@@ -1,5 +1,14 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import {
+  Bell,
+  Calendar,
+  CreditCard,
+  LayoutDashboard,
+  ListChecks,
+  Settings,
+  Users,
+} from "lucide-react";
 import { createClient, createServerClient } from "@/lib/supabase";
 import { getTranslations } from "@/lib/i18n";
 import { LogoutButton } from "./logout-button";
@@ -31,13 +40,13 @@ export default async function DashboardLayout({
   const practiceName = practice?.name ?? "";
 
   const navItems = [
-    { href: "/dashboard", label: t("dashboard.overview") },
-    { href: "/dashboard/patients", label: t("dashboard.patients") },
-    { href: "/dashboard/waitlist", label: t("dashboard.waitlist") },
-    { href: "/dashboard/appointments", label: t("dashboard.appointments") },
-    { href: "/dashboard/notifications", label: t("dashboard.notifications") },
-    { href: "/dashboard/subscription", label: t("dashboard.subscription") },
-    { href: "/dashboard/settings", label: t("dashboard.settings") },
+    { href: "/dashboard", label: t("dashboard.overview"), icon: LayoutDashboard },
+    { href: "/dashboard/patients", label: t("dashboard.patients"), icon: Users },
+    { href: "/dashboard/waitlist", label: t("dashboard.waitlist"), icon: ListChecks },
+    { href: "/dashboard/appointments", label: t("dashboard.appointments"), icon: Calendar },
+    { href: "/dashboard/notifications", label: t("dashboard.notifications"), icon: Bell },
+    { href: "/dashboard/subscription", label: t("dashboard.subscription"), icon: CreditCard },
+    { href: "/dashboard/settings", label: t("dashboard.settings"), icon: Settings },
   ];
 
   return (
@@ -49,8 +58,9 @@ export default async function DashboardLayout({
             <Link
               key={item.href}
               href={item.href}
-              className="rounded-md px-3 py-2 text-sm transition hover:bg-secondary"
+              className="flex items-center gap-2 rounded-md px-3 py-2 text-sm transition hover:bg-secondary"
             >
+              <item.icon className="h-4 w-4" />
               {item.label}
             </Link>
           ))}

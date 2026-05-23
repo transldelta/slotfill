@@ -80,6 +80,10 @@ export default function AppointmentsPage() {
       body: JSON.stringify({ appointment_id: appointment.id }),
     });
     const data = await res.json().catch(() => null);
+    if (data?.code === "LIMIT_REACHED") {
+      toast.error(t("subscription.limitReached"));
+      return;
+    }
     if (!res.ok || !data) {
       toast.error(t("notification.sendError"));
       return;

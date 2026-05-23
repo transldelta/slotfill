@@ -40,11 +40,13 @@ export async function createPatient(formData: FormData): Promise<ActionResult> {
     return { error: "VALIDATION_ERROR" };
   }
   const { name, phone, notes } = parsed.data;
+  const whatsappOptIn = formData.get("whatsapp_opt_in") === "on";
 
   const { patient, error } = await insertPatient(ctx.admin, ctx.practiceId, {
     name,
     phone,
     notes,
+    whatsappOptIn,
   });
   if (error || !patient) {
     console.error("[createPatient] Supabase-Insert fehlgeschlagen:", error);

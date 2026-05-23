@@ -41,13 +41,19 @@ function isMissingColumn(error: PostgrestError, column: string): boolean {
 export async function insertPatient(
   admin: SupabaseClient,
   practiceId: string,
-  input: { name: string; phone: string; notes?: string | null },
+  input: {
+    name: string;
+    phone: string;
+    notes?: string | null;
+    whatsappOptIn?: boolean;
+  },
 ): Promise<{ patient?: PatientDTO; error?: PostgrestError }> {
   const base = {
     practice_id: practiceId,
     first_name: input.name,
     last_name: "",
     phone: input.phone,
+    whatsapp_opt_in: input.whatsappOptIn ?? false,
   };
 
   let result = await admin

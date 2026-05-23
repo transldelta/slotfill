@@ -2,9 +2,12 @@
 
 import { z } from "zod";
 import { getCurrentPractice } from "@/lib/practice";
+import { insertPatient } from "@/lib/patients";
 
 export type ActionResult = {
   success?: boolean;
+  // Maschinenlesbarer Fehlercode; die deutschen Texte kommen im Frontend
+  // aus messages/de.json.
   error?: string;
 };
 
@@ -19,8 +22,10 @@ const patientSchema = z.object({
 // Die practice_id wird IMMER serverseitig aus der Session ermittelt.
 export async function createPatient(formData: FormData): Promise<ActionResult> {
   const ctx = await getCurrentPractice();
-  if (!ctx) return { error: "unauthorized" };
-  const { admin, practiceId } = ctx;
+  if (!ctx) {
+    console.error("[createPatient] Keine Praxis für den aktuellen Benutzer gefunden.");
+    return { error: "PRACTICE_NOT_FOUND" };
+  }
 
   const parsed = patientSchema.safeParse({
     name: formData.get("name"),
@@ -28,18 +33,23 @@ export async function createPatient(formData: FormData): Promise<ActionResult> {
     notes: formData.get("notes") ?? "",
   });
   if (!parsed.success) {
-    return { error: "invalid" };
+    console.error(
+      "[createPatient] Validierung fehlgeschlagen:",
+      parsed.error.flatten().fieldErrors,
+    );
+    return { error: "VALIDATION_ERROR" };
   }
   const { name, phone, notes } = parsed.data;
 
-  const { error } = await admin.from("patients").insert({
-    practice_id: practiceId,
-    first_name: name,
-    last_name: "",
+  const { patient, error } = await insertPatient(ctx.admin, ctx.practiceId, {
+    name,
     phone,
-    notes: notes || null,
+    notes,
   });
-  if (error) return { error: "db" };
+  if (error || !patient) {
+    console.error("[createPatient] Supabase-Insert fehlgeschlagen:", error);
+    return { error: "DATABASE_INSERT_FAILED" };
+  }
 
   return { success: true };
 }

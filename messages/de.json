@@ -25,10 +25,40 @@
     "settings": "Einstellungen",
     "subscription": "Abo"
   },
+  "patients": {
+    "title": "Patienten",
+    "newPatient": "Neuen Patienten anlegen",
+    "editPatient": "Patient bearbeiten",
+    "nameLabel": "Name",
+    "phoneLabel": "Telefonnummer",
+    "notesLabel": "Notizen",
+    "noPatients": "Noch keine Patienten vorhanden.",
+    "deleteConfirm": "Patient wirklich löschen?",
+    "search": "Suchen...",
+    "actions": "Aktionen",
+    "delete": "Löschen",
+    "save": "Speichern",
+    "created": "Patient wurde angelegt.",
+    "invalidPhone": "Bitte eine gültige Telefonnummer im Format +49… eingeben."
+  },
+  "waitlist": {
+    "title": "Warteliste",
+    "addToWaitlist": "Zur Warteliste",
+    "removeFromWaitlist": "Von Warteliste entfernen",
+    "noWaitlist": "Keine Patienten auf der Warteliste.",
+    "addedToWaitlist": "Patient wurde zur Warteliste hinzugefügt.",
+    "removedFromWaitlist": "Patient wurde von der Warteliste entfernt.",
+    "onWaitlist": "Auf Warteliste",
+    "clearWaitlist": "Warteliste leeren",
+    "clearConfirm": "Gesamte Warteliste wirklich leeren?",
+    "since": "Auf Liste seit"
+  },
   "common": {
     "loading": "Lädt...",
     "error": "Ein Fehler ist aufgetreten.",
+    "retry": "Erneut versuchen",
     "save": "Speichern",
-    "cancel": "Abbrechen"
+    "cancel": "Abbrechen",
+    "noResults": "Keine Ergebnisse gefunden."
   }
 }

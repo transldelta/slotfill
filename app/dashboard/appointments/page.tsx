@@ -19,6 +19,7 @@ type Filter = "all" | "scheduled" | "cancelled" | "filled";
 
 type PreparedLinks = {
   count: number;
+  delivered: number;
   links: { slug: string; patient_id: string }[];
 };
 
@@ -87,9 +88,22 @@ export default function AppointmentsPage() {
       toast(t("notification.waitlistEmpty"));
       return;
     }
+    if (data.code === "NO_OPTED_IN_PATIENTS") {
+      toast(t("notification.noOptInPatients"));
+      return;
+    }
     if (data.code === "NOTIFICATIONS_PREPARED") {
-      toast.success(t("notification.notificationsPrepared"));
-      setPrepared({ count: data.count, links: data.links });
+      toast.success(
+        t("notification.notificationsSent", {
+          delivered: data.delivered ?? 0,
+          count: data.count ?? 0,
+        }),
+      );
+      setPrepared({
+        count: data.count,
+        delivered: data.delivered ?? 0,
+        links: data.links,
+      });
       return;
     }
     toast.error(t("notification.sendError"));
@@ -142,10 +156,12 @@ export default function AppointmentsPage() {
 
       {prepared && (
         <div className="mb-4 rounded-lg border border-border bg-secondary/20 p-4 text-sm">
-          <p className="font-medium">
-            {t("notification.notificationsPrepared")} ({prepared.count})
+          <p className="mb-2 font-medium">
+            {t("notification.notificationsSent", {
+              delivered: prepared.delivered,
+              count: prepared.count,
+            })}
           </p>
-          <p className="mb-2 text-muted-foreground">{t("notification.whatsappPlaceholder")}</p>
           <p className="mb-1 font-medium">{t("notification.previewLinks")}:</p>
           <ul className="space-y-1">
             {prepared.links.map((link) => (
@@ -191,7 +207,7 @@ export default function AppointmentsPage() {
               <tr>
                 <th className="px-4 py-3 font-medium">{t("appointments.dateLabel")}</th>
                 <th className="px-4 py-3 font-medium">{t("appointments.patientLabel")}</th>
-                <th className="px-4 py-3 font-medium">{t("appointments.filled")}</th>
+                <th className="px-4 py-3 font-medium">{t("appointments.statusLabel")}</th>
                 <th className="px-4 py-3 text-right font-medium">{t("patients.actions")}</th>
               </tr>
             </thead>

@@ -39,7 +39,8 @@
     "delete": "Löschen",
     "save": "Speichern",
     "created": "Patient wurde angelegt.",
-    "invalidPhone": "Bitte eine gültige Telefonnummer im Format +49… eingeben."
+    "invalidPhone": "Bitte eine gültige Telefonnummer im Format +49… eingeben.",
+    "whatsappOptInLabel": "WhatsApp-Benachrichtigungen erlauben"
   },
   "waitlist": {
     "title": "Warteliste",
@@ -68,15 +69,18 @@
     "filledSuccess": "Termin wurde als gefüllt markiert.",
     "dateLabel": "Datum & Uhrzeit",
     "patientLabel": "Patient",
+    "statusLabel": "Status",
     "notifyWaitlist": "Warteliste benachrichtigen"
   },
   "notification": {
     "title": "Benachrichtigungen",
     "notificationsPrepared": "Benachrichtigungen wurden vorbereitet.",
+    "notificationsSent": "{delivered} von {count} WhatsApp-Nachrichten gesendet.",
+    "noOptInPatients": "Keine Wartelisten-Patienten mit WhatsApp-Einwilligung.",
     "waitlistEmpty": "Keine Patienten auf der Warteliste.",
     "previewLinks": "Vorschau der generierten Links",
     "sendError": "Fehler beim Vorbereiten der Benachrichtigungen.",
-    "whatsappPlaceholder": "WhatsApp-Versand wird in Schritt 5 aktiviert."
+    "messageTemplate": "Hallo! In der Praxis {practice} ist am {date} Uhr ein Termin frei geworden. Jetzt buchen: {link}"
   },
   "fill": {
     "title": "Termin verfügbar",

@@ -91,6 +91,18 @@ export default function NewPatientPage() {
           />
         </div>
 
+        <div className="flex items-center gap-2">
+          <input
+            id="whatsapp_opt_in"
+            name="whatsapp_opt_in"
+            type="checkbox"
+            className="h-4 w-4 rounded border-input"
+          />
+          <label htmlFor="whatsapp_opt_in" className="text-sm font-medium">
+            {t("patients.whatsappOptInLabel")}
+          </label>
+        </div>
+
         <div className="flex gap-2">
           <button
             type="submit"

@@ -65,6 +65,7 @@ const createSchema = z.object({
   name: z.string().trim().min(1),
   phone: z.string().trim().regex(/^\+[1-9]\d{6,14}$/),
   notes: z.string().trim().optional(),
+  whatsapp_opt_in: z.boolean().optional(),
 });
 
 // POST /api/patients – neuen Patienten anlegen.
@@ -80,12 +81,13 @@ export async function POST(request: Request) {
   if (!parsed.success) {
     return NextResponse.json({ error: "VALIDATION_ERROR" }, { status: 422 });
   }
-  const { name, phone, notes } = parsed.data;
+  const { name, phone, notes, whatsapp_opt_in } = parsed.data;
 
   const { patient, error } = await insertPatient(admin, practiceId, {
     name,
     phone,
     notes,
+    whatsappOptIn: whatsapp_opt_in,
   });
   if (error || !patient) {
     console.error("[POST /api/patients] Insert fehlgeschlagen:", error);

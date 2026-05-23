@@ -45,7 +45,8 @@ export async function middleware(request: NextRequest) {
   return response;
 }
 
-// Schützt nur Pfade unterhalb von /dashboard.
+// Schützt Pfade unter /dashboard und /admin (Login-Pflicht).
+// Die eigentliche Admin-Berechtigung wird serverseitig im Admin-Layout geprüft.
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  matcher: ["/dashboard/:path*", "/admin/:path*"],
 };

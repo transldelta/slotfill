@@ -1,10 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
+import { ListOrdered } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslations } from "@/lib/i18n";
 import { ConfirmDialog } from "@/components/confirm-dialog";
+import { EmptyState } from "@/components/empty-state";
+import { LoadingSkeleton } from "@/components/loading-skeleton";
 
 type WaitlistEntry = {
   patientId: string;
@@ -70,31 +72,33 @@ export default function WaitlistPage() {
   return (
     <div>
       <div className="mb-6 flex items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold">{t("waitlist.title")}</h1>
-        {entries.length > 0 && (
-          <button
-            onClick={() => setConfirmClear(true)}
-            className="rounded-lg border border-border px-4 py-2 text-sm transition hover:bg-secondary"
-          >
-            {t("waitlist.clearWaitlist")}
-          </button>
-        )}
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+            {t("waitlist.title")}
+          </h1>
+          <span className="inline-flex min-w-[1.75rem] items-center justify-center rounded-full bg-blue-100 px-2 py-0.5 text-sm font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+            {entries.length}
+          </span>
+        </div>
+        <button
+          onClick={() => setConfirmClear(true)}
+          disabled={entries.length === 0}
+          className="rounded-lg border border-slate-300 px-4 py-2 text-sm text-slate-700 transition hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+        >
+          {t("waitlist.clearWaitlist")}
+        </button>
       </div>
 
-      {loading && (
-        <div className="space-y-2">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="h-12 w-full animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-          ))}
-        </div>
-      )}
+      {loading && <LoadingSkeleton variant="table" count={3} />}
 
       {!loading && error && (
-        <div className="rounded-lg border border-border p-8 text-center">
-          <p className="mb-4 text-muted-foreground">{t("common.error")}</p>
+        <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center dark:border-slate-800 dark:bg-slate-900">
+          <p className="mb-4 text-slate-500 dark:text-slate-400">
+            {t("common.error")}
+          </p>
           <button
             onClick={load}
-            className="rounded-lg border border-border px-4 py-2 text-sm transition hover:bg-secondary"
+            className="rounded-lg border border-slate-300 px-4 py-2 text-sm text-slate-700 transition hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
           >
             {t("common.retry")}
           </button>
@@ -102,26 +106,30 @@ export default function WaitlistPage() {
       )}
 
       {!loading && !error && entries.length === 0 && (
-        <div className="rounded-lg border border-border p-8 text-center">
-          <p className="mb-4 text-muted-foreground">{t("waitlist.noWaitlist")}</p>
-          <Link
-            href="/dashboard/patients"
-            className="inline-block rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
-          >
-            {t("patients.title")}
-          </Link>
-        </div>
+        <EmptyState
+          icon={ListOrdered}
+          title={t("emptyState.noWaitlist")}
+          description={t("dashboard.welcomeIntro")}
+          actionLabel={t("patients.title")}
+          actionHref="/dashboard/patients"
+        />
       )}
 
       {!loading && !error && entries.length > 0 && (
-        <div className="overflow-x-auto rounded-lg border border-border">
+        <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
           <table className="w-full border-collapse text-left text-sm">
-            <thead className="border-b border-border bg-secondary/30">
+            <thead className="sticky top-0 z-10 border-b border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-800/60">
               <tr>
-                <th className="px-4 py-3 font-medium">{t("patients.nameLabel")}</th>
-                <th className="px-4 py-3 font-medium">{t("patients.phoneLabel")}</th>
-                <th className="px-4 py-3 font-medium">{t("waitlist.since")}</th>
-                <th className="px-4 py-3 text-right font-medium">
+                <th className="px-4 py-3 font-medium text-slate-700 dark:text-slate-200">
+                  {t("patients.nameLabel")}
+                </th>
+                <th className="px-4 py-3 font-medium text-slate-700 dark:text-slate-200">
+                  {t("patients.phoneLabel")}
+                </th>
+                <th className="hidden px-4 py-3 font-medium text-slate-700 dark:text-slate-200 sm:table-cell">
+                  {t("waitlist.since")}
+                </th>
+                <th className="px-4 py-3 text-right font-medium text-slate-700 dark:text-slate-200">
                   {t("patients.actions")}
                 </th>
               </tr>
@@ -130,18 +138,22 @@ export default function WaitlistPage() {
               {entries.map((e) => (
                 <tr
                   key={e.patientId}
-                  className="border-b border-border transition last:border-0 hover:bg-secondary/20"
+                  className="border-b border-slate-100 transition last:border-0 hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-slate-800/40"
                 >
-                  <td className="px-4 py-3">{e.name}</td>
-                  <td className="px-4 py-3">{e.phone}</td>
-                  <td className="px-4 py-3 text-muted-foreground">
+                  <td className="px-4 py-3 text-slate-900 dark:text-slate-100">
+                    {e.name}
+                  </td>
+                  <td className="px-4 py-3 text-slate-700 dark:text-slate-300">
+                    {e.phone}
+                  </td>
+                  <td className="hidden px-4 py-3 text-slate-500 dark:text-slate-400 sm:table-cell">
                     {formatSince(e.since)}
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex justify-end">
                       <button
                         onClick={() => handleRemove(e)}
-                        className="rounded-lg border border-border px-3 py-1.5 text-xs transition hover:bg-secondary"
+                        className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs text-slate-700 transition hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
                       >
                         {t("waitlist.removeFromWaitlist")}
                       </button>

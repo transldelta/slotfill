@@ -269,6 +269,64 @@
     "SUBSCRIPTION_LOADED": "Abo-Daten geladen",
     "LIMITS_RESET": "Limits wurden zurückgesetzt"
   },
+  "nav": {
+    "brand": "SlotFill",
+    "features": "Funktionen",
+    "pricing": "Preise",
+    "blog": "Blog",
+    "contact": "Kontakt",
+    "login": "Anmelden",
+    "getStarted": "Kostenlos testen"
+  },
+  "landing": {
+    "heroTitle": "Freie Termine automatisch aus der Warteliste füllen",
+    "heroSubtitle": "SlotFill benachrichtigt bei einer Terminlücke automatisch passende Patienten per WhatsApp – die Lücke füllt sich oft von selbst.",
+    "ctaPrimary": "Kostenlos testen",
+    "ctaSecondary": "Funktionen ansehen",
+    "comparePrices": "Preise vergleichen",
+    "featuresTitle": "Was SlotFill für Ihre Praxis tut",
+    "feature1Title": "Warteliste verwalten",
+    "feature1Desc": "Behalten Sie alle wartenden Patienten an einem Ort im Blick.",
+    "feature2Title": "WhatsApp-Benachrichtigungen",
+    "feature2Desc": "Bei einem Ausfall werden passende Patienten automatisch informiert.",
+    "feature3Title": "Termine im Griff",
+    "feature3Desc": "Ausgefallene Termine erkennen und Lücken schnell wieder füllen.",
+    "feature4Title": "Für den Praxiseinsatz vorbereitet",
+    "feature4Desc": "Datensparsame Kommunikation und DSGVO-bewusste Prozesse.",
+    "ctaBlockTitle": "Bereit, weniger leere Termine zu haben?",
+    "ctaBlockSubtitle": "Starten Sie mit einer 14-tägigen kostenlosen Testphase.",
+    "footerNote": "Hosting und Datenschutz müssen vor Produktivstart final geprüft werden.",
+    "rights": "Alle Rechte vorbehalten."
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Tipps und Neuigkeiten rund um SlotFill und die Praxisorganisation.",
+    "empty": "Es sind noch keine Beiträge veröffentlicht.",
+    "readMore": "Weiterlesen",
+    "back": "Zurück zum Blog",
+    "notFound": "Beitrag nicht gefunden."
+  },
+  "contact": {
+    "title": "Kontakt",
+    "subtitle": "Schreiben Sie uns – wir melden uns so schnell wie möglich.",
+    "nameLabel": "Name",
+    "emailLabel": "E-Mail-Adresse",
+    "messageLabel": "Nachricht",
+    "send": "Nachricht senden",
+    "sending": "Wird gesendet...",
+    "success": "Vielen Dank! Ihre Nachricht ist bei uns eingegangen.",
+    "error": "Ihre Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es später erneut."
+  },
+  "legal": {
+    "draftNotice": "Hinweis: Dieser Text ist ein vorläufiger Entwurf und wurde noch nicht rechtlich geprüft. Vor dem Produktivstart muss er durch finale, rechtlich geprüfte Texte ersetzt werden.",
+    "impressumTitle": "Impressum",
+    "impressumIntro": "Angaben gemäß § 5 TMG (Entwurf – bitte vor Veröffentlichung vervollständigen und prüfen).",
+    "impressumContact": "Kontakt",
+    "datenschutzTitle": "Datenschutzerklärung",
+    "datenschutzIntro": "Diese Datenschutzerklärung ist ein Entwurf und muss vor dem Produktivstart final geprüft werden.",
+    "agbTitle": "Allgemeine Geschäftsbedingungen (AGB)",
+    "agbIntro": "Diese AGB sind ein Entwurf und müssen vor dem Produktivstart final geprüft werden."
+  },
   "errors": {
     "practiceNotFound": "Es konnte keine Praxis für dein Konto gefunden werden.",
     "validationError": "Die eingegebenen Daten sind ungültig.",

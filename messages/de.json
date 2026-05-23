@@ -71,6 +71,16 @@
     "noAppointments": "Noch keine Termine vorhanden.",
     "noNotifications": "Noch keine Benachrichtigungen vorhanden."
   },
+  "settings": {
+    "title": "Einstellungen",
+    "practiceData": "Praxisdaten",
+    "practiceName": "Praxisname",
+    "practiceEmail": "Praxis-E-Mail",
+    "notifications": "Benachrichtigungen",
+    "notificationsDescription": "WhatsApp-Benachrichtigungen werden über ausgefallene Termine und die Warteliste gesteuert.",
+    "appearance": "Darstellung",
+    "appearanceDescription": "Den Hell- oder Dunkelmodus können Sie unten in der Seitenleiste umschalten."
+  },
   "patients": {
     "title": "Patienten",
     "newPatient": "Neuen Patienten anlegen",

@@ -5,6 +5,10 @@ import { z } from "zod";
 import { getCurrentPractice } from "@/lib/practice";
 import { getTranslations } from "@/lib/i18n";
 import { sendWhatsApp } from "@/lib/twilio";
+import {
+  checkNotificationLimit,
+  incrementNotificationCount,
+} from "@/lib/subscription";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -45,6 +49,18 @@ export async function POST(request: Request) {
     .maybeSingle();
   if (!appointment || appointment.status !== "cancelled") {
     return NextResponse.json({ code: "VALIDATION_ERROR" }, { status: 422 });
+  }
+
+  // Monatliches Limit prüfen (vor dem Versand).
+  let limit;
+  try {
+    limit = await checkNotificationLimit(practiceId);
+  } catch (err) {
+    if (err instanceof Error && err.message === "LIMIT_REACHED") {
+      return NextResponse.json({ code: "LIMIT_REACHED" }, { status: 402 });
+    }
+    console.error("[POST /api/notifications/send] Limit-Prüfung fehlgeschlagen:", err);
+    return NextResponse.json({ code: "SERVER_ERROR" }, { status: 500 });
   }
 
   // Wartelisten-Patienten mit Kontaktdaten laden.
@@ -136,10 +152,15 @@ export async function POST(request: Request) {
     console.error("[POST /api/notifications/send] sent_notifications-Insert fehlgeschlagen:", notifError);
   }
 
+  // Nur tatsächlich versendete Nachrichten auf das Limit anrechnen.
+  await incrementNotificationCount(practiceId, delivered);
+  const remaining = limit.maxNotifications - (limit.usedNotifications + delivered);
+
   return NextResponse.json({
     code: "NOTIFICATIONS_PREPARED",
     count: createdLinks.length,
     delivered,
+    remaining,
     links: createdLinks.map((link) => ({
       slug: link.slug,
       patient_id: link.patient_id,

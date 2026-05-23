@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getCurrentPractice } from "@/lib/practice";
+import { insertPatient, toPatientName } from "@/lib/patients";
 
 export const dynamic = "force-dynamic";
 
@@ -12,13 +13,35 @@ export async function GET() {
   }
   const { admin, practiceId } = ctx;
 
-  const { data: patients, error } = await admin
-    .from("patients")
-    .select("id, first_name, last_name, phone, notes")
-    .eq("practice_id", practiceId)
-    .order("first_name", { ascending: true });
-  if (error) {
-    return NextResponse.json({ error: "SERVER_ERROR" }, { status: 500 });
+  // Erst mit notes versuchen; falls die Spalte fehlt (Migration 003 nicht
+  // eingespielt), ohne notes erneut laden, damit die Liste trotzdem lädt.
+  type PatientListRow = {
+    id: string;
+    first_name: string | null;
+    last_name: string | null;
+    phone: string | null;
+    notes?: string | null;
+  };
+
+  let patients: PatientListRow[] | null = (
+    await admin
+      .from("patients")
+      .select("id, first_name, last_name, phone, notes")
+      .eq("practice_id", practiceId)
+      .order("first_name", { ascending: true })
+  ).data;
+
+  if (patients === null) {
+    const fallback = await admin
+      .from("patients")
+      .select("id, first_name, last_name, phone")
+      .eq("practice_id", practiceId)
+      .order("first_name", { ascending: true });
+    if (fallback.error) {
+      console.error("[GET /api/patients] Laden fehlgeschlagen:", fallback.error);
+      return NextResponse.json({ error: "SERVER_ERROR" }, { status: 500 });
+    }
+    patients = fallback.data;
   }
 
   const { data: waitlistRows } = await admin
@@ -29,9 +52,9 @@ export async function GET() {
 
   const result = (patients ?? []).map((p) => ({
     id: p.id,
-    name: [p.first_name, p.last_name].filter(Boolean).join(" ").trim(),
+    name: toPatientName(p.first_name, p.last_name),
     phone: p.phone,
-    notes: p.notes,
+    notes: "notes" in p ? p.notes : null,
     onWaitlist: onWaitlist.has(p.id),
   }));
 
@@ -59,31 +82,15 @@ export async function POST(request: Request) {
   }
   const { name, phone, notes } = parsed.data;
 
-  const { data, error } = await admin
-    .from("patients")
-    .insert({
-      practice_id: practiceId,
-      first_name: name,
-      last_name: "",
-      phone,
-      notes: notes || null,
-    })
-    .select("id, first_name, last_name, phone, notes")
-    .single();
-  if (error) {
-    return NextResponse.json({ error: "SERVER_ERROR" }, { status: 500 });
+  const { patient, error } = await insertPatient(admin, practiceId, {
+    name,
+    phone,
+    notes,
+  });
+  if (error || !patient) {
+    console.error("[POST /api/patients] Insert fehlgeschlagen:", error);
+    return NextResponse.json({ error: "DATABASE_INSERT_FAILED" }, { status: 500 });
   }
 
-  return NextResponse.json(
-    {
-      patient: {
-        id: data.id,
-        name: [data.first_name, data.last_name].filter(Boolean).join(" ").trim(),
-        phone: data.phone,
-        notes: data.notes,
-        onWaitlist: false,
-      },
-    },
-    { status: 201 },
-  );
+  return NextResponse.json({ patient }, { status: 201 });
 }

@@ -16,9 +16,14 @@ export default function NewPatientPage() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
+    const name = (formData.get("name") as string).trim();
     const phone = (formData.get("phone") as string).trim();
+    if (!name) {
+      toast.error(t("errors.requiredField"));
+      return;
+    }
     if (!/^\+[1-9]\d{6,14}$/.test(phone)) {
-      toast.error(t("patients.invalidPhone"));
+      toast.error(t("errors.phoneInvalid"));
       return;
     }
 
@@ -27,12 +32,16 @@ export default function NewPatientPage() {
     setLoading(false);
 
     if (result.error) {
-      toast.error(
-        result.error === "invalid" ? t("patients.invalidPhone") : t("common.error"),
-      );
+      // Maschinenlesbaren Fehlercode auf deutschen Text aus de.json abbilden.
+      const messages: Record<string, string> = {
+        PRACTICE_NOT_FOUND: t("errors.practiceNotFound"),
+        VALIDATION_ERROR: t("errors.validationError"),
+        DATABASE_INSERT_FAILED: t("errors.databaseInsertFailed"),
+      };
+      toast.error(messages[result.error] ?? t("errors.unknownError"));
       return;
     }
-    toast.success(t("patients.created"));
+    toast.success(t("errors.patientCreated"));
     router.push("/dashboard/patients");
     router.refresh();
   }

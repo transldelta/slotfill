@@ -53,6 +53,16 @@
     "clearConfirm": "Gesamte Warteliste wirklich leeren?",
     "since": "Auf Liste seit"
   },
+  "errors": {
+    "practiceNotFound": "Es konnte keine Praxis für dein Konto gefunden werden.",
+    "validationError": "Die eingegebenen Daten sind ungültig.",
+    "databaseInsertFailed": "Speichern fehlgeschlagen. Bitte später erneut versuchen.",
+    "patientCreated": "Patient wurde angelegt.",
+    "patientCreateFailed": "Der Patient konnte nicht angelegt werden.",
+    "phoneInvalid": "Bitte eine gültige Telefonnummer im Format +49… eingeben.",
+    "requiredField": "Bitte fülle alle Pflichtfelder aus.",
+    "unknownError": "Ein unbekannter Fehler ist aufgetreten."
+  },
   "common": {
     "loading": "Lädt...",
     "error": "Ein Fehler ist aufgetreten.",

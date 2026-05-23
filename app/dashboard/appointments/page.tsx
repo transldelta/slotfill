@@ -191,7 +191,7 @@ export default function AppointmentsPage() {
               <tr>
                 <th className="px-4 py-3 font-medium">{t("appointments.dateLabel")}</th>
                 <th className="px-4 py-3 font-medium">{t("appointments.patientLabel")}</th>
-                <th className="px-4 py-3 font-medium">{t("appointments.filled")}</th>
+                <th className="px-4 py-3 font-medium">{t("appointments.statusLabel")}</th>
                 <th className="px-4 py-3 text-right font-medium">{t("patients.actions")}</th>
               </tr>
             </thead>

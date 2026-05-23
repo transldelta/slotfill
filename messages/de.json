@@ -68,6 +68,7 @@
     "filledSuccess": "Termin wurde als gefüllt markiert.",
     "dateLabel": "Datum & Uhrzeit",
     "patientLabel": "Patient",
+    "statusLabel": "Status",
     "notifyWaitlist": "Warteliste benachrichtigen"
   },
   "notification": {

@@ -42,8 +42,12 @@ export async function signUp(formData: FormData): Promise<ActionResult> {
     return { code: "VALIDATION_ERROR" };
   }
   const { email, password } = parsed.data;
-  const name =
-    (formData.get("name") as string | null)?.trim() || email.split("@")[0];
+  // Praxisname aus dem Formular. Wir lesen "practiceName" (eindeutig) und
+  // fallen aus Kompatibilität auf "name" zurück; erst dann auf den E-Mail-Prefix.
+  const rawName = (formData.get("practiceName") ?? formData.get("name")) as
+    | string
+    | null;
+  const name = rawName?.trim() || email.split("@")[0];
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
@@ -107,23 +111,31 @@ export async function signUp(formData: FormData): Promise<ActionResult> {
   }
 
   // Willkommens-E-Mail senden – Fehler blockieren die Registrierung NICHT.
-  // Versuch wird in email_logs protokolliert.
+  // Jeder Versuch wird in email_logs protokolliert (Erfolg wie Fehler).
   const t = await getTranslations();
+  let mailResult: { success: boolean; code?: string } = {
+    success: false,
+    code: "EMAIL_ERROR",
+  };
   try {
-    const mail = await sendEmail(
+    mailResult = await sendEmail(
       email,
       t("email.welcomeSubject"),
       welcomeEmail(t, name),
     );
-    await admin.from("email_logs").insert({
-      practice_id: practice.id,
-      email_type: "welcome",
-      recipient: email,
-      success: mail.success,
-      error_message: mail.success ? null : (mail.code ?? null),
-    });
   } catch (err) {
-    console.error("[signUp] Willkommens-E-Mail fehlgeschlagen (ignoriert):", err);
+    console.error("[signUp] Willkommens-E-Mail Ausnahme (ignoriert):", err);
+  }
+
+  const { error: logError } = await admin.from("email_logs").insert({
+    practice_id: practice.id,
+    email_type: "welcome",
+    recipient: email,
+    success: mailResult.success,
+    error_message: mailResult.success ? null : (mailResult.code ?? "EMAIL_ERROR"),
+  });
+  if (logError) {
+    console.error("[signUp] email_logs-Insert fehlgeschlagen:", logError.message);
   }
 
   return { success: true, code: "REGISTRATION_CREATED" };

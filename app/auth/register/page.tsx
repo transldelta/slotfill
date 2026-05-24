@@ -57,7 +57,7 @@ export default function RegisterPage() {
             </label>
             <input
               id="name"
-              name="name"
+              name="practiceName"
               type="text"
               autoComplete="organization"
               className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"

@@ -4,8 +4,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { createClient, createServerClient } from "@/lib/supabase";
 import { getTranslations } from "@/lib/i18n";
-import { sendEmail } from "@/lib/email";
-import { welcomeEmail } from "@/lib/email/templates";
+import { ensureOnboarding } from "@/lib/onboarding";
 
 // Rückgabe-Form für die Formulare im Browser.
 export type ActionResult = {
@@ -58,14 +57,18 @@ export async function signUp(formData: FormData): Promise<ActionResult> {
     const result = await supabase.auth.signUp({
       email,
       password,
-      options: { emailRedirectTo: `${appUrl}/auth/login` },
+      options: {
+        // Praxisname in den Auth-Metadaten ablegen – das Onboarding nach der
+        // E-Mail-Bestätigung liest practice_name daraus.
+        data: { practice_name: name },
+        emailRedirectTo: `${appUrl}/auth/callback`,
+      },
     });
     data = result.data;
     if (result.error) {
       // Echte Fehlermeldung serverseitig protokollieren (keine Secrets).
       console.error("[signUp] Supabase-Auth-Fehler:", result.error.message);
-      const code = mapSignUpError(result.error.message);
-      return code === "EMAIL_TAKEN" ? { code: "EMAIL_TAKEN" } : { code };
+      return { code: mapSignUpError(result.error.message) };
     }
   } catch (err) {
     console.error("[signUp] Unerwarteter Auth-Fehler:", err);
@@ -77,68 +80,25 @@ export async function signUp(formData: FormData): Promise<ActionResult> {
     return { code: "EMAIL_TAKEN" };
   }
 
-  const userId = data.user?.id;
-  if (!userId) {
+  if (!data.user) {
     console.error("[signUp] Kein Benutzer trotz fehlendem Auth-Fehler.");
     return { code: "AUTH_SIGNUP_ERROR" };
   }
 
-  // Praxis und Test-Abo serverseitig anlegen (Service-Role umgeht RLS).
-  const admin = createClient();
-
-  const { data: practice, error: practiceError } = await admin
-    .from("practices")
-    .insert({ auth_uid: userId, name, email })
-    .select("id")
-    .single();
-
-  if (practiceError || !practice) {
-    console.error("[signUp] Praxis konnte nicht angelegt werden:", practiceError?.message);
-    return { code: "PRACTICE_CREATE_ERROR" };
+  // Ist bereits eine Session vorhanden (E-Mail-Bestätigung deaktiviert), kann
+  // das Onboarding sofort laufen. Andernfalls geschieht es nach der
+  // Bestätigung über /auth/callback (bzw. self-healing beim ersten Dashboard).
+  if (data.session) {
+    try {
+      const admin = createClient();
+      await ensureOnboarding(admin, data.user);
+    } catch (err) {
+      console.error("[signUp] Onboarding fehlgeschlagen (ignoriert):", err);
+    }
+    return { success: true, code: "REGISTRATION_CREATED" };
   }
 
-  const trialEndsAt = new Date();
-  trialEndsAt.setDate(trialEndsAt.getDate() + 14);
-  const { error: subError } = await admin.from("subscriptions").insert({
-    practice_id: practice.id,
-    plan_id: null, // "Starter"-Plan wird beim ersten Laden zugeordnet.
-    status: "trial",
-    trial_ends_at: trialEndsAt.toISOString(),
-  });
-  if (subError) {
-    // Nicht fatal: Abo wird später per getOrCreatePracticeSubscription erzeugt.
-    console.error("[signUp] Abo konnte nicht angelegt werden:", subError.message);
-  }
-
-  // Willkommens-E-Mail senden – Fehler blockieren die Registrierung NICHT.
-  // Jeder Versuch wird in email_logs protokolliert (Erfolg wie Fehler).
-  const t = await getTranslations();
-  let mailResult: { success: boolean; code?: string } = {
-    success: false,
-    code: "EMAIL_ERROR",
-  };
-  try {
-    mailResult = await sendEmail(
-      email,
-      t("email.welcomeSubject"),
-      welcomeEmail(t, name),
-    );
-  } catch (err) {
-    console.error("[signUp] Willkommens-E-Mail Ausnahme (ignoriert):", err);
-  }
-
-  const { error: logError } = await admin.from("email_logs").insert({
-    practice_id: practice.id,
-    email_type: "welcome",
-    recipient: email,
-    success: mailResult.success,
-    error_message: mailResult.success ? null : (mailResult.code ?? "EMAIL_ERROR"),
-  });
-  if (logError) {
-    console.error("[signUp] email_logs-Insert fehlgeschlagen:", logError.message);
-  }
-
-  return { success: true, code: "REGISTRATION_CREATED" };
+  return { success: true, code: "CONFIRM_EMAIL" };
 }
 
 // --- Anmeldung -----------------------------------------------------

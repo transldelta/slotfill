@@ -13,6 +13,7 @@
     "invalidCredentials": "E‑Mail oder Passwort ungültig.",
     "emailTaken": "Diese E‑Mail wird bereits verwendet.",
     "registrationSuccess": "Konto erfolgreich erstellt. Du kannst dich jetzt anmelden.",
+    "confirmEmail": "Bitte bestätigen Sie Ihre E-Mail-Adresse. Wir haben Ihnen einen Bestätigungslink gesendet.",
     "signupError": "Registrierung fehlgeschlagen. Bitte versuche es später erneut.",
     "weakPassword": "Das Passwort ist zu schwach (mindestens 6 Zeichen).",
     "rateLimited": "Zu viele Versuche. Bitte warte einen Moment und versuche es erneut.",

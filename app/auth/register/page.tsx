@@ -28,11 +28,20 @@ export default function RegisterPage() {
     const result = await signUp(formData);
     setLoading(false);
 
-    if (result.error) {
-      toast.error(result.error);
+    if (result.code !== "REGISTRATION_CREATED") {
+      // Maschinenlesbaren Code auf deutschen Text aus de.json abbilden.
+      const messages: Record<string, string> = {
+        EMAIL_TAKEN: t("auth.emailTaken"),
+        WEAK_PASSWORD: t("auth.weakPassword"),
+        RATE_LIMITED: t("auth.rateLimited"),
+        VALIDATION_ERROR: t("errors.validationError"),
+        PRACTICE_CREATE_ERROR: t("auth.practiceCreateError"),
+        AUTH_SIGNUP_ERROR: t("auth.signupError"),
+      };
+      toast.error(messages[result.code ?? ""] ?? t("auth.signupError"));
       return;
     }
-    toast.success(result.message ?? t("auth.registrationSuccess"));
+    toast.success(t("auth.registrationSuccess"));
     router.push("/auth/login");
   }
 

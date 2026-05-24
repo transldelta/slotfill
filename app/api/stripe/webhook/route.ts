@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { createClient } from "@/lib/supabase";
 import { getStripe } from "@/lib/stripe";
+import { getTranslations } from "@/lib/i18n";
+import { sendEmail } from "@/lib/email";
+import { paymentEmail } from "@/lib/email/templates";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -91,6 +94,53 @@ export async function POST(request: Request) {
               updated_at: new Date().toISOString(),
             })
             .eq("stripe_subscription_id", subscriptionId);
+
+          // Zahlungsbestätigung senden – idempotent über event.id.
+          // Blockiert den Webhook NICHT bei Fehlern.
+          try {
+            const { data: existingLog } = await admin
+              .from("email_logs")
+              .select("id")
+              .eq("idempotency_key", event.id)
+              .maybeSingle();
+
+            if (!existingLog) {
+              const { data: subRow } = await admin
+                .from("subscriptions")
+                .select("practice_id")
+                .eq("stripe_subscription_id", subscriptionId)
+                .maybeSingle();
+              const { data: practice } = subRow?.practice_id
+                ? await admin
+                    .from("practices")
+                    .select("name, email")
+                    .eq("id", subRow.practice_id)
+                    .maybeSingle()
+                : { data: null };
+
+              if (practice?.email) {
+                const t = await getTranslations();
+                const amount = (invoice.amount_paid ?? 0) / 100;
+                const invoiceUrl =
+                  invoice.hosted_invoice_url ?? invoice.invoice_pdf ?? undefined;
+                const result = await sendEmail(
+                  practice.email,
+                  t("email.paymentSubject"),
+                  paymentEmail(t, practice.name ?? "", amount, invoiceUrl),
+                );
+                await admin.from("email_logs").insert({
+                  practice_id: subRow?.practice_id ?? null,
+                  email_type: "payment",
+                  recipient: practice.email,
+                  idempotency_key: event.id,
+                  success: result.success,
+                  error_message: result.success ? null : (result.code ?? null),
+                });
+              }
+            }
+          } catch (mailErr) {
+            console.error("[webhook invoice.paid] E-Mail-Schritt fehlgeschlagen (ignoriert):", mailErr);
+          }
         }
         break;
       }

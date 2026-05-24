@@ -327,6 +327,21 @@
     "agbTitle": "Allgemeine Geschäftsbedingungen (AGB)",
     "agbIntro": "Diese AGB sind ein Entwurf und müssen vor dem Produktivstart final geprüft werden."
   },
+  "email": {
+    "welcomeSubject": "Willkommen bei SlotFill – Ihre Testphase startet jetzt",
+    "trialReminderSubject": "Ihre Testphase endet bald – jetzt upgraden",
+    "paymentSubject": "Zahlungsbestätigung für SlotFill",
+    "welcomeSent": "Willkommens-E-Mail gesendet",
+    "trialReminderSent": "Trial-Erinnerung gesendet",
+    "paymentSent": "Zahlungsbestätigung gesendet",
+    "emailError": "E-Mail konnte nicht gesendet werden",
+    "emailDisabled": "E-Mail-Versand ist deaktiviert (RESEND_API_KEY fehlt)",
+    "fromName": "SlotFill Team",
+    "welcomeBody": "Willkommen bei SlotFill, {praxisName}! Ihre 14-tägige Testphase hat begonnen.",
+    "trialReminderBody": "Ihre Testphase endet in {daysLeft} Tagen. Jetzt upgraden und weiternutzen.",
+    "paymentBody": "Vielen Dank für Ihre Zahlung über {amount} €. Ihr Abo ist aktiv.",
+    "viewInvoice": "Rechnung ansehen"
+  },
   "errors": {
     "practiceNotFound": "Es konnte keine Praxis für dein Konto gefunden werden.",
     "validationError": "Die eingegebenen Daten sind ungültig.",

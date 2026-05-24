@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { createClient, createServerClient } from "@/lib/supabase";
 import { getTranslations } from "@/lib/i18n";
+import { sendEmail } from "@/lib/email";
+import { welcomeEmail } from "@/lib/email/templates";
 
 // Rückgabe-Form für die Formulare im Browser.
 export type ActionResult = {
@@ -69,7 +71,12 @@ export async function signUp(formData: FormData): Promise<ActionResult> {
       });
     }
 
-    // TODO (Schritt 10): Willkommens-E-Mail über Resend versenden.
+    // Willkommens-E-Mail senden – Fehler blockieren die Registrierung NICHT.
+    try {
+      await sendEmail(email, t("email.welcomeSubject"), welcomeEmail(t, name));
+    } catch {
+      console.error("[signUp] Willkommens-E-Mail fehlgeschlagen (ignoriert).");
+    }
   }
 
   return { success: true, message: t("auth.registrationSuccess") };

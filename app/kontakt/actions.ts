@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import { createClient } from "@/lib/supabase";
+import { escapeHtml, sendEmail } from "@/lib/email";
 
 const schema = z.object({
   name: z.string().trim().min(1),
@@ -26,26 +27,17 @@ export async function submitContact(
   }
   const { name, email, message } = parsed.data;
 
-  const resendKey = process.env.RESEND_API_KEY;
-  if (resendKey) {
-    try {
-      const { Resend } = await import("resend");
-      const resend = new Resend(resendKey);
-      const to = process.env.CONTACT_EMAIL ?? "transl.delta@gmail.com";
-      await resend.emails.send({
-        from: "SlotFill <onboarding@resend.dev>",
-        to,
-        reply_to: email,
-        subject: `Kontaktanfrage von ${name}`,
-        text: `Name: ${name}\nE-Mail: ${email}\n\n${message}`,
-      });
-      return { code: "CONTACT_SENT" };
-    } catch (err) {
-      console.error("[submitContact] Resend fehlgeschlagen, speichere stattdessen:", err);
-      // Fällt durch zum Speichern.
-    }
+  // Per E-Mail senden, wenn konfiguriert (zentrale sendEmail-Funktion).
+  const to = process.env.CONTACT_EMAIL ?? "transl.delta@gmail.com";
+  const html = `<p><strong>Name:</strong> ${escapeHtml(name)}</p>
+<p><strong>E-Mail:</strong> ${escapeHtml(email)}</p>
+<p style="white-space:pre-wrap;">${escapeHtml(message)}</p>`;
+  const emailResult = await sendEmail(to, `Kontaktanfrage von ${name}`, html);
+  if (emailResult.success) {
+    return { code: "CONTACT_SENT" };
   }
 
+  // Kein Versand möglich (kein Key oder Fehler) -> Nachricht speichern.
   const admin = createClient();
   const { error } = await admin
     .from("contact_messages")

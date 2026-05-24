@@ -28,21 +28,29 @@ export default function RegisterPage() {
     const result = await signUp(formData);
     setLoading(false);
 
-    if (result.code !== "REGISTRATION_CREATED") {
-      // Maschinenlesbaren Code auf deutschen Text aus de.json abbilden.
-      const messages: Record<string, string> = {
-        EMAIL_TAKEN: t("auth.emailTaken"),
-        WEAK_PASSWORD: t("auth.weakPassword"),
-        RATE_LIMITED: t("auth.rateLimited"),
-        VALIDATION_ERROR: t("errors.validationError"),
-        PRACTICE_CREATE_ERROR: t("auth.practiceCreateError"),
-        AUTH_SIGNUP_ERROR: t("auth.signupError"),
-      };
-      toast.error(messages[result.code ?? ""] ?? t("auth.signupError"));
+    // E-Mail-Bestätigung erforderlich: klare Meldung, KEIN Fehler.
+    if (result.code === "CONFIRM_EMAIL") {
+      toast.success(t("auth.confirmEmail"));
+      router.push("/auth/login");
       return;
     }
-    toast.success(t("auth.registrationSuccess"));
-    router.push("/auth/login");
+    // Bereits eingeloggt (Bestätigung deaktiviert).
+    if (result.code === "REGISTRATION_CREATED") {
+      toast.success(t("auth.registrationSuccess"));
+      router.push("/auth/login");
+      return;
+    }
+
+    // Fehlercodes auf deutsche Texte aus de.json abbilden.
+    const messages: Record<string, string> = {
+      EMAIL_TAKEN: t("auth.emailTaken"),
+      WEAK_PASSWORD: t("auth.weakPassword"),
+      RATE_LIMITED: t("auth.rateLimited"),
+      VALIDATION_ERROR: t("errors.validationError"),
+      PRACTICE_CREATE_ERROR: t("auth.practiceCreateError"),
+      AUTH_SIGNUP_ERROR: t("auth.signupError"),
+    };
+    toast.error(messages[result.code ?? ""] ?? t("auth.signupError"));
   }
 
   return (

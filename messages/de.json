@@ -340,7 +340,7 @@
     "welcomeBody": "Willkommen bei SlotFill, {praxisName}! Ihre 14-tägige Testphase hat begonnen.",
     "trialReminderBody": "Ihre Testphase endet in {daysLeft} Tagen. Jetzt upgraden und weiternutzen.",
     "paymentBody": "Vielen Dank für Ihre Zahlung über {amount} €. Ihr Abo ist aktiv.",
-    "viewInvoice": "Rechnung ansehen"
+    "viewInvoice": "Zahlungsbestätigung ansehen"
   },
   "errors": {
     "practiceNotFound": "Es konnte keine Praxis für dein Konto gefunden werden.",

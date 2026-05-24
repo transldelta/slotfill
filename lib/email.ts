@@ -1,6 +1,6 @@
 export type SendEmailResult = {
   success: boolean;
-  code?: "EMAIL_DISABLED" | "EMAIL_ERROR";
+  code?: "EMAIL_SENT" | "EMAIL_DISABLED" | "EMAIL_ERROR";
 };
 
 // Escaped dynamische Werte vor dem Einfügen in HTML-Templates.
@@ -36,7 +36,7 @@ export async function sendEmail(
       console.error("[email] Versand fehlgeschlagen.");
       return { success: false, code: "EMAIL_ERROR" };
     }
-    return { success: true };
+    return { success: true, code: "EMAIL_SENT" };
   } catch {
     console.error("[email] Unerwarteter Fehler beim Versand.");
     return { success: false, code: "EMAIL_ERROR" };

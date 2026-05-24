@@ -22,17 +22,10 @@ ADD COLUMN IF NOT EXISTS trial_reminder_sent_at TIMESTAMPTZ;
 ALTER TABLE public.email_logs ENABLE ROW LEVEL SECURITY;
 
 -- Nur service_role darf lesen/schreiben
-DO $$
-BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_policies
-    WHERE schemaname = 'public' AND tablename = 'email_logs'
-      AND policyname = 'Service role can manage email_logs'
-  ) THEN
-    CREATE POLICY "Service role can manage email_logs" ON public.email_logs
-      FOR ALL TO service_role USING (true) WITH CHECK (true);
-  END IF;
-END $$;
+DROP POLICY IF EXISTS "Service role can manage email_logs" ON public.email_logs;
+
+CREATE POLICY "Service role can manage email_logs" ON public.email_logs
+  FOR ALL TO service_role USING (true) WITH CHECK (true);
 
 -- Grants
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.email_logs TO service_role;

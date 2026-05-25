@@ -153,6 +153,33 @@
     "statusWarn": "Warnung",
     "statusError": "Fehler",
     "emailSetupNav": "E-Mail-Setup",
+    "autoMaintenanceNav": "Auto-Wartung",
+    "autoMaintenance": {
+      "title": "Auto-Prüfung & Reparatur",
+      "subtitle": "Prüft den Datenzustand automatisch und behebt sichere Probleme mit einem Klick.",
+      "checkAll": "Alles prüfen",
+      "repairAll": "Alles sicher reparieren",
+      "checking": "Prüfung läuft...",
+      "repairing": "Reparatur läuft...",
+      "statusOk": "Alles in Ordnung",
+      "statusWarn": "Es wurden Hinweise gefunden",
+      "statusError": "Es wurden Fehler gefunden",
+      "lastCheck": "Letzte Prüfung",
+      "foundIssues": "Gefundene Punkte",
+      "noIssues": "Keine Probleme gefunden.",
+      "repairedCount": "{count} Einträge automatisch repariert.",
+      "notAutoFixable": "Nicht automatisch reparierbar – bitte manuell prüfen.",
+      "logsTitle": "Protokoll der letzten Reparaturen",
+      "noLogs": "Noch keine Reparaturen protokolliert.",
+      "error": "Aktion konnte nicht ausgeführt werden.",
+      "itemLabels": {
+        "accountsWithoutPractice": "Konten ohne Praxis",
+        "missingPracticeName": "Konten ohne hinterlegten Praxisnamen",
+        "orphanWaitlist": "Wartelisten-Einträge ohne gültigen Patienten",
+        "duplicateWaitlist": "Doppelte Wartelisten-Einträge",
+        "claimedStillOnWaitlist": "Gebuchte Patienten noch auf der Warteliste"
+      }
+    },
     "emailSetup": {
       "title": "E-Mail-Setup",
       "subtitle": "Prüft Resend-Konfiguration und Domain-Verifizierung.",
@@ -255,6 +282,7 @@
     "intro": "Hier sehen Sie alle vorbereiteten und versendeten Benachrichtigungen der letzten Zeit.",
     "delivered": "Zugestellt",
     "notDelivered": "Nicht zugestellt",
+    "providerNotConfigured": "Vorbereitet – Anbieter nicht konfiguriert",
     "sentAt": "Gesendet am",
     "recipient": "Empfänger"
   },

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getCurrentPractice } from "@/lib/practice";
 import { toPatientName } from "@/lib/patients";
+import { isTwilioConfigured } from "@/lib/twilio";
 
 export const dynamic = "force-dynamic";
 
@@ -48,5 +49,9 @@ export async function GET() {
     createdAt: r.created_at,
   }));
 
-  return NextResponse.json({ code: "NOTIFICATIONS_LOADED", notifications });
+  return NextResponse.json({
+    code: "NOTIFICATIONS_LOADED",
+    notifications,
+    providerConfigured: isTwilioConfigured(),
+  });
 }

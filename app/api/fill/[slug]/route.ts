@@ -54,7 +54,7 @@ export async function POST(
 
   const { data: link } = await admin
     .from("notification_links")
-    .select("id, patient_id, appointment_id, is_claimed, expires_at")
+    .select("id, patient_id, appointment_id, practice_id, is_claimed, expires_at")
     .eq("slug", params.slug)
     .maybeSingle();
 
@@ -95,6 +95,15 @@ export async function POST(
       claimed_at: new Date().toISOString(),
     })
     .eq("id", link.id);
+
+  // Patient von der Warteliste der Praxis entfernen (idempotent).
+  if (link.patient_id && link.practice_id) {
+    await admin
+      .from("waitlist")
+      .delete()
+      .eq("practice_id", link.practice_id)
+      .eq("patient_id", link.patient_id);
+  }
 
   return NextResponse.json({ code: "CLAIM_SUCCESS" });
 }

@@ -4,7 +4,7 @@ import { formatBerlin } from "@/lib/datetime";
 import { z } from "zod";
 import { getCurrentPractice } from "@/lib/practice";
 import { getTranslations } from "@/lib/i18n";
-import { sendWhatsApp } from "@/lib/twilio";
+import { sendAppointmentOfferMessage } from "@/lib/messaging";
 import {
   checkNotificationLimit,
   incrementNotificationCount,
@@ -118,7 +118,7 @@ export async function POST(request: Request) {
   const dateText = formatBerlin(appointment.scheduled_time);
   const phoneById = new Map(recipients.map((p) => [p.id, p.phone as string]));
 
-  // WhatsApp an jeden Empfänger senden und Zustellung protokollieren.
+  // Über die zentrale Nachrichten-Schicht senden und Status protokollieren.
   let delivered = 0;
   const notificationRows = [];
   for (const link of createdLinks) {
@@ -129,12 +129,9 @@ export async function POST(request: Request) {
       link: `${appUrl}/fill/${link.slug}`,
     });
 
-    let ok = false;
-    if (phone) {
-      const result = await sendWhatsApp(phone, messageBody);
-      ok = Boolean(result.sid);
-      if (ok) delivered += 1;
-    }
+    const result = await sendAppointmentOfferMessage({ to: phone, body: messageBody });
+    const ok = result.status === "sent";
+    if (ok) delivered += 1;
 
     notificationRows.push({
       practice_id: practiceId,
@@ -142,6 +139,7 @@ export async function POST(request: Request) {
       appointment_id,
       notification_link_id: link.id,
       delivered: ok,
+      status: result.status,
     });
   }
 

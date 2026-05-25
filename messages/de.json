@@ -154,6 +154,27 @@
     "statusError": "Fehler",
     "emailSetupNav": "E-Mail-Setup",
     "autoMaintenanceNav": "Auto-Wartung",
+    "messagingSetupNav": "Nachrichten-Setup",
+    "messagingSetup": {
+      "title": "Nachrichten-Setup",
+      "subtitle": "Status des SMS-/WhatsApp-Anbieters. Ohne Anbieter werden Links nur vorbereitet.",
+      "recheck": "Status aktualisieren",
+      "sendTest": "Test-Nachricht senden",
+      "checking": "Wird geprüft...",
+      "sending": "Wird gesendet...",
+      "provider": "Aktiver Anbieter",
+      "dryRun": "Testmodus (Dry-Run)",
+      "smsConfigured": "Twilio SMS konfiguriert",
+      "whatsappConfigured": "Twilio WhatsApp konfiguriert",
+      "yes": "Ja",
+      "no": "Nein",
+      "providerNone": "Kein Anbieter (none)",
+      "providerSms": "Twilio SMS",
+      "providerWhatsApp": "Twilio WhatsApp",
+      "noTestPhone": "Es ist keine ADMIN_TEST_PHONE gesetzt.",
+      "testResult": "Test-Status: {status}",
+      "error": "Aktion konnte nicht ausgeführt werden."
+    },
     "autoMaintenance": {
       "title": "Auto-Prüfung & Reparatur",
       "subtitle": "Prüft den Datenzustand automatisch und behebt sichere Probleme mit einem Klick.",
@@ -177,7 +198,8 @@
         "missingPracticeName": "Konten ohne hinterlegten Praxisnamen",
         "orphanWaitlist": "Wartelisten-Einträge ohne gültigen Patienten",
         "duplicateWaitlist": "Doppelte Wartelisten-Einträge",
-        "claimedStillOnWaitlist": "Gebuchte Patienten noch auf der Warteliste"
+        "claimedStillOnWaitlist": "Gebuchte Patienten noch auf der Warteliste",
+        "messagingNotConfigured": "Nachrichten-Anbieter nicht vollständig konfiguriert"
       }
     },
     "emailSetup": {
@@ -283,6 +305,14 @@
     "delivered": "Zugestellt",
     "notDelivered": "Nicht zugestellt",
     "providerNotConfigured": "Vorbereitet – Anbieter nicht konfiguriert",
+    "statusLabels": {
+      "sent": "Gesendet",
+      "failed": "Fehlgeschlagen",
+      "prepared": "Vorbereitet",
+      "skipped_no_provider": "Vorbereitet – Anbieter nicht konfiguriert",
+      "skipped_no_consent": "Keine Einwilligung",
+      "skipped_invalid_phone": "Telefonnummer ungültig"
+    },
     "sentAt": "Gesendet am",
     "recipient": "Empfänger"
   },

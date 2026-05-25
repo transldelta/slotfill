@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { formatBerlin } from "@/lib/datetime";
-import { Bell, Check, X } from "lucide-react";
+import { Bell } from "lucide-react";
 import { useTranslations } from "@/lib/i18n";
 import { LoadingSkeleton } from "@/components/loading-skeleton";
 import { EmptyState } from "@/components/empty-state";
@@ -11,7 +11,17 @@ type NotificationEntry = {
   id: string;
   patientName: string | null;
   delivered: boolean;
+  status: string | null;
   createdAt: string;
+};
+
+const STATUS_STYLE: Record<string, string> = {
+  sent: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
+  failed: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
+  prepared: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300",
+  skipped_no_provider: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300",
+  skipped_no_consent: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300",
+  skipped_invalid_phone: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
 };
 
 export default function NotificationsPage() {
@@ -40,6 +50,18 @@ export default function NotificationsPage() {
   useEffect(() => {
     load();
   }, [load]);
+
+  function renderStatus(n: NotificationEntry) {
+    // Status bevorzugen; Altzeilen ohne status anhand delivered/Provider abbilden.
+    const key =
+      n.status ?? (n.delivered ? "sent" : providerConfigured ? "failed" : "skipped_no_provider");
+    const cls = STATUS_STYLE[key] ?? STATUS_STYLE.prepared;
+    return (
+      <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs ${cls}`}>
+        {t(`notification.statusLabels.${key}`)}
+      </span>
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -104,23 +126,7 @@ export default function NotificationsPage() {
                   <td className="px-4 py-3 text-slate-500 dark:text-slate-400">
                     {formatBerlin(n.createdAt)}
                   </td>
-                  <td className="px-4 py-3">
-                    {n.delivered ? (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-800 dark:bg-green-900/30 dark:text-green-300">
-                        <Check className="h-3 w-3" />
-                        {t("notification.delivered")}
-                      </span>
-                    ) : !providerConfigured ? (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
-                        {t("notification.providerNotConfigured")}
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300">
-                        <X className="h-3 w-3" />
-                        {t("notification.notDelivered")}
-                      </span>
-                    )}
-                  </td>
+                  <td className="px-4 py-3">{renderStatus(n)}</td>
                 </tr>
               ))}
             </tbody>

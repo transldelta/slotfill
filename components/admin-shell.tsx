@@ -12,6 +12,7 @@ import {
   LayoutDashboard,
   Mail,
   Menu,
+  MessageSquare,
   Package,
   Wrench,
   X,
@@ -32,6 +33,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     { href: "/admin/system-check", label: t("admin.systemCheck"), icon: Activity },
     { href: "/admin/email-setup", label: t("admin.emailSetupNav"), icon: Mail },
     { href: "/admin/auto-maintenance", label: t("admin.autoMaintenanceNav"), icon: Wrench },
+    { href: "/admin/messaging-setup", label: t("admin.messagingSetupNav"), icon: MessageSquare },
   ];
 
   function isActive(href: string) {

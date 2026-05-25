@@ -1,9 +1,17 @@
 import { NextResponse } from "next/server";
 import { getCurrentPractice } from "@/lib/practice";
 import { toPatientName } from "@/lib/patients";
-import { isTwilioConfigured } from "@/lib/twilio";
+import { messagingStatus } from "@/lib/messaging";
 
 export const dynamic = "force-dynamic";
+
+type NotificationRow = {
+  id: string;
+  patient_id: string | null;
+  delivered: boolean | null;
+  created_at: string | null;
+  status?: string | null;
+};
 
 // GET /api/notifications – Protokoll der versendeten Benachrichtigungen.
 export async function GET() {
@@ -13,15 +21,29 @@ export async function GET() {
   }
   const { admin, practiceId } = ctx;
 
-  const { data: rows, error } = await admin
-    .from("sent_notifications")
-    .select("id, patient_id, appointment_id, delivered, created_at")
-    .eq("practice_id", practiceId)
-    .order("created_at", { ascending: false })
-    .limit(50);
-  if (error) {
-    console.error("[GET /api/notifications] Laden fehlgeschlagen:", error);
-    return NextResponse.json({ code: "SERVER_ERROR" }, { status: 500 });
+  // Mit status laden; falls Spalte fehlt (Migration 012 noch nicht eingespielt),
+  // ohne status erneut laden – kein Absturz.
+  let rows: NotificationRow[] | null = (
+    await admin
+      .from("sent_notifications")
+      .select("id, patient_id, delivered, created_at, status")
+      .eq("practice_id", practiceId)
+      .order("created_at", { ascending: false })
+      .limit(50)
+  ).data;
+
+  if (rows === null) {
+    const fallback = await admin
+      .from("sent_notifications")
+      .select("id, patient_id, delivered, created_at")
+      .eq("practice_id", practiceId)
+      .order("created_at", { ascending: false })
+      .limit(50);
+    if (fallback.error) {
+      console.error("[GET /api/notifications] Laden fehlgeschlagen:", fallback.error);
+      return NextResponse.json({ code: "SERVER_ERROR" }, { status: 500 });
+    }
+    rows = fallback.data;
   }
 
   const patientIds = Array.from(
@@ -46,12 +68,13 @@ export async function GET() {
     id: r.id,
     patientName: r.patient_id ? (names.get(r.patient_id) ?? null) : null,
     delivered: r.delivered,
+    status: "status" in r ? (r.status ?? null) : null,
     createdAt: r.created_at,
   }));
 
   return NextResponse.json({
     code: "NOTIFICATIONS_LOADED",
     notifications,
-    providerConfigured: isTwilioConfigured(),
+    providerConfigured: messagingStatus().activeConfigured,
   });
 }

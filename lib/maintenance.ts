@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase";
 import { ensureOnboarding } from "@/lib/onboarding";
+import { messagingStatus } from "@/lib/messaging";
 
 export type MaintenanceItem = {
   type: string; // Maschinen-Key (Frontend übersetzt über de.json)
@@ -182,6 +183,17 @@ export async function runMaintenance(dryRun: boolean): Promise<MaintenanceResult
         error_message: error.message,
       });
     }
+  }
+
+  // Konfigurationsprüfung Nachrichten-Anbieter (Warnung, nie Fehler, nicht auto-fixbar).
+  const messaging = messagingStatus();
+  if (!messaging.activeConfigured) {
+    items.push({
+      type: "messagingNotConfigured",
+      severity: "warn",
+      count: 1,
+      autoFixable: false,
+    });
   }
 
   const hasWarn = items.some((i) => i.severity === "warn" && i.count > 0);

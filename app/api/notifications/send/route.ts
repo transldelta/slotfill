@@ -4,7 +4,7 @@ import { formatBerlin } from "@/lib/datetime";
 import { z } from "zod";
 import { getCurrentPractice } from "@/lib/practice";
 import { getTranslations } from "@/lib/i18n";
-import { sendWhatsApp } from "@/lib/twilio";
+import { sendAppointmentOfferMessage } from "@/lib/messaging";
 import {
   checkNotificationLimit,
   incrementNotificationCount,
@@ -80,12 +80,34 @@ export async function POST(request: Request) {
     return NextResponse.json({ code: "WAITLIST_EMPTY", count: 0, links: [] });
   }
 
+  // Zähler über alle möglichen Status (für die Antwort).
+  const counts: Record<string, number> = {
+    sent: 0,
+    prepared: 0,
+    dry_run: 0,
+    failed: 0,
+    skipped_no_provider: 0,
+    skipped_no_consent: 0,
+    skipped_invalid_phone: 0,
+    skipped_whatsapp_template_missing: 0,
+  };
+
   // Nur Patienten mit Einwilligung UND Telefonnummer benachrichtigen.
+  // Fehlende Einwilligung wird sauber gezählt (keine Nachricht, kein Link).
   const recipients = allPatients.filter(
     (p) => p.whatsapp_opt_in === true && Boolean(p.phone),
   );
+  counts.skipped_no_consent = allPatients.filter(
+    (p) => p.whatsapp_opt_in !== true,
+  ).length;
+
   if (recipients.length === 0) {
-    return NextResponse.json({ code: "NO_OPTED_IN_PATIENTS", count: 0, links: [] });
+    return NextResponse.json({
+      code: "NO_OPTED_IN_PATIENTS",
+      count: 0,
+      links: [],
+      counts,
+    });
   }
 
   // Vorhandene, noch nicht eingelöste Links für diesen Termin entfernen.
@@ -118,8 +140,9 @@ export async function POST(request: Request) {
   const dateText = formatBerlin(appointment.scheduled_time);
   const phoneById = new Map(recipients.map((p) => [p.id, p.phone as string]));
 
-  // WhatsApp an jeden Empfänger senden und Zustellung protokollieren.
+  // Über die zentrale Nachrichten-Schicht senden und Status protokollieren.
   let delivered = 0;
+  counts.prepared = createdLinks.length;
   const notificationRows = [];
   for (const link of createdLinks) {
     const phone = phoneById.get(link.patient_id);
@@ -129,12 +152,10 @@ export async function POST(request: Request) {
       link: `${appUrl}/fill/${link.slug}`,
     });
 
-    let ok = false;
-    if (phone) {
-      const result = await sendWhatsApp(phone, messageBody);
-      ok = Boolean(result.sid);
-      if (ok) delivered += 1;
-    }
+    const result = await sendAppointmentOfferMessage({ to: phone, body: messageBody });
+    const ok = result.status === "sent";
+    if (ok) delivered += 1;
+    counts[result.status] = (counts[result.status] ?? 0) + 1;
 
     notificationRows.push({
       practice_id: practiceId,
@@ -142,6 +163,7 @@ export async function POST(request: Request) {
       appointment_id,
       notification_link_id: link.id,
       delivered: ok,
+      status: result.status,
     });
   }
 
@@ -161,6 +183,7 @@ export async function POST(request: Request) {
     count: createdLinks.length,
     delivered,
     remaining,
+    counts,
     links: createdLinks.map((link) => ({
       slug: link.slug,
       patient_id: link.patient_id,

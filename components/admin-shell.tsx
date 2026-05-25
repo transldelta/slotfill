@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  Activity,
   ArrowLeft,
   Bell,
   Bug,
@@ -26,6 +27,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     { href: "/admin/notifications", label: t("admin.notifications"), icon: Bell },
     { href: "/admin/plans", label: t("admin.plans"), icon: Package },
     { href: "/admin/errors", label: t("admin.errors"), icon: Bug },
+    { href: "/admin/system-check", label: t("admin.systemCheck"), icon: Activity },
   ];
 
   function isActive(href: string) {

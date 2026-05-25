@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { format } from "date-fns";
+import { formatBerlin } from "@/lib/datetime";
 import { useTranslations } from "@/lib/i18n";
 
 type LinkInfo = {
@@ -76,7 +76,7 @@ export default function FillPage() {
   }
 
   function formatDate(iso: string | null) {
-    return iso ? format(new Date(iso), "dd.MM.yyyy HH:mm") : "—";
+    return iso ? formatBerlin(iso) : "—";
   }
 
   return (

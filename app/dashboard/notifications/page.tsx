@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { format } from "date-fns";
+import { formatBerlin } from "@/lib/datetime";
 import { Bell, Check, X } from "lucide-react";
 import { useTranslations } from "@/lib/i18n";
 import { LoadingSkeleton } from "@/components/loading-skeleton";
@@ -100,7 +100,7 @@ export default function NotificationsPage() {
                     {n.patientName ?? "—"}
                   </td>
                   <td className="px-4 py-3 text-slate-500 dark:text-slate-400">
-                    {format(new Date(n.createdAt), "dd.MM.yyyy HH:mm")}
+                    {formatBerlin(n.createdAt)}
                   </td>
                   <td className="px-4 py-3">
                     {n.delivered ? (

@@ -307,11 +307,13 @@
     "providerNotConfigured": "Vorbereitet – Anbieter nicht konfiguriert",
     "statusLabels": {
       "sent": "Gesendet",
+      "dry_run": "DRY RUN – keine echten Nachrichten",
       "failed": "Fehlgeschlagen",
       "prepared": "Vorbereitet",
       "skipped_no_provider": "Vorbereitet – Anbieter nicht konfiguriert",
       "skipped_no_consent": "Keine Einwilligung",
-      "skipped_invalid_phone": "Telefonnummer ungültig"
+      "skipped_invalid_phone": "Telefonnummer ungültig",
+      "skipped_whatsapp_template_missing": "WhatsApp-Vorlage nicht konfiguriert"
     },
     "sentAt": "Gesendet am",
     "recipient": "Empfänger"

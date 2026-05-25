@@ -5,9 +5,11 @@ export type MessagingProvider = "none" | "twilio_sms" | "twilio_whatsapp";
 
 export type MessageStatus =
   | "sent"
+  | "dry_run"
   | "failed"
   | "skipped_no_provider"
-  | "skipped_invalid_phone";
+  | "skipped_invalid_phone"
+  | "skipped_whatsapp_template_missing";
 
 export function getMessagingProvider(): MessagingProvider {
   const p = process.env.MESSAGING_PROVIDER;
@@ -77,13 +79,19 @@ export async function sendAppointmentOfferMessage(input: {
   const fromWhatsApp = process.env.TWILIO_WHATSAPP_FROM;
 
   if (provider === "twilio_sms" && !fromSms) return { status: "skipped_no_provider" };
-  if (provider === "twilio_whatsapp" && !fromWhatsApp)
-    return { status: "skipped_no_provider" };
+  if (provider === "twilio_whatsapp") {
+    if (!fromWhatsApp) return { status: "skipped_no_provider" };
+    // WhatsApp benötigt eine genehmigte Vorlage (Content SID). Fehlt sie,
+    // wird NICHT gesendet, sondern verständlich übersprungen.
+    if (!process.env.TWILIO_WHATSAPP_CONTENT_SID) {
+      return { status: "skipped_whatsapp_template_missing" };
+    }
+  }
 
-  // Dry-Run: kein echter Versand, aber sauberer Status (Testmodus durch Betreiber).
+  // Dry-Run: kein echter Versand und KEIN "sent"-Status (keine echte Nachricht).
   if (isDryRun()) {
     console.log(`[messaging] DRY_RUN (${provider}) -> ${phone}`);
-    return { status: "sent" };
+    return { status: "dry_run" };
   }
 
   try {

@@ -17,11 +17,13 @@ type NotificationEntry = {
 
 const STATUS_STYLE: Record<string, string> = {
   sent: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
+  dry_run: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
   failed: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
   prepared: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300",
   skipped_no_provider: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300",
   skipped_no_consent: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300",
   skipped_invalid_phone: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
+  skipped_whatsapp_template_missing: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300",
 };
 
 export default function NotificationsPage() {

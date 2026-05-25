@@ -13,6 +13,7 @@ import {
   Mail,
   Menu,
   Package,
+  Wrench,
   X,
 } from "lucide-react";
 import { useTranslations } from "@/lib/i18n";
@@ -30,6 +31,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     { href: "/admin/errors", label: t("admin.errors"), icon: Bug },
     { href: "/admin/system-check", label: t("admin.systemCheck"), icon: Activity },
     { href: "/admin/email-setup", label: t("admin.emailSetupNav"), icon: Mail },
+    { href: "/admin/auto-maintenance", label: t("admin.autoMaintenanceNav"), icon: Wrench },
   ];
 
   function isActive(href: string) {

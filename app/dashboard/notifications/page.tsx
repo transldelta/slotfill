@@ -17,6 +17,7 @@ type NotificationEntry = {
 export default function NotificationsPage() {
   const t = useTranslations();
   const [items, setItems] = useState<NotificationEntry[]>([]);
+  const [providerConfigured, setProviderConfigured] = useState(true);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -28,6 +29,7 @@ export default function NotificationsPage() {
       if (!res.ok) throw new Error("request failed");
       const data = await res.json();
       setItems(data.notifications ?? []);
+      setProviderConfigured(data.providerConfigured ?? true);
     } catch {
       setError(true);
     } finally {
@@ -107,6 +109,10 @@ export default function NotificationsPage() {
                       <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-800 dark:bg-green-900/30 dark:text-green-300">
                         <Check className="h-3 w-3" />
                         {t("notification.delivered")}
+                      </span>
+                    ) : !providerConfigured ? (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
+                        {t("notification.providerNotConfigured")}
                       </span>
                     ) : (
                       <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300">

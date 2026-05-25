@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import { getCurrentPractice } from "@/lib/practice";
+import { berlinLocalToUtcIso } from "@/lib/datetime";
 
 export type ActionResult = {
   success?: boolean;
@@ -25,10 +26,11 @@ export async function createAppointment(
   }
   const { admin, practiceId } = ctx;
 
-  // datetime-local liefert "YYYY-MM-DDTHH:mm" ohne Zeitzone – in ISO wandeln.
+  // datetime-local liefert "YYYY-MM-DDTHH:mm" ohne Zeitzone. Der Wert ist als
+  // Berliner Ortszeit gemeint und wird korrekt (DST-bewusst) nach UTC gewandelt.
   const rawTime = formData.get("scheduled_time");
   const isoTime =
-    typeof rawTime === "string" && rawTime ? new Date(rawTime).toISOString() : "";
+    typeof rawTime === "string" && rawTime ? berlinLocalToUtcIso(rawTime) : "";
 
   const parsed = appointmentSchema.safeParse({
     patient_id: formData.get("patient_id"),

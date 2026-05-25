@@ -1,10 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { format } from "date-fns";
 import { Calendar, CalendarPlus } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslations } from "@/lib/i18n";
+import { formatBerlin, berlinDateKey } from "@/lib/datetime";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { EmptyState } from "@/components/empty-state";
 import { LoadingSkeleton } from "@/components/loading-skeleton";
@@ -32,16 +32,11 @@ const STATUS_COLOR: Record<Appointment["status"], string> = {
 };
 
 function dayBucket(iso: string): "today" | "tomorrow" | "later" {
-  const d = new Date(iso);
-  const now = new Date();
-  const sameDay = (a: Date, b: Date) =>
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate();
-  const tomorrow = new Date(now);
-  tomorrow.setDate(now.getDate() + 1);
-  if (sameDay(d, now)) return "today";
-  if (sameDay(d, tomorrow)) return "tomorrow";
+  const key = berlinDateKey(iso);
+  const todayKey = berlinDateKey(new Date());
+  const tomorrowKey = berlinDateKey(new Date(Date.now() + 24 * 60 * 60 * 1000));
+  if (key === todayKey) return "today";
+  if (key === tomorrowKey) return "tomorrow";
   return "later";
 }
 
@@ -180,7 +175,7 @@ export default function AppointmentsPage() {
                 className="border-b border-slate-100 transition last:border-0 hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-slate-800/40"
               >
                 <td className="px-4 py-3 text-slate-900 dark:text-slate-100">
-                  {format(new Date(a.scheduledTime), "dd.MM.yyyy HH:mm")}
+                  {formatBerlin(a.scheduledTime)}
                 </td>
                 <td className="px-4 py-3 text-slate-700 dark:text-slate-300">
                   {a.filledByPatientName ?? a.patientName ?? "—"}

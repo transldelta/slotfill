@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
-import { format } from "date-fns";
+import { formatBerlin } from "@/lib/datetime";
 import { z } from "zod";
 import { getCurrentPractice } from "@/lib/practice";
 import { getTranslations } from "@/lib/i18n";
@@ -115,7 +115,7 @@ export async function POST(request: Request) {
 
   const t = await getTranslations();
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-  const dateText = format(new Date(appointment.scheduled_time), "dd.MM.yyyy HH:mm");
+  const dateText = formatBerlin(appointment.scheduled_time);
   const phoneById = new Map(recipients.map((p) => [p.id, p.phone as string]));
 
   // WhatsApp an jeden Empfänger senden und Zustellung protokollieren.

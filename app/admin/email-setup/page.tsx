@@ -46,7 +46,10 @@ export default function EmailSetupPage() {
     } finally {
       setChecking(false);
     }
-  }, [t]);
+    // t ist bei festem Locale stabil; bewusst nicht in die Deps, damit der
+    // Mount-Effekt nicht in einer Endlosschleife läuft.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     check();

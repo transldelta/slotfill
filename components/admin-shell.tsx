@@ -10,6 +10,7 @@ import {
   Bug,
   Building2,
   LayoutDashboard,
+  Mail,
   Menu,
   Package,
   X,
@@ -28,6 +29,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     { href: "/admin/plans", label: t("admin.plans"), icon: Package },
     { href: "/admin/errors", label: t("admin.errors"), icon: Bug },
     { href: "/admin/system-check", label: t("admin.systemCheck"), icon: Activity },
+    { href: "/admin/email-setup", label: t("admin.emailSetupNav"), icon: Mail },
   ];
 
   function isActive(href: string) {

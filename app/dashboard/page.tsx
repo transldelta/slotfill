@@ -149,6 +149,24 @@ export default function DashboardPage() {
         </p>
       </div>
 
+      {/* Erste-Schritte-Karte */}
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-blue-200 bg-blue-50 p-4 dark:border-blue-900/50 dark:bg-blue-900/20">
+        <div>
+          <p className="font-medium text-slate-900 dark:text-slate-100">
+            {t("onboarding.title")}
+          </p>
+          <p className="text-sm text-slate-600 dark:text-slate-300">
+            {t("onboarding.testModeHint")}
+          </p>
+        </div>
+        <Link
+          href="/dashboard/onboarding"
+          className="shrink-0 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
+        >
+          {t("onboarding.start")}
+        </Link>
+      </div>
+
       {isEmpty ? (
         <EmptyState
           icon={LayoutDashboard}

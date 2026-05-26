@@ -4,7 +4,16 @@
   "buildCommand": "next build",
   "devCommand": "next dev",
   "installCommand": "npm install",
+  "functions": {
+    "app/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  },
   "crons": [
+    {
+      "path": "/api/cron/trial-reminder",
+      "schedule": "0 8 * * *"
+    },
     {
       "path": "/api/cron/reset-limits",
       "schedule": "0 0 1 * *"

@@ -14,6 +14,7 @@ import {
   Menu,
   MessageSquare,
   Package,
+  ShieldCheck,
   Wrench,
   X,
 } from "lucide-react";
@@ -34,6 +35,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     { href: "/admin/email-setup", label: t("admin.emailSetupNav"), icon: Mail },
     { href: "/admin/auto-maintenance", label: t("admin.autoMaintenanceNav"), icon: Wrench },
     { href: "/admin/messaging-setup", label: t("admin.messagingSetupNav"), icon: MessageSquare },
+    { href: "/admin/operations", label: t("operations.title"), icon: ShieldCheck },
   ];
 
   function isActive(href: string) {

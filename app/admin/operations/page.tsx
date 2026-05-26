@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import { AlertTriangle, CheckCircle2, XCircle } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslations } from "@/lib/i18n";
@@ -177,6 +178,32 @@ export default function OperationsPage() {
                   <span className="shrink-0 text-xs text-slate-400 dark:text-slate-500">{task.priority}</span>
                 </li>
               ))}
+            </ul>
+          </div>
+
+          <div className={card}>
+            <h2 className="mb-3 text-base font-semibold text-slate-900 dark:text-slate-100">
+              {t("operations.securityStatus")}
+            </h2>
+            <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400" />
+                {t("securityHardening.rateLimitActive")}
+                <span className="text-xs text-slate-400 dark:text-slate-500">
+                  ({t("securityHardening.rateLimitRecommendation")})
+                </span>
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400" />
+                {t("securityHardening.auditLogActive")}
+                <Link href="/admin/audit-logs" className="text-blue-600 hover:underline dark:text-blue-400">
+                  {t("securityHardening.viewAuditLogs")}
+                </Link>
+              </li>
+              <li className="flex items-center gap-2">
+                <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                {t("securityHardening.backupManualCheck")}
+              </li>
             </ul>
           </div>
 

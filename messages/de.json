@@ -587,10 +587,35 @@
       "PRACTICE_ID_SERVER_SIDE": "practice_id wird serverseitig ermittelt.",
       "MESSAGING_SAFE": "Messaging sicher konfiguriert (kein ungewollter Versand).",
       "RATE_LIMIT_RECOMMENDED": "Rate-Limiting für sensible Routen prüfen.",
+      "RATE_LIMIT_BASIC": "Rate-Limiting-Basisschutz aktiv.",
       "AUDIT_LOG_RECOMMENDED": "Audit-Log für Admin- und Systemaktionen einführen.",
+      "AUDIT_LOG_ACTIVE": "Audit-Log aktiv.",
       "BACKUP_REVIEW": "Supabase-Backup- und Wiederherstellungsstrategie prüfen.",
+      "BACKUP_DOCUMENTED": "Backup-Dokumentation vorhanden (docs/BACKUP-RECOVERY.md).",
       "MONITORING_RECOMMENDED": "Externes Monitoring für /api/health einrichten."
     }
+  },
+  "auditLogs": {
+    "title": "Audit-Logs",
+    "subtitle": "Protokoll wichtiger Admin- und Systemaktionen.",
+    "empty": "Noch keine Audit-Logs vorhanden.",
+    "createdAt": "Zeitpunkt",
+    "area": "Bereich",
+    "action": "Aktion",
+    "status": "Status",
+    "actor": "Ausgeführt von",
+    "metadata": "Details",
+    "noSecretsShown": "Secrets werden aus Sicherheitsgründen nicht angezeigt.",
+    "error": "Audit-Logs konnten nicht geladen werden.",
+    "retry": "Erneut versuchen"
+  },
+  "securityHardening": {
+    "rateLimitActive": "Rate-Limiting-Basisschutz aktiv",
+    "rateLimitRecommendation": "Für größere Nutzung später Redis/Upstash prüfen.",
+    "auditLogActive": "Audit-Log aktiv",
+    "viewAuditLogs": "Audit-Logs ansehen",
+    "backupManualCheck": "Backup- und Wiederherstellungsstrategie manuell prüfen.",
+    "backupDocumentation": "Backup-Dokumentation vorhanden."
   },
   "errors": {
     "practiceNotFound": "Es konnte keine Praxis für dein Konto gefunden werden.",

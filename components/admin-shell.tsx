@@ -14,6 +14,7 @@ import {
   Menu,
   MessageSquare,
   Package,
+  ScrollText,
   ShieldCheck,
   Wrench,
   X,
@@ -36,6 +37,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     { href: "/admin/auto-maintenance", label: t("admin.autoMaintenanceNav"), icon: Wrench },
     { href: "/admin/messaging-setup", label: t("admin.messagingSetupNav"), icon: MessageSquare },
     { href: "/admin/operations", label: t("operations.title"), icon: ShieldCheck },
+    { href: "/admin/audit-logs", label: t("auditLogs.title"), icon: ScrollText },
   ];
 
   function isActive(href: string) {

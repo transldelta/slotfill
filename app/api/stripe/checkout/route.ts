@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getCurrentPractice } from "@/lib/practice";
 import { getEnvPriceId, getStripe } from "@/lib/stripe";
+import { checkRateLimit } from "@/lib/rate-limit";
+import { writeAuditLog } from "@/lib/audit-log";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -20,6 +22,33 @@ export async function POST(request: Request) {
     return NextResponse.json({ code: "UNAUTHORIZED" }, { status: 401 });
   }
   const { admin, practiceId } = ctx;
+
+  // Rate-Limit: 10 Checkout-Versuche pro Minute pro Nutzer.
+  const rl = checkRateLimit(`stripe_checkout:${ctx.userId}`, {
+    limit: 10,
+    windowMs: 60_000,
+  });
+  if (!rl.allowed) {
+    await writeAuditLog({
+      action: "rate_limited_request",
+      area: "stripe",
+      status: "blocked",
+      actorUserId: ctx.userId,
+      practiceId,
+      metadata: { route: "stripe/checkout" },
+    });
+    return NextResponse.json(
+      { code: "RATE_LIMITED", message: "Zu viele Anfragen. Bitte versuchen Sie es später erneut." },
+      { status: 429 },
+    );
+  }
+
+  await writeAuditLog({
+    action: "stripe_checkout_attempt",
+    area: "stripe",
+    actorUserId: ctx.userId,
+    practiceId,
+  });
 
   const body = await request.json().catch(() => null);
   const parsed = checkoutSchema.safeParse(body);

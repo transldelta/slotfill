@@ -70,9 +70,10 @@ export function runSecurityCheck(): SecurityResult {
     findings.push({ level: "info", code: "MESSAGING_SAFE" });
   }
 
-  // Empfehlungen (Missbrauchsschutz, Audit, Backup, Monitoring).
-  findings.push({ level: "warning", code: "RATE_LIMIT_RECOMMENDED" });
-  findings.push({ level: "warning", code: "AUDIT_LOG_RECOMMENDED" });
+  // Missbrauchsschutz, Audit, Backup, Monitoring.
+  findings.push({ level: "info", code: "RATE_LIMIT_BASIC" });
+  findings.push({ level: "info", code: "AUDIT_LOG_ACTIVE" });
+  findings.push({ level: "info", code: "BACKUP_DOCUMENTED" });
   findings.push({ level: "warning", code: "BACKUP_REVIEW" });
   findings.push({ level: "info", code: "MONITORING_RECOMMENDED" });
 

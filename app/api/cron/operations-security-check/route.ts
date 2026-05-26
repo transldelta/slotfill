@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { runOperationsCheck } from "@/lib/operations-agent";
 import { runSecurityCheck } from "@/lib/security-agent";
+import { writeAuditLog } from "@/lib/audit-log";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -20,6 +21,12 @@ async function handle(request: Request) {
       : operations.status === "warning" || security.status === "warning"
         ? "warning"
         : "healthy";
+
+  await writeAuditLog({
+    action: "cron_operations_security_check",
+    area: "cron",
+    metadata: { status },
+  });
 
   return NextResponse.json({
     code: "OPERATIONS_SECURITY_CHECK_DONE",

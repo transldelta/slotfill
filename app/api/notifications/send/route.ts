@@ -9,6 +9,8 @@ import {
   checkNotificationLimit,
   incrementNotificationCount,
 } from "@/lib/subscription";
+import { checkRateLimit } from "@/lib/rate-limit";
+import { writeAuditLog } from "@/lib/audit-log";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -32,6 +34,26 @@ export async function POST(request: Request) {
     return NextResponse.json({ code: "UNAUTHORIZED" }, { status: 401 });
   }
   const { admin, practiceId, practiceName } = ctx;
+
+  // Rate-Limit: 20 Sende-Vorgänge pro Minute pro Praxis.
+  const rl = checkRateLimit(`notifications_send:${practiceId}`, {
+    limit: 20,
+    windowMs: 60_000,
+  });
+  if (!rl.allowed) {
+    await writeAuditLog({
+      action: "rate_limited_request",
+      area: "messaging",
+      status: "blocked",
+      actorUserId: ctx.userId,
+      practiceId,
+      metadata: { route: "notifications/send" },
+    });
+    return NextResponse.json(
+      { code: "RATE_LIMITED", message: "Zu viele Anfragen. Bitte versuchen Sie es später erneut." },
+      { status: 429 },
+    );
+  }
 
   const body = await request.json().catch(() => null);
   const parsed = sendSchema.safeParse(body);
@@ -177,6 +199,14 @@ export async function POST(request: Request) {
   // Nur tatsächlich versendete Nachrichten auf das Limit anrechnen.
   await incrementNotificationCount(practiceId, delivered);
   const remaining = limit.maxNotifications - (limit.usedNotifications + delivered);
+
+  await writeAuditLog({
+    action: "notification_send_attempt",
+    area: "messaging",
+    actorUserId: ctx.userId,
+    practiceId,
+    metadata: { count: createdLinks.length, delivered },
+  });
 
   return NextResponse.json({
     code: "NOTIFICATIONS_PREPARED",

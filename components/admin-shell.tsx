@@ -7,6 +7,7 @@ import {
   Activity,
   ArrowLeft,
   Bell,
+  Briefcase,
   Bug,
   Building2,
   LayoutDashboard,
@@ -38,6 +39,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     { href: "/admin/messaging-setup", label: t("admin.messagingSetupNav"), icon: MessageSquare },
     { href: "/admin/operations", label: t("operations.title"), icon: ShieldCheck },
     { href: "/admin/audit-logs", label: t("auditLogs.title"), icon: ScrollText },
+    { href: "/admin/ceo", label: t("ceo.title"), icon: Briefcase },
   ];
 
   function isActive(href: string) {

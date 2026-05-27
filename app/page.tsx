@@ -8,13 +8,65 @@ import {
 } from "lucide-react";
 import { getTranslations } from "@/lib/i18n";
 
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://slotfill.de";
+
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations();
+  const title = "SlotFill – Termine automatisch aus der Warteliste füllen";
+  const description = t("landing.heroSubtitle");
+
   return {
-    title: "SlotFill – Termine automatisch aus der Warteliste füllen",
-    description: t("landing.heroSubtitle"),
+    title,
+    description,
+    metadataBase: new URL(APP_URL),
+    alternates: { canonical: "/" },
+    openGraph: {
+      title,
+      description,
+      url: "/",
+      siteName: "SlotFill",
+      locale: "de_DE",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
   };
 }
+
+// Schema.org JSON-LD – SoftwareApplication + Organization.
+// Kein MedicalOrganization (SlotFill ist eine SaaS, keine Praxis).
+// Keine AggregateRating, keine erfundenen Reviews.
+const schemaOrg = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      name: "SlotFill",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      description:
+        "SlotFill hilft Arzt- und Facharztpraxen, kurzfristige Terminlücken aus der Warteliste zu füllen. Patienten werden datenschutzbewusst über einen sicheren Link informiert.",
+      url: APP_URL,
+      inLanguage: "de",
+      offers: {
+        "@type": "Offer",
+        price: "29",
+        priceCurrency: "EUR",
+        description: "Starter-Plan ab 29 € pro Monat, 14-tägige Testphase inklusive",
+      },
+    },
+    {
+      "@type": "Organization",
+      name: "SlotFill",
+      url: APP_URL,
+      description:
+        "SlotFill – Software für die Wartelisten-Verwaltung in Arztpraxen.",
+    },
+  ],
+};
 
 export default async function LandingPage() {
   const t = await getTranslations();
@@ -28,6 +80,12 @@ export default async function LandingPage() {
 
   return (
     <div className="min-h-screen bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+      {/* Schema.org JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaOrg) }}
+      />
+
       {/* Header */}
       <header className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
         <span className="text-lg font-bold">{t("nav.brand")}</span>

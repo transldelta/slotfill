@@ -4,8 +4,11 @@ import { notFound } from "next/navigation";
 import { format } from "date-fns";
 import { createClient } from "@/lib/supabase";
 import { getTranslations } from "@/lib/i18n";
+import { STATIC_BLOG_POSTS, getStaticPost } from "@/lib/blog-data";
 
 export const dynamic = "force-dynamic";
+
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://slotfill.de";
 
 type Post = {
   slug: string;
@@ -15,7 +18,13 @@ type Post = {
   published_at: string | null;
 };
 
+/** Statische Slugs für generateStaticParams (Vorrendering der bekannten Artikel). */
+export function generateStaticParams() {
+  return STATIC_BLOG_POSTS.map((p) => ({ slug: p.slug }));
+}
+
 async function loadPost(slug: string): Promise<Post | null> {
+  // 1. DB-Versuch
   try {
     const admin = createClient();
     const { data } = await admin
@@ -24,10 +33,24 @@ async function loadPost(slug: string): Promise<Post | null> {
       .eq("slug", slug)
       .not("published_at", "is", null)
       .maybeSingle();
-    return (data as Post | null) ?? null;
+    if (data) return data as Post;
   } catch {
-    return null;
+    // DB nicht verfügbar → statischer Fallback
   }
+
+  // 2. Statischer Fallback
+  const staticPost = getStaticPost(slug);
+  if (staticPost) {
+    return {
+      slug: staticPost.slug,
+      title: staticPost.title,
+      excerpt: staticPost.excerpt,
+      content: staticPost.content,
+      published_at: staticPost.published_at,
+    };
+  }
+
+  return null;
 }
 
 export async function generateMetadata({
@@ -37,9 +60,25 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const post = await loadPost(params.slug);
   if (!post) return { title: "SlotFill Blog" };
+
+  const title = `${post.title} – SlotFill`;
+  const description = post.excerpt ?? "Praxistipps von SlotFill.";
+
   return {
-    title: `${post.title} – SlotFill`,
-    description: post.excerpt ?? undefined,
+    title,
+    description,
+    metadataBase: new URL(APP_URL),
+    alternates: { canonical: `/blog/${post.slug}` },
+    openGraph: {
+      title,
+      description,
+      url: `/blog/${post.slug}`,
+      siteName: "SlotFill",
+      locale: "de_DE",
+      type: "article",
+      publishedTime: post.published_at ?? undefined,
+    },
+    twitter: { card: "summary", title, description },
   };
 }
 
@@ -68,8 +107,37 @@ export default async function BlogPostPage({
           {format(new Date(post.published_at), "dd.MM.yyyy")}
         </p>
       )}
-      <div className="mt-6 whitespace-pre-wrap text-slate-700 dark:text-slate-300">
+      {post.excerpt && (
+        <p className="mt-3 border-l-4 border-blue-500 pl-4 text-base font-medium text-slate-600 dark:text-slate-300">
+          {post.excerpt}
+        </p>
+      )}
+      <div className="mt-6 whitespace-pre-wrap leading-relaxed text-slate-700 dark:text-slate-300">
         {post.content}
+      </div>
+
+      {/* CTA am Ende */}
+      <div className="mt-10 rounded-xl border border-blue-100 bg-blue-50 p-6 text-center dark:border-blue-900/50 dark:bg-blue-950/30">
+        <p className="font-semibold text-slate-900 dark:text-slate-100">
+          SlotFill kostenlos testen
+        </p>
+        <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+          14 Tage kostenlos – keine Kreditkarte erforderlich.
+        </p>
+        <div className="mt-4 flex flex-wrap justify-center gap-3">
+          <Link
+            href="/pricing"
+            className="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
+          >
+            Kostenlos testen
+          </Link>
+          <Link
+            href="/kontakt"
+            className="rounded-lg border border-slate-300 px-5 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
+          >
+            Kontakt aufnehmen
+          </Link>
+        </div>
       </div>
     </main>
   );

@@ -148,6 +148,14 @@ async function deptTechnik(): Promise<DepartmentReport> {
   };
 }
 
+/** Lesbare Empfehlungstexte für bekannte Sicherheits-Codes */
+const SEC_REC_LABELS: Record<string, string> = {
+  BACKUP_REVIEW: "Backup-Strategie prüfen und regelmäßige Sicherungen sicherstellen.",
+  MONITORING_RECOMMENDED: "Monitoring-Tool einrichten (z. B. Sentry, Uptime-Check).",
+  PUBLIC_SECRET_LEAK: "Öffentlich exponiertes Secret sofort rotieren und aus NEXT_PUBLIC_ entfernen.",
+  ADMIN_EMAILS_MISSING: "ADMIN_EMAILS-Umgebungsvariable setzen, um Admin-Bereich abzusichern.",
+};
+
 /** 2. Sicherheit */
 function deptSicherheit(): DepartmentReport {
   const sec = runSecurityCheck();
@@ -180,7 +188,7 @@ function deptSicherheit(): DepartmentReport {
     findings,
     recommendations:
       sec.recommendations.length > 0
-        ? sec.recommendations.map((r) => `Prüfen: ${r}`)
+        ? sec.recommendations.map((r) => SEC_REC_LABELS[r] ?? `Prüfen: ${r}`)
         : ["Sicherheits-Score regelmäßig im Admin-Bereich überwachen."],
     metrics: {
       securityScore: sec.score,

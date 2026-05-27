@@ -48,6 +48,131 @@ type Payload = {
   generatedAt: string;
 };
 
+// ─── Übersetzungen für technische Codes und Metriken ─────────────────────────
+
+/** Metric-Keys → lesbares Deutsch */
+const METRIC_LABELS: Record<string, string> = {
+  // Technik
+  healthStatus: "Status",
+  databaseConfigured: "Datenbank konfiguriert",
+  cronCount: "Cron-Jobs",
+  errorCount7d: "Fehler letzte 7 Tage",
+  publicPagesReady: "Öffentliche Seiten bereit",
+  // Sicherheit
+  securityScore: "Security-Score",
+  rateLimitActive: "Rate-Limit aktiv",
+  auditLogActive: "Audit-Log aktiv",
+  adminProtected: "Admin geschützt",
+  cronProtected: "Cron geschützt",
+  secretsHidden: "Secrets versteckt",
+  // Operations
+  operationsScore: "Operations-Score",
+  messagingSafeMode: "Messaging Sicherheitsmodus",
+  dryRunActive: "Nur-Simulation aktiv",
+  emailConfigured: "E-Mail konfiguriert",
+  stripeConfigured: "Stripe konfiguriert",
+  backupStatus: "Backup-Status",
+  errors24h: "Fehler letzte 24 Std.",
+  errors7d: "Fehler letzte 7 Tage",
+  // Produkt
+  onboardingReady: "Onboarding bereit",
+  trustCenterReady: "Trust-Center bereit",
+  helpReady: "Hilfe bereit",
+  dashboardReady: "Dashboard bereit",
+  coreFlowReady: "Kernprozess bereit",
+  // Praxen & Nutzung
+  practicesTotal: "Praxen gesamt",
+  practicesActive: "Aktive Praxen",
+  practicesTrial: "Praxen in Testphase",
+  activeSubscriptions: "Aktive Abos",
+  patientsTotal: "Patienten gesamt",
+  waitlistEntries: "Wartelisten-Einträge",
+  appointmentsTotal: "Termine gesamt",
+  cancelledAppointments: "Abgesagte Termine",
+  notificationsTotal: "Benachrichtigungen gesamt",
+  filledAppointments: "Gefüllte Termine",
+  fillRatePercent: "Füllrate (%)",
+  // Finanzen
+  trialSubscriptions: "Test-Abos",
+  cancelledSubscriptions: "Gekündigte Abos",
+  estimatedMrr: "Geschätzter MRR (€)",
+  arpa: "Ø Umsatz pro Abo (€)",
+  // Support
+  auditLogsAvailable: "Audit-Logs verfügbar",
+  helpPageReady: "Hilfe-Seite bereit",
+  contactPageReady: "Kontakt-Seite bereit",
+  // Marketing
+  landingPageReady: "Landing-Page bereit",
+  pricingReady: "Pricing-Seite bereit",
+  contactReady: "Kontakt-Seite bereit",
+  blogReady: "Blog bereit",
+  ctaReady: "CTA bereit",
+  messagingCopyHonest: "Ehrliche Kommunikation",
+  leadAutomationActive: "Lead-Automatisierung aktiv",
+  // Compliance
+  imprintReady: "Impressum bereit",
+  privacyReady: "Datenschutz bereit",
+  termsReady: "AGB bereit",
+  honestMessagingCopy: "Ehrliche Texte",
+  consentRespected: "Einwilligung respektiert",
+  noDsgvoPromise: "Keine DSGVO-Garantie",
+};
+
+/** Finding-Codes → lesbares Deutsch */
+const FINDING_LABELS: Record<string, string> = {
+  // Sicherheit (SEC_)
+  SEC_PUBLIC_SECRET_LEAK: "⚠ Öffentliches Secret-Leck",
+  SEC_SECRETS_SERVER_ONLY: "✓ Secrets nur serverseitig",
+  SEC_ADMIN_EMAILS_MISSING: "⚠ Admin-E-Mails nicht konfiguriert",
+  SEC_ADMIN_PROTECTED: "✓ Admin-Bereich geschützt",
+  SEC_WEBHOOK_SIGNATURE_OK: "✓ Webhook-Signatur geprüft",
+  SEC_PRACTICE_ID_SERVER_SIDE: "✓ Praxis-ID serverseitig",
+  SEC_MESSAGING_SAFE: "✓ Messaging-Sicherheit aktiv",
+  SEC_RATE_LIMIT_BASIC: "✓ Basis-Rate-Limit aktiv",
+  SEC_AUDIT_LOG_ACTIVE: "✓ Audit-Log aktiv",
+  SEC_BACKUP_DOCUMENTED: "✓ Backup dokumentiert",
+  SEC_BACKUP_REVIEW: "⚠ Backup-Strategie prüfen",
+  SEC_MONITORING_RECOMMENDED: "→ Monitoring empfohlen",
+  // Operations (OPS_)
+  OPS_DB_UNREACHABLE: "⚠ Datenbank nicht erreichbar",
+  OPS_SUPABASE_CONFIG_MISSING: "⚠ Supabase-Konfiguration fehlt",
+  OPS_CRON_SECRET_MISSING: "⚠ Cron-Secret fehlt",
+  OPS_ADMIN_EMAILS_MISSING: "⚠ Admin-E-Mails fehlen",
+  OPS_APP_URL_MISSING: "→ App-URL nicht gesetzt",
+  OPS_STRIPE_NOT_CONFIGURED: "→ Stripe nicht konfiguriert",
+  OPS_RESEND_NOT_CONFIGURED: "→ E-Mail nicht konfiguriert",
+  OPS_MESSAGING_NONE: "→ Kein Messaging-Anbieter",
+  OPS_MESSAGING_DRY_RUN: "✓ Messaging im Simulationsmodus",
+  OPS_MANY_ERRORS_24H: "⚠ Viele Fehler letzte 24 Std.",
+  // Technik (TECH_)
+  TECH_DB_UNREACHABLE: "⚠ Datenbank nicht erreichbar",
+  TECH_SUPABASE_CONFIG_MISSING: "⚠ Supabase-Konfiguration fehlt",
+  TECH_ERROR_LOGS_UNAVAILABLE: "→ Fehlerprotokolle nicht verfügbar",
+  TECH_MANY_ERRORS_7D: "⚠ Viele Fehler in letzten 7 Tagen",
+  // Nutzung (USAGE_)
+  USAGE_NO_PRACTICES_YET: "→ Noch keine Praxen registriert",
+  USAGE_NO_PATIENTS_YET: "→ Noch keine Patienten registriert",
+  USAGE_SUBSCRIPTION_DATA_UNAVAILABLE: "→ Abo-Daten nicht verfügbar",
+  // Finanzen (FIN_)
+  FIN_STRIPE_NOT_CONFIGURED: "⚠ Stripe nicht konfiguriert",
+  FIN_SUBSCRIPTION_DATA_UNAVAILABLE: "→ Abo-Daten nicht verfügbar",
+  // Marketing
+  MARKETING_NO_ACTIVE_LEADS: "→ Noch keine aktiven Leads",
+  // Support
+  SUPPORT_ERROR_LOGS_UNAVAILABLE: "→ Fehlerprotokolle nicht verfügbar",
+  SUPPORT_MANY_ERRORS_7D: "⚠ Viele Fehler in letzten 7 Tagen",
+};
+
+/** Gibt das lesbare Label für einen Metric-Key zurück, oder den Key selbst als Fallback. */
+function metricLabel(key: string): string {
+  return METRIC_LABELS[key] ?? key;
+}
+
+/** Gibt das lesbare Label für einen Finding-Code zurück, oder den Code selbst als Fallback. */
+function findingLabel(code: string): string {
+  return FINDING_LABELS[code] ?? code;
+}
+
 // ─── Hilfsfunktionen ──────────────────────────────────────────────────────────
 
 const STATUS_STYLE: Record<DeptStatus, string> = {
@@ -121,7 +246,7 @@ function DepartmentCard({ dept, t }: { dept: DepartmentReport; t: ReturnType<typ
           .slice(0, 4)
           .map(([k, v]) => (
             <div key={k} className="flex items-center gap-1 text-xs">
-              <span className="text-slate-500 dark:text-slate-400">{k}:</span>
+              <span className="text-slate-500 dark:text-slate-400">{metricLabel(k)}:</span>
               <MetricValue value={v} />
             </div>
           ))}
@@ -146,7 +271,7 @@ function DepartmentCard({ dept, t }: { dept: DepartmentReport; t: ReturnType<typ
             <div className="grid grid-cols-2 gap-x-4 gap-y-1">
               {Object.entries(dept.metrics).map(([k, v]) => (
                 <div key={k} className="flex items-center gap-1 text-xs">
-                  <span className="text-slate-500 dark:text-slate-400 truncate">{k}:</span>
+                  <span className="text-slate-500 dark:text-slate-400 truncate">{metricLabel(k)}:</span>
                   <MetricValue value={v} />
                 </div>
               ))}
@@ -180,9 +305,9 @@ function DepartmentCard({ dept, t }: { dept: DepartmentReport; t: ReturnType<typ
                 {dept.findings.map((f, i) => (
                   <span
                     key={i}
-                    className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300"
+                    className="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300"
                   >
-                    {f}
+                    {findingLabel(f)}
                   </span>
                 ))}
               </div>

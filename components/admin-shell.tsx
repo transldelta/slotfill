@@ -11,6 +11,7 @@ import {
   Bug,
   Building2,
   LayoutDashboard,
+  LineChart,
   Mail,
   Menu,
   MessageSquare,
@@ -40,6 +41,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     { href: "/admin/operations", label: t("operations.title"), icon: ShieldCheck },
     { href: "/admin/audit-logs", label: t("auditLogs.title"), icon: ScrollText },
     { href: "/admin/ceo", label: t("ceo.title"), icon: Briefcase },
+    { href: "/admin/marketing", label: t("marketing.title"), icon: LineChart },
   ];
 
   function isActive(href: string) {

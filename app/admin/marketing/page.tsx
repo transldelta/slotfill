@@ -1,0 +1,527 @@
+"use client";
+
+import { useCallback, useEffect, useState } from "react";
+import {
+  AlertTriangle,
+  CheckCircle2,
+  ChevronDown,
+  ChevronUp,
+  ExternalLink,
+  LineChart,
+  RefreshCw,
+  XCircle,
+} from "lucide-react";
+import { useTranslations } from "@/lib/i18n";
+import { formatBerlin } from "@/lib/datetime";
+
+// ─── Typen ────────────────────────────────────────────────────────────────────
+
+type ChannelStatus = "healthy" | "warning" | "critical";
+
+type ChannelReport = {
+  channel: string;
+  label: string;
+  status: ChannelStatus;
+  score: number;
+  summary: string;
+  findings: string[];
+  recommendations: string[];
+  metrics: Record<string, string | number | boolean>;
+};
+
+type MarketingTask = {
+  priority: "critical" | "important" | "recommended";
+  channel: string;
+  title: string;
+  description: string;
+  actionable: boolean;
+  link: string | null;
+  autoExecutable: false;
+};
+
+type Payload = {
+  code: "MARKETING_OVERVIEW_READY";
+  status: ChannelStatus;
+  score: number;
+  channels: ChannelReport[];
+  tasks: MarketingTask[];
+  generatedAt: string;
+};
+
+// ─── Hilfsfunktionen ──────────────────────────────────────────────────────────
+
+const STATUS_STYLE: Record<ChannelStatus, string> = {
+  healthy: "text-green-600 dark:text-green-400",
+  warning: "text-amber-600 dark:text-amber-400",
+  critical: "text-red-600 dark:text-red-500",
+};
+
+const STATUS_BG: Record<ChannelStatus, string> = {
+  healthy:
+    "bg-green-50 border-green-200 dark:bg-green-950/30 dark:border-green-800",
+  warning:
+    "bg-amber-50 border-amber-200 dark:bg-amber-950/30 dark:border-amber-800",
+  critical:
+    "bg-red-50 border-red-200 dark:bg-red-950/30 dark:border-red-800",
+};
+
+const PRIORITY_STYLE: Record<MarketingTask["priority"], string> = {
+  critical:
+    "bg-red-100 text-red-700 border border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800",
+  important:
+    "bg-amber-100 text-amber-700 border border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800",
+  recommended:
+    "bg-blue-100 text-blue-700 border border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800",
+};
+
+const SCORE_COLOR = (score: number): string => {
+  if (score >= 80) return "text-green-600 dark:text-green-400";
+  if (score >= 60) return "text-amber-600 dark:text-amber-400";
+  return "text-red-600 dark:text-red-500";
+};
+
+function StatusIcon({ status }: { status: ChannelStatus }) {
+  if (status === "healthy")
+    return <CheckCircle2 className="h-5 w-5 text-green-500" />;
+  if (status === "warning")
+    return <AlertTriangle className="h-5 w-5 text-amber-500" />;
+  return <XCircle className="h-5 w-5 text-red-500" />;
+}
+
+function MetricValue({ value }: { value: string | number | boolean }) {
+  if (typeof value === "boolean")
+    return (
+      <span
+        className={
+          value
+            ? "text-green-600 dark:text-green-400"
+            : "text-amber-600 dark:text-amber-400"
+        }
+      >
+        {value ? "✓ Ja" : "✗ Nein"}
+      </span>
+    );
+  return (
+    <span className="text-slate-900 dark:text-slate-100">{String(value)}</span>
+  );
+}
+
+// ─── Kanal-Karte ──────────────────────────────────────────────────────────────
+
+function ChannelCard({
+  channel,
+}: {
+  channel: ChannelReport;
+}) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div className={`rounded-xl border p-4 ${STATUS_BG[channel.status]}`}>
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <StatusIcon status={channel.status} />
+          <h3 className="font-semibold text-slate-900 dark:text-slate-100">
+            {channel.label}
+          </h3>
+        </div>
+        <div className="flex items-center gap-1">
+          <span
+            className={`text-xl font-bold tabular-nums ${SCORE_COLOR(channel.score)}`}
+          >
+            {channel.score}
+          </span>
+          <span className="text-xs text-slate-400">/100</span>
+        </div>
+      </div>
+
+      <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+        {channel.summary}
+      </p>
+
+      {/* Top-Kennzahlen */}
+      <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1">
+        {Object.entries(channel.metrics)
+          .slice(0, 3)
+          .map(([k, v]) => (
+            <div key={k} className="flex items-center gap-1 text-xs">
+              <span className="text-slate-500 dark:text-slate-400">{k}:</span>
+              <MetricValue value={v} />
+            </div>
+          ))}
+      </div>
+
+      {/* Aufklappen */}
+      <button
+        onClick={() => setExpanded((p) => !p)}
+        className="mt-3 flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+      >
+        {expanded ? (
+          <ChevronUp className="h-3 w-3" />
+        ) : (
+          <ChevronDown className="h-3 w-3" />
+        )}
+        {expanded ? "Weniger" : "Details"}
+      </button>
+
+      {expanded && (
+        <div className="mt-3 space-y-3">
+          {/* Alle Kennzahlen */}
+          <div>
+            <p className="mb-1 text-xs font-medium text-slate-500 dark:text-slate-400">
+              Kennzahlen
+            </p>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+              {Object.entries(channel.metrics).map(([k, v]) => (
+                <div key={k} className="flex items-center gap-1 text-xs">
+                  <span className="truncate text-slate-500 dark:text-slate-400">
+                    {k}:
+                  </span>
+                  <MetricValue value={v} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Empfehlungen */}
+          {channel.recommendations.length > 0 && (
+            <div>
+              <p className="mb-1 text-xs font-medium text-slate-500 dark:text-slate-400">
+                Empfehlungen
+              </p>
+              <ul className="space-y-1">
+                {channel.recommendations.map((rec, i) => (
+                  <li
+                    key={i}
+                    className="flex items-start gap-1.5 text-xs text-slate-700 dark:text-slate-300"
+                  >
+                    <span className="mt-0.5 text-blue-500">→</span>
+                    {rec}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Befunde */}
+          {channel.findings.length > 0 && (
+            <div>
+              <p className="mb-1 text-xs font-medium text-slate-500 dark:text-slate-400">
+                Befunde
+              </p>
+              <div className="flex flex-wrap gap-1">
+                {channel.findings.map((f, i) => (
+                  <span
+                    key={i}
+                    className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300"
+                  >
+                    {f}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Aufgaben-Gruppe ──────────────────────────────────────────────────────────
+
+function TaskGroup({
+  tasks,
+  priority,
+  label,
+  emptyLabel,
+  t,
+}: {
+  tasks: MarketingTask[];
+  priority: MarketingTask["priority"];
+  label: string;
+  emptyLabel: string;
+  t: ReturnType<typeof useTranslations>;
+}) {
+  const filtered = tasks.filter((task) => task.priority === priority);
+
+  return (
+    <div className="space-y-2">
+      <h3 className="flex items-center gap-2 font-semibold text-slate-900 dark:text-slate-100">
+        {priority === "critical" && (
+          <XCircle className="h-4 w-4 text-red-500" />
+        )}
+        {priority === "important" && (
+          <AlertTriangle className="h-4 w-4 text-amber-500" />
+        )}
+        {priority === "recommended" && (
+          <CheckCircle2 className="h-4 w-4 text-blue-500" />
+        )}
+        {label}
+        <span className="rounded-full bg-slate-200 px-2 py-0.5 text-xs font-normal text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+          {filtered.length}
+        </span>
+      </h3>
+
+      {filtered.length === 0 ? (
+        <p className="text-sm text-slate-500 dark:text-slate-400">{emptyLabel}</p>
+      ) : (
+        <div className="space-y-2">
+          {filtered.map((task, i) => (
+            <div
+              key={i}
+              className="rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-800"
+            >
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex-1">
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <span
+                      className={`rounded px-1.5 py-0.5 text-xs font-medium ${PRIORITY_STYLE[task.priority]}`}
+                    >
+                      {task.priority === "critical"
+                        ? t("marketing.priorityCritical")
+                        : task.priority === "important"
+                          ? t("marketing.priorityImportant")
+                          : t("marketing.priorityRecommended")}
+                    </span>
+                    <span className="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-500 dark:bg-slate-700 dark:text-slate-400">
+                      {task.channel}
+                    </span>
+                    <span className="text-xs text-slate-400 dark:text-slate-500">
+                      🔒 {t("marketing.manualOnly")}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-sm font-medium text-slate-900 dark:text-slate-100">
+                    {task.title}
+                  </p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    {task.description}
+                  </p>
+                </div>
+                {task.link && (
+                  <a
+                    href={task.link}
+                    className="shrink-0 rounded p-1 text-slate-400 hover:text-blue-600 dark:hover:text-blue-400"
+                    title="Öffnen"
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                  </a>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Haupt-Seite ──────────────────────────────────────────────────────────────
+
+export default function MarketingPage() {
+  const t = useTranslations();
+  const [data, setData] = useState<Payload | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    setError(false);
+    try {
+      const res = await fetch("/api/admin/marketing/overview", {
+        cache: "no-store",
+      });
+      const json = await res.json().catch(() => null);
+      if (!res.ok || json?.code !== "MARKETING_OVERVIEW_READY") {
+        setError(true);
+        return;
+      }
+      setData(json);
+    } catch {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  return (
+    <div className="space-y-6">
+      {/* Kopfzeile */}
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <div className="flex items-center gap-2">
+            <LineChart className="h-6 w-6 text-blue-600" />
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+              {t("marketing.title")}
+            </h1>
+          </div>
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+            {t("marketing.subtitle")}
+          </p>
+        </div>
+        <button
+          onClick={load}
+          disabled={loading}
+          className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-blue-700 disabled:opacity-60"
+        >
+          <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+          Aktualisieren
+        </button>
+      </div>
+
+      {/* Sicherheits-Hinweise */}
+      <div className="rounded-xl border border-blue-200 bg-blue-50 p-3 dark:border-blue-800 dark:bg-blue-950/30">
+        <div className="space-y-0.5 text-xs font-medium text-blue-700 dark:text-blue-300">
+          <p>🔒 {t("marketing.readOnly")}</p>
+          <p>🚫 {t("marketing.noAutoOutreach")}</p>
+          <p>🚫 {t("marketing.noAutoAds")}</p>
+          <p>🚫 {t("marketing.noAutoMessages")}</p>
+          <p>✅ {t("marketing.noFakeTestimonials")}</p>
+        </div>
+      </div>
+
+      {/* Ladezustand */}
+      {loading && (
+        <div className="flex items-center gap-3 text-slate-500 dark:text-slate-400">
+          <RefreshCw className="h-5 w-5 animate-spin" />
+          <span>Marketing-Übersicht wird geladen…</span>
+        </div>
+      )}
+
+      {/* Fehler */}
+      {!loading && error && (
+        <div className="rounded-xl border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-950/30">
+          <p className="text-sm font-medium text-red-700 dark:text-red-400">
+            Marketing-Übersicht konnte nicht geladen werden. Bitte erneut versuchen.
+          </p>
+        </div>
+      )}
+
+      {/* Hauptinhalt */}
+      {!loading && !error && data && (
+        <>
+          {/* ── Gesamtkarte ── */}
+          <div className={`rounded-xl border p-5 ${STATUS_BG[data.status]}`}>
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                  {t("marketing.overallStatus")}
+                </p>
+                <div className="mt-1 flex items-center gap-2">
+                  <StatusIcon status={data.status} />
+                  <span
+                    className={`text-lg font-bold ${STATUS_STYLE[data.status]}`}
+                  >
+                    {data.status === "healthy"
+                      ? t("marketing.healthy")
+                      : data.status === "warning"
+                        ? t("marketing.warning")
+                        : t("marketing.critical")}
+                  </span>
+                </div>
+              </div>
+
+              <div className="text-center">
+                <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                  {t("marketing.score")}
+                </p>
+                <p
+                  className={`text-4xl font-bold tabular-nums ${SCORE_COLOR(data.score)}`}
+                >
+                  {data.score}
+                  <span className="text-lg font-normal text-slate-400">
+                    /100
+                  </span>
+                </p>
+              </div>
+
+              <div>
+                <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                  {t("marketing.lastUpdated")}
+                </p>
+                <p className="mt-1 text-sm text-slate-700 dark:text-slate-300">
+                  {formatBerlin(data.generatedAt)}
+                </p>
+              </div>
+            </div>
+
+            <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
+              ⚠ {t("marketing.manualOnly")}
+            </p>
+          </div>
+
+          {/* ── Score-Balken ── */}
+          <div className="h-2.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
+            <div
+              className={`h-2.5 rounded-full transition-all duration-700 ${
+                data.score >= 80
+                  ? "bg-green-500"
+                  : data.score >= 60
+                    ? "bg-amber-500"
+                    : "bg-red-500"
+              }`}
+              style={{ width: `${data.score}%` }}
+            />
+          </div>
+
+          {/* ── Kanäle ── */}
+          <div>
+            <h2 className="mb-3 text-lg font-bold text-slate-900 dark:text-slate-100">
+              {t("marketing.channels")}
+            </h2>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              {data.channels.map((ch) => (
+                <ChannelCard key={ch.channel} channel={ch} />
+              ))}
+            </div>
+          </div>
+
+          {/* ── Aufgaben ── */}
+          <div className="space-y-6">
+            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">
+              Aufgaben
+            </h2>
+            <TaskGroup
+              tasks={data.tasks}
+              priority="critical"
+              label={t("marketing.criticalTasks")}
+              emptyLabel={t("marketing.noCriticalTasks")}
+              t={t}
+            />
+            <TaskGroup
+              tasks={data.tasks}
+              priority="important"
+              label={t("marketing.importantTasks")}
+              emptyLabel={t("marketing.noImportantTasks")}
+              t={t}
+            />
+            <TaskGroup
+              tasks={data.tasks}
+              priority="recommended"
+              label={t("marketing.recommendedTasks")}
+              emptyLabel={t("marketing.noRecommendedTasks")}
+              t={t}
+            />
+          </div>
+
+          {/* ── Sicherheits-Disclaimer ── */}
+          <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/50">
+            <h3 className="mb-2 text-sm font-semibold text-slate-700 dark:text-slate-300">
+              Hinweise
+            </h3>
+            <ul className="space-y-1 text-xs text-slate-500 dark:text-slate-400">
+              <li>• {t("marketing.readOnly")}</li>
+              <li>• {t("marketing.noAutoOutreach")}</li>
+              <li>• {t("marketing.noAutoAds")}</li>
+              <li>• {t("marketing.noAutoMessages")}</li>
+              <li>• {t("marketing.noFakeTestimonials")}</li>
+              <li>• {t("marketing.honestSocialProof")}</li>
+            </ul>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}

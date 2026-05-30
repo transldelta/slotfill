@@ -5,7 +5,8 @@ import { format } from "date-fns";
 import { createClient } from "@/lib/supabase";
 import { getTranslations } from "next-intl/server";
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { STATIC_BLOG_POSTS, getStaticPost } from "@/lib/blog-data";
+import { STATIC_BLOG_POSTS } from "@/lib/blog-data";
+import { getLocalizedPost } from "@/lib/blog-translations";
 import { locales, type Locale } from "@/i18n/routing";
 
 export const dynamic = "force-dynamic";
@@ -27,7 +28,7 @@ export function generateStaticParams() {
   );
 }
 
-async function loadPost(slug: string): Promise<Post | null> {
+async function loadPost(slug: string, locale: string): Promise<Post | null> {
   // 1. DB-Versuch
   try {
     const admin = createClient();
@@ -39,11 +40,11 @@ async function loadPost(slug: string): Promise<Post | null> {
       .maybeSingle();
     if (data) return data as Post;
   } catch {
-    // DB nicht verfügbar → statischer Fallback
+    // DB nicht verfügbar → lokalisierter statischer Fallback
   }
 
-  // 2. Statischer Fallback
-  const staticPost = getStaticPost(slug);
+  // 2. Lokalisierter statischer Fallback
+  const staticPost = getLocalizedPost(slug, locale);
   if (staticPost) {
     return {
       slug: staticPost.slug,
@@ -63,7 +64,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string; slug: string }>;
 }): Promise<Metadata> {
   const { locale, slug } = await params;
-  const post = await loadPost(slug);
+  const post = await loadPost(slug, locale);
   if (!post) return { title: "SlotFill Blog" };
 
   const title = `${post.title} – SlotFill`;
@@ -100,7 +101,7 @@ export default async function LocaleBlogPostPage({
   const { locale, slug } = await params;
   const t = await getTranslations({ locale, namespace: "blog" });
   const tNav = await getTranslations({ locale, namespace: "nav" });
-  const post = await loadPost(slug);
+  const post = await loadPost(slug, locale);
   if (!post) notFound();
 
   return (

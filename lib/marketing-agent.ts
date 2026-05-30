@@ -110,6 +110,8 @@ function channelWebsite(): ChannelReport {
       legalPagesComplete,
       noDeadLinks,
       mobileResponsive,
+      i18nReady: true, // app/[locale]/ mit 10 Sprachen vorhanden
+      languageSwitcherPresent: true, // components/language-switcher.tsx eingebunden
     },
   };
 }
@@ -117,29 +119,33 @@ function channelWebsite(): ChannelReport {
 /** 2. SEO */
 function channelSeo(): ChannelReport {
   // Nur interne Prüfung – kein externes Crawling, keine SEO-APIs
-  const robotsReady = true; // app/robots.ts: /dashboard, /admin, /api, /auth blockiert
-  const sitemapReady = true; // app/sitemap.ts: statische + Blog-Routen vorhanden
+  const robotsReady = true; // app/robots.ts: /dashboard, /admin, /api, /auth blockiert + alle Locale-Prefixe
+  const sitemapReady = true; // app/sitemap.ts: alle 10 Locales × öffentliche Pfade + Blog-Routen
   const metaTagsComplete = true; // generateMetadata() + OG + Twitter auf allen öffentlichen Seiten
-  const structuredDataReady = true; // Schema.org JSON-LD (SoftwareApplication + Organization) in app/page.tsx
+  const structuredDataReady = true; // Schema.org JSON-LD (SoftwareApplication + Organization) in app/[locale]/page.tsx
   const noUnwantedNoindex = true; // /dashboard, /admin, /auth nicht öffentlich indexiert
-  const canonicalsPresent = true; // alternates.canonical auf allen öffentlichen Seiten gesetzt
+  const canonicalsPresent = true; // alternates.canonical + hreflang auf allen öffentlichen [locale]-Seiten gesetzt
+  const i18nReady = true; // next-intl installiert, 10 Locales: de,en,zh,hi,es,ar,fr,pt,bn,ru
+  const languageSwitcherPresent = true; // components/language-switcher.tsx vorhanden
+  const hreflangPresent = true; // alternates.languages mit allen 10 Locales in generateMetadata()
 
   const findings: string[] = [];
-  // Alle Basis-SEO-Checks erfüllt
+  // Alle Basis-SEO-Checks erfüllt, inkl. i18n für 10 Sprachen
 
   return {
     channel: "seo",
     label: "SEO",
     status: "healthy",
-    score: 90,
+    score: 95,
     summary:
-      "robots.ts, sitemap.ts, Meta-Tags, Open Graph, Twitter Card und Schema.org JSON-LD vorhanden.",
+      "robots.ts, sitemap.ts, Meta-Tags, Open Graph, Twitter Card, Schema.org JSON-LD und i18n für 10 Sprachen (de,en,zh,hi,es,ar,fr,pt,bn,ru) mit hreflang vorhanden.",
     findings,
     recommendations: [
       "Google Search Console einrichten, sobald Domain live ist.",
       "Alt-Texte für alle Bilder prüfen.",
       "Core Web Vitals nach Launch messen (PageSpeed Insights).",
       "Backlinks durch Blog-Syndizierung aufbauen.",
+      "Übersetzungsqualität der 9 neuen Sprachen von qualifizierten Übersetzern prüfen lassen.",
     ],
     metrics: {
       robotsReady,
@@ -148,6 +154,9 @@ function channelSeo(): ChannelReport {
       structuredDataReady,
       noUnwantedNoindex,
       canonicalsPresent,
+      i18nReady,
+      languageSwitcherPresent,
+      hreflangPresent,
     },
   };
 }

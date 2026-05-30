@@ -4,7 +4,8 @@ import { format } from "date-fns";
 import { createClient } from "@/lib/supabase";
 import { getTranslations } from "next-intl/server";
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { STATIC_BLOG_POSTS, type StaticPost } from "@/lib/blog-data";
+import { type StaticPost } from "@/lib/blog-data";
+import { getLocalizedBlogPosts } from "@/lib/blog-translations";
 import { locales, type Locale } from "@/i18n/routing";
 
 export const dynamic = "force-dynamic";
@@ -51,24 +52,9 @@ type Post = {
   published_at: string | null;
 };
 
-/** Lädt Artikel aus der DB; fällt auf statische Artikel zurück wenn leer. */
-async function loadPosts(): Promise<Post[]> {
-  try {
-    const admin = createClient();
-    const { data, error } = await admin
-      .from("blog_posts")
-      .select("slug, title, excerpt, published_at")
-      .not("published_at", "is", null)
-      .order("published_at", { ascending: false });
-    if (error || !data || data.length === 0) return staticFallback();
-    return data as Post[];
-  } catch {
-    return staticFallback();
-  }
-}
-
-function staticFallback(): Post[] {
-  return [...STATIC_BLOG_POSTS]
+/** Statischer Fallback: lokalisierte Artikel aus blog-translations.ts. */
+function staticFallback(locale: string): Post[] {
+  return [...getLocalizedBlogPosts(locale)]
     .sort(
       (a, b) =>
         new Date(b.published_at).getTime() - new Date(a.published_at).getTime(),
@@ -79,6 +65,22 @@ function staticFallback(): Post[] {
       excerpt: p.excerpt,
       published_at: p.published_at,
     }));
+}
+
+/** Lädt Artikel aus der DB; fällt auf lokalisierte statische Artikel zurück. */
+async function loadPosts(locale: string): Promise<Post[]> {
+  try {
+    const admin = createClient();
+    const { data, error } = await admin
+      .from("blog_posts")
+      .select("slug, title, excerpt, published_at")
+      .not("published_at", "is", null)
+      .order("published_at", { ascending: false });
+    if (error || !data || data.length === 0) return staticFallback(locale);
+    return data as Post[];
+  } catch {
+    return staticFallback(locale);
+  }
 }
 
 export function generateStaticParams() {
@@ -93,7 +95,7 @@ export default async function LocaleBlogPage({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "blog" });
   const tNav = await getTranslations({ locale, namespace: "nav" });
-  const posts = await loadPosts();
+  const posts = await loadPosts(locale);
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-12">

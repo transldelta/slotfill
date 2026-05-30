@@ -192,3 +192,113 @@ test('i18n: middleware.ts setzt keine Sprach-Cookies (NEXT_LOCALE)', () => {
     'middleware.ts setzt NEXT_LOCALE-Cookie – widerspricht der No-Cookie-Anforderung',
   );
 });
+
+// ── Blog-Lokalisierung ────────────────────────────────────────────────────────
+
+test('i18n: blog-translations.ts exportiert getLocalizedBlogPosts und getLocalizedPost', () => {
+  const path = resolve(process.cwd(), 'lib/blog-translations.ts');
+  assert.ok(existsSync(path), 'lib/blog-translations.ts fehlt');
+  const content = readFileSync(path, 'utf8');
+  assert.ok(content.includes('getLocalizedBlogPosts'), 'getLocalizedBlogPosts nicht exportiert');
+  assert.ok(content.includes('getLocalizedPost'), 'getLocalizedPost nicht exportiert');
+});
+
+test('i18n: /de/blog zeigt deutschen Titel (STATIC_BLOG_POSTS)', async () => {
+  // Dynamischer Import – node:test unterstützt ESM async
+  const { getLocalizedBlogPosts } = await import('../lib/blog-translations');
+  const posts = getLocalizedBlogPosts('de');
+  assert.ok(posts.length > 0, 'Keine deutschen Blog-Posts');
+  const first = posts[0];
+  // Deutsch: Titel enthält kein englisches Wort wie "Appointment" oder "Medical"
+  assert.ok(!first.title.includes('Appointment') && !first.title.includes('Medical'),
+    `Deutscher Post hat englischen Titel: ${first.title}`);
+});
+
+test('i18n: /en/blog zeigt englischen Titel (nicht Deutsch)', async () => {
+  const { getLocalizedBlogPosts } = await import('../lib/blog-translations');
+  const posts = getLocalizedBlogPosts('en');
+  assert.ok(posts.length > 0, 'Keine englischen Blog-Posts');
+  const slugFound = posts.find((p) => p.slug === 'warteliste-arztpraxis-terminluecken');
+  assert.ok(slugFound, 'Slug warteliste-arztpraxis-terminluecken nicht in EN-Posts');
+  // Englisch: muss englischen Titel haben
+  assert.ok(
+    !slugFound.title.includes('Warteliste') && !slugFound.title.includes('Arztpraxis'),
+    `EN-Post hat deutschen Titel: ${slugFound.title}`,
+  );
+});
+
+test('i18n: /es/blog zeigt spanischen Titel (nicht Deutsch)', async () => {
+  const { getLocalizedBlogPosts } = await import('../lib/blog-translations');
+  const posts = getLocalizedBlogPosts('es');
+  assert.ok(posts.length > 0, 'Keine spanischen Blog-Posts');
+  const allGerman = posts.every((p) => p.title.includes('Warteliste') || p.title.includes('Terminausfälle'));
+  assert.ok(!allGerman, 'ES-Posts zeigen noch deutsche Titel');
+});
+
+test('i18n: /ar/blog zeigt arabischen Titel (nicht Deutsch)', async () => {
+  const { getLocalizedBlogPosts } = await import('../lib/blog-translations');
+  const posts = getLocalizedBlogPosts('ar');
+  assert.ok(posts.length > 0, 'Keine arabischen Blog-Posts');
+  // Arabisch enthält Unicode-Zeichen, kein lateinisches Alphabet für Haupttitel
+  const first = posts[0];
+  assert.ok(
+    !first.title.includes('Warteliste') && !first.title.includes('Arztpraxis'),
+    `AR-Post hat deutschen Titel: ${first.title}`,
+  );
+});
+
+test('i18n: /fr/blog zeigt französischen Titel (nicht Deutsch)', async () => {
+  const { getLocalizedBlogPosts } = await import('../lib/blog-translations');
+  const posts = getLocalizedBlogPosts('fr');
+  assert.ok(posts.length > 0, 'Keine französischen Blog-Posts');
+  const allGerman = posts.every((p) => p.title.startsWith('Warteliste') || p.title.startsWith('Terminausfälle'));
+  assert.ok(!allGerman, 'FR-Posts zeigen noch deutsche Titel');
+});
+
+test('i18n: Unbekannte Locale → DE-Fallback bei getLocalizedBlogPosts', async () => {
+  const { getLocalizedBlogPosts } = await import('../lib/blog-translations');
+  const posts = getLocalizedBlogPosts('xx');
+  assert.ok(posts.length > 0, 'Kein Fallback auf DE für unbekannte Locale');
+});
+
+test('i18n: getLocalizedPost gibt null für unbekannten Slug zurück', async () => {
+  const { getLocalizedPost } = await import('../lib/blog-translations');
+  const post = getLocalizedPost('nicht-vorhandener-slug', 'en');
+  assert.equal(post, null, 'getLocalizedPost soll null für unbekannten Slug liefern');
+});
+
+test('i18n: Blog-Artikel enthalten kein "DSGVO-konform"', () => {
+  const path = resolve(process.cwd(), 'lib/blog-translations.ts');
+  const content = readFileSync(path, 'utf8');
+  assert.ok(
+    !content.includes('DSGVO-konform'),
+    'blog-translations.ts enthält verbotenen Text "DSGVO-konform"',
+  );
+});
+
+test('i18n: Blog-Artikel enthalten keine Secrets (sk_, re_, whsec_)', () => {
+  const path = resolve(process.cwd(), 'lib/blog-translations.ts');
+  const content = readFileSync(path, 'utf8');
+  assert.ok(
+    !/(sk_|re_|whsec_|AC[0-9a-fA-F]{8})/.test(content),
+    'Mögliches Secret in lib/blog-translations.ts',
+  );
+});
+
+test('i18n: blog/page.tsx verwendet getLocalizedBlogPosts', () => {
+  const path = resolve(process.cwd(), 'app/[locale]/blog/page.tsx');
+  const content = readFileSync(path, 'utf8');
+  assert.ok(
+    content.includes('getLocalizedBlogPosts'),
+    'app/[locale]/blog/page.tsx nutzt nicht getLocalizedBlogPosts – Blog zeigt immer Deutsch',
+  );
+});
+
+test('i18n: blog/[slug]/page.tsx verwendet getLocalizedPost', () => {
+  const path = resolve(process.cwd(), 'app/[locale]/blog/[slug]/page.tsx');
+  const content = readFileSync(path, 'utf8');
+  assert.ok(
+    content.includes('getLocalizedPost'),
+    'app/[locale]/blog/[slug]/page.tsx nutzt nicht getLocalizedPost – Blogartikel zeigt immer Deutsch',
+  );
+});

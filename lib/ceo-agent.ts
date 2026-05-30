@@ -563,7 +563,7 @@ function deptMarketing(): DepartmentReport {
     findings: ["MARKETING_NO_ACTIVE_LEADS"],
     recommendations: [
       "Erste 5 Test-Praxen manuell ansprechen.",
-      "Marketing & Sales Agent als separaten Schritt (Schritt 17+) bauen.",
+      "Marketing & Sales regelmäßig prüfen und erste Testpraxen manuell ansprechen.",
       "Mehrsprachigkeit (EN) später vorbereiten.",
       "Google Analytics / Plausible für Traffic-Analyse erwägen.",
     ],

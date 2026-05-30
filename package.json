@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "seed-blog": "tsx scripts/seed-blog.ts",
-    "test": "tsx --test scripts/messaging.test.ts scripts/operations.test.ts scripts/hardening.test.ts scripts/ceo.test.ts scripts/marketing.test.ts scripts/seo.test.ts"
+    "test": "tsx --test scripts/messaging.test.ts scripts/operations.test.ts scripts/hardening.test.ts scripts/ceo.test.ts scripts/marketing.test.ts scripts/seo.test.ts scripts/i18n.test.ts"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.5",
@@ -22,6 +22,7 @@
     "jose": "^5.4.0",
     "lucide-react": "^0.395.0",
     "next": "14.2.4",
+    "next-intl": "^4.13.0",
     "qrcode": "^1.5.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

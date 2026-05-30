@@ -10,6 +10,15 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { calculateSaaSScore, getCeoTasks } from "../lib/ceo-agent";
 import { assertNoSecretsInResponse } from "../lib/security-agent";
+import {
+  METRIC_LABELS,
+  FINDING_LABELS,
+  DEPT_LABELS,
+  metricLabel,
+  findingLabel,
+  deptLabel,
+  formatMetricValue,
+} from "../lib/ceo-labels";
 
 // ─── Typ-Hilfsfunktionen ───────────────────────────────────────────────────────
 
@@ -190,4 +199,98 @@ test("getCeoTasks: keine autoExecutable=true bei bekannten Risiko-Findings", () 
       assert.equal(task.autoExecutable, false);
     }
   }
+});
+
+// ─── Labels: keine Roh-Codes sichtbar ────────────────────────────────────────
+
+test("Labels: BACKUP_REVIEW wird nicht roh angezeigt (SEC_BACKUP_REVIEW übersetzt)", () => {
+  const label = findingLabel("SEC_BACKUP_REVIEW");
+  assert.ok(!label.includes("BACKUP_REVIEW"), `Rohcode sichtbar: ${label}`);
+  assert.ok(label.includes("Backup"), `Kein deutsches Wort: ${label}`);
+});
+
+test("Labels: Metric-Keys werden auf Deutsch übersetzt", () => {
+  assert.equal(metricLabel("practicesTotal"), "Praxen gesamt");
+  assert.equal(metricLabel("activeSubscriptions"), "Aktive Abos");
+  assert.equal(metricLabel("trialSubscriptions"), "Test-Abos");
+  assert.equal(metricLabel("cancelledSubscriptions"), "Gekündigte Abos");
+  assert.equal(metricLabel("securityScore"), "Security-Score");
+  assert.equal(metricLabel("operationsScore"), "Operations-Score");
+  assert.equal(metricLabel("cronCount"), "Cron-Jobs");
+  assert.equal(metricLabel("errors7d"), "Fehler letzte 7 Tage");
+  assert.equal(metricLabel("imprintReady"), "Impressum vorhanden");
+  assert.equal(metricLabel("privacyReady"), "Datenschutz vorhanden");
+  assert.equal(metricLabel("termsReady"), "AGB vorhanden");
+});
+
+test("Labels: Abteilungs-Codes werden auf Deutsch übersetzt", () => {
+  assert.equal(deptLabel("tech"), "Technik");
+  assert.equal(deptLabel("security"), "Sicherheit");
+  assert.equal(deptLabel("operations"), "Operations");
+  assert.equal(deptLabel("product"), "Produkt");
+  assert.equal(deptLabel("usage"), "Praxen & Nutzung");
+  assert.equal(deptLabel("finance"), "Umsatz & Finanzen");
+  assert.equal(deptLabel("support"), "Support");
+  assert.equal(deptLabel("marketing"), "Marketing & Vertrieb");
+  assert.equal(deptLabel("compliance"), "Compliance & Trust");
+});
+
+test("Labels: Alle 9 Abteilungs-Codes sind im DEPT_LABELS-Map vorhanden", () => {
+  const expected = ["tech", "security", "operations", "product", "usage", "finance", "support", "marketing", "compliance"];
+  for (const code of expected) {
+    assert.ok(DEPT_LABELS[code], `Abteilungs-Code fehlt im Map: ${code}`);
+  }
+});
+
+test("Labels: formatMetricValue übersetzt boolean und bekannte Strings korrekt", () => {
+  assert.equal(formatMetricValue(true), "✓ Ja");
+  assert.equal(formatMetricValue(false), "Nein");
+  assert.equal(formatMetricValue("ok"), "OK");
+  assert.equal(formatMetricValue("healthy"), "Gesund");
+  assert.equal(formatMetricValue("warning"), "Warnung");
+  assert.equal(formatMetricValue("critical"), "Kritisch");
+  assert.equal(formatMetricValue(42), "42");
+});
+
+test("Labels: getCeoTasks-Empfehlungen enthalten kein rohes BACKUP_REVIEW", () => {
+  // Sicherheits-Abteilung mit BACKUP_REVIEW-Finding
+  const secDept = makeDept("security", "warning", 90, ["SEC_BACKUP_REVIEW"], [
+    "Backup-Strategie prüfen und regelmäßige Sicherungen sicherstellen.",
+  ]);
+  const tasks = getCeoTasks([secDept]);
+  for (const task of tasks) {
+    assert.ok(
+      !task.title.includes("BACKUP_REVIEW"),
+      `Roh-Code in title: ${task.title}`,
+    );
+    assert.ok(
+      !task.description.includes("BACKUP_REVIEW"),
+      `Roh-Code in description: ${task.description}`,
+    );
+  }
+});
+
+test("Labels: Marketing-Empfehlung enthält nicht mehr 'Schritt 17+'", () => {
+  // Veraltete Empfehlung wurde durch aktuelle ersetzt
+  const marketingDept = makeDept("marketing", "warning", 70, ["MARKETING_NO_ACTIVE_LEADS"], [
+    "Erste 5 Test-Praxen manuell ansprechen.",
+    "Marketing & Sales regelmäßig prüfen und erste Testpraxen manuell ansprechen.",
+  ]);
+  const tasks = getCeoTasks([marketingDept]);
+  for (const task of tasks) {
+    assert.ok(
+      !task.title.includes("Schritt 17+"),
+      `Veralteter Text in title: ${task.title}`,
+    );
+    assert.ok(
+      !task.description.includes("Schritt 17+"),
+      `Veralteter Text in description: ${task.description}`,
+    );
+  }
+});
+
+// Unbenutzte Import-Prüfung (verhindert TS-Fehler bei unbenutzten Variablen)
+test("Labels: METRIC_LABELS und FINDING_LABELS sind nicht leer", () => {
+  assert.ok(Object.keys(METRIC_LABELS).length > 20, "METRIC_LABELS zu wenig Einträge");
+  assert.ok(Object.keys(FINDING_LABELS).length > 10, "FINDING_LABELS zu wenig Einträge");
 });

@@ -13,6 +13,12 @@ import {
 } from "lucide-react";
 import { useTranslations } from "@/lib/i18n";
 import { formatBerlin } from "@/lib/datetime";
+import {
+  metricLabel,
+  findingLabel,
+  deptLabel,
+  formatMetricValue,
+} from "@/lib/ceo-labels";
 
 // ─── Typen ────────────────────────────────────────────────────────────────────
 
@@ -47,131 +53,6 @@ type Payload = {
   tasks: CeoTask[];
   generatedAt: string;
 };
-
-// ─── Übersetzungen für technische Codes und Metriken ─────────────────────────
-
-/** Metric-Keys → lesbares Deutsch */
-const METRIC_LABELS: Record<string, string> = {
-  // Technik
-  healthStatus: "Status",
-  databaseConfigured: "Datenbank konfiguriert",
-  cronCount: "Cron-Jobs",
-  errorCount7d: "Fehler letzte 7 Tage",
-  publicPagesReady: "Öffentliche Seiten bereit",
-  // Sicherheit
-  securityScore: "Security-Score",
-  rateLimitActive: "Rate-Limit aktiv",
-  auditLogActive: "Audit-Log aktiv",
-  adminProtected: "Admin geschützt",
-  cronProtected: "Cron geschützt",
-  secretsHidden: "Secrets versteckt",
-  // Operations
-  operationsScore: "Operations-Score",
-  messagingSafeMode: "Messaging Sicherheitsmodus",
-  dryRunActive: "Nur-Simulation aktiv",
-  emailConfigured: "E-Mail konfiguriert",
-  stripeConfigured: "Stripe konfiguriert",
-  backupStatus: "Backup-Status",
-  errors24h: "Fehler letzte 24 Std.",
-  errors7d: "Fehler letzte 7 Tage",
-  // Produkt
-  onboardingReady: "Onboarding bereit",
-  trustCenterReady: "Trust-Center bereit",
-  helpReady: "Hilfe bereit",
-  dashboardReady: "Dashboard bereit",
-  coreFlowReady: "Kernprozess bereit",
-  // Praxen & Nutzung
-  practicesTotal: "Praxen gesamt",
-  practicesActive: "Aktive Praxen",
-  practicesTrial: "Praxen in Testphase",
-  activeSubscriptions: "Aktive Abos",
-  patientsTotal: "Patienten gesamt",
-  waitlistEntries: "Wartelisten-Einträge",
-  appointmentsTotal: "Termine gesamt",
-  cancelledAppointments: "Abgesagte Termine",
-  notificationsTotal: "Benachrichtigungen gesamt",
-  filledAppointments: "Gefüllte Termine",
-  fillRatePercent: "Füllrate (%)",
-  // Finanzen
-  trialSubscriptions: "Test-Abos",
-  cancelledSubscriptions: "Gekündigte Abos",
-  estimatedMrr: "Geschätzter MRR (€)",
-  arpa: "Ø Umsatz pro Abo (€)",
-  // Support
-  auditLogsAvailable: "Audit-Logs verfügbar",
-  helpPageReady: "Hilfe-Seite bereit",
-  contactPageReady: "Kontakt-Seite bereit",
-  // Marketing
-  landingPageReady: "Landing-Page bereit",
-  pricingReady: "Pricing-Seite bereit",
-  contactReady: "Kontakt-Seite bereit",
-  blogReady: "Blog bereit",
-  ctaReady: "CTA bereit",
-  messagingCopyHonest: "Ehrliche Kommunikation",
-  leadAutomationActive: "Lead-Automatisierung aktiv",
-  // Compliance
-  imprintReady: "Impressum bereit",
-  privacyReady: "Datenschutz bereit",
-  termsReady: "AGB bereit",
-  honestMessagingCopy: "Ehrliche Texte",
-  consentRespected: "Einwilligung respektiert",
-  noDsgvoPromise: "Keine DSGVO-Garantie",
-};
-
-/** Finding-Codes → lesbares Deutsch */
-const FINDING_LABELS: Record<string, string> = {
-  // Sicherheit (SEC_)
-  SEC_PUBLIC_SECRET_LEAK: "⚠ Öffentliches Secret-Leck",
-  SEC_SECRETS_SERVER_ONLY: "✓ Secrets nur serverseitig",
-  SEC_ADMIN_EMAILS_MISSING: "⚠ Admin-E-Mails nicht konfiguriert",
-  SEC_ADMIN_PROTECTED: "✓ Admin-Bereich geschützt",
-  SEC_WEBHOOK_SIGNATURE_OK: "✓ Webhook-Signatur geprüft",
-  SEC_PRACTICE_ID_SERVER_SIDE: "✓ Praxis-ID serverseitig",
-  SEC_MESSAGING_SAFE: "✓ Messaging-Sicherheit aktiv",
-  SEC_RATE_LIMIT_BASIC: "✓ Basis-Rate-Limit aktiv",
-  SEC_AUDIT_LOG_ACTIVE: "✓ Audit-Log aktiv",
-  SEC_BACKUP_DOCUMENTED: "✓ Backup dokumentiert",
-  SEC_BACKUP_REVIEW: "⚠ Backup-Strategie prüfen",
-  SEC_MONITORING_RECOMMENDED: "→ Monitoring empfohlen",
-  // Operations (OPS_)
-  OPS_DB_UNREACHABLE: "⚠ Datenbank nicht erreichbar",
-  OPS_SUPABASE_CONFIG_MISSING: "⚠ Supabase-Konfiguration fehlt",
-  OPS_CRON_SECRET_MISSING: "⚠ Cron-Secret fehlt",
-  OPS_ADMIN_EMAILS_MISSING: "⚠ Admin-E-Mails fehlen",
-  OPS_APP_URL_MISSING: "→ App-URL nicht gesetzt",
-  OPS_STRIPE_NOT_CONFIGURED: "→ Stripe nicht konfiguriert",
-  OPS_RESEND_NOT_CONFIGURED: "→ E-Mail nicht konfiguriert",
-  OPS_MESSAGING_NONE: "→ Kein Messaging-Anbieter",
-  OPS_MESSAGING_DRY_RUN: "✓ Messaging im Simulationsmodus",
-  OPS_MANY_ERRORS_24H: "⚠ Viele Fehler letzte 24 Std.",
-  // Technik (TECH_)
-  TECH_DB_UNREACHABLE: "⚠ Datenbank nicht erreichbar",
-  TECH_SUPABASE_CONFIG_MISSING: "⚠ Supabase-Konfiguration fehlt",
-  TECH_ERROR_LOGS_UNAVAILABLE: "→ Fehlerprotokolle nicht verfügbar",
-  TECH_MANY_ERRORS_7D: "⚠ Viele Fehler in letzten 7 Tagen",
-  // Nutzung (USAGE_)
-  USAGE_NO_PRACTICES_YET: "→ Noch keine Praxen registriert",
-  USAGE_NO_PATIENTS_YET: "→ Noch keine Patienten registriert",
-  USAGE_SUBSCRIPTION_DATA_UNAVAILABLE: "→ Abo-Daten nicht verfügbar",
-  // Finanzen (FIN_)
-  FIN_STRIPE_NOT_CONFIGURED: "⚠ Stripe nicht konfiguriert",
-  FIN_SUBSCRIPTION_DATA_UNAVAILABLE: "→ Abo-Daten nicht verfügbar",
-  // Marketing
-  MARKETING_NO_ACTIVE_LEADS: "→ Noch keine aktiven Leads",
-  // Support
-  SUPPORT_ERROR_LOGS_UNAVAILABLE: "→ Fehlerprotokolle nicht verfügbar",
-  SUPPORT_MANY_ERRORS_7D: "⚠ Viele Fehler in letzten 7 Tagen",
-};
-
-/** Gibt das lesbare Label für einen Metric-Key zurück, oder den Key selbst als Fallback. */
-function metricLabel(key: string): string {
-  return METRIC_LABELS[key] ?? key;
-}
-
-/** Gibt das lesbare Label für einen Finding-Code zurück, oder den Code selbst als Fallback. */
-function findingLabel(code: string): string {
-  return FINDING_LABELS[code] ?? code;
-}
 
 // ─── Hilfsfunktionen ──────────────────────────────────────────────────────────
 
@@ -209,13 +90,15 @@ function StatusIcon({ status }: { status: DeptStatus }) {
 }
 
 function MetricValue({ value }: { value: string | number | boolean }) {
-  if (typeof value === "boolean")
+  const text = formatMetricValue(value);
+  if (typeof value === "boolean") {
     return (
-      <span className={value ? "text-green-600 dark:text-green-400" : "text-amber-600 dark:text-amber-400"}>
-        {value ? "✓ Ja" : "✗ Nein"}
+      <span className={value ? "text-green-600 dark:text-green-400" : "text-slate-500 dark:text-slate-400"}>
+        {text}
       </span>
     );
-  return <span className="text-slate-900 dark:text-slate-100">{String(value)}</span>;
+  }
+  return <span className="text-slate-900 dark:text-slate-100">{text}</span>;
 }
 
 // ─── Abteilungs-Karte ─────────────────────────────────────────────────────────
@@ -240,7 +123,7 @@ function DepartmentCard({ dept, t }: { dept: DepartmentReport; t: ReturnType<typ
 
       <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{dept.summary}</p>
 
-      {/* Wichtigste Kennzahlen */}
+      {/* Wichtigste Kennzahlen (kompakt, max. 4) */}
       <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1">
         {Object.entries(dept.metrics)
           .slice(0, 4)
@@ -336,6 +219,13 @@ function TaskList({
 }) {
   const filtered = tasks.filter((task) => task.priority === priority);
 
+  const priorityLabel =
+    priority === "critical"
+      ? t("ceo.priorityCritical")
+      : priority === "important"
+        ? t("ceo.priorityImportant")
+        : t("ceo.priorityRecommended");
+
   return (
     <div className="space-y-2">
       <h3 className="flex items-center gap-2 font-semibold text-slate-900 dark:text-slate-100">
@@ -359,19 +249,18 @@ function TaskList({
             >
               <div className="flex items-start justify-between gap-2">
                 <div className="flex-1">
+                  {/* Badge-Zeile: Priorität · Abteilung · Ausführung */}
                   <div className="flex flex-wrap items-center gap-1.5">
                     <span
                       className={`rounded px-1.5 py-0.5 text-xs font-medium ${PRIORITY_STYLE[task.priority]}`}
                     >
-                      {task.priority === "critical"
-                        ? t("ceo.priorityCritical")
-                        : task.priority === "important"
-                          ? t("ceo.priorityImportant")
-                          : t("ceo.priorityRecommended")}
+                      {priorityLabel}
                     </span>
-                    <span className="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-500 dark:bg-slate-700 dark:text-slate-400">
-                      {task.department}
+                    <span className="text-xs text-slate-400 dark:text-slate-500">·</span>
+                    <span className="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+                      {deptLabel(task.department)}
                     </span>
+                    <span className="text-xs text-slate-400 dark:text-slate-500">·</span>
                     <span className="text-xs text-slate-400 dark:text-slate-500">
                       {task.autoExecutable ? t("ceo.autoExecutable") : t("ceo.manualOnly")}
                     </span>
@@ -480,9 +369,7 @@ export default function CeoPage() {
       {!loading && !error && data && (
         <>
           {/* ── Gesamtkarte ── */}
-          <div
-            className={`rounded-xl border p-5 ${STATUS_BG[data.status]}`}
-          >
+          <div className={`rounded-xl border p-5 ${STATUS_BG[data.status]}`}>
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <p className="text-sm font-medium text-slate-500 dark:text-slate-400">

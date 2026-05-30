@@ -117,3 +117,78 @@ test('i18n: detect-locale.ts exportiert detectLocaleFromAcceptLanguage', () => {
   // Bereits implizit durch die vorherigen Tests geprüft
   assert.ok(typeof detectLocaleFromAcceptLanguage === 'function');
 });
+
+// ── Locale-Routen: Dateien existieren ───────────────────────────────────────
+
+test('i18n: app/[locale]/page.tsx existiert', () => {
+  const path = resolve(process.cwd(), 'app/[locale]/page.tsx');
+  assert.ok(existsSync(path), 'app/[locale]/page.tsx fehlt – /en würde 404 zeigen');
+});
+
+test('i18n: app/[locale]/layout.tsx existiert', () => {
+  const path = resolve(process.cwd(), 'app/[locale]/layout.tsx');
+  assert.ok(existsSync(path), 'app/[locale]/layout.tsx fehlt');
+});
+
+test('i18n: app/[locale]/pricing/page.tsx existiert', () => {
+  const path = resolve(process.cwd(), 'app/[locale]/pricing/page.tsx');
+  assert.ok(existsSync(path), 'app/[locale]/pricing/page.tsx fehlt – /en/pricing würde 404 zeigen');
+});
+
+test('i18n: app/[locale]/blog/page.tsx existiert', () => {
+  const path = resolve(process.cwd(), 'app/[locale]/blog/page.tsx');
+  assert.ok(existsSync(path), 'app/[locale]/blog/page.tsx fehlt – /en/blog würde 404 zeigen');
+});
+
+test('i18n: app/[locale]/blog/[slug]/page.tsx existiert', () => {
+  const path = resolve(process.cwd(), 'app/[locale]/blog/[slug]/page.tsx');
+  assert.ok(existsSync(path), 'app/[locale]/blog/[slug]/page.tsx fehlt');
+});
+
+// ── Middleware: createIntlMiddleware wird genutzt ────────────────────────────
+
+test('i18n: middleware.ts importiert next-intl/middleware (createIntlMiddleware)', () => {
+  const path = resolve(process.cwd(), 'middleware.ts');
+  assert.ok(existsSync(path), 'middleware.ts fehlt');
+  const content = readFileSync(path, 'utf8');
+  assert.ok(
+    content.includes('next-intl/middleware'),
+    'middleware.ts nutzt nicht next-intl/middleware – /en könnte 404 zeigen',
+  );
+});
+
+test('i18n: middleware.ts schützt /admin und /dashboard (Auth-Check)', () => {
+  const content = readFileSync(resolve(process.cwd(), 'middleware.ts'), 'utf8');
+  assert.ok(content.includes('"/admin"'), 'Auth-Schutz für /admin fehlt in middleware.ts');
+  assert.ok(content.includes('"/dashboard"'), 'Auth-Schutz für /dashboard fehlt in middleware.ts');
+});
+
+test('i18n: middleware.ts leitet /admin NICHT auf /de/admin um', () => {
+  const content = readFileSync(resolve(process.cwd(), 'middleware.ts'), 'utf8');
+  // AUTH_PROTECTED must be handled BEFORE handleIntl – check structure
+  const authIdx = content.indexOf('AUTH_PROTECTED');
+  const intlIdx = content.indexOf('handleIntl(request)');
+  assert.ok(authIdx > -1, 'AUTH_PROTECTED nicht in middleware.ts');
+  assert.ok(intlIdx > -1, 'handleIntl nicht in middleware.ts');
+  assert.ok(authIdx < intlIdx, '/admin muss vor dem intl-Redirect geprüft werden');
+});
+
+test('i18n: middleware.ts enthält breiten Matcher für öffentliche Routen', () => {
+  const content = readFileSync(resolve(process.cwd(), 'middleware.ts'), 'utf8');
+  // Der Matcher darf nicht nur /dashboard und /admin enthalten
+  assert.ok(
+    !content.includes('matcher: ["/dashboard/:path*", "/admin/:path*"]'),
+    'Alter enger Matcher gefunden – öffentliche Locale-Routen würden nie erreichbar sein',
+  );
+  assert.ok(content.includes('matcher'), 'Kein Matcher in middleware.ts');
+});
+
+// ── Keine Cookies für Sprachpräferenz ────────────────────────────────────────
+
+test('i18n: middleware.ts setzt keine Sprach-Cookies (NEXT_LOCALE)', () => {
+  const content = readFileSync(resolve(process.cwd(), 'middleware.ts'), 'utf8');
+  assert.ok(
+    !content.toLowerCase().includes('next_locale'),
+    'middleware.ts setzt NEXT_LOCALE-Cookie – widerspricht der No-Cookie-Anforderung',
+  );
+});

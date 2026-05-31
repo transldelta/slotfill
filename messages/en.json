@@ -359,7 +359,11 @@
       "everythingInProfessional": "Everything in Professional",
       "unlimitedPatients": "Unlimited Patients",
       "prioritySupport": "Priority Support"
-    }
+    },
+    "trialInfo": "Try free for 14 days – a paid plan is required after that.",
+    "trialNoCreditCard": "No credit card required for the trial.",
+    "trialNoSms": "No real SMS or WhatsApp are sent in the trial without deliberate provider configuration.",
+    "providerCostNote": "SMS and WhatsApp are processed via external providers (e.g. Twilio). These provider costs are not automatically included in the SlotFill price."
   },
   "subscription": {
     "title": "Your Subscription",
@@ -421,7 +425,15 @@
     "ctaBlockTitle": "Ready to have fewer empty appointments?",
     "ctaBlockSubtitle": "Start with a 14-day free trial.",
     "footerNote": "Hosting and data protection must be finally reviewed before going live.",
-    "rights": "All rights reserved."
+    "rights": "All rights reserved.",
+    "trustTitle": "The practice stays in control",
+    "trustSubtitle": "SlotFill supports – decisions are always made by the practice.",
+    "trustPoint1": "No automatic message without approval from the practice.",
+    "trustPoint2": "SMS and WhatsApp are optional and require deliberate provider configuration.",
+    "trustPoint3": "In standard mode, messages are prepared – not automatically sent.",
+    "trustPoint4": "No fake references. No invented user numbers.",
+    "trialNote": "Try free for 14 days – no credit card required.",
+    "trialNoMessages": "No real messages are sent in trial mode."
   },
   "blog": {
     "title": "Blog",
@@ -440,7 +452,11 @@
     "send": "Send Message",
     "sending": "Sending...",
     "success": "Thank you! Your message has been received.",
-    "error": "Your message could not be sent. Please try again later."
+    "error": "Your message could not be sent. Please try again later.",
+    "whatHappensTitle": "What happens after submitting?",
+    "whatHappens1": "We receive your request and will get back to you personally.",
+    "whatHappens2": "No automatic cold outreach. No automatic sending of messages.",
+    "whatHappens3": "We personally guide you through setting up the first test practice."
   },
   "legal": {
     "draftNotice": "Note: This text is a preliminary draft and has not been legally reviewed. Before going live, it must be replaced by final, legally reviewed texts.",

@@ -5,6 +5,7 @@ import {
   CalendarClock,
   ListOrdered,
   ShieldCheck,
+  CheckCircle2,
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { LanguageSwitcher } from "@/components/language-switcher";
@@ -162,6 +163,12 @@ export default async function LocaleLandingPage({
             {t("ctaSecondary")}
           </a>
         </div>
+        <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
+          {t("trialNote")}
+        </p>
+        <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+          {t("trialNoMessages")}
+        </p>
       </section>
 
       {/* Features */}
@@ -185,6 +192,37 @@ export default async function LocaleLandingPage({
             </div>
           ))}
         </div>
+      </section>
+
+      {/* Trust */}
+      <section
+        id="trust"
+        className="mx-auto max-w-4xl px-4 py-16 text-center"
+      >
+        <h2 className="text-2xl font-bold">{t("trustTitle")}</h2>
+        <p className="mt-2 text-slate-600 dark:text-slate-300">
+          {t("trustSubtitle")}
+        </p>
+        <ul className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {(
+            [
+              t("trustPoint1"),
+              t("trustPoint2"),
+              t("trustPoint3"),
+              t("trustPoint4"),
+            ] as string[]
+          ).map((point) => (
+            <li
+              key={point}
+              className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white px-5 py-4 text-left shadow-sm dark:border-slate-800 dark:bg-slate-900"
+            >
+              <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-green-500" />
+              <span className="text-sm text-slate-700 dark:text-slate-300">
+                {point}
+              </span>
+            </li>
+          ))}
+        </ul>
       </section>
 
       {/* CTA */}

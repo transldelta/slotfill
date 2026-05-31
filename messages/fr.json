@@ -359,7 +359,11 @@
       "everythingInProfessional": "Tout dans Professional",
       "unlimitedPatients": "Patients illimités",
       "prioritySupport": "Support prioritaire"
-    }
+    },
+    "trialInfo": "Essai gratuit 14 jours – un plan payant est requis ensuite.",
+    "trialNoCreditCard": "Aucune carte de crédit requise pour l'essai.",
+    "trialNoSms": "Aucun SMS ou WhatsApp réel n'est envoyé lors de l'essai sans configuration délibérée du prestataire.",
+    "providerCostNote": "Les SMS et WhatsApp transitent par des prestataires externes (ex. Twilio). Ces coûts de prestataire ne sont pas automatiquement inclus dans le prix SlotFill."
   },
   "subscription": {
     "title": "Your Subscription",
@@ -421,7 +425,15 @@
     "ctaBlockTitle": "Prêt à avoir moins de rendez-vous vides?",
     "ctaBlockSubtitle": "Commencez avec un essai gratuit de 14 jours.",
     "footerNote": "L'hébergement et la protection des données doivent être vérifiés avant la mise en ligne.",
-    "rights": "Tous droits réservés."
+    "rights": "Tous droits réservés.",
+    "trustTitle": "Le cabinet garde le contrôle",
+    "trustSubtitle": "SlotFill accompagne – les décisions appartiennent toujours au cabinet.",
+    "trustPoint1": "Aucun message automatique sans validation du cabinet.",
+    "trustPoint2": "SMS et WhatsApp sont optionnels et nécessitent une configuration délibérée du prestataire.",
+    "trustPoint3": "En mode standard, les messages sont préparés, pas envoyés automatiquement.",
+    "trustPoint4": "Pas de faux avis. Pas de chiffres d'utilisateurs inventés.",
+    "trialNote": "Essai gratuit 14 jours – aucune carte de crédit requise.",
+    "trialNoMessages": "Aucun message réel n'est envoyé en mode d'essai."
   },
   "blog": {
     "title": "Blog",
@@ -440,7 +452,11 @@
     "send": "Envoyer le message",
     "sending": "Envoi en cours...",
     "success": "Merci ! Votre message a bien été reçu.",
-    "error": "Votre message n'a pas pu être envoyé. Veuillez réessayer plus tard."
+    "error": "Votre message n'a pas pu être envoyé. Veuillez réessayer plus tard.",
+    "whatHappensTitle": "Que se passe-t-il après l'envoi ?",
+    "whatHappens1": "Nous recevons votre demande et vous répondrons personnellement.",
+    "whatHappens2": "Pas de démarchage automatique. Pas d'envoi automatique de messages.",
+    "whatHappens3": "Nous vous accompagnons personnellement dans la configuration du premier cabinet test."
   },
   "legal": {
     "draftNotice": "Note : Ce texte est un projet préliminaire et n'a pas encore été examiné juridiquement.",

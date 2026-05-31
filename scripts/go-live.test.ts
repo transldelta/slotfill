@@ -485,3 +485,242 @@ test("Go-Live: lib/go-live-agent.ts enthält kein 'DSGVO-konform'", () => {
     'lib/go-live-agent.ts enthält verbotenen Text "DSGVO-konform"',
   );
 });
+
+// ─── Aufgaben 1-4: Neue Content-Elemente ──────────────────────────────────────
+
+test("Go-Live: A4 – Trust-Sektion: messages/de.json enthält trustTitle", () => {
+  const { readFileSync } = require("fs");
+  const msgs = JSON.parse(readFileSync(resolve(process.cwd(), "messages/de.json"), "utf8"));
+  assert.ok(msgs.landing?.trustTitle, "messages/de.json: landing.trustTitle fehlt");
+  assert.ok(msgs.landing?.trustPoint1, "messages/de.json: landing.trustPoint1 fehlt");
+  assert.ok(msgs.landing?.trustPoint4, "messages/de.json: landing.trustPoint4 fehlt");
+});
+
+test("Go-Live: A4 – Trust-Sektion: app/[locale]/page.tsx verwendet trustTitle", () => {
+  const { readFileSync } = require("fs");
+  const content: string = readFileSync(
+    resolve(process.cwd(), "app/[locale]/page.tsx"),
+    "utf8",
+  );
+  assert.ok(
+    content.includes("trustTitle"),
+    'app/[locale]/page.tsx: trustTitle fehlt – Trust-Sektion nicht eingebaut',
+  );
+  assert.ok(
+    content.includes("trustPoint1"),
+    'app/[locale]/page.tsx: trustPoint1 fehlt',
+  );
+});
+
+test("Go-Live: A4 – KNOWN_CONTENT enthält TRUST_SECTION_ADDED → A4 ist ready", () => {
+  const sections = getGoLiveSections();
+  const a = sections.find((s) => s.sectionId === "A");
+  assert.ok(a, "Abschnitt A fehlt");
+  const a4 = a.checks.find((c) => c.id === "A4_TRUST_SECTION");
+  assert.ok(a4, "A4_TRUST_SECTION check fehlt");
+  assert.equal(
+    a4.status,
+    "ready",
+    `A4 soll ready sein nach Aufgabe 1, ist aber: ${a4.status}`,
+  );
+});
+
+test("Go-Live: Aufgabe 4 – trialNoMessages im Hero der Startseite", () => {
+  const { readFileSync } = require("fs");
+  const content: string = readFileSync(
+    resolve(process.cwd(), "app/[locale]/page.tsx"),
+    "utf8",
+  );
+  assert.ok(
+    content.includes("trialNoMessages"),
+    'app/[locale]/page.tsx: trialNoMessages fehlt – Messaging-Ehrlichkeit im Hero fehlt',
+  );
+  assert.ok(
+    content.includes("trialNote"),
+    'app/[locale]/page.tsx: trialNote fehlt',
+  );
+});
+
+test("Go-Live: B3 – Trial-Infobox: messages/de.json enthält trialInfo", () => {
+  const { readFileSync } = require("fs");
+  const msgs = JSON.parse(readFileSync(resolve(process.cwd(), "messages/de.json"), "utf8"));
+  assert.ok(msgs.pricing?.trialInfo, "messages/de.json: pricing.trialInfo fehlt");
+  assert.ok(msgs.pricing?.trialNoCreditCard, "messages/de.json: pricing.trialNoCreditCard fehlt");
+  assert.ok(msgs.pricing?.trialNoSms, "messages/de.json: pricing.trialNoSms fehlt");
+});
+
+test("Go-Live: B3 – Trial-Infobox: app/[locale]/pricing/page.tsx verwendet trialInfo", () => {
+  const { readFileSync } = require("fs");
+  const content: string = readFileSync(
+    resolve(process.cwd(), "app/[locale]/pricing/page.tsx"),
+    "utf8",
+  );
+  assert.ok(
+    content.includes("trialInfo"),
+    'app/[locale]/pricing/page.tsx: trialInfo fehlt – Trial-Infobox nicht eingebaut',
+  );
+  assert.ok(
+    content.includes("trialNoCreditCard"),
+    'app/[locale]/pricing/page.tsx: trialNoCreditCard fehlt',
+  );
+});
+
+test("Go-Live: B3 – KNOWN_CONTENT → B3 ist ready", () => {
+  const sections = getGoLiveSections();
+  const b = sections.find((s) => s.sectionId === "B");
+  assert.ok(b, "Abschnitt B fehlt");
+  const b3 = b.checks.find((c) => c.id === "B3_TRIAL_CLEAR");
+  assert.ok(b3, "B3_TRIAL_CLEAR check fehlt");
+  assert.equal(b3.status, "ready", `B3 soll ready sein, ist aber: ${b3.status}`);
+});
+
+test("Go-Live: B4 – Anbieterkosten: messages/de.json enthält providerCostNote", () => {
+  const { readFileSync } = require("fs");
+  const msgs = JSON.parse(readFileSync(resolve(process.cwd(), "messages/de.json"), "utf8"));
+  assert.ok(msgs.pricing?.providerCostNote, "messages/de.json: pricing.providerCostNote fehlt");
+});
+
+test("Go-Live: B4 – KNOWN_CONTENT → B4 ist ready", () => {
+  const sections = getGoLiveSections();
+  const b = sections.find((s) => s.sectionId === "B");
+  assert.ok(b, "Abschnitt B fehlt");
+  const b4 = b.checks.find((c) => c.id === "B4_PROVIDER_COSTS_HONEST");
+  assert.ok(b4, "B4_PROVIDER_COSTS_HONEST check fehlt");
+  assert.equal(b4.status, "ready", `B4 soll ready sein, ist aber: ${b4.status}`);
+});
+
+test("Go-Live: B4 – Pricing-Seite enthält providerCostNote", () => {
+  const { readFileSync } = require("fs");
+  const content: string = readFileSync(
+    resolve(process.cwd(), "app/[locale]/pricing/page.tsx"),
+    "utf8",
+  );
+  assert.ok(
+    content.includes("providerCostNote"),
+    'app/[locale]/pricing/page.tsx: providerCostNote fehlt',
+  );
+});
+
+test("Go-Live: C4 – Kontaktklarheit: messages/de.json enthält whatHappensTitle", () => {
+  const { readFileSync } = require("fs");
+  const msgs = JSON.parse(readFileSync(resolve(process.cwd(), "messages/de.json"), "utf8"));
+  assert.ok(msgs.contact?.whatHappensTitle, "messages/de.json: contact.whatHappensTitle fehlt");
+  assert.ok(msgs.contact?.whatHappens1, "messages/de.json: contact.whatHappens1 fehlt");
+  assert.ok(msgs.contact?.whatHappens3, "messages/de.json: contact.whatHappens3 fehlt");
+});
+
+test("Go-Live: C4 – Kontaktseite verwendet whatHappensTitle", () => {
+  const { readFileSync } = require("fs");
+  const content: string = readFileSync(
+    resolve(process.cwd(), "app/[locale]/kontakt/page.tsx"),
+    "utf8",
+  );
+  assert.ok(
+    content.includes("whatHappensTitle"),
+    'app/[locale]/kontakt/page.tsx: whatHappensTitle fehlt – "Was passiert danach?"-Sektion nicht eingebaut',
+  );
+  assert.ok(
+    content.includes("whatHappens1"),
+    'app/[locale]/kontakt/page.tsx: whatHappens1 fehlt',
+  );
+});
+
+test("Go-Live: C4 – KNOWN_CONTENT → C4 ist ready", () => {
+  const sections = getGoLiveSections();
+  const c = sections.find((s) => s.sectionId === "C");
+  assert.ok(c, "Abschnitt C fehlt");
+  const c4 = c.checks.find((c2) => c2.id === "C4_TRIAL_REQUEST_CLEAR");
+  assert.ok(c4, "C4_TRIAL_REQUEST_CLEAR check fehlt");
+  assert.equal(c4.status, "ready", `C4 soll ready sein, ist aber: ${c4.status}`);
+});
+
+test("Go-Live: I3 – KNOWN_CONTENT → I3 ist ready", () => {
+  const sections = getGoLiveSections();
+  const i = sections.find((s) => s.sectionId === "I");
+  assert.ok(i, "Abschnitt I fehlt");
+  const i3 = i.checks.find((c) => c.id === "I3_UI_MESSAGING_HONEST");
+  assert.ok(i3, "I3_UI_MESSAGING_HONEST check fehlt");
+  assert.equal(i3.status, "ready", `I3 soll ready sein, ist aber: ${i3.status}`);
+});
+
+test("Go-Live: Score ≥ 90 nach Aufgaben 1-4", () => {
+  const sections = getGoLiveSections();
+  const score = calculateGoLiveScore(sections);
+  assert.ok(score >= 90, `Score soll ≥ 90 sein, ist aber: ${score}`);
+});
+
+// ─── Sicherheit: Kein Auto-SMS-Versprechen, kein Kaltakquise ─────────────────
+
+test("Go-Live: Startseite enthält kein automatisches SMS-Versprechen", () => {
+  const { readFileSync } = require("fs");
+  const content: string = readFileSync(
+    resolve(process.cwd(), "app/[locale]/page.tsx"),
+    "utf8",
+  );
+  assert.ok(
+    !/automatisch.*sms/i.test(content),
+    'app/[locale]/page.tsx: automatisches SMS-Versprechen gefunden',
+  );
+  assert.ok(
+    !/automatisch.*whatsapp/i.test(content),
+    'app/[locale]/page.tsx: automatisches WhatsApp-Versprechen gefunden',
+  );
+});
+
+test("Go-Live: Pricing-Seite enthält keine Fake-Testimonials", () => {
+  const { readFileSync } = require("fs");
+  const content: string = readFileSync(
+    resolve(process.cwd(), "app/[locale]/pricing/page.tsx"),
+    "utf8",
+  );
+  assert.ok(
+    !/\d{3,}\s+zufriedene/i.test(content),
+    'app/[locale]/pricing/page.tsx: mögliche Fake-Zahlen gefunden',
+  );
+  assert.ok(
+    !/trusted\s+by\s+\d+/i.test(content),
+    'app/[locale]/pricing/page.tsx: "trusted by N" gefunden',
+  );
+});
+
+test("Go-Live: i18n – alle 10 Locales haben landing.trustTitle", () => {
+  const { readFileSync } = require("fs");
+  const locales = ['de', 'en', 'zh', 'hi', 'es', 'ar', 'fr', 'pt', 'bn', 'ru'];
+  for (const locale of locales) {
+    const msgs = JSON.parse(
+      readFileSync(resolve(process.cwd(), `messages/${locale}.json`), "utf8"),
+    );
+    assert.ok(
+      msgs.landing?.trustTitle,
+      `messages/${locale}.json: landing.trustTitle fehlt`,
+    );
+  }
+});
+
+test("Go-Live: i18n – alle 10 Locales haben pricing.providerCostNote", () => {
+  const { readFileSync } = require("fs");
+  const locales = ['de', 'en', 'zh', 'hi', 'es', 'ar', 'fr', 'pt', 'bn', 'ru'];
+  for (const locale of locales) {
+    const msgs = JSON.parse(
+      readFileSync(resolve(process.cwd(), `messages/${locale}.json`), "utf8"),
+    );
+    assert.ok(
+      msgs.pricing?.providerCostNote,
+      `messages/${locale}.json: pricing.providerCostNote fehlt`,
+    );
+  }
+});
+
+test("Go-Live: i18n – alle 10 Locales haben contact.whatHappensTitle", () => {
+  const { readFileSync } = require("fs");
+  const locales = ['de', 'en', 'zh', 'hi', 'es', 'ar', 'fr', 'pt', 'bn', 'ru'];
+  for (const locale of locales) {
+    const msgs = JSON.parse(
+      readFileSync(resolve(process.cwd(), `messages/${locale}.json`), "utf8"),
+    );
+    assert.ok(
+      msgs.contact?.whatHappensTitle,
+      `messages/${locale}.json: contact.whatHappensTitle fehlt`,
+    );
+  }
+});

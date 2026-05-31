@@ -359,7 +359,11 @@
       "everythingInProfessional": "Tudo no Professional",
       "unlimitedPatients": "Pacientes ilimitados",
       "prioritySupport": "Suporte prioritário"
-    }
+    },
+    "trialInfo": "Teste grátis por 14 dias – depois é necessário um plano pago.",
+    "trialNoCreditCard": "Sem cartão de crédito para o teste.",
+    "trialNoSms": "No teste não são enviados SMS ou WhatsApp reais sem configuração deliberada do provedor.",
+    "providerCostNote": "SMS e WhatsApp são processados por provedores externos (ex. Twilio). Esses custos de provedor não estão automaticamente incluídos no preço do SlotFill."
   },
   "subscription": {
     "title": "Your Subscription",
@@ -421,7 +425,15 @@
     "ctaBlockTitle": "Pronto para ter menos consultas vazias?",
     "ctaBlockSubtitle": "Comece com uma avaliação gratuita de 14 dias.",
     "footerNote": "Hospedagem e proteção de dados devem ser revisados antes de entrar no ar.",
-    "rights": "Todos os direitos reservados."
+    "rights": "Todos os direitos reservados.",
+    "trustTitle": "O consultório mantém o controle",
+    "trustSubtitle": "SlotFill apoia – as decisões são sempre do consultório.",
+    "trustPoint1": "Nenhuma mensagem automática sem aprovação do consultório.",
+    "trustPoint2": "SMS e WhatsApp são opcionais e exigem configuração deliberada do provedor.",
+    "trustPoint3": "No modo padrão, as mensagens são preparadas, não enviadas automaticamente.",
+    "trustPoint4": "Sem referências falsas. Sem números de usuários inventados.",
+    "trialNote": "Teste grátis por 14 dias – sem cartão de crédito.",
+    "trialNoMessages": "No modo de teste, nenhuma mensagem real é enviada."
   },
   "blog": {
     "title": "Blog",
@@ -440,7 +452,11 @@
     "send": "Enviar mensagem",
     "sending": "Enviando...",
     "success": "Obrigado! Sua mensagem foi recebida.",
-    "error": "Sua mensagem não pôde ser enviada. Tente novamente mais tarde."
+    "error": "Sua mensagem não pôde ser enviada. Tente novamente mais tarde.",
+    "whatHappensTitle": "O que acontece após o envio?",
+    "whatHappens1": "Recebemos sua solicitação e entraremos em contato pessoalmente.",
+    "whatHappens2": "Sem contato frio automático. Sem envio automático de mensagens.",
+    "whatHappens3": "Acompanhamos você pessoalmente na configuração do primeiro consultório de teste."
   },
   "legal": {
     "draftNotice": "Nota: Este texto é um rascunho preliminar e não foi revisado juridicamente.",

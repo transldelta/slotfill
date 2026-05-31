@@ -355,7 +355,11 @@
       "everythingInProfessional": "Alles in Professional",
       "unlimitedPatients": "Unbegrenzt Patienten",
       "prioritySupport": "Vorrangsupport"
-    }
+    },
+    "trialInfo": "14 Tage kostenlos testen – danach ist ein bezahlter Plan erforderlich.",
+    "trialNoCreditCard": "Keine Kreditkarte für den Test erforderlich.",
+    "trialNoSms": "Im Trial werden keine echten SMS oder WhatsApp ohne bewusste Anbieter-Konfiguration versendet.",
+    "providerCostNote": "SMS und WhatsApp werden über externe Anbieter (z. B. Twilio) abgewickelt. Diese Anbieterkosten sind nicht automatisch im SlotFill-Preis enthalten."
   },
   "subscription": {
     "title": "Ihr Abo",
@@ -417,7 +421,15 @@
     "ctaBlockTitle": "Bereit, weniger leere Termine zu haben?",
     "ctaBlockSubtitle": "Starten Sie mit einer 14-tägigen kostenlosen Testphase.",
     "footerNote": "Hosting und Datenschutz müssen vor Produktivstart final geprüft werden.",
-    "rights": "Alle Rechte vorbehalten."
+    "rights": "Alle Rechte vorbehalten.",
+    "trustTitle": "Die Praxis behält die Kontrolle",
+    "trustSubtitle": "SlotFill unterstützt – entschieden wird immer in der Praxis.",
+    "trustPoint1": "Keine automatische Nachricht ohne Freigabe durch die Praxis.",
+    "trustPoint2": "SMS und WhatsApp sind optional und erfordern eine bewusste Anbieter-Konfiguration.",
+    "trustPoint3": "Im Standardmodus werden Nachrichten vorbereitet, nicht automatisch versendet.",
+    "trustPoint4": "Keine Fake-Referenzen. Keine erfundenen Nutzerzahlen.",
+    "trialNote": "14 Tage kostenlos testen – keine Kreditkarte erforderlich.",
+    "trialNoMessages": "Im Testmodus werden keine echten Nachrichten versendet."
   },
   "blog": {
     "title": "Blog",
@@ -436,7 +448,11 @@
     "send": "Nachricht senden",
     "sending": "Wird gesendet...",
     "success": "Vielen Dank! Ihre Nachricht ist bei uns eingegangen.",
-    "error": "Ihre Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es später erneut."
+    "error": "Ihre Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.",
+    "whatHappensTitle": "Was passiert nach dem Absenden?",
+    "whatHappens1": "Wir erhalten deine Anfrage und melden uns persönlich zurück.",
+    "whatHappens2": "Keine automatische Kaltakquise. Kein automatischer Versand von Nachrichten.",
+    "whatHappens3": "Wir begleiten dich persönlich bei der Einrichtung der ersten Testpraxis."
   },
   "legal": {
     "draftNotice": "Hinweis: Dieser Text ist ein vorläufiger Entwurf und wurde noch nicht rechtlich geprüft. Vor dem Produktivstart muss er durch finale, rechtlich geprüfte Texte ersetzt werden.",

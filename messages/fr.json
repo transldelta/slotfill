@@ -715,5 +715,9 @@
     "priorityCritical": "Critical",
     "priorityImportant": "Important",
     "priorityRecommended": "Recommended"
+  },
+  "goLive": {
+    "title": "Vérification de Lancement",
+    "nav": "Go-Live"
   }
 }

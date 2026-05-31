@@ -715,5 +715,9 @@
     "priorityCritical": "严重",
     "priorityImportant": "重要",
     "priorityRecommended": "推荐"
+  },
+  "goLive": {
+    "title": "上线检查",
+    "nav": "Go-Live"
   }
 }

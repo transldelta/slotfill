@@ -1119,95 +1119,165 @@ test("Go-Live (Confirmations): go-live-agent.ts exportiert MANUAL_CONFIRMATION_K
 
 // ─── Legal-Seiten – Impressum, AGB, Datenschutz, AVV ─────────────────────────
 
-test("Legal: app/impressum/page.tsx enthält Pflichtangaben § 5 DDG", () => {
+test("Legal: ImpressumContent enthält Pflichtangaben § 5 DDG", () => {
   const { readFileSync } = require("fs");
-  const path = resolve(process.cwd(), "app/impressum/page.tsx");
-  assert.ok(existsSync(path), "app/impressum/page.tsx fehlt");
-  const src: string = readFileSync(path, "utf8");
+  // Inhalt liegt jetzt in der shared Component – Root-Page importiert nur
+  const contentPath = resolve(process.cwd(), "components/legal/ImpressumContent.tsx");
+  assert.ok(existsSync(contentPath), "components/legal/ImpressumContent.tsx fehlt");
+  const src: string = readFileSync(contentPath, "utf8");
   assert.ok(
     src.includes("Brahim Ben Abla"),
-    "Impressum muss den Betreibernamen 'Brahim Ben Abla' enthalten (§ 5 DDG)",
+    "ImpressumContent muss den Betreibernamen 'Brahim Ben Abla' enthalten (§ 5 DDG)",
   );
   assert.ok(
     src.includes("Schlesier Straße 64"),
-    "Impressum muss die korrekte Adresse 'Schlesier Straße 64' enthalten",
+    "ImpressumContent muss die korrekte Adresse 'Schlesier Straße 64' enthalten",
   );
   assert.ok(
     src.includes("transl.delta@gmail.com"),
-    "Impressum muss die Kontakt-E-Mail 'transl.delta@gmail.com' enthalten",
+    "ImpressumContent muss die Kontakt-E-Mail 'transl.delta@gmail.com' enthalten",
   );
   assert.ok(
     src.includes("76227"),
-    "Impressum muss die Postleitzahl '76227' (Karlsruhe) enthalten",
+    "ImpressumContent muss die Postleitzahl '76227' (Karlsruhe) enthalten",
   );
 });
 
-test("Legal: app/agb/page.tsx enthält Testphase, kein SMS im Trial, Provider-Kosten-Hinweis", () => {
+test("Legal: AgbContent enthält Testphase, kein SMS im Trial, Provider-Kosten-Hinweis", () => {
   const { readFileSync } = require("fs");
-  const path = resolve(process.cwd(), "app/agb/page.tsx");
-  assert.ok(existsSync(path), "app/agb/page.tsx fehlt");
-  const src: string = readFileSync(path, "utf8");
+  const contentPath = resolve(process.cwd(), "components/legal/AgbContent.tsx");
+  assert.ok(existsSync(contentPath), "components/legal/AgbContent.tsx fehlt");
+  const src: string = readFileSync(contentPath, "utf8");
   assert.ok(
     src.includes("14") && (src.includes("Testphase") || src.includes("Trial")),
-    "AGB muss Hinweis auf 14-tägige Testphase enthalten",
+    "AgbContent muss Hinweis auf 14-tägige Testphase enthalten",
   );
   assert.ok(
     src.includes("keine echten SMS") || src.includes("kein echter SMS") || src.includes("keine echten"),
-    "AGB muss klarstellen, dass im Testmodus keine echten SMS/WhatsApp versendet werden",
+    "AgbContent muss klarstellen, dass im Testmodus keine echten SMS/WhatsApp versendet werden",
   );
   assert.ok(
     src.includes("AVV") || src.includes("Auftragsverarbeitung"),
-    "AGB muss Hinweis auf AVV / Auftragsverarbeitung enthalten",
+    "AgbContent muss Hinweis auf AVV / Auftragsverarbeitung enthalten",
   );
   assert.ok(
     src.includes("Twilio") || src.includes("Provider") || src.includes("provider"),
-    "AGB muss Hinweis auf externe Messaging-Provider (z.B. Twilio) enthalten",
+    "AgbContent muss Hinweis auf externe Messaging-Provider (z.B. Twilio) enthalten",
   );
 });
 
-test("Legal: app/datenschutz/page.tsx verwendet 'datenschutzbewusst' statt 'DSGVO-konform garantiert'", () => {
+test("Legal: DatenschutzContent verwendet 'datenschutzbewusst' statt 'DSGVO-konform garantiert'", () => {
   const { readFileSync } = require("fs");
-  const path = resolve(process.cwd(), "app/datenschutz/page.tsx");
-  assert.ok(existsSync(path), "app/datenschutz/page.tsx fehlt");
-  const src: string = readFileSync(path, "utf8");
+  const contentPath = resolve(process.cwd(), "components/legal/DatenschutzContent.tsx");
+  assert.ok(existsSync(contentPath), "components/legal/DatenschutzContent.tsx fehlt");
+  const src: string = readFileSync(contentPath, "utf8");
   assert.ok(
     !src.includes("DSGVO-konform garantiert") && !src.includes("DSGVO garantiert"),
-    "Datenschutzerklärung darf nicht 'DSGVO-konform garantiert' behaupten",
+    "DatenschutzContent darf nicht 'DSGVO-konform garantiert' behaupten",
   );
   assert.ok(
     src.includes("datenschutzbewusst") || src.includes("datenschutz­bewusst"),
-    "Datenschutzerklärung soll 'datenschutzbewusst' statt Compliance-Garantie verwenden",
+    "DatenschutzContent soll 'datenschutzbewusst' statt Compliance-Garantie verwenden",
   );
 });
 
-test("Legal: app/avv/page.tsx existiert und enthält AVV-Pflichthinweis", () => {
+test("Legal: AvvContent existiert und enthält AVV-Pflichthinweis", () => {
   const { readFileSync } = require("fs");
-  const path = resolve(process.cwd(), "app/avv/page.tsx");
-  assert.ok(existsSync(path), "app/avv/page.tsx fehlt – AVV-Seite muss vorhanden sein");
-  const src: string = readFileSync(path, "utf8");
+  const contentPath = resolve(process.cwd(), "components/legal/AvvContent.tsx");
+  assert.ok(existsSync(contentPath), "components/legal/AvvContent.tsx fehlt – AVV-Seite muss vorhanden sein");
+  const src: string = readFileSync(contentPath, "utf8");
   assert.ok(
     src.includes("Art. 28") || src.includes("Auftragsverarbeitung"),
-    "AVV-Seite muss Hinweis auf Art. 28 DSGVO / Auftragsverarbeitung enthalten",
+    "AvvContent muss Hinweis auf Art. 28 DSGVO / Auftragsverarbeitung enthalten",
   );
 });
 
-test("Legal: Legal-Seiten dürfen persönlichen Namen enthalten (erlaubte Ausnahme)", () => {
+test("Legal: Locale Legal-Seiten existieren (app/[locale]/{impressum,agb,datenschutz,avv})", () => {
+  const localeLegalPages = [
+    "app/[locale]/impressum/page.tsx",
+    "app/[locale]/agb/page.tsx",
+    "app/[locale]/datenschutz/page.tsx",
+    "app/[locale]/avv/page.tsx",
+  ];
+  for (const p of localeLegalPages) {
+    assert.ok(
+      existsSync(resolve(process.cwd(), p)),
+      `${p} fehlt – Locale Legal-Route muss vorhanden sein (für /de/agb, /en/agb, etc.)`,
+    );
+  }
+});
+
+test("Legal: Locale Legal-Seiten nutzen shared Components (kein Code-Duplikat)", () => {
   const { readFileSync } = require("fs");
-  const legalPaths = [
+  const checks = [
+    { page: "app/[locale]/impressum/page.tsx", component: "ImpressumContent" },
+    { page: "app/[locale]/agb/page.tsx",       component: "AgbContent" },
+    { page: "app/[locale]/datenschutz/page.tsx", component: "DatenschutzContent" },
+    { page: "app/[locale]/avv/page.tsx",        component: "AvvContent" },
+  ];
+  for (const { page, component } of checks) {
+    const fullPath = resolve(process.cwd(), page);
+    if (existsSync(fullPath)) {
+      const src: string = readFileSync(fullPath, "utf8");
+      assert.ok(
+        src.includes(component),
+        `${page} muss die shared Component '${component}' verwenden`,
+      );
+    }
+  }
+});
+
+test("Legal: Root Legal-Seiten existieren weiterhin (/impressum, /agb, /datenschutz, /avv)", () => {
+  const rootPages = [
     "app/impressum/page.tsx",
     "app/agb/page.tsx",
     "app/datenschutz/page.tsx",
     "app/avv/page.tsx",
   ];
-  for (const p of legalPaths) {
+  for (const p of rootPages) {
+    assert.ok(
+      existsSync(resolve(process.cwd(), p)),
+      `Root-Route ${p} fehlt – muss weiterhin erreichbar sein`,
+    );
+  }
+});
+
+test("Legal: Legal-Seiten dürfen persönlichen Namen enthalten (erlaubte Ausnahme)", () => {
+  const { readFileSync } = require("fs");
+  // Die tatsächlichen Inhalte liegen in den Content-Components
+  const legalContentFiles = [
+    "components/legal/ImpressumContent.tsx",
+    "components/legal/AgbContent.tsx",
+    "components/legal/DatenschutzContent.tsx",
+    "components/legal/AvvContent.tsx",
+  ];
+  for (const p of legalContentFiles) {
     const fullPath = resolve(process.cwd(), p);
     if (existsSync(fullPath)) {
       const src: string = readFileSync(fullPath, "utf8");
-      // Legal-Seiten DÜRFEN persönliche Namen enthalten – kein Fehler
-      // Dieser Test bestätigt nur, dass die Seiten existieren und lesbar sind
+      // Legal-Content-Dateien DÜRFEN persönliche Namen enthalten – kein Fehler
       assert.ok(src.length > 0, `${p} ist leer`);
     }
   }
+});
+
+test("Legal: Footer in app/[locale]/page.tsx verlinkt auf locale-spezifische Legal-Seiten", () => {
+  const { readFileSync } = require("fs");
+  const localePage = resolve(process.cwd(), "app/[locale]/page.tsx");
+  assert.ok(existsSync(localePage), "app/[locale]/page.tsx fehlt");
+  const src: string = readFileSync(localePage, "utf8");
+  assert.ok(
+    src.includes("/${locale}/impressum") || src.includes("`/${locale}/impressum`"),
+    "Footer muss auf /${locale}/impressum verlinken (nicht hardcoded /impressum)",
+  );
+  assert.ok(
+    src.includes("/${locale}/datenschutz") || src.includes("`/${locale}/datenschutz`"),
+    "Footer muss auf /${locale}/datenschutz verlinken",
+  );
+  assert.ok(
+    src.includes("/${locale}/agb") || src.includes("`/${locale}/agb`"),
+    "Footer muss auf /${locale}/agb verlinken",
+  );
 });
 
 test("Legal: Automatische Kommunikation enthält keinen persönlichen Namen", () => {

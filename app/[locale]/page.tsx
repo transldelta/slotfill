@@ -251,14 +251,17 @@ export default async function LocaleLandingPage({
       <footer className="border-t border-slate-200 dark:border-slate-800">
         <div className="mx-auto max-w-6xl px-4 py-8 text-sm text-slate-500 dark:text-slate-400">
           <div className="flex flex-wrap gap-4">
-            <Link href="/impressum" className="hover:underline">
+            <Link href={`/${locale}/impressum`} className="hover:underline">
               {tLegal("impressumTitle")}
             </Link>
-            <Link href="/datenschutz" className="hover:underline">
+            <Link href={`/${locale}/datenschutz`} className="hover:underline">
               {tLegal("datenschutzTitle")}
             </Link>
-            <Link href="/agb" className="hover:underline">
+            <Link href={`/${locale}/agb`} className="hover:underline">
               {tLegal("agbTitle")}
+            </Link>
+            <Link href={`/${locale}/avv`} className="hover:underline">
+              AVV
             </Link>
             <Link href={`/${locale}/blog`} className="hover:underline">
               {tNav("blog")}

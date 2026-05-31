@@ -30,6 +30,14 @@ import {
   type ConfirmationRecord,
   type ConfirmationsMap,
 } from "@/lib/go-live-confirmations";
+// Brand-Konfiguration – direkt importiert, NICHT per Dateisystem-Scan.
+// Auf Vercel Production sind Quellcode-Dateien zur Laufzeit nicht zugänglich;
+// der Import funktioniert immer, weil lib/brand.ts ins Bundle kompiliert wird.
+import {
+  BRAND_NAME,
+  BRAND_TEAM_NAME,
+  PERSONAL_SIGNATURE_ALLOWED,
+} from "@/lib/brand";
 
 // ─── Typen ────────────────────────────────────────────────────────────────────
 
@@ -164,6 +172,10 @@ const KNOWN_SOURCE_PATHS: ReadonlySet<string> = new Set([
   // Dokumentation
   "docs/FIRST_TEST_PRACTICE.md",
   "docs/BACKUP-RECOVERY.md",
+  // Bibliotheken (für J-Sektion: Brand-Konfiguration)
+  "lib/brand.ts",
+  "lib/email/templates.ts",
+  "lib/onboarding.ts",
 ]);
 
 // Mapping Quellpfad → primärer URL-Pfad (für doppelte Absicherung)
@@ -1200,19 +1212,32 @@ function sectionJ(): GoLiveSection {
   const checks: GoLiveCheckItem[] = [];
   const findings: string[] = [];
 
-  // J1: lib/brand.ts existiert (zentrale Markenkonfiguration)
-  const brandExists = routeExists("lib/brand.ts") === "found";
+  // J1: Brand-Konfiguration korrekt importiert (Vercel-sicher)
+  //
+  // DESIGN: Auf Vercel sind Quellcode-Dateien zur Laufzeit NICHT im Dateisystem.
+  // existsSync("lib/brand.ts") würde fälschlicherweise false zurückgeben.
+  // Stattdessen: direkt importierte Werte prüfen – sie sind immer verfügbar,
+  // weil lib/brand.ts beim Build ins Bundle kompiliert wird.
+  const brandConfigured =
+    typeof BRAND_NAME === "string" &&
+    BRAND_NAME === "SlotFill" &&
+    typeof BRAND_TEAM_NAME === "string" &&
+    BRAND_TEAM_NAME.includes("SlotFill") &&
+    PERSONAL_SIGNATURE_ALLOWED === false;
   checks.push({
     id: "J1_BRAND_CONFIG_EXISTS",
-    label: "lib/brand.ts existiert (zentrale Markenkonfiguration)",
-    status: brandExists ? "ready" : "blocking",
-    note: brandExists
-      ? "lib/brand.ts vorhanden – BRAND_NAME, BRAND_TEAM_NAME, CONTACT_EMAIL, PERSONAL_SIGNATURE_ALLOWED definiert."
-      : "lib/brand.ts fehlt. Erstellen Sie die zentrale Markenkonfiguration.",
+    label: "Brand-Konfiguration importiert (BRAND_NAME, BRAND_TEAM_NAME, PERSONAL_SIGNATURE_ALLOWED)",
+    status: brandConfigured ? "ready" : "blocking",
+    note: brandConfigured
+      ? `Brand-Konfiguration korrekt: BRAND_NAME="${BRAND_NAME}", BRAND_TEAM_NAME="${BRAND_TEAM_NAME}", PERSONAL_SIGNATURE_ALLOWED=${PERSONAL_SIGNATURE_ALLOWED}.`
+      : `Brand-Konfiguration fehlt oder inkorrekt. BRAND_NAME="${BRAND_NAME}", PERSONAL_SIGNATURE_ALLOWED=${PERSONAL_SIGNATURE_ALLOWED}.`,
   });
-  if (!brandExists) findings.push("J1_BRAND_CONFIG_MISSING");
+  if (!brandConfigured) findings.push("J1_BRAND_CONFIG_MISSING");
 
   // J2: Keine private E-Mail als Fallback in app/kontakt/actions.ts
+  //
+  // scanFileForPatterns: auf Vercel nicht lesbar → returns false = "kein Fund" = safe.
+  // Nur "blocking" wenn Muster WIRKLICH gefunden (d.h. in Entwicklungsumgebung oder Build-Zeit).
   const PERSONAL_EMAIL_PATTERNS = [
     /gmail\.com/i,
     /hotmail\.com/i,
@@ -1253,7 +1278,7 @@ function sectionJ(): GoLiveSection {
   });
   if (personalNameInTemplates) findings.push("J3_PERSONAL_NAME_IN_TEMPLATES");
 
-  // J4: Kein persönlicher Name in Marketing-/Trial-Kommunikation (kontakt/page, pricing)
+  // J4: Kein persönlicher Name in Marketing-/Onboarding-Kommunikation
   const personalNameInMarketing =
     scanFileForPatterns("app/kontakt/actions.ts", PERSONAL_NAME_PATTERNS) ||
     scanFileForPatterns("lib/onboarding.ts", PERSONAL_NAME_PATTERNS);
@@ -1267,21 +1292,20 @@ function sectionJ(): GoLiveSection {
   });
   if (personalNameInMarketing) findings.push("J4_PERSONAL_NAME_IN_MARKETING");
 
-  // J5: Brand-Signatur (PERSONAL_SIGNATURE_ALLOWED = false) in brand.ts verankert
-  const personalSigFalse = scanFileForPatterns("lib/brand.ts", [
-    /PERSONAL_SIGNATURE_ALLOWED\s*=\s*false/,
-  ]);
+  // J5: PERSONAL_SIGNATURE_ALLOWED === false (Vercel-sicher, direkt importiert)
+  //
+  // Kein scanFileForPatterns – auf Vercel fehlt das Dateisystem.
+  // Der importierte Wert ist zur Laufzeit immer korrekt.
+  const personalSigForbidden = PERSONAL_SIGNATURE_ALLOWED === false;
   checks.push({
     id: "J5_PERSONAL_SIGNATURE_FORBIDDEN",
-    label: "PERSONAL_SIGNATURE_ALLOWED = false in lib/brand.ts",
-    status: brandExists && personalSigFalse ? "ready" : "warning",
-    note:
-      brandExists && personalSigFalse
-        ? "PERSONAL_SIGNATURE_ALLOWED ist explizit als false definiert."
-        : "Bitte PERSONAL_SIGNATURE_ALLOWED = false in lib/brand.ts sicherstellen.",
+    label: "PERSONAL_SIGNATURE_ALLOWED = false (aus lib/brand.ts importiert)",
+    status: personalSigForbidden ? "ready" : "warning",
+    note: personalSigForbidden
+      ? "PERSONAL_SIGNATURE_ALLOWED ist explizit false – keine persönliche Signatur erlaubt."
+      : "PERSONAL_SIGNATURE_ALLOWED ist nicht false – bitte lib/brand.ts prüfen.",
   });
-  if (!(brandExists && personalSigFalse))
-    findings.push("J5_PERSONAL_SIGNATURE_NOT_FORBIDDEN");
+  if (!personalSigForbidden) findings.push("J5_PERSONAL_SIGNATURE_NOT_FORBIDDEN");
 
   // J6: Impressum-Ausnahme verifiziert (persönliche Daten nur dort erlaubt)
   const impressumExists = routeExists("app/impressum/page.tsx") === "found";

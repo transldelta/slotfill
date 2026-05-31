@@ -715,5 +715,9 @@
     "priorityCritical": "गंभीर",
     "priorityImportant": "महत्वपूर्ण",
     "priorityRecommended": "अनुशंसित"
+  },
+  "goLive": {
+    "title": "गो-लाइव जाँच",
+    "nav": "Go-Live"
   }
 }

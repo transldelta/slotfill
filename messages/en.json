@@ -715,5 +715,9 @@
     "priorityCritical": "Critical",
     "priorityImportant": "Important",
     "priorityRecommended": "Recommended"
+  },
+  "goLive": {
+    "title": "Go-Live Check",
+    "nav": "Go-Live"
   }
 }

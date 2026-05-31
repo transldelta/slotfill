@@ -715,5 +715,9 @@
     "priorityCritical": "Critical",
     "priorityImportant": "Important",
     "priorityRecommended": "Recommended"
+  },
+  "goLive": {
+    "title": "গো-লাইভ চেক",
+    "nav": "Go-Live"
   }
 }

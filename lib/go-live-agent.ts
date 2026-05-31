@@ -136,6 +136,17 @@ const KNOWN_URL_ROUTES: ReadonlySet<string> = new Set([
   // Blog-Seiten
   "/de/blog", "/en/blog", "/zh/blog", "/hi/blog",
   "/es/blog", "/ar/blog", "/fr/blog", "/pt/blog", "/bn/blog", "/ru/blog",
+  // Legal-Seiten (alle Locales)
+  "/de/impressum", "/en/impressum", "/zh/impressum", "/hi/impressum",
+  "/es/impressum", "/ar/impressum", "/fr/impressum", "/pt/impressum", "/bn/impressum", "/ru/impressum",
+  "/de/datenschutz", "/en/datenschutz", "/zh/datenschutz", "/hi/datenschutz",
+  "/es/datenschutz", "/ar/datenschutz", "/fr/datenschutz", "/pt/datenschutz", "/bn/datenschutz", "/ru/datenschutz",
+  "/de/agb", "/en/agb", "/zh/agb", "/hi/agb",
+  "/es/agb", "/ar/agb", "/fr/agb", "/pt/agb", "/bn/agb", "/ru/agb",
+  "/de/avv", "/en/avv", "/zh/avv", "/hi/avv",
+  "/es/avv", "/ar/avv", "/fr/avv", "/pt/avv", "/bn/avv", "/ru/avv",
+  // Root Legal-Routen (Fallback)
+  "/impressum", "/datenschutz", "/agb", "/avv",
   // Auth
   "/auth/login", "/auth/register",
   // Dashboard
@@ -165,12 +176,22 @@ const KNOWN_SOURCE_PATHS: ReadonlySet<string> = new Set([
   // Admin
   "app/admin/page.tsx",
   "app/admin/go-live/page.tsx",
-  // Legacy-Routen (Weiterleitungen)
+  // Legacy-Routen (Root)
   "app/kontakt/page.tsx",
   "app/impressum/page.tsx",
   "app/datenschutz/page.tsx",
   "app/agb/page.tsx",
   "app/avv/page.tsx",
+  // Locale Legal-Routen
+  "app/[locale]/impressum/page.tsx",
+  "app/[locale]/datenschutz/page.tsx",
+  "app/[locale]/agb/page.tsx",
+  "app/[locale]/avv/page.tsx",
+  // Shared Legal Components
+  "components/legal/ImpressumContent.tsx",
+  "components/legal/AgbContent.tsx",
+  "components/legal/DatenschutzContent.tsx",
+  "components/legal/AvvContent.tsx",
   // Dokumentation
   "docs/FIRST_TEST_PRACTICE.md",
   "docs/BACKUP-RECOVERY.md",
@@ -187,6 +208,10 @@ const SOURCE_TO_URL: ReadonlyMap<string, string> = new Map([
   ["app/[locale]/blog/page.tsx",       "/de/blog"],
   ["app/[locale]/blog/[slug]/page.tsx","/de/blog"],
   ["app/[locale]/kontakt/page.tsx",    "/de/kontakt"],
+  ["app/[locale]/impressum/page.tsx",   "/de/impressum"],
+  ["app/[locale]/datenschutz/page.tsx", "/de/datenschutz"],
+  ["app/[locale]/agb/page.tsx",         "/de/agb"],
+  ["app/[locale]/avv/page.tsx",         "/de/avv"],
   ["app/auth/login/page.tsx",          "/auth/login"],
   ["app/auth/register/page.tsx",       "/auth/register"],
   ["app/dashboard/page.tsx",           "/dashboard"],

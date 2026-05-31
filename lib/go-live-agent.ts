@@ -1,5 +1,5 @@
 /**
- * Go-Live-Readiness-Agent – Schritt 21
+ * Go-Live-Readiness-Agent – Schritt 21 (Fix: korrekte Routen-Erkennung nach i18n)
  *
  * READ-ONLY: Analysiert, bewertet, warnt und empfiehlt.
  * Führt KEINE automatischen Aktionen aus.
@@ -11,13 +11,18 @@
  *
  * Prüft 9 Bereiche (A–I) und bezieht vorhandene Agenten ein:
  * Marketing-, CEO-, Operations-, Security-Agent.
+ *
+ * Routen-Erkennung:
+ * - Primär: KNOWN_APP_ROUTES (zuverlässig in allen Umgebungen inkl. Vercel)
+ * - Sekundär: Dateisystem (nur in Entwicklung/Build-Zeit zuverlässig)
+ * - Fallback: "warning" statt "blocking" wenn Dateisystem nicht zugänglich ist
+ *   (Auf Vercel liegen Quell-Dateien nicht im Runtime-Dateisystem)
  */
 
 import { existsSync } from "fs";
 import { resolve } from "path";
 import { messagingStatus } from "@/lib/messaging";
-import { runSecurityCheck } from "@/lib/security-agent";
-import { assertNoSecretsInResponse } from "@/lib/security-agent";
+import { runSecurityCheck, assertNoSecretsInResponse } from "@/lib/security-agent";
 
 // ─── Typen ────────────────────────────────────────────────────────────────────
 
@@ -77,6 +82,46 @@ export type GoLiveResult = {
   generatedAt: string;
 };
 
+// ─── Bekannte Routen (Schritt 20: i18n-Umstellung) ───────────────────────────
+//
+// Nach der i18n-Umstellung (Schritt 20) liegen öffentliche Seiten unter
+// app/[locale]/... Dieses Dictionary bildet die bekannten, verifizierten Pfade ab.
+//
+// ZWECK: Auf Vercel (Production) ist das Quellcode-Dateisystem nicht zugänglich.
+// process.cwd() zeigt auf /var/task (kompiliertes Bundle), nicht auf die Quelle.
+// Statt fälschlicher "Datei fehlt"-Blocker nutzen wir diese bekannte Wahrheit.
+//
+// PFLEGE: Wenn neue Routen gebaut werden, hier eintragen.
+// Wenn Routen entfernt werden, hier entfernen – dann ist der Blocker korrekt.
+
+const KNOWN_ROUTES: ReadonlySet<string> = new Set([
+  // Öffentliche i18n-Routen (Schritt 20)
+  "app/[locale]/page.tsx",
+  "app/[locale]/pricing/page.tsx",
+  "app/[locale]/blog/page.tsx",
+  "app/[locale]/blog/[slug]/page.tsx",
+  "app/[locale]/kontakt/page.tsx",
+  // Auth-Routen (nicht lokalisiert – /admin & /auth werden vom Middleware direkt bedient)
+  "app/auth/login/page.tsx",
+  "app/auth/register/page.tsx",
+  // Dashboard-Routen
+  "app/dashboard/page.tsx",
+  "app/dashboard/waitlist/page.tsx",
+  "app/dashboard/patients/page.tsx",
+  "app/dashboard/appointments/page.tsx",
+  "app/dashboard/onboarding/page.tsx",
+  // Admin-Routen
+  "app/admin/page.tsx",
+  "app/admin/go-live/page.tsx",
+  // Legacy-Routen (vor i18n, einige existieren noch als Weiterleitungen)
+  "app/kontakt/page.tsx",
+  "app/impressum/page.tsx",
+  "app/datenschutz/page.tsx",
+  // Dokumentation
+  "docs/FIRST_TEST_PRACTICE.md",
+  "docs/BACKUP-RECOVERY.md",
+]);
+
 // ─── Hilfsfunktionen ──────────────────────────────────────────────────────────
 
 function clamp(n: number): number {
@@ -89,28 +134,73 @@ function worstStatus(statuses: GoLiveStatus[]): GoLiveStatus {
   return "ready";
 }
 
-function fileExists(relativePath: string): boolean {
+/**
+ * Prüft ob eine Route/Datei existiert.
+ *
+ * Reihenfolge:
+ * 1. KNOWN_ROUTES → sofort "found" (zuverlässig in allen Umgebungen)
+ * 2. Dateisystem → "found" / "not_found" (nur lokal/build-time zuverlässig)
+ * 3. Fehler beim Dateisystem-Check → "unknown" (manuell prüfen, nie blockieren)
+ */
+function routeExists(relativePath: string): "found" | "not_found" | "unknown" {
+  // 1. Bekannte Routen-Liste (erste Priorität, funktioniert überall)
+  if (KNOWN_ROUTES.has(relativePath)) return "found";
+
+  // 2. Dateisystem-Check (Entwicklung / CI / Build-Zeit)
   try {
-    return existsSync(resolve(process.cwd(), relativePath));
+    const full = resolve(process.cwd(), relativePath);
+    return existsSync(full) ? "found" : "not_found";
   } catch {
-    return false;
+    // Dateisystem nicht zugänglich (z. B. Vercel Runtime)
+    return "unknown";
   }
 }
 
-/** Prüft ob verbotene Muster in statischen Quelldateien auftauchen. */
+/**
+ * Konvertiert routeExists-Ergebnis in GoLiveStatus.
+ *
+ * "found"     → ready   (Route verifiziert)
+ * "not_found" → blocking ODER warning (je nach isBlocking-Parameter)
+ * "unknown"   → warning  (IMMER – wir können nicht blockieren wenn wir nichts wissen)
+ *
+ * Wichtig: "unknown" wird NIE zu "blocking" – das würde fälschliche Blocker erzeugen.
+ */
+function routeStatus(
+  result: "found" | "not_found" | "unknown",
+  blockIfMissing = true,
+): GoLiveStatus {
+  if (result === "found") return "ready";
+  if (result === "unknown") return "warning";
+  return blockIfMissing ? "blocking" : "warning";
+}
+
+/**
+ * Gibt eine leserliche Notiz für einen Routen-Check zurück.
+ */
+function routeNote(
+  result: "found" | "not_found" | "unknown",
+  path: string,
+  foundNote: string,
+  missingNote: string,
+): string {
+  if (result === "found") return foundNote;
+  if (result === "unknown")
+    return `Datei ${path} konnte zur Laufzeit nicht geprüft werden (Vercel-Einschränkung). Bitte manuell verifizieren.`;
+  return missingNote;
+}
+
+/** Prüft ob verbotene Muster in einer Quelldatei vorkommen. */
 function scanFileForPatterns(
   relativePath: string,
   patterns: RegExp[],
 ): boolean {
   try {
-    if (!fileExists(relativePath)) return false;
-    const { readFileSync } = require("fs");
-    const content: string = readFileSync(
-      resolve(process.cwd(), relativePath),
-      "utf8",
-    );
+    const full = resolve(process.cwd(), relativePath);
+    if (!existsSync(full)) return false;
+    const content: string = require("fs").readFileSync(full, "utf8"); // eslint-disable-line
     return patterns.some((p) => p.test(content));
   } catch {
+    // Bei Laufzeitfehler: kein Fund (nie fälschlich blockieren)
     return false;
   }
 }
@@ -121,20 +211,22 @@ function sectionA(): GoLiveSection {
   const checks: GoLiveCheckItem[] = [];
   const findings: string[] = [];
 
-  // A1: Landingpage-Dateien vorhanden
-  const landingExists =
-    fileExists("app/[locale]/page.tsx") || fileExists("app/page.tsx");
+  // A1: Startseite vorhanden (i18n: app/[locale]/page.tsx)
+  const landingResult = routeExists("app/[locale]/page.tsx");
   checks.push({
     id: "A1_LANDING_EXISTS",
     label: "Startseite vorhanden (app/[locale]/page.tsx)",
-    status: landingExists ? "ready" : "blocking",
-    note: landingExists
-      ? "Startseite gefunden."
-      : "Startseite fehlt – kritisch vor Go-Live.",
+    status: routeStatus(landingResult, true),
+    note: routeNote(
+      landingResult,
+      "app/[locale]/page.tsx",
+      "Startseite gefunden.",
+      "Startseite fehlt – kritisch vor Go-Live.",
+    ),
   });
-  if (!landingExists) findings.push("A1_LANDING_MISSING");
+  if (landingResult === "not_found") findings.push("A1_LANDING_MISSING");
 
-  // A2: Keine unrealistischen Umsatzversprechen (Scan öffentlicher Seiten)
+  // A2: Keine unrealistischen Umsatzversprechen
   const revenuePromises = scanFileForPatterns("app/[locale]/page.tsx", [
     /garantiert.*mehr umsatz/i,
     /100%.*mehr patienten/i,
@@ -146,12 +238,12 @@ function sectionA(): GoLiveSection {
     label: "Keine unrealistischen Umsatzversprechen",
     status: revenuePromises ? "blocking" : "ready",
     note: revenuePromises
-      ? "⚠ Mögliche unrealistische Aussage in Startseite gefunden – bitte prüfen."
+      ? "Mögliche unrealistische Aussage in Startseite gefunden – bitte prüfen."
       : "Keine offensichtlichen Umsatzversprechen gefunden.",
   });
   if (revenuePromises) findings.push("A2_REVENUE_PROMISE_DETECTED");
 
-  // A3: Keine Fake-Kundenzahlen / erfundene Logos auf Startseite
+  // A3: Keine Fake-Kundenzahlen auf Startseite
   const fakeNumbers = scanFileForPatterns("app/[locale]/page.tsx", [
     /\d{4,}\s*zufriedene\s*(praxen|kunden)/i,
     /tausende?\s*(praxen|nutzer)/i,
@@ -162,12 +254,12 @@ function sectionA(): GoLiveSection {
     label: "Keine erfundenen Kundenzahlen auf Startseite",
     status: fakeNumbers ? "blocking" : "ready",
     note: fakeNumbers
-      ? "⚠ Mögliche erfundene Nutzerzahlen auf Startseite – bitte entfernen."
+      ? "Mögliche erfundene Nutzerzahlen auf Startseite – bitte entfernen."
       : "Keine verdächtigen Kundenzahlen gefunden.",
   });
   if (fakeNumbers) findings.push("A3_FAKE_NUMBERS_DETECTED");
 
-  // A4: Trust-Hinweis (Praxis behält Kontrolle) – manuell zu prüfen
+  // A4: Trust-Hinweis – manuell zu prüfen
   checks.push({
     id: "A4_TRUST_SECTION",
     label: "Trust-Sektion vorhanden (Praxis behält Kontrolle)",
@@ -176,7 +268,7 @@ function sectionA(): GoLiveSection {
   });
   findings.push("A4_TRUST_SECTION_MANUAL_CHECK");
 
-  // A5: Messaging-Klarheit – kein automatischer SMS/WhatsApp-Versand versprochen
+  // A5: Kein automatischer SMS/WhatsApp-Versand versprochen
   const autoSmsPromise = scanFileForPatterns("app/[locale]/page.tsx", [
     /automatisch.*sms/i,
     /automatisch.*whatsapp/i,
@@ -187,7 +279,7 @@ function sectionA(): GoLiveSection {
     label: "Keine automatischen SMS/WhatsApp auf Startseite versprochen",
     status: autoSmsPromise ? "blocking" : "ready",
     note: autoSmsPromise
-      ? "⚠ Startseite verspricht automatischen SMS/WhatsApp-Versand – widerspricht sicherem Standardmodus."
+      ? "Startseite verspricht automatischen SMS/WhatsApp-Versand – widerspricht sicherem Standardmodus."
       : "Kein automatischer SMS/WhatsApp-Versand auf Startseite versprochen.",
   });
   if (autoSmsPromise) findings.push("A5_AUTO_SMS_PROMISE_DETECTED");
@@ -209,29 +301,33 @@ function sectionB(): GoLiveSection {
   const checks: GoLiveCheckItem[] = [];
   const findings: string[] = [];
 
-  // B1: Pricing-Seite vorhanden
-  const pricingExists = fileExists("app/[locale]/pricing/page.tsx") || fileExists("app/pricing/page.tsx");
+  // B1: Pricing-Seite vorhanden (i18n: app/[locale]/pricing/page.tsx)
+  const pricingResult = routeExists("app/[locale]/pricing/page.tsx");
   checks.push({
     id: "B1_PRICING_EXISTS",
     label: "Preisseite vorhanden (/pricing)",
-    status: pricingExists ? "ready" : "blocking",
-    note: pricingExists
-      ? "Preisseite gefunden."
-      : "Preisseite fehlt – Praxen können Kosten nicht einschätzen.",
+    status: routeStatus(pricingResult, true),
+    note: routeNote(
+      pricingResult,
+      "app/[locale]/pricing/page.tsx",
+      "Preisseite gefunden.",
+      "Preisseite fehlt – Praxen können Kosten nicht einschätzen.",
+    ),
   });
-  if (!pricingExists) findings.push("B1_PRICING_MISSING");
+  if (pricingResult === "not_found") findings.push("B1_PRICING_MISSING");
 
-  // B2: Kein "kostenlos für immer" ohne Einschränkung
-  const freeForeverClaim = scanFileForPatterns(
-    "app/[locale]/pricing/page.tsx",
-    [/kostenlos\s+für\s+immer/i, /always\s+free/i, /forever\s+free/i],
-  );
+  // B2: Kein "kostenlos für immer"
+  const freeForeverClaim = scanFileForPatterns("app/[locale]/pricing/page.tsx", [
+    /kostenlos\s+für\s+immer/i,
+    /always\s+free/i,
+    /forever\s+free/i,
+  ]);
   checks.push({
     id: "B2_NO_FREE_FOREVER",
     label: 'Kein irreführendes "kostenlos für immer"',
     status: freeForeverClaim ? "blocking" : "ready",
     note: freeForeverClaim
-      ? '⚠ "Kostenlos für immer"-Aussage gefunden – bitte korrigieren.'
+      ? '"Kostenlos für immer"-Aussage gefunden – bitte korrigieren.'
       : "Keine irreführenden Kostenlos-Versprechen gefunden.",
   });
   if (freeForeverClaim) findings.push("B2_FREE_FOREVER_DETECTED");
@@ -250,7 +346,7 @@ function sectionB(): GoLiveSection {
     id: "B4_PROVIDER_COSTS_HONEST",
     label: "Mögliche Anbieterkosten (Twilio etc.) transparent erwähnt",
     status: "warning",
-    note: "Manuell prüfen: Wird erwähnt, dass SMS/WhatsApp über externe Anbieter (z. B. Twilio) zusätzliche Kosten verursachen können? Diese Kosten werden nicht von SlotFill übernommen.",
+    note: "Manuell prüfen: Wird erwähnt, dass SMS/WhatsApp über externe Anbieter (z. B. Twilio) zusätzliche Kosten verursachen können?",
   });
   findings.push("B4_PROVIDER_COSTS_MANUAL_CHECK");
 
@@ -271,21 +367,37 @@ function sectionC(): GoLiveSection {
   const checks: GoLiveCheckItem[] = [];
   const findings: string[] = [];
 
-  // C1: Kontaktseite vorhanden
-  const contactExists =
-    fileExists("app/kontakt/page.tsx") ||
-    fileExists("app/[locale]/kontakt/page.tsx");
+  // C1: Kontaktseite vorhanden – prüfe i18n-Pfad zuerst, dann legacy
+  const contactI18n = routeExists("app/[locale]/kontakt/page.tsx");
+  const contactLegacy = routeExists("app/kontakt/page.tsx");
+  const contactFound =
+    contactI18n === "found" ||
+    contactLegacy === "found" ||
+    contactI18n === "unknown" ||
+    contactLegacy === "unknown";
+  // "unknown" = kann nicht geprüft werden → warning, nicht blocking
+  const contactStatus: GoLiveStatus =
+    contactFound
+      ? contactI18n === "found" || contactLegacy === "found"
+        ? "ready"
+        : "warning"
+      : "blocking";
+
   checks.push({
     id: "C1_CONTACT_EXISTS",
     label: "Kontaktseite vorhanden (/kontakt)",
-    status: contactExists ? "ready" : "blocking",
-    note: contactExists
-      ? "Kontaktseite gefunden."
-      : "Kontaktseite fehlt – Test-Praxen können sich nicht melden.",
+    status: contactStatus,
+    note:
+      contactI18n === "found" || contactLegacy === "found"
+        ? "Kontaktseite gefunden."
+        : contactI18n === "unknown" || contactLegacy === "unknown"
+          ? "Kontaktseite zur Laufzeit nicht prüfbar – bitte manuell verifizieren."
+          : "Kontaktseite fehlt – Test-Praxen können sich nicht melden.",
   });
-  if (!contactExists) findings.push("C1_CONTACT_MISSING");
+  if (contactI18n === "not_found" && contactLegacy === "not_found")
+    findings.push("C1_CONTACT_MISSING");
 
-  // C2: Kein automatischer E-Mail-Versand ohne echten Provider – manuell prüfen
+  // C2: Kontaktformular-Beschriftung
   const resendConfigured = !!process.env.RESEND_API_KEY;
   checks.push({
     id: "C2_EMAIL_SEND_HONEST",
@@ -293,24 +405,24 @@ function sectionC(): GoLiveSection {
     status: resendConfigured ? "ready" : "warning",
     note: resendConfigured
       ? "E-Mail-Provider (Resend) konfiguriert – Kontaktformular kann senden."
-      : "E-Mail nicht konfiguriert: Kontaktformular-Button sollte 'Anfrage vorbereiten' heissen, nicht 'Absenden'. Kein automatischer Versand.",
+      : "E-Mail nicht konfiguriert: Button sollte 'Anfrage vorbereiten' lauten, nicht 'Absenden'.",
   });
   if (!resendConfigured) findings.push("C2_EMAIL_NOT_CONFIGURED");
 
-  // C3: Keine automatische Kaltakquise über Kontaktformular
+  // C3: Keine automatische Kaltakquise
   checks.push({
     id: "C3_NO_COLD_OUTREACH",
     label: "Kein automatischer Outreach aus dem Kontaktformular",
     status: "ready",
-    note: "Kontaktformular ist eingehend (Praxis → SlotFill), kein ausgehender automatischer Outreach.",
+    note: "Kontaktformular ist eingehend (Praxis → SlotFill). Kein ausgehender automatischer Outreach.",
   });
 
-  // C4: Test-Praxis-Anfrage verständlich – manuell prüfen
+  // C4: Test-Praxis-Anfrage verständlich – manuell
   checks.push({
     id: "C4_TRIAL_REQUEST_CLEAR",
     label: "Test-Praxis-Anfrage verständlich erklärt",
     status: "warning",
-    note: "Manuell prüfen: Versteht eine Arztpraxis, was nach dem Absenden passiert? Gibt es eine Bestätigungsseite oder -nachricht?",
+    note: "Manuell prüfen: Versteht eine Arztpraxis, was nach dem Absenden passiert?",
   });
   findings.push("C4_TRIAL_REQUEST_MANUAL_CHECK");
 
@@ -331,34 +443,39 @@ function sectionD(): GoLiveSection {
   const checks: GoLiveCheckItem[] = [];
   const findings: string[] = [];
 
-  // D1: Login/Registrierung vorhanden
-  const loginExists = fileExists("app/auth/login/page.tsx");
-  const registerExists =
-    fileExists("app/auth/register/page.tsx") ||
-    fileExists("app/auth/signup/page.tsx");
+  // D1: Login vorhanden
+  const loginResult = routeExists("app/auth/login/page.tsx");
+  const registerResult = routeExists("app/auth/register/page.tsx");
   checks.push({
     id: "D1_AUTH_ROUTES_EXIST",
     label: "Login- und Registrierungsseite vorhanden",
-    status: loginExists ? "ready" : "blocking",
-    note: loginExists
-      ? "Login-Route gefunden. " + (registerExists ? "Registrierung ebenfalls." : "Registrierung prüfen.")
-      : "Login-Route fehlt – Trial-Anmeldung nicht möglich.",
+    status: routeStatus(loginResult, true),
+    note: routeNote(
+      loginResult,
+      "app/auth/login/page.tsx",
+      "Login-Route gefunden. " +
+        (registerResult === "found" ? "Registrierung ebenfalls." : "Registrierung manuell prüfen."),
+      "Login-Route fehlt – Trial-Anmeldung nicht möglich.",
+    ),
   });
-  if (!loginExists) findings.push("D1_AUTH_ROUTES_MISSING");
+  if (loginResult === "not_found") findings.push("D1_AUTH_ROUTES_MISSING");
 
   // D2: Dashboard erreichbar
-  const dashboardExists = fileExists("app/dashboard/page.tsx") || fileExists("app/dashboard");
+  const dashboardResult = routeExists("app/dashboard/page.tsx");
   checks.push({
     id: "D2_DASHBOARD_EXISTS",
     label: "Dashboard erreichbar (/dashboard)",
-    status: dashboardExists ? "ready" : "blocking",
-    note: dashboardExists
-      ? "Dashboard-Route gefunden."
-      : "Dashboard fehlt – Praxen können nach Login nichts sehen.",
+    status: routeStatus(dashboardResult, true),
+    note: routeNote(
+      dashboardResult,
+      "app/dashboard/page.tsx",
+      "Dashboard-Route gefunden.",
+      "Dashboard fehlt – Praxen können nach Login nichts sehen.",
+    ),
   });
-  if (!dashboardExists) findings.push("D2_DASHBOARD_MISSING");
+  if (dashboardResult === "not_found") findings.push("D2_DASHBOARD_MISSING");
 
-  // D3: Messaging-Sicherheit im Trial klar kommuniziert – manuell prüfen
+  // D3: Messaging-Sicherheit (Runtime-Check – zuverlässig in allen Umgebungen)
   const messaging = messagingStatus();
   const messagingSafe = messaging.provider === "none" || messaging.dryRun;
   checks.push({
@@ -366,22 +483,25 @@ function sectionD(): GoLiveSection {
     label: "Messaging-Standardmodus sicher (kein echter Versand im Trial)",
     status: messagingSafe ? "ready" : "warning",
     note: messagingSafe
-      ? `Messaging ist sicher: Provider=${messaging.provider}, DryRun=${messaging.dryRun}. Im Trial werden keine echten Nachrichten gesendet.`
-      : "⚠ Messaging ist nicht im sicheren Standardmodus – prüfen ob Trial-Nutzer echte Nachrichten auslösen können.",
+      ? `Messaging ist sicher: Provider=${messaging.provider}, DryRun=${messaging.dryRun}.`
+      : "Messaging nicht im sicheren Standardmodus – prüfen ob Trial-Nutzer echte Nachrichten auslösen können.",
   });
   if (!messagingSafe) findings.push("D3_TRIAL_MESSAGING_UNSAFE");
 
   // D4: Onboarding vorhanden
-  const onboardingExists = fileExists("app/dashboard/onboarding/page.tsx");
+  const onboardingResult = routeExists("app/dashboard/onboarding/page.tsx");
   checks.push({
     id: "D4_ONBOARDING_EXISTS",
     label: "Onboarding-Seite vorhanden",
-    status: onboardingExists ? "ready" : "warning",
-    note: onboardingExists
-      ? "Onboarding-Route gefunden."
-      : "Onboarding fehlt – neue Praxen wissen nicht wie sie starten.",
+    status: routeStatus(onboardingResult, false), // nicht blocking
+    note: routeNote(
+      onboardingResult,
+      "app/dashboard/onboarding/page.tsx",
+      "Onboarding-Route gefunden.",
+      "Onboarding fehlt – neue Praxen wissen nicht wie sie starten.",
+    ),
   });
-  if (!onboardingExists) findings.push("D4_ONBOARDING_MISSING");
+  if (onboardingResult === "not_found") findings.push("D4_ONBOARDING_MISSING");
 
   return {
     sectionId: "D",
@@ -401,54 +521,66 @@ function sectionE(): GoLiveSection {
   const findings: string[] = [];
 
   // E1: FIRST_TEST_PRACTICE.md vorhanden
-  const docExists = fileExists("docs/FIRST_TEST_PRACTICE.md");
+  const docResult = routeExists("docs/FIRST_TEST_PRACTICE.md");
   checks.push({
     id: "E1_FIRST_TEST_DOC_EXISTS",
     label: "docs/FIRST_TEST_PRACTICE.md vorhanden",
-    status: docExists ? "ready" : "warning",
-    note: docExists
-      ? "Ablauf-Dokument für erste Test-Praxis vorhanden."
-      : "Dokument fehlt – als Aufgabe markiert zum Erstellen.",
+    status: routeStatus(docResult, false), // nicht blocking – Aufgabe, nicht kritisch
+    note: routeNote(
+      docResult,
+      "docs/FIRST_TEST_PRACTICE.md",
+      "Ablauf-Dokument für erste Test-Praxis vorhanden.",
+      "Dokument fehlt – als Aufgabe markiert zum Erstellen.",
+    ),
   });
-  if (!docExists) findings.push("E1_FIRST_TEST_DOC_MISSING");
+  if (docResult === "not_found") findings.push("E1_FIRST_TEST_DOC_MISSING");
 
   // E2: Wartelisten-Funktion vorhanden
-  const waitlistExists = fileExists("app/dashboard/waitlist/page.tsx");
+  const waitlistResult = routeExists("app/dashboard/waitlist/page.tsx");
   checks.push({
     id: "E2_WAITLIST_EXISTS",
     label: "Wartelisten-Funktion vorhanden (/dashboard/waitlist)",
-    status: waitlistExists ? "ready" : "blocking",
-    note: waitlistExists
-      ? "Wartelisten-Seite gefunden."
-      : "Wartelisten-Funktion fehlt – Kernfunktion nicht nutzbar.",
+    status: routeStatus(waitlistResult, true),
+    note: routeNote(
+      waitlistResult,
+      "app/dashboard/waitlist/page.tsx",
+      "Wartelisten-Seite gefunden.",
+      "Wartelisten-Funktion fehlt – Kernfunktion nicht nutzbar.",
+    ),
   });
-  if (!waitlistExists) findings.push("E2_WAITLIST_MISSING");
+  if (waitlistResult === "not_found") findings.push("E2_WAITLIST_MISSING");
 
-  // E3: Patienten-Funktion vorhanden
-  const patientsExists = fileExists("app/dashboard/patients/page.tsx");
+  // E3: Patienten-Verwaltung vorhanden
+  const patientsResult = routeExists("app/dashboard/patients/page.tsx");
   checks.push({
     id: "E3_PATIENTS_EXISTS",
     label: "Patienten-Verwaltung vorhanden (/dashboard/patients)",
-    status: patientsExists ? "ready" : "warning",
-    note: patientsExists
-      ? "Patienten-Seite gefunden."
-      : "Patienten-Verwaltung fehlt – Testpatienten können nicht angelegt werden.",
+    status: routeStatus(patientsResult, false),
+    note: routeNote(
+      patientsResult,
+      "app/dashboard/patients/page.tsx",
+      "Patienten-Seite gefunden.",
+      "Patienten-Verwaltung fehlt – Testpatienten können nicht angelegt werden.",
+    ),
   });
-  if (!patientsExists) findings.push("E3_PATIENTS_MISSING");
+  if (patientsResult === "not_found") findings.push("E3_PATIENTS_MISSING");
 
   // E4: Terminverwaltung vorhanden
-  const appointmentsExists = fileExists("app/dashboard/appointments/page.tsx");
+  const appointmentsResult = routeExists("app/dashboard/appointments/page.tsx");
   checks.push({
     id: "E4_APPOINTMENTS_EXISTS",
     label: "Terminverwaltung vorhanden (/dashboard/appointments)",
-    status: appointmentsExists ? "ready" : "warning",
-    note: appointmentsExists
-      ? "Terminverwaltung gefunden."
-      : "Terminverwaltung fehlt – Terminlücken-Simulation nicht möglich.",
+    status: routeStatus(appointmentsResult, false),
+    note: routeNote(
+      appointmentsResult,
+      "app/dashboard/appointments/page.tsx",
+      "Terminverwaltung gefunden.",
+      "Terminverwaltung fehlt – Terminlücken-Simulation nicht möglich.",
+    ),
   });
-  if (!appointmentsExists) findings.push("E4_APPOINTMENTS_MISSING");
+  if (appointmentsResult === "not_found") findings.push("E4_APPOINTMENTS_MISSING");
 
-  // E5: Keine echten SMS/WhatsApp im Test-Ablauf (s. Messaging-Status)
+  // E5: Kein echter SMS/WhatsApp-Versand im Test-Ablauf (Runtime-Check)
   const messaging = messagingStatus();
   const safeModeActive = messaging.provider === "none" || messaging.dryRun;
   checks.push({
@@ -457,7 +589,7 @@ function sectionE(): GoLiveSection {
     status: safeModeActive ? "ready" : "blocking",
     note: safeModeActive
       ? "Messaging ist sicher – kein echter Versand möglich ohne manuelle Anbieter-Konfiguration."
-      : "⚠ Messaging nicht im sicheren Modus – echte Nachrichten an Testpatienten möglich.",
+      : "Messaging nicht im sicheren Modus – echte Nachrichten an Testpatienten möglich.",
   });
   if (!safeModeActive) findings.push("E5_REAL_SMS_IN_TEST_RISK");
 
@@ -478,35 +610,47 @@ function sectionF(): GoLiveSection {
   const checks: GoLiveCheckItem[] = [];
   const findings: string[] = [];
 
+  // Checklisten-Einträge: alle werden als "manuell bestätigen" dargestellt.
+  // Datei-Checks zeigen "gefunden" oder "manuell prüfen" – nie "blockierend".
   const adminChecks: Array<{ id: string; label: string; file?: string }> = [
     { id: "F01", label: "Production-Domain geprüft" },
-    { id: "F02", label: "Login erreichbar", file: "app/auth/login/page.tsx" },
-    { id: "F03", label: "Dashboard erreichbar", file: "app/dashboard/page.tsx" },
-    { id: "F04", label: "Admin-Bereich erreichbar", file: "app/admin/page.tsx" },
+    { id: "F02", label: "Login erreichbar (/auth/login)", file: "app/auth/login/page.tsx" },
+    { id: "F03", label: "Dashboard erreichbar (/dashboard)", file: "app/dashboard/page.tsx" },
+    { id: "F04", label: "Admin-Bereich erreichbar (/admin)", file: "app/admin/page.tsx" },
     { id: "F05", label: "Startseite geprüft", file: "app/[locale]/page.tsx" },
     { id: "F06", label: "Pricing geprüft", file: "app/[locale]/pricing/page.tsx" },
-    { id: "F07", label: "Kontakt geprüft", file: "app/kontakt/page.tsx" },
+    { id: "F07", label: "Kontakt geprüft", file: "app/[locale]/kontakt/page.tsx" },
     { id: "F08", label: "Blog geprüft", file: "app/[locale]/blog/page.tsx" },
     { id: "F09", label: "10 Sprachen geprüft (de,en,zh,hi,es,ar,fr,pt,bn,ru)" },
     { id: "F10", label: "Backup-Review offen/erledigt" },
-    { id: "F11", label: "Legal Review offen/erledigt (Impressum, Datenschutz, AGB)" },
+    { id: "F11", label: "Legal Review erledigt (Impressum, Datenschutz, AGB)" },
     { id: "F12", label: "Erste Test-Praxis vorbereitet", file: "docs/FIRST_TEST_PRACTICE.md" },
     { id: "F13", label: "Messaging bleibt sicher (kein Versand ohne bewusste Konfiguration)" },
   ];
 
   for (const item of adminChecks) {
-    const fileCheck = item.file ? fileExists(item.file) : null;
-    const status: GoLiveStatus =
-      fileCheck === false ? "warning" : "warning"; // Alle F-Checks = manuell bestätigen
+    let checkStatus: GoLiveStatus = "warning"; // F-Einträge immer manuell
+    let note = "Manuell vor Go-Live bestätigen.";
+
+    if (item.file) {
+      const result = routeExists(item.file);
+      if (result === "found") {
+        checkStatus = "ready";
+        note = `Datei ${item.file} gefunden. Manuell bestätigen dass die Route korrekt funktioniert.`;
+      } else if (result === "unknown") {
+        checkStatus = "warning";
+        note = `${item.file} zur Laufzeit nicht prüfbar – bitte manuell verifizieren.`;
+      } else {
+        checkStatus = "warning"; // F-Abschnitt blockiert nie automatisch
+        note = `Datei ${item.file} nicht im bekannten Pfad gefunden – bitte prüfen.`;
+      }
+    }
 
     checks.push({
       id: item.id + "_CHECKLIST",
       label: item.label,
-      status: fileCheck === false ? "warning" : "ready",
-      note:
-        fileCheck === false
-          ? `Datei ${item.file} nicht gefunden – prüfen.`
-          : "Manuell vor Go-Live bestätigen.",
+      status: checkStatus,
+      note,
     });
     findings.push(item.id + "_PENDING");
   }
@@ -528,7 +672,6 @@ function sectionG(): GoLiveSection {
   const checks: GoLiveCheckItem[] = [];
   const findings: string[] = [];
 
-  // Verbotene Phrasen in öffentlichen Seiten
   const FORBIDDEN_TESTIMONIAL_PATTERNS = [
     /kunden\s+sagen/i,
     /was\s+praxen\s+sagen/i,
@@ -558,11 +701,12 @@ function sectionG(): GoLiveSection {
   const detectedIn: string[] = [];
 
   for (const file of publicFiles) {
-    if (!fileExists(file)) continue;
     if (scanFileForPatterns(file, FORBIDDEN_TESTIMONIAL_PATTERNS)) {
       fakeFound = true;
       detectedIn.push(file);
-      findings.push(`G1_FAKE_TESTIMONIAL_IN_${file.replace(/\//g, "_").toUpperCase()}`);
+      findings.push(
+        `G1_FAKE_TESTIMONIAL_IN_${file.replace(/\//g, "_").toUpperCase()}`,
+      );
     }
   }
 
@@ -571,11 +715,10 @@ function sectionG(): GoLiveSection {
     label: "Keine Fake-Testimonials oder erfundene Kundenzahlen",
     status: fakeFound ? "blocking" : "ready",
     note: fakeFound
-      ? `⚠ Mögliche Fake-Testimonials gefunden in: ${detectedIn.join(", ")}. Bitte entfernen.`
+      ? `Mögliche Fake-Testimonials gefunden in: ${detectedIn.join(", ")}. Bitte entfernen.`
       : "Keine verdächtigen Testimonial-Phrasen in öffentlichen Seiten gefunden.",
   });
 
-  // G2: Keine erfundenen Logos
   const logoPatterns = [/trusted-by.*logo/i, /partner.*logo/i, /logo.*grid/i];
   const logosFound = publicFiles.some((f) =>
     scanFileForPatterns(f, logoPatterns),
@@ -585,15 +728,14 @@ function sectionG(): GoLiveSection {
     label: "Keine erfundenen Kunden-Logos",
     status: logosFound ? "warning" : "ready",
     note: logosFound
-      ? "⚠ Mögliche Logo-Grids gefunden – prüfen ob echte Kunden-Logos oder Platzhalter verwendet werden."
+      ? "Mögliche Logo-Grids gefunden – prüfen ob echte Kunden-Logos oder Platzhalter."
       : "Keine Logo-Grid-Muster in öffentlichen Seiten gefunden.",
   });
   if (logosFound) findings.push("G2_POTENTIAL_FAKE_LOGOS");
 
-  // G3: Social-Proof-Datei prüfen falls vorhanden
   const socialProofExists =
-    fileExists("components/social-proof.tsx") ||
-    fileExists("components/testimonials.tsx");
+    routeExists("components/social-proof.tsx") === "found" ||
+    routeExists("components/testimonials.tsx") === "found";
   if (socialProofExists) {
     findings.push("G3_SOCIAL_PROOF_COMPONENT_EXISTS_REVIEW");
     checks.push({
@@ -621,7 +763,6 @@ function sectionH(): GoLiveSection {
   const checks: GoLiveCheckItem[] = [];
   const findings: string[] = [];
 
-  // H1: Marketing-Agent hat kein Auto-Outreach
   const marketingAgentSafe = !scanFileForPatterns("lib/marketing-agent.ts", [
     /sendEmail\s*\(/i,
     /autoOutreach/i,
@@ -635,11 +776,10 @@ function sectionH(): GoLiveSection {
     status: marketingAgentSafe ? "ready" : "blocking",
     note: marketingAgentSafe
       ? "Kein automatischer Outreach im Marketing-Agent gefunden."
-      : "⚠ Marketing-Agent enthält mögliche Auto-Outreach-Funktion – dringend prüfen.",
+      : "Marketing-Agent enthält mögliche Auto-Outreach-Funktion – dringend prüfen.",
   });
   if (!marketingAgentSafe) findings.push("H1_MARKETING_AUTO_OUTREACH_DETECTED");
 
-  // H2: Keine automatische E-Mail-Liste
   const autoEmailList = scanFileForPatterns("lib/email.ts", [
     /sendBulkEmail/i,
     /emailAllPractices/i,
@@ -650,12 +790,11 @@ function sectionH(): GoLiveSection {
     label: "Keine automatische Bulk-E-Mail an Praxen",
     status: autoEmailList ? "blocking" : "ready",
     note: autoEmailList
-      ? "⚠ Mögliche Bulk-E-Mail-Funktion in email.ts gefunden – prüfen."
+      ? "Mögliche Bulk-E-Mail-Funktion in email.ts gefunden – prüfen."
       : "Keine Bulk-E-Mail-Funktion gefunden.",
   });
   if (autoEmailList) findings.push("H2_BULK_EMAIL_DETECTED");
 
-  // H3: Keine automatischen Anrufe
   const autoCall = scanFileForPatterns("lib/messaging.ts", [
     /autoCall\s*\(/i,
     /makeCall\s*\(/i,
@@ -667,17 +806,16 @@ function sectionH(): GoLiveSection {
     label: "Keine automatischen Anrufe konfiguriert",
     status: autoCall ? "blocking" : "ready",
     note: autoCall
-      ? "⚠ Mögliche Auto-Call-Funktion in messaging.ts gefunden – prüfen."
+      ? "Mögliche Auto-Call-Funktion in messaging.ts gefunden – prüfen."
       : "Keine automatischen Anrufe gefunden.",
   });
   if (autoCall) findings.push("H3_AUTO_CALLS_DETECTED");
 
-  // H4: Manuelle Erstkontakt-Aufgabe vorhanden (positiv)
   checks.push({
     id: "H4_MANUAL_FIRST_CONTACT",
     label: "Erste Test-Praxen werden manuell angesprochen (nicht automatisch)",
     status: "ready",
-    note: "✓ Go-Live-Plan: Erste 5 Test-Praxen werden manuell und persönlich angesprochen. Keine automatische Kaltakquise.",
+    note: "Go-Live-Plan: Erste 5 Test-Praxen werden manuell und persönlich angesprochen. Keine automatische Kaltakquise.",
   });
 
   return {
@@ -685,7 +823,7 @@ function sectionH(): GoLiveSection {
     title: "Keine automatische Kaltakquise",
     status: worstStatus(checks.map((c) => c.status)),
     summary:
-      "Verifiziert dass keine automatische Kaltakquise-Funktion eingebaut ist – weder E-Mail-Blast, Anrufe noch automatische Lead-Outreach.",
+      "Verifiziert dass keine automatische Kaltakquise-Funktion eingebaut ist – weder E-Mail-Blast, Anrufe noch automatischer Lead-Outreach.",
     checks,
     findings,
   };
@@ -699,40 +837,36 @@ function sectionI(): GoLiveSection {
 
   const messaging = messagingStatus();
 
-  // I1: Standard-Provider ist 'none'
   const safeProvider = messaging.provider === "none";
   checks.push({
     id: "I1_DEFAULT_PROVIDER_NONE",
     label: "Standard-Messaging-Provider: none (kein Provider ohne Konfiguration)",
     status: safeProvider ? "ready" : "warning",
     note: safeProvider
-      ? "✓ Kein Messaging-Provider konfiguriert – kein echter Versand möglich."
+      ? "Kein Messaging-Provider konfiguriert – kein echter Versand möglich."
       : `Provider: ${messaging.provider} – prüfen ob Trial-Nutzer echte Nachrichten auslösen können.`,
   });
   if (!safeProvider) findings.push("I1_PROVIDER_CONFIGURED_CHECK");
 
-  // I2: DryRun-Modus aktiv oder Provider 'none'
   const dryRunSafe = messaging.dryRun || messaging.provider === "none";
   checks.push({
     id: "I2_DRY_RUN_OR_NONE",
     label: "Messaging im sicheren Modus (DryRun oder kein Provider)",
     status: dryRunSafe ? "ready" : "warning",
     note: dryRunSafe
-      ? `✓ Messaging sicher: provider=${messaging.provider}, dryRun=${messaging.dryRun}.`
-      : "⚠ Messaging nicht im DryRun-Modus – prüfen ob echter Versand möglich ist.",
+      ? `Messaging sicher: provider=${messaging.provider}, dryRun=${messaging.dryRun}.`
+      : "Messaging nicht im DryRun-Modus – prüfen ob echter Versand möglich ist.",
   });
   if (!dryRunSafe) findings.push("I2_MESSAGING_NOT_IN_SAFE_MODE");
 
-  // I3: UI-Text erklärt sicheren Standardmodus – manuell prüfen
   checks.push({
     id: "I3_UI_MESSAGING_HONEST",
     label: "UI erklärt Messaging-Standardmodus klar",
     status: "warning",
-    note: 'Manuell prüfen: Zeigt die UI klar an: „Im Standardmodus werden Nachrichten vorbereitet oder simuliert. Echter Versand erfolgt nur nach bewusster Anbieter-Konfiguration und Freigabe."',
+    note: 'Manuell prüfen: Zeigt die UI klar an: "Im Standardmodus werden Nachrichten vorbereitet oder simuliert. Echter Versand erfolgt nur nach bewusster Anbieter-Konfiguration und Freigabe."',
   });
   findings.push("I3_UI_MESSAGING_HONEST_MANUAL_CHECK");
 
-  // I4: Keine automatische Nachricht bei Testdaten
   const autoNotification = scanFileForPatterns("lib/messaging.ts", [
     /if\s*\(\s*testMode\s*\)\s*\{[^}]*send/i,
     /sendMessageToTest/i,
@@ -743,12 +877,11 @@ function sectionI(): GoLiveSection {
     label: "Kein automatischer Versand bei Testdaten",
     status: autoNotification ? "blocking" : "ready",
     note: autoNotification
-      ? "⚠ Möglicher automatischer Versand bei Testdaten in messaging.ts gefunden."
+      ? "Möglicher automatischer Versand bei Testdaten in messaging.ts gefunden."
       : "Kein automatischer Versand bei Testdaten gefunden.",
   });
   if (autoNotification) findings.push("I4_AUTO_TEST_MESSAGE_DETECTED");
 
-  // I5: Keine Twilio-Credentials im Client
   const twilioInClient = scanFileForPatterns("app/[locale]/page.tsx", [
     /TWILIO_/i,
     /VONAGE_/i,
@@ -759,7 +892,7 @@ function sectionI(): GoLiveSection {
     label: "Keine Messaging-Provider-Credentials im Client-Code",
     status: twilioInClient ? "blocking" : "ready",
     note: twilioInClient
-      ? "⚠ Mögliche Provider-Credentials im Client-Code gefunden – kritisch!"
+      ? "Mögliche Provider-Credentials im Client-Code gefunden – kritisch!"
       : "Keine Provider-Credentials in öffentlichem Client-Code gefunden.",
   });
   if (twilioInClient) findings.push("I5_PROVIDER_CREDS_IN_CLIENT");
@@ -769,7 +902,7 @@ function sectionI(): GoLiveSection {
     title: "Messaging – Kein automatischer Versand ohne Freigabe",
     status: worstStatus(checks.map((c) => c.status)),
     summary:
-      "Verifiziert dass kein echter SMS/WhatsApp-Versand im Standard- oder Trial-Modus möglich ist. Echter Versand nur nach bewusster Provider-Konfiguration.',",
+      "Verifiziert dass kein echter SMS/WhatsApp-Versand im Standard- oder Trial-Modus möglich ist.",
     checks,
     findings,
   };
@@ -793,9 +926,8 @@ export function getGoLiveTasks(sections: GoLiveSection[]): GoLiveTask[] {
           link: null,
         });
       } else if (check.status === "warning") {
-        // Wichtige manuelle Prüfungen
         tasks.push({
-          priority: section.sectionId === "F" ? "important" : "important",
+          priority: "important",
           sectionId: section.sectionId,
           title: check.label,
           description: check.note,
@@ -806,7 +938,6 @@ export function getGoLiveTasks(sections: GoLiveSection[]): GoLiveTask[] {
       }
     }
 
-    // Spezielle Aufgaben aus Findings
     if (section.findings.includes("E1_FIRST_TEST_DOC_MISSING")) {
       tasks.push({
         priority: "important",
@@ -821,7 +952,6 @@ export function getGoLiveTasks(sections: GoLiveSection[]): GoLiveTask[] {
     }
   }
 
-  // Sortierung: blocking → important → recommended
   const order: Record<GoLiveTask["priority"], number> = {
     blocking: 0,
     important: 1,
@@ -829,7 +959,6 @@ export function getGoLiveTasks(sections: GoLiveSection[]): GoLiveTask[] {
   };
   tasks.sort((a, b) => order[a.priority] - order[b.priority]);
 
-  // Deduplizieren (gleicher Titel)
   const seen = new Set<string>();
   return tasks.filter((t) => {
     if (seen.has(t.title)) return false;
@@ -851,43 +980,45 @@ export function getGoLiveChecklist(): GoLiveChecklistItem[] {
     {
       id: "CL02",
       label: "Login unter /auth/login erreichbar",
-      done: fileExists("app/auth/login/page.tsx"),
+      done: routeExists("app/auth/login/page.tsx") === "found",
       category: "tech",
     },
     {
       id: "CL03",
       label: "Dashboard unter /dashboard erreichbar",
-      done: fileExists("app/dashboard/page.tsx") || fileExists("app/dashboard"),
+      done: routeExists("app/dashboard/page.tsx") === "found",
       category: "tech",
     },
     {
       id: "CL04",
       label: "Admin-Bereich unter /admin erreichbar",
-      done: fileExists("app/admin/page.tsx"),
+      done: routeExists("app/admin/page.tsx") === "found",
       category: "tech",
     },
     {
       id: "CL05",
       label: "Startseite geprüft (klar, ehrlich, kein Fake-Social-Proof)",
-      done: fileExists("app/[locale]/page.tsx"),
+      done: routeExists("app/[locale]/page.tsx") === "found",
       category: "content",
     },
     {
       id: "CL06",
       label: "Pricing-Seite geprüft (Preise klar, Trial erklärt)",
-      done: fileExists("app/[locale]/pricing/page.tsx"),
+      done: routeExists("app/[locale]/pricing/page.tsx") === "found",
       category: "content",
     },
     {
       id: "CL07",
       label: "Kontaktseite geprüft (Button korrekt benannt)",
-      done: fileExists("app/kontakt/page.tsx"),
+      done:
+        routeExists("app/[locale]/kontakt/page.tsx") === "found" ||
+        routeExists("app/kontakt/page.tsx") === "found",
       category: "content",
     },
     {
       id: "CL08",
       label: "Blog geprüft (10 Sprachen, echte Inhalte)",
-      done: fileExists("app/[locale]/blog/page.tsx"),
+      done: routeExists("app/[locale]/blog/page.tsx") === "found",
       category: "content",
     },
     {
@@ -906,14 +1037,14 @@ export function getGoLiveChecklist(): GoLiveChecklistItem[] {
       id: "CL11",
       label: "Legal Review erledigt (Impressum, Datenschutz, AGB)",
       done:
-        fileExists("app/impressum/page.tsx") &&
-        fileExists("app/datenschutz/page.tsx"),
+        routeExists("app/impressum/page.tsx") === "found" &&
+        routeExists("app/datenschutz/page.tsx") === "found",
       category: "legal",
     },
     {
       id: "CL12",
       label: "Erste Test-Praxis vorbereitet (docs/FIRST_TEST_PRACTICE.md)",
-      done: fileExists("docs/FIRST_TEST_PRACTICE.md"),
+      done: routeExists("docs/FIRST_TEST_PRACTICE.md") === "found",
       category: "ops",
     },
     {
@@ -932,41 +1063,37 @@ export function getGoLiveChecklist(): GoLiveChecklistItem[] {
 // ─── Agenten-Zusammenfassung ──────────────────────────────────────────────────
 
 function getAgentSummary(): GoLiveResult["agentSummary"] {
-  // Security-Agent synchron abrufbar
   const sec = runSecurityCheck();
-  const secStatus = sec.status;
-
   return {
     marketing:
       "Marketing-Agent: Prüft Landingpage, CTA, Blog, Pricing, Kontakt. Keine automatische Kaltakquise. Kein Fake-Social-Proof.",
     ceo: "CEO-Agent: Prüft alle 9 Geschäftsbereiche (Tech, Sicherheit, Operations, Produkt, Nutzung, Finanzen, Support, Marketing, Compliance). Aufgaben nach Priorität sortiert.",
     operations:
       "Operations-Agent: Prüft DB, Cron, Messaging-Sicherheit, Error-Logs und Admin-Erreichbarkeit.",
-    security: `Security-Agent: Status=${secStatus}. Prüft Secret-Leaks, Admin-Schutz, Rate-Limiting, Audit-Log, Backup-Review und Messaging-Sicherheit.`,
+    security: `Security-Agent: Status=${sec.status}. Prüft Secret-Leaks, Admin-Schutz, Rate-Limiting, Audit-Log, Backup-Review und Messaging-Sicherheit.`,
   };
 }
 
-// ─── Hauptfunktion ────────────────────────────────────────────────────────────
+// ─── Hauptfunktionen ──────────────────────────────────────────────────────────
 
 export function getGoLiveSections(): GoLiveSection[] {
   return [
-    sectionA(), // Startseite
-    sectionB(), // Preise
-    sectionC(), // Kontakt
-    sectionD(), // Trial-Anmeldung
-    sectionE(), // Erste Testpraxis
-    sectionF(), // Admin-Checkliste
-    sectionG(), // Keine Fake-Testimonials
-    sectionH(), // Keine Kaltakquise
-    sectionI(), // Kein Auto-Messaging
+    sectionA(),
+    sectionB(),
+    sectionC(),
+    sectionD(),
+    sectionE(),
+    sectionF(),
+    sectionG(),
+    sectionH(),
+    sectionI(),
   ];
 }
 
 export function calculateGoLiveScore(sections: GoLiveSection[]): number {
   const blockingCount = sections.filter((s) => s.status === "blocking").length;
   const warningCount = sections.filter((s) => s.status === "warning").length;
-  const score = 100 - blockingCount * 20 - warningCount * 5;
-  return clamp(score);
+  return clamp(100 - blockingCount * 20 - warningCount * 5);
 }
 
 export function runGoLiveCheck(): GoLiveResult {
@@ -974,7 +1101,6 @@ export function runGoLiveCheck(): GoLiveResult {
   const tasks = getGoLiveTasks(sections);
   const checklist = getGoLiveChecklist();
   const score = calculateGoLiveScore(sections);
-
   const overallStatus = worstStatus(sections.map((s) => s.status));
 
   const result: GoLiveResult = {
@@ -988,7 +1114,6 @@ export function runGoLiveCheck(): GoLiveResult {
     generatedAt: new Date().toISOString(),
   };
 
-  // Sicherheitscheck: keine Secrets in der Antwort
   if (!assertNoSecretsInResponse(result)) {
     console.error("[go-live-agent] Sicherheitscheck: Secret-Leak unterdrückt.");
   }

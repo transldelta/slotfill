@@ -350,7 +350,7 @@
     "checkoutUnavailable": "Оформление заказа ещё не настроено.",
     "stripePriceMissing": "Для этого плана не установлена цена Stripe.",
     "featureKeys": {
-      "whatsappNotifications": "Уведомления WhatsApp",
+      "whatsappNotifications": "Подготовленные уведомления",
       "patientManagement": "Управление пациентами",
       "trial14Days": "14-дневный пробный период",
       "everythingInStarter": "Всё из Starter",

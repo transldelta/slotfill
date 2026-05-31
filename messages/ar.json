@@ -350,7 +350,7 @@
     "checkoutUnavailable": "الدفع غير مكوّن بعد.",
     "stripePriceMissing": "لم يتم تعيين سعر Stripe لهذه الخطة.",
     "featureKeys": {
-      "whatsappNotifications": "إشعارات WhatsApp",
+      "whatsappNotifications": "إشعارات معدّة",
       "patientManagement": "إدارة المرضى",
       "trial14Days": "14 يوماً تجريبياً",
       "everythingInStarter": "كل شيء في Starter",

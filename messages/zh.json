@@ -350,7 +350,7 @@
     "checkoutUnavailable": "结账功能暂未配置。",
     "stripePriceMissing": "此套餐尚未设置Stripe价格。",
     "featureKeys": {
-      "whatsappNotifications": "WhatsApp通知",
+      "whatsappNotifications": "准备好的通知",
       "patientManagement": "患者管理",
       "trial14Days": "14天试用期",
       "everythingInStarter": "包含入门版所有功能",

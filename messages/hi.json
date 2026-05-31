@@ -350,7 +350,7 @@
     "checkoutUnavailable": "चेकआउट अभी कॉन्फ़िगर नहीं है।",
     "stripePriceMissing": "इस प्लान के लिए कोई Stripe मूल्य सेट नहीं है।",
     "featureKeys": {
-      "whatsappNotifications": "WhatsApp सूचनाएं",
+      "whatsappNotifications": "तैयार सूचनाएं",
       "patientManagement": "मरीज़ प्रबंधन",
       "trial14Days": "14 दिन परीक्षण",
       "everythingInStarter": "स्टार्टर में सब कुछ",

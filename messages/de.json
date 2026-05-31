@@ -346,7 +346,7 @@
     "checkoutUnavailable": "Checkout ist aktuell noch nicht konfiguriert.",
     "stripePriceMissing": "Für diesen Plan ist noch kein Stripe-Preis hinterlegt.",
     "featureKeys": {
-      "whatsappNotifications": "WhatsApp-Benachrichtigungen",
+      "whatsappNotifications": "Vorbereitete Benachrichtigungen",
       "patientManagement": "Patientenverwaltung",
       "trial14Days": "14 Tage Testphase",
       "everythingInStarter": "Alles in Starter",

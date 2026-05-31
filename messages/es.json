@@ -350,7 +350,7 @@
     "checkoutUnavailable": "El pago aún no está configurado.",
     "stripePriceMissing": "No se ha configurado un precio de Stripe para este plan.",
     "featureKeys": {
-      "whatsappNotifications": "Notificaciones de WhatsApp",
+      "whatsappNotifications": "Notificaciones preparadas",
       "patientManagement": "Gestión de pacientes",
       "trial14Days": "14 días de prueba",
       "everythingInStarter": "Todo en Starter",

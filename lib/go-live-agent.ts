@@ -23,6 +23,13 @@ import { existsSync } from "fs";
 import { resolve } from "path";
 import { messagingStatus } from "@/lib/messaging";
 import { runSecurityCheck, assertNoSecretsInResponse } from "@/lib/security-agent";
+import {
+  MANUAL_CONFIRMATIONS,
+  MANUAL_CONFIRMATION_KEYS,
+  type ManualConfirmationKey,
+  type ConfirmationRecord,
+  type ConfirmationsMap,
+} from "@/lib/go-live-confirmations";
 
 // ─── Typen ────────────────────────────────────────────────────────────────────
 
@@ -79,8 +86,13 @@ export type GoLiveResult = {
     operations: string;
     security: string;
   };
+  /** Manuelle Bestätigungen (persistent via audit_log). */
+  confirmations: ConfirmationsMap;
   generatedAt: string;
 };
+
+// Re-export für externe Verwendung (z. B. API-Routen, Tests)
+export type { ManualConfirmationKey, ConfirmationRecord, ConfirmationsMap };
 
 // ─── Bekannte Routen: URL-Pfade (primär) + Quellpfade (sekundär) ─────────────
 //
@@ -1078,12 +1090,22 @@ export function getGoLiveTasks(sections: GoLiveSection[]): GoLiveTask[] {
 
 // ─── Go-Live-Checkliste ───────────────────────────────────────────────────────
 
-export function getGoLiveChecklist(): GoLiveChecklistItem[] {
+export function getGoLiveChecklist(
+  confirmations?: ConfirmationsMap,
+): GoLiveChecklistItem[] {
+  // Index der Bestätigungen nach Checklisten-ID für schnellen Zugriff
+  const confirmedByChecklistId: Record<string, boolean> = {};
+  if (confirmations) {
+    for (const mc of MANUAL_CONFIRMATIONS) {
+      if (confirmations[mc.key]) confirmedByChecklistId[mc.checklistId] = true;
+    }
+  }
+
   return [
     {
       id: "CL01",
       label: "Production-Domain geprüft und live",
-      done: null,
+      done: confirmedByChecklistId["CL01"] ?? null,
       category: "tech",
     },
     {
@@ -1133,13 +1155,13 @@ export function getGoLiveChecklist(): GoLiveChecklistItem[] {
     {
       id: "CL09",
       label: "10 Sprachen manuell stichprobenartig geprüft",
-      done: null,
+      done: confirmedByChecklistId["CL09"] ?? null,
       category: "content",
     },
     {
       id: "CL10",
       label: "Backup-Review offen / erledigt",
-      done: null,
+      done: confirmedByChecklistId["CL10"] ?? null,
       category: "ops",
     },
     {
@@ -1161,8 +1183,11 @@ export function getGoLiveChecklist(): GoLiveChecklistItem[] {
       label:
         "Messaging bleibt sicher – kein echter Versand ohne bewusste Provider-Konfiguration",
       done: (() => {
+        // Auto-Check: technisch sicher (kein Provider konfiguriert oder Dry-Run)
         const m = messagingStatus();
-        return m.provider === "none" || m.dryRun;
+        const autoOk = m.provider === "none" || m.dryRun;
+        // Manuelle Bestätigung überschreibt den Auto-Status (true = Admin hat explizit bestätigt)
+        return confirmedByChecklistId["CL13"] ?? autoOk;
       })(),
       category: "ops",
     },
@@ -1199,17 +1224,28 @@ export function getGoLiveSections(): GoLiveSection[] {
   ];
 }
 
-export function calculateGoLiveScore(sections: GoLiveSection[]): number {
+export function calculateGoLiveScore(
+  sections: GoLiveSection[],
+  confirmations?: ConfirmationsMap,
+): number {
   const blockingCount = sections.filter((s) => s.status === "blocking").length;
   const warningCount = sections.filter((s) => s.status === "warning").length;
-  return clamp(100 - blockingCount * 20 - warningCount * 5);
+  const base = clamp(100 - blockingCount * 20 - warningCount * 5);
+
+  // Bonus: Wenn alle 4 manuellen Punkte bestätigt sind UND keine blocking-Sektionen
+  // existieren, erhält die Readiness 100/100.
+  if (confirmations && blockingCount === 0) {
+    const allConfirmed = MANUAL_CONFIRMATION_KEYS.every((k) => !!confirmations[k]);
+    if (allConfirmed) return 100;
+  }
+  return base;
 }
 
-export function runGoLiveCheck(): GoLiveResult {
+export function runGoLiveCheck(confirmations?: ConfirmationsMap): GoLiveResult {
   const sections = getGoLiveSections();
   const tasks = getGoLiveTasks(sections);
-  const checklist = getGoLiveChecklist();
-  const score = calculateGoLiveScore(sections);
+  const checklist = getGoLiveChecklist(confirmations);
+  const score = calculateGoLiveScore(sections, confirmations);
   const overallStatus = worstStatus(sections.map((s) => s.status));
 
   const result: GoLiveResult = {
@@ -1220,6 +1256,7 @@ export function runGoLiveCheck(): GoLiveResult {
     tasks,
     checklist,
     agentSummary: getAgentSummary(),
+    confirmations: confirmations ?? {},
     generatedAt: new Date().toISOString(),
   };
 

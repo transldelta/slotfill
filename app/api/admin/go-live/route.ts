@@ -10,6 +10,7 @@
 import { NextResponse } from "next/server";
 import { getAdminContext } from "@/lib/admin";
 import { runGoLiveCheck } from "@/lib/go-live-agent";
+import { getConfirmations } from "@/lib/go-live-confirmations";
 import { writeAuditLog } from "@/lib/audit-log";
 import { assertNoSecretsInResponse } from "@/lib/security-agent";
 
@@ -37,7 +38,10 @@ export async function GET() {
   }
 
   try {
-    const result = runGoLiveCheck();
+    // Manuelle Bestätigungen laden (Fehler werden intern abgefangen → leere Map)
+    const confirmations = await getConfirmations(ctx.admin);
+
+    const result = runGoLiveCheck(confirmations);
 
     // Sicherheitscheck: keine Secrets in der Antwort
     if (!assertNoSecretsInResponse(result)) {

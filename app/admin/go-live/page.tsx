@@ -7,6 +7,7 @@ import {
   ChevronDown,
   ChevronUp,
   Clock,
+  ClipboardCheck,
   RefreshCw,
   ShieldCheck,
   XCircle,
@@ -16,6 +17,51 @@ import { formatBerlin } from "@/lib/datetime";
 // ─── Typen ────────────────────────────────────────────────────────────────────
 
 type GoLiveStatus = "ready" | "warning" | "blocking";
+
+type ManualConfirmationKey =
+  | "prod_domain"
+  | "languages_checked"
+  | "backup_review"
+  | "messaging_safe";
+
+type ConfirmationRecord = {
+  key: ManualConfirmationKey;
+  confirmedBy: string;
+  confirmedAt: string;
+};
+
+type ConfirmationsMap = Partial<Record<ManualConfirmationKey, ConfirmationRecord>>;
+
+const MANUAL_CONFIRMATIONS: Array<{
+  key: ManualConfirmationKey;
+  label: string;
+  description: string;
+}> = [
+  {
+    key: "prod_domain",
+    label: "Production-Domain geprüft und live",
+    description:
+      "Ich bestätige, dass die Produktions-Domain erreichbar ist und HTTPS korrekt konfiguriert ist.",
+  },
+  {
+    key: "languages_checked",
+    label: "10 Sprachen stichprobenartig geprüft",
+    description:
+      "Ich bestätige, dass alle 10 Sprachen (de, en, zh, hi, es, ar, fr, pt, bn, ru) stichprobenartig auf Vollständigkeit und Korrektheit geprüft wurden.",
+  },
+  {
+    key: "backup_review",
+    label: "Backup-Review erledigt",
+    description:
+      "Ich bestätige, dass Backups geprüft wurden und eine Wiederherstellungsstrategie vorhanden ist.",
+  },
+  {
+    key: "messaging_safe",
+    label: "Messaging bleibt sicher bestätigt",
+    description:
+      "Ich bestätige, dass kein automatischer Nachrichtenversand aktiv ist. Kein SMS/WhatsApp ohne bewusste Provider-Konfiguration.",
+  },
+];
 
 type GoLiveCheckItem = {
   id: string;
@@ -63,6 +109,7 @@ type Payload = {
     operations: string;
     security: string;
   };
+  confirmations: ConfirmationsMap;
   generatedAt: string;
 };
 
@@ -257,6 +304,141 @@ function ChecklistCard({ items }: { items: GoLiveChecklistItem[] }) {
   );
 }
 
+// ─── Bestätigungs-Panel ───────────────────────────────────────────────────────
+
+function ConfirmationsPanel({
+  confirmations,
+  onConfirm,
+}: {
+  confirmations: ConfirmationsMap;
+  onConfirm: (key: ManualConfirmationKey) => Promise<void>;
+}) {
+  const [pending, setPending] = useState<ManualConfirmationKey | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const allConfirmed = MANUAL_CONFIRMATIONS.every(
+    (mc) => !!confirmations[mc.key],
+  );
+  const confirmedCount = MANUAL_CONFIRMATIONS.filter(
+    (mc) => !!confirmations[mc.key],
+  ).length;
+
+  async function handleConfirm(key: ManualConfirmationKey) {
+    setPending(key);
+    setError(null);
+    try {
+      await onConfirm(key);
+    } catch {
+      setError("Bestätigung konnte nicht gespeichert werden. Bitte erneut versuchen.");
+    } finally {
+      setPending(null);
+    }
+  }
+
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+      <h2 className="mb-1 flex items-center gap-2 text-base font-semibold text-slate-900 dark:text-slate-100">
+        <ClipboardCheck className="h-5 w-5 text-blue-500" />
+        Manuelle Go-Live-Bestätigungen
+      </h2>
+      <p className="mb-4 text-xs text-slate-500 dark:text-slate-400">
+        Diese 4 Punkte können nur manuell von einem Admin bestätigt werden.
+        Keine automatische Freigabe. Keine Aktionen werden ausgeführt.
+        Jede Bestätigung wird audit-geloggt.
+      </p>
+
+      {/* Progress */}
+      <div className="mb-5 flex items-center gap-3">
+        <div className="h-2 flex-1 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+          <div
+            className="h-full rounded-full bg-blue-500 transition-all duration-500"
+            style={{ width: `${(confirmedCount / MANUAL_CONFIRMATIONS.length) * 100}%` }}
+          />
+        </div>
+        <span className="shrink-0 text-xs font-medium text-slate-600 dark:text-slate-400">
+          {confirmedCount}/{MANUAL_CONFIRMATIONS.length} bestätigt
+        </span>
+      </div>
+
+      {allConfirmed && (
+        <div className="mb-4 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800 dark:border-green-800 dark:bg-green-950/30 dark:text-green-300">
+          <CheckCircle2 className="mr-1.5 inline h-4 w-4" />
+          Alle 4 Punkte bestätigt – Go-Live-Score zeigt 100/100 an
+          (sofern keine blockierenden Sektionen offen sind).
+        </div>
+      )}
+
+      {error && (
+        <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-800 dark:bg-red-950/30 dark:text-red-300">
+          {error}
+        </div>
+      )}
+
+      <ul className="space-y-3">
+        {MANUAL_CONFIRMATIONS.map((mc) => {
+          const record = confirmations[mc.key];
+          const isConfirmed = !!record;
+          const isLoading = pending === mc.key;
+
+          return (
+            <li
+              key={mc.key}
+              className={`rounded-xl border p-4 transition-colors ${
+                isConfirmed
+                  ? "border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950/20"
+                  : "border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-800/40"
+              }`}
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start gap-2.5">
+                  <span className="mt-0.5 shrink-0">
+                    {isConfirmed ? (
+                      <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    ) : (
+                      <Clock className="h-4 w-4 text-slate-400" />
+                    )}
+                  </span>
+                  <div>
+                    <p className="text-sm font-medium text-slate-800 dark:text-slate-200">
+                      {mc.label}
+                    </p>
+                    <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                      {mc.description}
+                    </p>
+                    {isConfirmed && record && (
+                      <p className="mt-1.5 text-xs text-green-700 dark:text-green-400">
+                        ✓ Bestätigt von{" "}
+                        <span className="font-medium">{record.confirmedBy}</span>
+                        {" · "}
+                        {formatBerlin(record.confirmedAt)}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                {!isConfirmed && (
+                  <button
+                    onClick={() => handleConfirm(mc.key)}
+                    disabled={isLoading || pending !== null}
+                    className="shrink-0 rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-blue-700 disabled:opacity-50"
+                  >
+                    {isLoading ? "Speichern…" : "Bestätigen"}
+                  </button>
+                )}
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+
+      <p className="mt-4 text-xs text-slate-400 dark:text-slate-500">
+        Nicht bestätigte Punkte erscheinen als Warnung, niemals als Blockierung.
+        Bestehende Sicherheits-Checks (Fake-Testimonials, Kaltakquise, echter
+        Messaging-Versand) bleiben weiterhin blockierend.
+      </p>
+    </div>
+  );
+}
+
 // ─── Aufgaben-Komponente ──────────────────────────────────────────────────────
 
 function TaskList({ tasks }: { tasks: GoLiveTask[] }) {
@@ -307,7 +489,7 @@ export default function GoLivePage() {
   const [loading, setLoading] = useState(true);
   const [failed, setFailed] = useState(false);
   const [activeTab, setActiveTab] = useState<
-    "sections" | "tasks" | "checklist" | "agents"
+    "sections" | "tasks" | "checklist" | "confirmations" | "agents"
   >("sections");
 
   const load = useCallback(async () => {
@@ -324,6 +506,23 @@ export default function GoLivePage() {
       setLoading(false);
     }
   }, []);
+
+  const handleConfirm = useCallback(
+    async (key: ManualConfirmationKey) => {
+      const res = await fetch("/api/admin/go-live/confirmations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key }),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        throw new Error(body?.code ?? "Unbekannter Fehler");
+      }
+      // Nach erfolgreicher Bestätigung: Daten neu laden (Score aktualisieren)
+      await load();
+    },
+    [load],
+  );
 
   useEffect(() => {
     load();
@@ -362,10 +561,20 @@ export default function GoLivePage() {
   const warningCount = data.sections.filter((s) => s.status === "warning").length;
   const readyCount = data.sections.filter((s) => s.status === "ready").length;
 
+  const confirmedCount = MANUAL_CONFIRMATIONS.filter(
+    (mc) => !!data.confirmations?.[mc.key],
+  ).length;
+
   const tabs = [
     { id: "sections" as const, label: "Abschnitte A–I", count: data.sections.length },
     { id: "tasks" as const, label: "Aufgaben", count: data.tasks.length },
     { id: "checklist" as const, label: "Checkliste", count: data.checklist.length },
+    {
+      id: "confirmations" as const,
+      label: "Bestätigen",
+      count: confirmedCount,
+      badge: confirmedCount < MANUAL_CONFIRMATIONS.length ? "!" : undefined,
+    },
     { id: "agents" as const, label: "Agenten-Status" },
   ];
 
@@ -446,7 +655,7 @@ export default function GoLivePage() {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-2 text-sm font-medium transition ${
+            className={`relative px-4 py-2 text-sm font-medium transition ${
               activeTab === tab.id
                 ? "border-b-2 border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400"
                 : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
@@ -456,6 +665,11 @@ export default function GoLivePage() {
             {"count" in tab && tab.count !== undefined && (
               <span className="ml-1.5 rounded-full bg-slate-100 px-1.5 py-0.5 text-xs dark:bg-slate-800">
                 {tab.count}
+              </span>
+            )}
+            {"badge" in tab && tab.badge && (
+              <span className="ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-amber-500 text-xs font-bold text-white">
+                !
               </span>
             )}
           </button>
@@ -484,6 +698,13 @@ export default function GoLivePage() {
 
       {activeTab === "checklist" && (
         <ChecklistCard items={data.checklist} />
+      )}
+
+      {activeTab === "confirmations" && (
+        <ConfirmationsPanel
+          confirmations={data.confirmations ?? {}}
+          onConfirm={handleConfirm}
+        />
       )}
 
       {activeTab === "agents" && (

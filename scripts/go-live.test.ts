@@ -911,3 +911,208 @@ test("Go-Live (Route): H-Sektion (Kaltakquise) kann weiterhin blocking sein", ()
     "Auto-Outreach-Erkennung muss im Code bleiben",
   );
 });
+
+// ─── Manuelle Go-Live-Bestätigungen ──────────────────────────────────────────
+
+test("Go-Live (Confirmations): lib/go-live-confirmations.ts existiert", () => {
+  assert.ok(
+    existsSync(resolve(process.cwd(), "lib/go-live-confirmations.ts")),
+    "lib/go-live-confirmations.ts fehlt",
+  );
+});
+
+test("Go-Live (Confirmations): 4 MANUAL_CONFIRMATION_KEYS definiert", () => {
+  const { MANUAL_CONFIRMATION_KEYS } = require("../lib/go-live-confirmations");
+  assert.equal(
+    MANUAL_CONFIRMATION_KEYS.length,
+    4,
+    `Erwartet 4 Keys, erhalten: ${MANUAL_CONFIRMATION_KEYS.length}`,
+  );
+});
+
+test("Go-Live (Confirmations): alle 4 Keys vorhanden (prod_domain, languages_checked, backup_review, messaging_safe)", () => {
+  const { MANUAL_CONFIRMATION_KEYS } = require("../lib/go-live-confirmations");
+  const expected = ["prod_domain", "languages_checked", "backup_review", "messaging_safe"];
+  for (const key of expected) {
+    assert.ok(
+      MANUAL_CONFIRMATION_KEYS.includes(key),
+      `Key "${key}" fehlt in MANUAL_CONFIRMATION_KEYS`,
+    );
+  }
+});
+
+test("Go-Live (Confirmations): MANUAL_CONFIRMATIONS enthält 4 Einträge mit key, checklistId, label", () => {
+  const { MANUAL_CONFIRMATIONS } = require("../lib/go-live-confirmations");
+  assert.equal(MANUAL_CONFIRMATIONS.length, 4, "Erwartet 4 MANUAL_CONFIRMATIONS");
+  for (const mc of MANUAL_CONFIRMATIONS) {
+    assert.ok(mc.key, `MANUAL_CONFIRMATIONS Eintrag fehlt 'key'`);
+    assert.ok(mc.checklistId, `MANUAL_CONFIRMATIONS Eintrag "${mc.key}" fehlt 'checklistId'`);
+    assert.ok(mc.label, `MANUAL_CONFIRMATIONS Eintrag "${mc.key}" fehlt 'label'`);
+  }
+});
+
+test("Go-Live (Confirmations): checklistIds sind CL01, CL09, CL10, CL13", () => {
+  const { MANUAL_CONFIRMATIONS } = require("../lib/go-live-confirmations");
+  const ids = MANUAL_CONFIRMATIONS.map((mc: { checklistId: string }) => mc.checklistId);
+  for (const id of ["CL01", "CL09", "CL10", "CL13"]) {
+    assert.ok(ids.includes(id), `checklistId "${id}" fehlt in MANUAL_CONFIRMATIONS`);
+  }
+});
+
+test("Go-Live (Confirmations): calculateGoLiveScore ohne Confirmations gibt ≥ 90 zurück", () => {
+  const sections = getGoLiveSections();
+  const score = calculateGoLiveScore(sections);
+  assert.ok(
+    score >= 90,
+    `Score ohne Confirmations soll ≥ 90 sein. Aktuell: ${score}`,
+  );
+});
+
+test("Go-Live (Confirmations): calculateGoLiveScore mit allen Confirmations = 100 (keine Blocking)", () => {
+  const { MANUAL_CONFIRMATION_KEYS } = require("../lib/go-live-confirmations");
+  const sections = getGoLiveSections();
+  const blockingCount = sections.filter((s: { status: string }) => s.status === "blocking").length;
+
+  // Alle 4 Keys als bestätigt simulieren
+  const allConfirmed: Record<string, { key: string; confirmedBy: string; confirmedAt: string }> = {};
+  for (const key of MANUAL_CONFIRMATION_KEYS) {
+    allConfirmed[key] = {
+      key,
+      confirmedBy: "test@example.com",
+      confirmedAt: new Date().toISOString(),
+    };
+  }
+
+  const score = calculateGoLiveScore(sections, allConfirmed as Parameters<typeof calculateGoLiveScore>[1]);
+  if (blockingCount === 0) {
+    assert.equal(
+      score,
+      100,
+      `Score mit allen Confirmations und ohne Blocking soll 100 sein. Aktuell: ${score}`,
+    );
+  } else {
+    // Bei Blocking darf Score auch mit Confirmations nicht 100 sein
+    assert.ok(
+      score < 100,
+      `Score mit Blocking darf nicht 100 sein, auch nicht mit Confirmations. Aktuell: ${score}`,
+    );
+  }
+});
+
+test("Go-Live (Confirmations): calculateGoLiveScore mit Blocking bleibt < 100 trotz Confirmations", () => {
+  const { MANUAL_CONFIRMATION_KEYS } = require("../lib/go-live-confirmations");
+  // Fake-Section mit blocking-Status
+  const fakeSections = [
+    { sectionId: "X", title: "Test", status: "blocking" as const, summary: "", checks: [], findings: [] },
+  ];
+  const allConfirmed: Record<string, { key: string; confirmedBy: string; confirmedAt: string }> = {};
+  for (const key of MANUAL_CONFIRMATION_KEYS) {
+    allConfirmed[key] = { key, confirmedBy: "test@test.com", confirmedAt: new Date().toISOString() };
+  }
+  const score = calculateGoLiveScore(fakeSections, allConfirmed as Parameters<typeof calculateGoLiveScore>[1]);
+  assert.ok(
+    score < 100,
+    `Bei blocking-Sektionen darf Score nie 100 sein, auch nicht mit Confirmations. Aktuell: ${score}`,
+  );
+});
+
+test("Go-Live (Confirmations): runGoLiveCheck enthält confirmations-Feld", () => {
+  const result = runGoLiveCheck();
+  assert.ok(
+    "confirmations" in result,
+    "runGoLiveCheck() Ergebnis muss 'confirmations' Feld enthalten",
+  );
+  assert.equal(
+    typeof result.confirmations,
+    "object",
+    "confirmations muss ein Objekt sein",
+  );
+});
+
+test("Go-Live (Confirmations): getGoLiveChecklist mit Confirmations – CL01 ist done:true wenn bestätigt", () => {
+  const allConfirmed = {
+    prod_domain: { key: "prod_domain" as const, confirmedBy: "test@test.com", confirmedAt: new Date().toISOString() },
+  };
+  const checklist = getGoLiveChecklist(allConfirmed);
+  const cl01 = checklist.find((item) => item.id === "CL01");
+  assert.ok(cl01, "CL01 muss in der Checkliste sein");
+  assert.equal(cl01.done, true, `CL01 soll done:true sein wenn prod_domain bestätigt. Ist: ${cl01.done}`);
+});
+
+test("Go-Live (Confirmations): getGoLiveChecklist ohne Confirmations – CL01/CL09/CL10 sind done:null", () => {
+  const checklist = getGoLiveChecklist();
+  for (const id of ["CL01", "CL09", "CL10"]) {
+    const item = checklist.find((i) => i.id === id);
+    assert.ok(item, `${id} muss in der Checkliste sein`);
+    assert.equal(item.done, null, `${id} soll done:null sein ohne Bestätigung. Ist: ${item.done}`);
+  }
+});
+
+test("Go-Live (Confirmations): Bestätigungen wirken niemals blocking", () => {
+  // Keine Confirmations → sections dürfen weiterhin nicht blocking wegen fehlender Confirmations sein
+  const sections = getGoLiveSections();
+  for (const section of sections) {
+    // Keine Sektion darf nur wegen fehlender manueller Bestätigung blocking sein
+    if (section.status === "blocking") {
+      // Finde den Grund (findings)
+      const noConfirmBlocking = section.findings.some((f) =>
+        f.toLowerCase().includes("confirmation") || f.toLowerCase().includes("bestätig"),
+      );
+      assert.ok(
+        !noConfirmBlocking,
+        `Sektion ${section.sectionId} ist blocking wegen fehlender Bestätigung – das ist verboten`,
+      );
+    }
+  }
+});
+
+test("Go-Live (Confirmations): API-Route /api/admin/go-live/confirmations/route.ts existiert", () => {
+  assert.ok(
+    existsSync(
+      resolve(
+        process.cwd(),
+        "app/api/admin/go-live/confirmations/route.ts",
+      ),
+    ),
+    "app/api/admin/go-live/confirmations/route.ts fehlt",
+  );
+});
+
+test("Go-Live (Confirmations): Confirmations-Route hat GET und POST", () => {
+  const { readFileSync } = require("fs");
+  const src: string = readFileSync(
+    resolve(process.cwd(), "app/api/admin/go-live/confirmations/route.ts"),
+    "utf8",
+  );
+  assert.ok(src.includes("export async function GET"), "Confirmations-Route: GET fehlt");
+  assert.ok(src.includes("export async function POST"), "Confirmations-Route: POST fehlt");
+});
+
+test("Go-Live (Confirmations): Confirmations-Route prüft Admin (getAdminContext)", () => {
+  const { readFileSync } = require("fs");
+  const src: string = readFileSync(
+    resolve(process.cwd(), "app/api/admin/go-live/confirmations/route.ts"),
+    "utf8",
+  );
+  assert.ok(
+    src.includes("getAdminContext"),
+    "Confirmations-Route muss Admin via getAdminContext prüfen",
+  );
+  assert.ok(
+    src.includes("UNAUTHORIZED"),
+    "Confirmations-Route muss UNAUTHORIZED zurückgeben wenn kein Admin",
+  );
+});
+
+test("Go-Live (Confirmations): go-live-agent.ts exportiert MANUAL_CONFIRMATION_KEYS", () => {
+  const { readFileSync } = require("fs");
+  const src: string = readFileSync(
+    resolve(process.cwd(), "lib/go-live-agent.ts"),
+    "utf8",
+  );
+  assert.ok(
+    src.includes("ManualConfirmationKey") &&
+    src.includes("ConfirmationsMap"),
+    "lib/go-live-agent.ts muss ManualConfirmationKey und ConfirmationsMap re-exportieren",
+  );
+});

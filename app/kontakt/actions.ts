@@ -3,6 +3,8 @@
 import { z } from "zod";
 import { createClient } from "@/lib/supabase";
 import { escapeHtml, sendEmail } from "@/lib/email";
+import { contactConfirmationEmail } from "@/lib/email/templates";
+import { BRAND_TEAM_NAME, CONTACT_EMAIL } from "@/lib/brand";
 
 const schema = z.object({
   name: z.string().trim().min(1),
@@ -10,10 +12,17 @@ const schema = z.object({
   message: z.string().trim().min(1),
 });
 
-// Verarbeitet das Kontaktformular. Wenn RESEND_API_KEY gesetzt ist, wird eine
-// E-Mail versendet (CONTACT_SENT). Andernfalls – oder bei Fehler – wird die
-// Nachricht in contact_messages gespeichert (CONTACT_STORED). Bei ungültigen
-// Daten oder DB-Fehler: CONTACT_ERROR.
+// Verarbeitet das Kontaktformular.
+//
+// Wenn RESEND_API_KEY gesetzt ist:
+//   1. Weiterleitung an CONTACT_EMAIL (intern)
+//   2. Eingangsbestätigung an den Absender (Absendername: "SlotFill Team")
+// Wenn kein API-Key oder Fehler:
+//   - Nachricht in contact_messages speichern → CONTACT_STORED
+//   - UI zeigt ehrlich: "Anfrage wurde vorbereitet. E-Mail-Versand ist noch nicht konfiguriert."
+// Bei ungültigen Daten oder DB-Fehler: CONTACT_ERROR
+//
+// Kein persönlicher Name im Absender. Keine Kaltakquise. Keine privaten Adressen.
 export async function submitContact(
   formData: FormData,
 ): Promise<{ code: "CONTACT_SENT" | "CONTACT_STORED" | "CONTACT_ERROR" }> {
@@ -27,13 +36,35 @@ export async function submitContact(
   }
   const { name, email, message } = parsed.data;
 
-  // Per E-Mail senden, wenn konfiguriert (zentrale sendEmail-Funktion).
-  const to = process.env.CONTACT_EMAIL ?? "transl.delta@gmail.com";
-  const html = `<p><strong>Name:</strong> ${escapeHtml(name)}</p>
+  // Interne Weiterleitung – Absender ist CONTACT_EMAIL (kein persönlicher Name).
+  const to = CONTACT_EMAIL;
+  const internalHtml = `
+<p><strong>Name:</strong> ${escapeHtml(name)}</p>
 <p><strong>E-Mail:</strong> ${escapeHtml(email)}</p>
-<p style="white-space:pre-wrap;">${escapeHtml(message)}</p>`;
-  const emailResult = await sendEmail(to, `Kontaktanfrage von ${name}`, html);
-  if (emailResult.success) {
+<p style="white-space:pre-wrap;">${escapeHtml(message)}</p>
+<hr style="margin:16px 0;" />
+<p style="font-size:12px;color:#94a3b8;">
+  Eingang über das Kontaktformular – ${escapeHtml(BRAND_TEAM_NAME)}.
+  Keine automatische Kaltakquise. Antwort erfolgt manuell.
+</p>`;
+
+  const internalResult = await sendEmail(
+    to,
+    `Neue Kontaktanfrage: ${escapeHtml(name)}`,
+    internalHtml,
+  );
+
+  if (internalResult.success) {
+    // Eingangsbestätigung an den Absender
+    // Absender: "SlotFill Team" – kein persönlicher Name
+    await sendEmail(
+      email,
+      "Wir haben Ihre Anfrage erhalten – SlotFill",
+      contactConfirmationEmail(name),
+    ).catch((err) => {
+      // Darf das Onboarding nicht crashen – nur loggen
+      console.error("[submitContact] Eingangsbestätigung fehlgeschlagen:", err);
+    });
     return { code: "CONTACT_SENT" };
   }
 

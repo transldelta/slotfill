@@ -1117,6 +1117,164 @@ test("Go-Live (Confirmations): go-live-agent.ts exportiert MANUAL_CONFIRMATION_K
   );
 });
 
+// ─── Legal-Seiten – Impressum, AGB, Datenschutz, AVV ─────────────────────────
+
+test("Legal: app/impressum/page.tsx enthält Pflichtangaben § 5 DDG", () => {
+  const { readFileSync } = require("fs");
+  const path = resolve(process.cwd(), "app/impressum/page.tsx");
+  assert.ok(existsSync(path), "app/impressum/page.tsx fehlt");
+  const src: string = readFileSync(path, "utf8");
+  assert.ok(
+    src.includes("Brahim Ben Abla"),
+    "Impressum muss den Betreibernamen 'Brahim Ben Abla' enthalten (§ 5 DDG)",
+  );
+  assert.ok(
+    src.includes("Schlesier Straße 64"),
+    "Impressum muss die korrekte Adresse 'Schlesier Straße 64' enthalten",
+  );
+  assert.ok(
+    src.includes("transl.delta@gmail.com"),
+    "Impressum muss die Kontakt-E-Mail 'transl.delta@gmail.com' enthalten",
+  );
+  assert.ok(
+    src.includes("76227"),
+    "Impressum muss die Postleitzahl '76227' (Karlsruhe) enthalten",
+  );
+});
+
+test("Legal: app/agb/page.tsx enthält Testphase, kein SMS im Trial, Provider-Kosten-Hinweis", () => {
+  const { readFileSync } = require("fs");
+  const path = resolve(process.cwd(), "app/agb/page.tsx");
+  assert.ok(existsSync(path), "app/agb/page.tsx fehlt");
+  const src: string = readFileSync(path, "utf8");
+  assert.ok(
+    src.includes("14") && (src.includes("Testphase") || src.includes("Trial")),
+    "AGB muss Hinweis auf 14-tägige Testphase enthalten",
+  );
+  assert.ok(
+    src.includes("keine echten SMS") || src.includes("kein echter SMS") || src.includes("keine echten"),
+    "AGB muss klarstellen, dass im Testmodus keine echten SMS/WhatsApp versendet werden",
+  );
+  assert.ok(
+    src.includes("AVV") || src.includes("Auftragsverarbeitung"),
+    "AGB muss Hinweis auf AVV / Auftragsverarbeitung enthalten",
+  );
+  assert.ok(
+    src.includes("Twilio") || src.includes("Provider") || src.includes("provider"),
+    "AGB muss Hinweis auf externe Messaging-Provider (z.B. Twilio) enthalten",
+  );
+});
+
+test("Legal: app/datenschutz/page.tsx verwendet 'datenschutzbewusst' statt 'DSGVO-konform garantiert'", () => {
+  const { readFileSync } = require("fs");
+  const path = resolve(process.cwd(), "app/datenschutz/page.tsx");
+  assert.ok(existsSync(path), "app/datenschutz/page.tsx fehlt");
+  const src: string = readFileSync(path, "utf8");
+  assert.ok(
+    !src.includes("DSGVO-konform garantiert") && !src.includes("DSGVO garantiert"),
+    "Datenschutzerklärung darf nicht 'DSGVO-konform garantiert' behaupten",
+  );
+  assert.ok(
+    src.includes("datenschutzbewusst") || src.includes("datenschutz­bewusst"),
+    "Datenschutzerklärung soll 'datenschutzbewusst' statt Compliance-Garantie verwenden",
+  );
+});
+
+test("Legal: app/avv/page.tsx existiert und enthält AVV-Pflichthinweis", () => {
+  const { readFileSync } = require("fs");
+  const path = resolve(process.cwd(), "app/avv/page.tsx");
+  assert.ok(existsSync(path), "app/avv/page.tsx fehlt – AVV-Seite muss vorhanden sein");
+  const src: string = readFileSync(path, "utf8");
+  assert.ok(
+    src.includes("Art. 28") || src.includes("Auftragsverarbeitung"),
+    "AVV-Seite muss Hinweis auf Art. 28 DSGVO / Auftragsverarbeitung enthalten",
+  );
+});
+
+test("Legal: Legal-Seiten dürfen persönlichen Namen enthalten (erlaubte Ausnahme)", () => {
+  const { readFileSync } = require("fs");
+  const legalPaths = [
+    "app/impressum/page.tsx",
+    "app/agb/page.tsx",
+    "app/datenschutz/page.tsx",
+    "app/avv/page.tsx",
+  ];
+  for (const p of legalPaths) {
+    const fullPath = resolve(process.cwd(), p);
+    if (existsSync(fullPath)) {
+      const src: string = readFileSync(fullPath, "utf8");
+      // Legal-Seiten DÜRFEN persönliche Namen enthalten – kein Fehler
+      // Dieser Test bestätigt nur, dass die Seiten existieren und lesbar sind
+      assert.ok(src.length > 0, `${p} ist leer`);
+    }
+  }
+});
+
+test("Legal: Automatische Kommunikation enthält keinen persönlichen Namen", () => {
+  const { readFileSync } = require("fs");
+  const automatedFiles = [
+    "lib/email/templates.ts",
+    "app/kontakt/actions.ts",
+  ];
+  const personalNames = ["Brahim", "Ben Abla", "transl.delta@gmail.com"];
+  for (const f of automatedFiles) {
+    const fullPath = resolve(process.cwd(), f);
+    if (existsSync(fullPath)) {
+      const src: string = readFileSync(fullPath, "utf8");
+      for (const name of personalNames) {
+        assert.ok(
+          !src.includes(name),
+          `${f} darf keinen persönlichen Namen ('${name}') enthalten – nur Legal-Seiten erlaubt`,
+        );
+      }
+    }
+  }
+});
+
+test("Legal: Automatische Kommunikation verwendet 'SlotFill Team'", () => {
+  const { readFileSync } = require("fs");
+  const templatesPath = resolve(process.cwd(), "lib/email/templates.ts");
+  assert.ok(existsSync(templatesPath), "lib/email/templates.ts fehlt");
+  const src: string = readFileSync(templatesPath, "utf8");
+  assert.ok(
+    src.includes("BRAND_TEAM_NAME") || src.includes("SlotFill Team"),
+    "lib/email/templates.ts muss 'SlotFill Team' oder BRAND_TEAM_NAME als Absender verwenden",
+  );
+});
+
+test("Legal: Marketing/Trial/Kontakt darf keinen persönlichen Namen enthalten", () => {
+  const { readFileSync } = require("fs");
+  const marketingFiles = [
+    "app/landing/page.tsx",
+    "app/[locale]/page.tsx",
+    "components/landing.tsx",
+    "components/landing-hero.tsx",
+  ];
+  const personalNames = ["Brahim", "Ben Abla"];
+  for (const f of marketingFiles) {
+    const fullPath = resolve(process.cwd(), f);
+    if (existsSync(fullPath)) {
+      const src: string = readFileSync(fullPath, "utf8");
+      for (const name of personalNames) {
+        assert.ok(
+          !src.includes(name),
+          `${f} (Marketing) darf keinen persönlichen Namen ('${name}') enthalten`,
+        );
+      }
+    }
+  }
+});
+
+test("Legal: app/impressum/page.tsx hat robots noindex (kein SEO-Index)", () => {
+  const { readFileSync } = require("fs");
+  const path = resolve(process.cwd(), "app/impressum/page.tsx");
+  const src: string = readFileSync(path, "utf8");
+  assert.ok(
+    src.includes("index: false") || src.includes("noindex"),
+    "Impressum sollte robots:noindex haben",
+  );
+});
+
 // ─── Markenkommunikation – kein persönlicher Name ────────────────────────────
 
 test("Brand: lib/brand.ts existiert", () => {

@@ -169,6 +169,8 @@ const KNOWN_SOURCE_PATHS: ReadonlySet<string> = new Set([
   "app/kontakt/page.tsx",
   "app/impressum/page.tsx",
   "app/datenschutz/page.tsx",
+  "app/agb/page.tsx",
+  "app/avv/page.tsx",
   // Dokumentation
   "docs/FIRST_TEST_PRACTICE.md",
   "docs/BACKUP-RECOVERY.md",

@@ -16,6 +16,7 @@ import {
   Menu,
   MessageSquare,
   Package,
+  Radio,
   Rocket,
   ScrollText,
   ShieldCheck,
@@ -44,6 +45,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     { href: "/admin/ceo", label: t("ceo.title"), icon: Briefcase },
     { href: "/admin/marketing", label: t("marketing.title"), icon: LineChart },
     { href: "/admin/go-live", label: t("goLive.nav"), icon: Rocket },
+    { href: "/admin/communication", label: "Kommunikation", icon: Radio },
   ];
 
   function isActive(href: string) {

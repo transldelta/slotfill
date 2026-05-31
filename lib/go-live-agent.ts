@@ -1194,6 +1194,118 @@ export function getGoLiveChecklist(
   ];
 }
 
+// ─── ABSCHNITT J: Markenkommunikation – kein persönlicher Name ───────────────
+
+function sectionJ(): GoLiveSection {
+  const checks: GoLiveCheckItem[] = [];
+  const findings: string[] = [];
+
+  // J1: lib/brand.ts existiert (zentrale Markenkonfiguration)
+  const brandExists = routeExists("lib/brand.ts") === "found";
+  checks.push({
+    id: "J1_BRAND_CONFIG_EXISTS",
+    label: "lib/brand.ts existiert (zentrale Markenkonfiguration)",
+    status: brandExists ? "ready" : "blocking",
+    note: brandExists
+      ? "lib/brand.ts vorhanden – BRAND_NAME, BRAND_TEAM_NAME, CONTACT_EMAIL, PERSONAL_SIGNATURE_ALLOWED definiert."
+      : "lib/brand.ts fehlt. Erstellen Sie die zentrale Markenkonfiguration.",
+  });
+  if (!brandExists) findings.push("J1_BRAND_CONFIG_MISSING");
+
+  // J2: Keine private E-Mail als Fallback in app/kontakt/actions.ts
+  const PERSONAL_EMAIL_PATTERNS = [
+    /gmail\.com/i,
+    /hotmail\.com/i,
+    /yahoo\.com/i,
+    /outlook\.com/i,
+  ];
+  const personalEmailInContact = scanFileForPatterns(
+    "app/kontakt/actions.ts",
+    PERSONAL_EMAIL_PATTERNS,
+  );
+  checks.push({
+    id: "J2_NO_PERSONAL_EMAIL_IN_CONTACT",
+    label: "Kein persönlicher E-Mail-Fallback in Kontaktformular-Aktion",
+    status: personalEmailInContact ? "blocking" : "ready",
+    note: personalEmailInContact
+      ? "Privater E-Mail-Fallback (gmail/hotmail/yahoo/outlook) in app/kontakt/actions.ts gefunden. Bitte durch CONTACT_EMAIL aus lib/brand.ts ersetzen."
+      : "Kontaktformular-Aktion verwendet CONTACT_EMAIL (kein persönlicher Fallback).",
+  });
+  if (personalEmailInContact) findings.push("J2_PERSONAL_EMAIL_IN_CONTACT_FALLBACK");
+
+  // J3: Kein persönlicher Name in E-Mail-Templates
+  const PERSONAL_NAME_PATTERNS = [
+    /Brahim/i,
+    /Ben\s+Abla/i,
+    /transl\.delta@gmail\.com/i,
+  ];
+  const personalNameInTemplates = scanFileForPatterns(
+    "lib/email/templates.ts",
+    PERSONAL_NAME_PATTERNS,
+  );
+  checks.push({
+    id: "J3_NO_PERSONAL_NAME_IN_TEMPLATES",
+    label: "Kein persönlicher Name in E-Mail-Templates",
+    status: personalNameInTemplates ? "blocking" : "ready",
+    note: personalNameInTemplates
+      ? "Persönlicher Name in lib/email/templates.ts gefunden. Bitte durch BRAND_TEAM_NAME ersetzen."
+      : "E-Mail-Templates verwenden ausschließlich den Brand-Namen (kein persönlicher Name).",
+  });
+  if (personalNameInTemplates) findings.push("J3_PERSONAL_NAME_IN_TEMPLATES");
+
+  // J4: Kein persönlicher Name in Marketing-/Trial-Kommunikation (kontakt/page, pricing)
+  const personalNameInMarketing =
+    scanFileForPatterns("app/kontakt/actions.ts", PERSONAL_NAME_PATTERNS) ||
+    scanFileForPatterns("lib/onboarding.ts", PERSONAL_NAME_PATTERNS);
+  checks.push({
+    id: "J4_NO_PERSONAL_NAME_IN_MARKETING",
+    label: "Kein persönlicher Name in Marketing-/Onboarding-Kommunikation",
+    status: personalNameInMarketing ? "blocking" : "ready",
+    note: personalNameInMarketing
+      ? "Persönlicher Name in Marketing-/Onboarding-Code gefunden. Bitte durch BRAND_TEAM_NAME ersetzen."
+      : "Marketing- und Onboarding-Kommunikation enthält keinen persönlichen Namen.",
+  });
+  if (personalNameInMarketing) findings.push("J4_PERSONAL_NAME_IN_MARKETING");
+
+  // J5: Brand-Signatur (PERSONAL_SIGNATURE_ALLOWED = false) in brand.ts verankert
+  const personalSigFalse = scanFileForPatterns("lib/brand.ts", [
+    /PERSONAL_SIGNATURE_ALLOWED\s*=\s*false/,
+  ]);
+  checks.push({
+    id: "J5_PERSONAL_SIGNATURE_FORBIDDEN",
+    label: "PERSONAL_SIGNATURE_ALLOWED = false in lib/brand.ts",
+    status: brandExists && personalSigFalse ? "ready" : "warning",
+    note:
+      brandExists && personalSigFalse
+        ? "PERSONAL_SIGNATURE_ALLOWED ist explizit als false definiert."
+        : "Bitte PERSONAL_SIGNATURE_ALLOWED = false in lib/brand.ts sicherstellen.",
+  });
+  if (!(brandExists && personalSigFalse))
+    findings.push("J5_PERSONAL_SIGNATURE_NOT_FORBIDDEN");
+
+  // J6: Impressum-Ausnahme verifiziert (persönliche Daten nur dort erlaubt)
+  const impressumExists = routeExists("app/impressum/page.tsx") === "found";
+  checks.push({
+    id: "J6_IMPRESSUM_EXEMPTION",
+    label: "Impressum vorhanden (persönliche Daten nur dort, gesetzlich vorgeschrieben)",
+    status: impressumExists ? "ready" : "warning",
+    note: impressumExists
+      ? "Impressum vorhanden. Persönliche Anbieterinformationen sind dort gesetzlich vorgeschrieben."
+      : "Impressum-Seite nicht gefunden – bitte manuell prüfen.",
+  });
+  if (!impressumExists) findings.push("J6_IMPRESSUM_MISSING");
+
+  return {
+    sectionId: "J",
+    title: "Markenkommunikation – Kein persönlicher Name",
+    status: worstStatus(checks.map((c) => c.status)),
+    summary:
+      "Prüft dass keine persönlichen Namen in Marketing-, Kontakt-, Trial- oder Onboarding-Kommunikation erscheinen. Ausnahme: Impressum/Legal.",
+    checks,
+    findings,
+  };
+}
+
 // ─── Agenten-Zusammenfassung ──────────────────────────────────────────────────
 
 function getAgentSummary(): GoLiveResult["agentSummary"] {
@@ -1221,6 +1333,7 @@ export function getGoLiveSections(): GoLiveSection[] {
     sectionG(),
     sectionH(),
     sectionI(),
+    sectionJ(),
   ];
 }
 

@@ -27,15 +27,15 @@ import { assertNoSecretsInResponse } from "../lib/security-agent";
 
 // ─── Abschnitte: Vollständigkeit ──────────────────────────────────────────────
 
-test("Go-Live: genau 9 Abschnitte (A–I) vorhanden", () => {
+test("Go-Live: genau 10 Abschnitte (A–J) vorhanden", () => {
   const sections = getGoLiveSections();
-  assert.equal(sections.length, 9, `Erwartet 9, erhalten: ${sections.length}`);
+  assert.equal(sections.length, 10, `Erwartet 10, erhalten: ${sections.length}`);
 });
 
-test("Go-Live: Abschnitt-IDs sind A bis I", () => {
+test("Go-Live: Abschnitt-IDs sind A bis J", () => {
   const sections = getGoLiveSections();
   const ids = sections.map((s) => s.sectionId);
-  const expected = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
+  const expected = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
   for (const id of expected) {
     assert.ok(ids.includes(id), `Abschnitt ${id} fehlt`);
   }
@@ -1114,5 +1114,267 @@ test("Go-Live (Confirmations): go-live-agent.ts exportiert MANUAL_CONFIRMATION_K
     src.includes("ManualConfirmationKey") &&
     src.includes("ConfirmationsMap"),
     "lib/go-live-agent.ts muss ManualConfirmationKey und ConfirmationsMap re-exportieren",
+  );
+});
+
+// ─── Markenkommunikation – kein persönlicher Name ────────────────────────────
+
+test("Brand: lib/brand.ts existiert", () => {
+  assert.ok(
+    existsSync(resolve(process.cwd(), "lib/brand.ts")),
+    "lib/brand.ts fehlt",
+  );
+});
+
+test("Brand: BRAND_NAME ist 'SlotFill'", () => {
+  const { BRAND_NAME } = require("../lib/brand");
+  assert.equal(BRAND_NAME, "SlotFill", `BRAND_NAME soll 'SlotFill' sein, ist: ${BRAND_NAME}`);
+});
+
+test("Brand: BRAND_TEAM_NAME ist 'SlotFill Team'", () => {
+  const { BRAND_TEAM_NAME } = require("../lib/brand");
+  assert.equal(BRAND_TEAM_NAME, "SlotFill Team", `BRAND_TEAM_NAME soll 'SlotFill Team' sein, ist: ${BRAND_TEAM_NAME}`);
+});
+
+test("Brand: PERSONAL_SIGNATURE_ALLOWED ist false", () => {
+  const { PERSONAL_SIGNATURE_ALLOWED } = require("../lib/brand");
+  assert.equal(
+    PERSONAL_SIGNATURE_ALLOWED,
+    false,
+    "PERSONAL_SIGNATURE_ALLOWED muss false sein",
+  );
+});
+
+test("Brand: SUPPORT_EMAIL enthält keinen persönlichen Namen oder Gmail", () => {
+  const { SUPPORT_EMAIL } = require("../lib/brand");
+  assert.ok(
+    !SUPPORT_EMAIL.includes("gmail"),
+    `SUPPORT_EMAIL darf keine Gmail-Adresse sein: ${SUPPORT_EMAIL}`,
+  );
+  assert.ok(
+    !SUPPORT_EMAIL.toLowerCase().includes("brahim"),
+    `SUPPORT_EMAIL darf keinen persönlichen Namen enthalten: ${SUPPORT_EMAIL}`,
+  );
+});
+
+test("Brand: CONTACT_EMAIL enthält keinen persönlichen Namen oder Gmail", () => {
+  const { CONTACT_EMAIL } = require("../lib/brand");
+  assert.ok(
+    !CONTACT_EMAIL.includes("gmail"),
+    `CONTACT_EMAIL darf keine Gmail-Adresse sein: ${CONTACT_EMAIL}`,
+  );
+  assert.ok(
+    !CONTACT_EMAIL.toLowerCase().includes("brahim"),
+    `CONTACT_EMAIL darf keinen persönlichen Namen enthalten: ${CONTACT_EMAIL}`,
+  );
+});
+
+test("Brand: isCommunicationAllowed erlaubt 'inbound' und 'transactional'", () => {
+  const { isCommunicationAllowed } = require("../lib/brand");
+  assert.ok(isCommunicationAllowed("inbound"), "'inbound' muss erlaubt sein");
+  assert.ok(isCommunicationAllowed("transactional"), "'transactional' muss erlaubt sein");
+  assert.ok(!isCommunicationAllowed("cold_outreach"), "'cold_outreach' darf NICHT erlaubt sein");
+});
+
+test("Brand: app/kontakt/actions.ts verwendet CONTACT_EMAIL aus lib/brand.ts (kein Gmail-Fallback)", () => {
+  const { readFileSync } = require("fs");
+  const src: string = readFileSync(
+    resolve(process.cwd(), "app/kontakt/actions.ts"),
+    "utf8",
+  );
+  assert.ok(
+    !src.includes("gmail.com"),
+    "app/kontakt/actions.ts darf keine Gmail-Adresse als Fallback enthalten",
+  );
+  assert.ok(
+    src.includes("CONTACT_EMAIL"),
+    "app/kontakt/actions.ts muss CONTACT_EMAIL aus lib/brand.ts verwenden",
+  );
+});
+
+test("Brand: lib/email/templates.ts enthält keinen persönlichen Namen", () => {
+  const { readFileSync } = require("fs");
+  const src: string = readFileSync(
+    resolve(process.cwd(), "lib/email/templates.ts"),
+    "utf8",
+  );
+  assert.ok(!src.includes("Brahim"), "lib/email/templates.ts darf 'Brahim' nicht enthalten");
+  assert.ok(!src.includes("Ben Abla"), "lib/email/templates.ts darf 'Ben Abla' nicht enthalten");
+  assert.ok(
+    !src.includes("transl.delta@gmail.com"),
+    "lib/email/templates.ts darf 'transl.delta@gmail.com' nicht enthalten",
+  );
+});
+
+test("Brand: lib/email/templates.ts verwendet BRAND_TEAM_NAME aus lib/brand.ts", () => {
+  const { readFileSync } = require("fs");
+  const src: string = readFileSync(
+    resolve(process.cwd(), "lib/email/templates.ts"),
+    "utf8",
+  );
+  assert.ok(
+    src.includes("BRAND_TEAM_NAME"),
+    "lib/email/templates.ts muss BRAND_TEAM_NAME aus lib/brand.ts verwenden",
+  );
+});
+
+test("Brand: contactConfirmationEmail existiert und enthält keinen persönlichen Namen", () => {
+  const { contactConfirmationEmail } = require("../lib/email/templates");
+  const html: string = contactConfirmationEmail("Max Mustermann");
+  assert.ok(
+    !html.includes("Brahim"),
+    "contactConfirmationEmail darf 'Brahim' nicht enthalten",
+  );
+  assert.ok(
+    !html.includes("gmail"),
+    "contactConfirmationEmail darf keine Gmail-Adresse enthalten",
+  );
+  assert.ok(
+    html.toLowerCase().includes("slotfill"),
+    "contactConfirmationEmail muss 'SlotFill' enthalten",
+  );
+});
+
+test("Brand: trialWelcomeEmail existiert und enthält keinen persönlichen Namen", () => {
+  const { trialWelcomeEmail } = require("../lib/email/templates");
+  const html: string = trialWelcomeEmail("Testpraxis GmbH");
+  assert.ok(
+    !html.includes("Brahim"),
+    "trialWelcomeEmail darf 'Brahim' nicht enthalten",
+  );
+  assert.ok(
+    !html.includes("gmail"),
+    "trialWelcomeEmail darf keine Gmail-Adresse enthalten",
+  );
+  assert.ok(
+    html.toLowerCase().includes("slotfill"),
+    "trialWelcomeEmail muss 'SlotFill' enthalten",
+  );
+  assert.ok(
+    html.includes("14"),
+    "trialWelcomeEmail muss die 14-tägige Testphase erwähnen",
+  );
+});
+
+test("Brand: trialWelcomeEmail enthält Hinweis auf kein automatisches Messaging", () => {
+  const { trialWelcomeEmail } = require("../lib/email/templates");
+  const html: string = trialWelcomeEmail("Testpraxis GmbH");
+  const lower = html.toLowerCase();
+  assert.ok(
+    lower.includes("ohne") || lower.includes("kein") || lower.includes("simuliert"),
+    "trialWelcomeEmail muss erwähnen dass kein echter SMS/WhatsApp-Versand im Trial",
+  );
+});
+
+test("Brand: testPracticeEmail enthält keinen persönlichen Namen und keine private Telefon/E-Mail", () => {
+  const { testPracticeEmail } = require("../lib/email/templates");
+  const html: string = testPracticeEmail("Testpraxis");
+  assert.ok(!html.includes("Brahim"), "testPracticeEmail darf 'Brahim' nicht enthalten");
+  assert.ok(
+    !html.includes("gmail"),
+    "testPracticeEmail darf keine Gmail-Adresse enthalten",
+  );
+  assert.ok(
+    html.toLowerCase().includes("slotfill"),
+    "testPracticeEmail muss 'SlotFill' enthalten",
+  );
+});
+
+test("Brand: Go-Live Abschnitt J (Markenkommunikation) vorhanden", () => {
+  const sections = getGoLiveSections();
+  const j = sections.find((s) => s.sectionId === "J");
+  assert.ok(j, "Abschnitt J fehlt");
+  assert.ok(
+    j.title.toLowerCase().includes("marken") ||
+    j.title.toLowerCase().includes("persönlich") ||
+    j.title.toLowerCase().includes("brand"),
+    `Abschnitt J Titel unpassend: ${j.title}`,
+  );
+  assert.ok(j.checks.length >= 4, `Abschnitt J braucht ≥ 4 Checks, hat: ${j.checks.length}`);
+});
+
+test("Brand: Go-Live Abschnitt J – J1 (brand.ts) ist ready", () => {
+  const sections = getGoLiveSections();
+  const j = sections.find((s) => s.sectionId === "J")!;
+  const j1 = j.checks.find((c) => c.id === "J1_BRAND_CONFIG_EXISTS")!;
+  assert.ok(j1, "J1_BRAND_CONFIG_EXISTS fehlt");
+  assert.equal(
+    j1.status,
+    "ready",
+    `J1 soll 'ready' sein (lib/brand.ts existiert). Ist: ${j1.status}`,
+  );
+});
+
+test("Brand: Go-Live Abschnitt J – J2 (kein Gmail-Fallback) ist ready", () => {
+  const sections = getGoLiveSections();
+  const j = sections.find((s) => s.sectionId === "J")!;
+  const j2 = j.checks.find((c) => c.id === "J2_NO_PERSONAL_EMAIL_IN_CONTACT")!;
+  assert.ok(j2, "J2_NO_PERSONAL_EMAIL_IN_CONTACT fehlt");
+  assert.equal(
+    j2.status,
+    "ready",
+    `J2 soll 'ready' sein (kein Gmail in kontakt/actions.ts). Ist: ${j2.status} | Note: ${j2.note}`,
+  );
+});
+
+test("Brand: Go-Live Abschnitt J – J3 (kein persönlicher Name in Templates) ist ready", () => {
+  const sections = getGoLiveSections();
+  const j = sections.find((s) => s.sectionId === "J")!;
+  const j3 = j.checks.find((c) => c.id === "J3_NO_PERSONAL_NAME_IN_TEMPLATES")!;
+  assert.ok(j3, "J3_NO_PERSONAL_NAME_IN_TEMPLATES fehlt");
+  assert.equal(
+    j3.status,
+    "ready",
+    `J3 soll 'ready' sein (kein persönlicher Name in templates.ts). Ist: ${j3.status}`,
+  );
+});
+
+test("Brand: Go-Live Abschnitt J – kein Blocking wegen fehlender Brand-Checks (alle Bedingungen erfüllt)", () => {
+  const sections = getGoLiveSections();
+  const j = sections.find((s) => s.sectionId === "J")!;
+  assert.notEqual(
+    j.status,
+    "blocking",
+    `Abschnitt J darf nicht blocking sein wenn Brand-Konfiguration korrekt ist. Status: ${j.status}`,
+  );
+});
+
+test("Brand: app/admin/communication/page.tsx existiert", () => {
+  assert.ok(
+    existsSync(resolve(process.cwd(), "app/admin/communication/page.tsx")),
+    "app/admin/communication/page.tsx fehlt",
+  );
+});
+
+test("Brand: app/api/admin/communication/route.ts existiert und ist admin-geschützt", () => {
+  const { readFileSync } = require("fs");
+  const path = resolve(process.cwd(), "app/api/admin/communication/route.ts");
+  assert.ok(existsSync(path), "app/api/admin/communication/route.ts fehlt");
+  const src: string = readFileSync(path, "utf8");
+  assert.ok(src.includes("getAdminContext"), "Communication-Route muss admin-geschützt sein");
+  assert.ok(src.includes("UNAUTHORIZED"), "Communication-Route muss UNAUTHORIZED zurückgeben");
+});
+
+test("Brand: Keine Kaltakquise – isCommunicationAllowed('cold_outreach') ist false", () => {
+  const { isCommunicationAllowed } = require("../lib/brand");
+  assert.ok(
+    !isCommunicationAllowed("cold_outreach"),
+    "Kaltakquise ('cold_outreach') darf niemals als erlaubt gelten",
+  );
+  assert.ok(
+    !isCommunicationAllowed("marketing_blast"),
+    "Mass-Marketing ('marketing_blast') darf niemals als erlaubt gelten",
+  );
+});
+
+test("Brand: Kein echter SMS/WhatsApp-Versand im Trial ohne Provider-Konfiguration", () => {
+  // Abschnitt I prüft Messaging-Sicherheit; bleibt weiterhin aktiv
+  const sections = getGoLiveSections();
+  const i = sections.find((s) => s.sectionId === "I")!;
+  assert.ok(i, "Abschnitt I (Messaging-Sicherheit) fehlt");
+  assert.notEqual(
+    i.status,
+    "blocking",
+    `Abschnitt I (Messaging) soll nicht blocking sein im Standard-Modus. Status: ${i.status}`,
   );
 });

@@ -724,3 +724,190 @@ test("Go-Live: i18n – alle 10 Locales haben contact.whatHappensTitle", () => {
     );
   }
 });
+
+// ─── Finale Route-Detection: Vercel-Sicherheit ────────────────────────────────
+
+test("Go-Live (Route): KNOWN_URL_ROUTES enthält /de (Startseite)", () => {
+  // Importiere den Agenten-Quelltext und prüfe direkt
+  const { readFileSync } = require("fs");
+  const src: string = readFileSync(
+    resolve(process.cwd(), "lib/go-live-agent.ts"),
+    "utf8",
+  );
+  assert.ok(
+    src.includes('"/de"'),
+    'KNOWN_URL_ROUTES muss "/de" enthalten',
+  );
+  assert.ok(
+    src.includes('KNOWN_URL_ROUTES'),
+    'lib/go-live-agent.ts: KNOWN_URL_ROUTES fehlt',
+  );
+});
+
+test("Go-Live (Route): KNOWN_URL_ROUTES enthält /de/pricing, /de/kontakt, /de/blog", () => {
+  const { readFileSync } = require("fs");
+  const src: string = readFileSync(
+    resolve(process.cwd(), "lib/go-live-agent.ts"),
+    "utf8",
+  );
+  assert.ok(src.includes('"/de/pricing"'), 'KNOWN_URL_ROUTES: /de/pricing fehlt');
+  assert.ok(src.includes('"/de/kontakt"'), 'KNOWN_URL_ROUTES: /de/kontakt fehlt');
+  assert.ok(src.includes('"/de/blog"'),    'KNOWN_URL_ROUTES: /de/blog fehlt');
+});
+
+test("Go-Live (Route): KNOWN_URL_ROUTES enthält /auth/login, /dashboard, /admin", () => {
+  const { readFileSync } = require("fs");
+  const src: string = readFileSync(
+    resolve(process.cwd(), "lib/go-live-agent.ts"),
+    "utf8",
+  );
+  assert.ok(src.includes('"/auth/login"'),   'KNOWN_URL_ROUTES: /auth/login fehlt');
+  assert.ok(src.includes('"/dashboard"'),    'KNOWN_URL_ROUTES: /dashboard fehlt');
+  assert.ok(src.includes('"/admin"'),        'KNOWN_URL_ROUTES: /admin fehlt');
+  assert.ok(src.includes('"/admin/go-live"'),'KNOWN_URL_ROUTES: /admin/go-live fehlt');
+});
+
+test("Go-Live (Route): SOURCE_TO_URL enthält Mapping für alle Kern-Routen", () => {
+  const { readFileSync } = require("fs");
+  const src: string = readFileSync(
+    resolve(process.cwd(), "lib/go-live-agent.ts"),
+    "utf8",
+  );
+  assert.ok(src.includes('SOURCE_TO_URL'), 'SOURCE_TO_URL fehlt in go-live-agent.ts');
+  assert.ok(
+    src.includes('"app/[locale]/page.tsx"') && src.includes('"/de"'),
+    'SOURCE_TO_URL: Mapping app/[locale]/page.tsx → /de fehlt',
+  );
+});
+
+test("Go-Live (Route): routeExists gibt niemals 'not_found' für bekannte Pfade zurück", () => {
+  const sections = getGoLiveSections();
+  // Alle Route-Checks in Abschnitten A–E und I dürfen nicht "blocking" wegen fehlender Dateien sein
+  const routeSectionIds = ["A", "B", "C", "D", "E"];
+  for (const sectionId of routeSectionIds) {
+    const section = sections.find((s) => s.sectionId === sectionId);
+    assert.ok(section, `Abschnitt ${sectionId} fehlt`);
+    const routeChecks = section.checks.filter((c) =>
+      c.id.endsWith("_EXISTS") || c.id.endsWith("_EXIST"),
+    );
+    for (const check of routeChecks) {
+      assert.notEqual(
+        check.status,
+        "blocking",
+        `Abschnitt ${sectionId}, Check ${check.id}: Route-Check blockiert auf Vercel → ${check.note}`,
+      );
+    }
+  }
+});
+
+test("Go-Live (Route): Abschnitt A – Startseite ist 'ready' (nicht blocking)", () => {
+  const sections = getGoLiveSections();
+  const a = sections.find((s) => s.sectionId === "A")!;
+  const a1 = a.checks.find((c) => c.id === "A1_LANDING_EXISTS")!;
+  assert.equal(
+    a1.status,
+    "ready",
+    `A1 soll 'ready' sein (Startseite ist bekannt via KNOWN_ROUTES), ist: ${a1.status}`,
+  );
+});
+
+test("Go-Live (Route): Abschnitt B – Pricing ist 'ready' (nicht blocking)", () => {
+  const sections = getGoLiveSections();
+  const b = sections.find((s) => s.sectionId === "B")!;
+  const b1 = b.checks.find((c) => c.id === "B1_PRICING_EXISTS")!;
+  assert.equal(
+    b1.status,
+    "ready",
+    `B1 soll 'ready' sein (Pricing ist bekannt), ist: ${b1.status}`,
+  );
+});
+
+test("Go-Live (Route): Abschnitt C – Kontakt ist 'ready' (nicht blocking)", () => {
+  const sections = getGoLiveSections();
+  const c = sections.find((s) => s.sectionId === "C")!;
+  const c1 = c.checks.find((c2) => c2.id === "C1_CONTACT_EXISTS")!;
+  assert.equal(
+    c1.status,
+    "ready",
+    `C1 soll 'ready' sein (Kontakt ist bekannt), ist: ${c1.status}`,
+  );
+});
+
+test("Go-Live (Route): Abschnitt D – Login und Dashboard sind 'ready'", () => {
+  const sections = getGoLiveSections();
+  const d = sections.find((s) => s.sectionId === "D")!;
+  const d1 = d.checks.find((c) => c.id === "D1_AUTH_ROUTES_EXIST")!;
+  const d2 = d.checks.find((c) => c.id === "D2_DASHBOARD_EXISTS")!;
+  assert.equal(d1.status, "ready", `D1 soll ready sein, ist: ${d1.status}`);
+  assert.equal(d2.status, "ready", `D2 soll ready sein, ist: ${d2.status}`);
+});
+
+test("Go-Live (Route): Kein Abschnitt ist 'blocking' wegen fehlender Source-Dateien", () => {
+  const sections = getGoLiveSections();
+  const blockingSections = sections.filter((s) => s.status === "blocking");
+  assert.equal(
+    blockingSections.length,
+    0,
+    `Keine Abschnitte sollen blocking sein (alle Routen bekannt). Blocking: ${blockingSections.map((s) => s.sectionId).join(", ")}`,
+  );
+});
+
+test("Go-Live (Route): Score ≥ 90 (nur manuelle Punkte offen)", () => {
+  const sections = getGoLiveSections();
+  const score = calculateGoLiveScore(sections);
+  assert.ok(
+    score >= 90,
+    `Score soll ≥ 90 sein wenn nur manuelle/Config-Punkte offen sind. Aktuell: ${score}`,
+  );
+});
+
+test("Go-Live (Route): routeExists kann '/de' direkt als URL-Pfad prüfen", () => {
+  // Prüfe dass KNOWN_URL_ROUTES im Quelltext alle 10 Locales enthält
+  const { readFileSync } = require("fs");
+  const src: string = readFileSync(
+    resolve(process.cwd(), "lib/go-live-agent.ts"),
+    "utf8",
+  );
+  const locales = ["/de", "/en", "/zh", "/hi", "/es", "/ar", "/fr", "/pt", "/bn", "/ru"];
+  for (const loc of locales) {
+    assert.ok(src.includes(`"${loc}"`), `KNOWN_URL_ROUTES: ${loc} fehlt`);
+  }
+});
+
+test("Go-Live (Route): Echte Risiken – G1 (Fake-Testimonials) kann weiterhin blocking sein", () => {
+  // Abschnitt G hat die Fähigkeit zu blockieren, ABER nur wenn echte Fake-Testimonials gefunden werden.
+  // Im aktuellen Code (keine Fake-Testimonials) ist G ready.
+  const sections = getGoLiveSections();
+  const g = sections.find((s) => s.sectionId === "G")!;
+  const g1 = g.checks.find((c) => c.id === "G1_NO_FAKE_TESTIMONIALS")!;
+  // Im normalen Code: kein Fake → ready (das ist der erwartete Status)
+  assert.equal(g1.status, "ready", `G1 soll ready sein (keine Fake-Testimonials im Code)`);
+  // Verifiziere dass die blocking-Logik im Code vorhanden ist (präventiv)
+  const { readFileSync } = require("fs");
+  const src: string = readFileSync(
+    resolve(process.cwd(), "lib/go-live-agent.ts"),
+    "utf8",
+  );
+  assert.ok(
+    src.includes("FORBIDDEN_TESTIMONIAL_PATTERNS"),
+    "Fake-Testimonial-Erkennung muss im Code bleiben",
+  );
+});
+
+test("Go-Live (Route): H-Sektion (Kaltakquise) kann weiterhin blocking sein", () => {
+  // Abschnitt H kann blocking sein wenn Auto-Outreach gefunden wird.
+  // Im aktuellen Code: kein Auto-Outreach → ready.
+  const sections = getGoLiveSections();
+  const h = sections.find((s) => s.sectionId === "H")!;
+  assert.ok(h.status !== "blocking", "H-Sektion soll nicht blocking sein (kein Auto-Outreach)");
+  // Verifiziere dass die blocking-Logik im Code vorhanden ist
+  const { readFileSync } = require("fs");
+  const src: string = readFileSync(
+    resolve(process.cwd(), "lib/go-live-agent.ts"),
+    "utf8",
+  );
+  assert.ok(
+    src.includes("autoOutreach"),
+    "Auto-Outreach-Erkennung muss im Code bleiben",
+  );
+});

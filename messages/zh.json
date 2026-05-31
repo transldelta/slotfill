@@ -359,7 +359,11 @@
       "everythingInProfessional": "包含专业版所有功能",
       "unlimitedPatients": "无限患者",
       "prioritySupport": "优先支持"
-    }
+    },
+    "trialInfo": "免费试用 14 天——之后需要付费方案。",
+    "trialNoCreditCard": "试用期间无需信用卡。",
+    "trialNoSms": "未主动配置服务提供商的情况下，试用期间不会发送真实短信或 WhatsApp。",
+    "providerCostNote": "短信和 WhatsApp 通过第三方服务商（如 Twilio）处理。这些服务商费用不自动包含在 SlotFill 价格中。"
   },
   "subscription": {
     "title": "您的订阅",
@@ -421,7 +425,15 @@
     "ctaBlockTitle": "准备好减少空档预约了吗？",
     "ctaBlockSubtitle": "从14天免费试用开始。",
     "footerNote": "上线前须最终审查托管和数据保护。",
-    "rights": "保留所有权利。"
+    "rights": "保留所有权利。",
+    "trustTitle": "诊所始终保持控制权",
+    "trustSubtitle": "SlotFill 提供支持——决策权始终在诊所手中。",
+    "trustPoint1": "未经诊所批准，不发送任何自动消息。",
+    "trustPoint2": "短信和 WhatsApp 是可选的，需要主动配置服务提供商。",
+    "trustPoint3": "在默认模式下，消息仅被准备好，不会自动发送。",
+    "trustPoint4": "无虚假评价。无虚构用户数据。",
+    "trialNote": "免费试用 14 天——无需信用卡。",
+    "trialNoMessages": "试用模式下不会发送任何真实消息。"
   },
   "blog": {
     "title": "博客",
@@ -440,7 +452,11 @@
     "send": "发送消息",
     "sending": "发送中...",
     "success": "感谢！您的消息已收到。",
-    "error": "消息发送失败，请稍后重试。"
+    "error": "消息发送失败，请稍后重试。",
+    "whatHappensTitle": "提交后会发生什么？",
+    "whatHappens1": "我们收到您的请求后，将亲自与您联系。",
+    "whatHappens2": "没有自动冷拓展。没有自动发送消息。",
+    "whatHappens3": "我们将亲自陪同您完成第一家测试诊所的设置。"
   },
   "legal": {
     "draftNotice": "注意：此文本为初稿，尚未经过法律审查。上线前必须替换为最终经法律审查的文本。",

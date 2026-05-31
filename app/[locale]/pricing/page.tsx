@@ -145,6 +145,24 @@ export default function LocalePricingPage() {
           ))}
         </div>
       )}
+
+      {/* Trial & Provider info box */}
+      <div className="mt-10 rounded-xl border border-blue-200 bg-blue-50 px-6 py-5 text-sm text-blue-800 dark:border-blue-900/50 dark:bg-blue-900/20 dark:text-blue-300">
+        <p className="font-semibold">{t("trialInfo")}</p>
+        <ul className="mt-2 space-y-1 list-none">
+          <li className="flex items-center gap-2">
+            <Check className="h-4 w-4 shrink-0 text-green-500" />
+            {t("trialNoCreditCard")}
+          </li>
+          <li className="flex items-center gap-2">
+            <Check className="h-4 w-4 shrink-0 text-green-500" />
+            {t("trialNoSms")}
+          </li>
+        </ul>
+        <p className="mt-3 text-xs text-blue-600 dark:text-blue-400">
+          {t("providerCostNote")}
+        </p>
+      </div>
     </main>
   );
 }

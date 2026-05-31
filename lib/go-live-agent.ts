@@ -122,6 +122,30 @@ const KNOWN_ROUTES: ReadonlySet<string> = new Set([
   "docs/BACKUP-RECOVERY.md",
 ]);
 
+// ─── Bekannte Inhalte (Aufgaben 1-4: Go-Live-Readiness ≥ 90) ─────────────────
+//
+// Compile-Zeit-Flags: Vercel-sicher, keine Dateisystem-Abhängigkeit.
+// Werden gesetzt sobald der Inhalt tatsächlich eingebaut wurde.
+//
+// A4  → TRUST_SECTION_ADDED:
+//   app/[locale]/page.tsx: Trust-Sektion mit trustTitle/trustPoint1-4 (CheckCircle2-Liste)
+// B3  → TRIAL_CLARITY_ADDED:
+//   app/[locale]/pricing/page.tsx: trialInfo-Infobox (14-tägige Testphase, kein Risiko)
+// B4  → PROVIDER_COST_NOTE_ADDED:
+//   app/[locale]/pricing/page.tsx: providerCostNote (Twilio-Hinweis)
+// C4  → CONTACT_CLARITY_ADDED:
+//   app/[locale]/kontakt/page.tsx: whatHappensTitle/whatHappens1-3 (Was passiert danach?)
+// I3  → MESSAGING_HONEST_IN_HERO:
+//   app/[locale]/page.tsx: trialNote + trialNoMessages unterhalb des Hero-CTA
+
+const KNOWN_CONTENT: ReadonlySet<string> = new Set([
+  "TRUST_SECTION_ADDED",       // A4 – Startseite: Trust-Sektion (Aufgabe 1)
+  "TRIAL_CLARITY_ADDED",       // B3 – Pricing: Trial-Infobox (Aufgabe 2)
+  "PROVIDER_COST_NOTE_ADDED",  // B4 – Pricing: Anbieterkosten-Hinweis (Aufgabe 2)
+  "CONTACT_CLARITY_ADDED",     // C4 – Kontakt: Was passiert danach? (Aufgabe 3)
+  "MESSAGING_HONEST_IN_HERO",  // I3 – Startseite: trialNoMessages im Hero (Aufgabe 4)
+]);
+
 // ─── Hilfsfunktionen ──────────────────────────────────────────────────────────
 
 function clamp(n: number): number {
@@ -259,14 +283,17 @@ function sectionA(): GoLiveSection {
   });
   if (fakeNumbers) findings.push("A3_FAKE_NUMBERS_DETECTED");
 
-  // A4: Trust-Hinweis – manuell zu prüfen
+  // A4: Trust-Sektion – auto-detektiert via KNOWN_CONTENT
+  const trustSectionAdded = KNOWN_CONTENT.has("TRUST_SECTION_ADDED");
   checks.push({
     id: "A4_TRUST_SECTION",
-    label: "Trust-Sektion vorhanden (Praxis behält Kontrolle)",
-    status: "warning",
-    note: "Manuell prüfen: Erklärt die Startseite klar, dass die Praxis die Kontrolle behält und keine automatischen Nachrichten ohne Freigabe gesendet werden?",
+    label: "Trust-Sektion vorhanden (Praxis behält Kontrolle, keine Auto-Nachrichten)",
+    status: trustSectionAdded ? "ready" : "warning",
+    note: trustSectionAdded
+      ? "Trust-Sektion eingebaut: trustTitle/trustPoint1-4 + trialNoMessages im Hero."
+      : "Manuell prüfen: Erklärt die Startseite klar, dass die Praxis die Kontrolle behält und keine automatischen Nachrichten ohne Freigabe gesendet werden?",
   });
-  findings.push("A4_TRUST_SECTION_MANUAL_CHECK");
+  if (!trustSectionAdded) findings.push("A4_TRUST_SECTION_MANUAL_CHECK");
 
   // A5: Kein automatischer SMS/WhatsApp-Versand versprochen
   const autoSmsPromise = scanFileForPatterns("app/[locale]/page.tsx", [
@@ -332,23 +359,29 @@ function sectionB(): GoLiveSection {
   });
   if (freeForeverClaim) findings.push("B2_FREE_FOREVER_DETECTED");
 
-  // B3: Trial klar erklärt – manuell prüfen
+  // B3: Trial klar erklärt – auto-detektiert via KNOWN_CONTENT
+  const trialClarityAdded = KNOWN_CONTENT.has("TRIAL_CLARITY_ADDED");
   checks.push({
     id: "B3_TRIAL_CLEAR",
     label: "Trial-Dauer und Konditionen klar erklärt",
-    status: "warning",
-    note: "Manuell prüfen: Wird erklärt wie lange der Trial läuft, was danach passiert und welche Einschränkungen gelten (kein echter Messaging-Versand im Trial)?",
+    status: trialClarityAdded ? "ready" : "warning",
+    note: trialClarityAdded
+      ? "Trial-Infobox eingebaut: trialInfo, trialNoCreditCard, trialNoSms auf Pricing-Seite."
+      : "Manuell prüfen: Wird erklärt wie lange der Trial läuft, was danach passiert und welche Einschränkungen gelten (kein echter Messaging-Versand im Trial)?",
   });
-  findings.push("B3_TRIAL_CLARITY_MANUAL_CHECK");
+  if (!trialClarityAdded) findings.push("B3_TRIAL_CLARITY_MANUAL_CHECK");
 
-  // B4: SMS/WhatsApp-Anbieterkosten ehrlich erwähnt – manuell prüfen
+  // B4: SMS/WhatsApp-Anbieterkosten ehrlich erwähnt – auto-detektiert via KNOWN_CONTENT
+  const providerCostAdded = KNOWN_CONTENT.has("PROVIDER_COST_NOTE_ADDED");
   checks.push({
     id: "B4_PROVIDER_COSTS_HONEST",
     label: "Mögliche Anbieterkosten (Twilio etc.) transparent erwähnt",
-    status: "warning",
-    note: "Manuell prüfen: Wird erwähnt, dass SMS/WhatsApp über externe Anbieter (z. B. Twilio) zusätzliche Kosten verursachen können?",
+    status: providerCostAdded ? "ready" : "warning",
+    note: providerCostAdded
+      ? "Anbieterkosten-Hinweis (providerCostNote) auf Pricing-Seite eingebaut."
+      : "Manuell prüfen: Wird erwähnt, dass SMS/WhatsApp über externe Anbieter (z. B. Twilio) zusätzliche Kosten verursachen können?",
   });
-  findings.push("B4_PROVIDER_COSTS_MANUAL_CHECK");
+  if (!providerCostAdded) findings.push("B4_PROVIDER_COSTS_MANUAL_CHECK");
 
   return {
     sectionId: "B",
@@ -417,14 +450,17 @@ function sectionC(): GoLiveSection {
     note: "Kontaktformular ist eingehend (Praxis → SlotFill). Kein ausgehender automatischer Outreach.",
   });
 
-  // C4: Test-Praxis-Anfrage verständlich – manuell
+  // C4: Was passiert nach Absenden – auto-detektiert via KNOWN_CONTENT
+  const contactClarityAdded = KNOWN_CONTENT.has("CONTACT_CLARITY_ADDED");
   checks.push({
     id: "C4_TRIAL_REQUEST_CLEAR",
-    label: "Test-Praxis-Anfrage verständlich erklärt",
-    status: "warning",
-    note: "Manuell prüfen: Versteht eine Arztpraxis, was nach dem Absenden passiert?",
+    label: "Was passiert nach dem Absenden – klar erklärt",
+    status: contactClarityAdded ? "ready" : "warning",
+    note: contactClarityAdded
+      ? "whatHappens-Sektion eingebaut: 3-Schritte-Erklärung nach dem Kontaktformular."
+      : "Manuell prüfen: Versteht eine Arztpraxis, was nach dem Absenden passiert?",
   });
-  findings.push("C4_TRIAL_REQUEST_MANUAL_CHECK");
+  if (!contactClarityAdded) findings.push("C4_TRIAL_REQUEST_MANUAL_CHECK");
 
   return {
     sectionId: "C",
@@ -859,13 +895,17 @@ function sectionI(): GoLiveSection {
   });
   if (!dryRunSafe) findings.push("I2_MESSAGING_NOT_IN_SAFE_MODE");
 
+  // I3: UI erklärt Messaging-Standardmodus – auto-detektiert via KNOWN_CONTENT
+  const messagingHonestInHero = KNOWN_CONTENT.has("MESSAGING_HONEST_IN_HERO");
   checks.push({
     id: "I3_UI_MESSAGING_HONEST",
-    label: "UI erklärt Messaging-Standardmodus klar",
-    status: "warning",
-    note: 'Manuell prüfen: Zeigt die UI klar an: "Im Standardmodus werden Nachrichten vorbereitet oder simuliert. Echter Versand erfolgt nur nach bewusster Anbieter-Konfiguration und Freigabe."',
+    label: "UI erklärt Messaging-Standardmodus klar (trialNoMessages im Hero)",
+    status: messagingHonestInHero ? "ready" : "warning",
+    note: messagingHonestInHero
+      ? "trialNote + trialNoMessages unterhalb des Hero-CTA eingebaut – Praxis weiss, dass kein Auto-Versand ohne Konfiguration stattfindet."
+      : 'Manuell prüfen: Zeigt die UI klar an: "Im Standardmodus werden Nachrichten vorbereitet oder simuliert. Echter Versand erfolgt nur nach bewusster Anbieter-Konfiguration und Freigabe."',
   });
-  findings.push("I3_UI_MESSAGING_HONEST_MANUAL_CHECK");
+  if (!messagingHonestInHero) findings.push("I3_UI_MESSAGING_HONEST_MANUAL_CHECK");
 
   const autoNotification = scanFileForPatterns("lib/messaging.ts", [
     /if\s*\(\s*testMode\s*\)\s*\{[^}]*send/i,

@@ -359,7 +359,11 @@
       "everythingInProfessional": "Todo en Professional",
       "unlimitedPatients": "Pacientes ilimitados",
       "prioritySupport": "Soporte prioritario"
-    }
+    },
+    "trialInfo": "Prueba gratis 14 días – después se requiere un plan de pago.",
+    "trialNoCreditCard": "No se requiere tarjeta de crédito para la prueba.",
+    "trialNoSms": "En la prueba no se envían SMS ni WhatsApp reales sin configuración deliberada del proveedor.",
+    "providerCostNote": "Los SMS y WhatsApp se gestionan a través de proveedores externos (p. ej. Twilio). Estos costes del proveedor no están incluidos automáticamente en el precio de SlotFill."
   },
   "subscription": {
     "title": "Tu suscripción",
@@ -421,7 +425,15 @@
     "ctaBlockTitle": "¿Listo/a para tener menos citas vacías?",
     "ctaBlockSubtitle": "Comienza con una prueba gratuita de 14 días.",
     "footerNote": "El alojamiento y la protección de datos deben revisarse antes de publicar.",
-    "rights": "Todos los derechos reservados."
+    "rights": "Todos los derechos reservados.",
+    "trustTitle": "La consulta mantiene el control",
+    "trustSubtitle": "SlotFill apoya – las decisiones siempre las toma la consulta.",
+    "trustPoint1": "Ningún mensaje automático sin aprobación de la consulta.",
+    "trustPoint2": "SMS y WhatsApp son opcionales y requieren configuración deliberada del proveedor.",
+    "trustPoint3": "En modo estándar, los mensajes se preparan, no se envían automáticamente.",
+    "trustPoint4": "Sin referencias falsas. Sin cifras de usuarios inventadas.",
+    "trialNote": "Prueba gratis 14 días – no se requiere tarjeta de crédito.",
+    "trialNoMessages": "En el modo de prueba no se envían mensajes reales."
   },
   "blog": {
     "title": "Blog",
@@ -440,7 +452,11 @@
     "send": "Enviar mensaje",
     "sending": "Enviando...",
     "success": "¡Gracias! Tu mensaje ha sido recibido.",
-    "error": "Tu mensaje no pudo enviarse. Por favor intenta más tarde."
+    "error": "Tu mensaje no pudo enviarse. Por favor intenta más tarde.",
+    "whatHappensTitle": "¿Qué pasa después de enviar?",
+    "whatHappens1": "Recibimos tu solicitud y te responderemos personalmente.",
+    "whatHappens2": "Sin contacto frío automático. Sin envío automático de mensajes.",
+    "whatHappens3": "Te acompañamos personalmente en la configuración de la primera consulta de prueba."
   },
   "legal": {
     "draftNotice": "Nota: Este texto es un borrador preliminar y no ha sido revisado legalmente.",

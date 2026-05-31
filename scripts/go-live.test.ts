@@ -1293,7 +1293,7 @@ test("Brand: Go-Live Abschnitt J (Markenkommunikation) vorhanden", () => {
   assert.ok(j.checks.length >= 4, `Abschnitt J braucht ≥ 4 Checks, hat: ${j.checks.length}`);
 });
 
-test("Brand: Go-Live Abschnitt J – J1 (brand.ts) ist ready", () => {
+test("Brand: Go-Live Abschnitt J – J1 (Brand-Config importiert) ist ready", () => {
   const sections = getGoLiveSections();
   const j = sections.find((s) => s.sectionId === "J")!;
   const j1 = j.checks.find((c) => c.id === "J1_BRAND_CONFIG_EXISTS")!;
@@ -1301,7 +1301,41 @@ test("Brand: Go-Live Abschnitt J – J1 (brand.ts) ist ready", () => {
   assert.equal(
     j1.status,
     "ready",
-    `J1 soll 'ready' sein (lib/brand.ts existiert). Ist: ${j1.status}`,
+    `J1 soll 'ready' sein (BRAND_NAME/BRAND_TEAM_NAME/PERSONAL_SIGNATURE_ALLOWED korrekt importiert). Ist: ${j1.status} | Note: ${j1.note}`,
+  );
+});
+
+test("Brand: Go-Live Abschnitt J – J1 verwendet Runtime-Import (nicht existsSync)", () => {
+  // Sicherstellen dass J1 auf Vercel korrekt funktioniert:
+  // Der Check darf NICHT existsSync("lib/brand.ts") verwenden,
+  // sondern muss die importierten Werte prüfen.
+  const { readFileSync } = require("fs");
+  const src: string = readFileSync(
+    resolve(process.cwd(), "lib/go-live-agent.ts"),
+    "utf8",
+  );
+  // Der neue Check muss BRAND_NAME, BRAND_TEAM_NAME, PERSONAL_SIGNATURE_ALLOWED prüfen
+  assert.ok(
+    src.includes("BRAND_NAME") && src.includes("BRAND_TEAM_NAME"),
+    "go-live-agent.ts muss BRAND_NAME und BRAND_TEAM_NAME für J1 importieren",
+  );
+  // Der alte routeExists("lib/brand.ts") === "found" Check darf nicht mehr da sein
+  // (wurde durch Runtime-Import-Check ersetzt)
+  assert.ok(
+    !src.includes('routeExists("lib/brand.ts")'),
+    'J1 darf nicht mehr routeExists("lib/brand.ts") verwenden – Vercel-Inkompatibel',
+  );
+});
+
+test("Brand: Go-Live Abschnitt J – J5 (PERSONAL_SIGNATURE_ALLOWED) ist ready", () => {
+  const sections = getGoLiveSections();
+  const j = sections.find((s) => s.sectionId === "J")!;
+  const j5 = j.checks.find((c) => c.id === "J5_PERSONAL_SIGNATURE_FORBIDDEN")!;
+  assert.ok(j5, "J5_PERSONAL_SIGNATURE_FORBIDDEN fehlt");
+  assert.equal(
+    j5.status,
+    "ready",
+    `J5 soll 'ready' sein (PERSONAL_SIGNATURE_ALLOWED === false). Ist: ${j5.status}`,
   );
 });
 
@@ -1329,13 +1363,38 @@ test("Brand: Go-Live Abschnitt J – J3 (kein persönlicher Name in Templates) i
   );
 });
 
-test("Brand: Go-Live Abschnitt J – kein Blocking wegen fehlender Brand-Checks (alle Bedingungen erfüllt)", () => {
+test("Brand: Go-Live Abschnitt J – kein Blocking (alle Brand-Checks erfüllt)", () => {
   const sections = getGoLiveSections();
   const j = sections.find((s) => s.sectionId === "J")!;
   assert.notEqual(
     j.status,
     "blocking",
-    `Abschnitt J darf nicht blocking sein wenn Brand-Konfiguration korrekt ist. Status: ${j.status}`,
+    `Abschnitt J darf nicht blocking sein wenn Brand-Konfiguration korrekt ist. Status: ${j.status}. Blocking-Checks: ${j.checks.filter((c) => c.status === "blocking").map((c) => `${c.id}: ${c.note}`).join(", ")}`,
+  );
+});
+
+test("Brand: Go-Live Abschnitt J – ist 'ready' (Vercel-sicher)", () => {
+  const sections = getGoLiveSections();
+  const j = sections.find((s) => s.sectionId === "J")!;
+  assert.equal(
+    j.status,
+    "ready",
+    `Abschnitt J soll 'ready' sein wenn alle Brand-Checks korrekt sind. Ist: ${j.status}. Checks: ${j.checks.map((c) => `${c.id}=${c.status}`).join(", ")}`,
+  );
+});
+
+test("Brand: Go-Live Score ≥ 90 ohne Bestätigungen (kein Abschnitt blocking)", () => {
+  const sections = getGoLiveSections();
+  const score = calculateGoLiveScore(sections);
+  const blockingCount = sections.filter((s) => s.status === "blocking").length;
+  assert.equal(
+    blockingCount,
+    0,
+    `Kein Abschnitt darf blocking sein. Blocking: ${sections.filter((s) => s.status === "blocking").map((s) => s.sectionId).join(", ")}`,
+  );
+  assert.ok(
+    score >= 90,
+    `Score soll ≥ 90 sein ohne Bestätigungen. Ist: ${score}`,
   );
 });
 

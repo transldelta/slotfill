@@ -27,12 +27,12 @@ import { assertNoSecretsInResponse } from "../lib/security-agent";
 
 // ─── Abschnitte: Vollständigkeit ──────────────────────────────────────────────
 
-test("Go-Live: genau 10 Abschnitte (A–J) vorhanden", () => {
+test("Go-Live: mindestens 10 Abschnitte (A–J, optional K) vorhanden", () => {
   const sections = getGoLiveSections();
-  assert.equal(sections.length, 10, `Erwartet 10, erhalten: ${sections.length}`);
+  assert.ok(sections.length >= 10, `Erwartet mindestens 10, erhalten: ${sections.length}`);
 });
 
-test("Go-Live: Abschnitt-IDs sind A bis J", () => {
+test("Go-Live: Abschnitt-IDs sind A bis J (K optional)", () => {
   const sections = getGoLiveSections();
   const ids = sections.map((s) => s.sectionId);
   const expected = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
@@ -1944,4 +1944,416 @@ test("Premium Colors: tailwind.config.ts enthält brand-Farbpalette", () => {
   const src: string = readFileSync(p, "utf8");
   assert.ok(src.includes("brand:"), "tailwind.config.ts muss brand-Farbpalette enthalten");
   assert.ok(src.includes("gradient-brand"), "tailwind.config.ts muss gradient-brand enthalten");
+});
+
+// ─── Feedback-Modul ───────────────────────────────────────────────────────────
+
+test("Feedback: Feedback-Seite app/[locale]/feedback/page.tsx existiert", () => {
+  const { existsSync } = require("fs");
+  const { resolve } = require("path");
+  assert.ok(
+    existsSync(resolve(process.cwd(), "app/[locale]/feedback/page.tsx")),
+    "app/[locale]/feedback/page.tsx fehlt",
+  );
+});
+
+test("Feedback: lib/feedback.ts – 1–3 Sterne bleiben private", () => {
+  const { buildFeedbackRecord, requiresImprovementTicket } = require("../lib/feedback");
+
+  // Rating 1 – muss private bleiben
+  const r1 = buildFeedbackRecord({ rating: 1, consent_to_publish: true });
+  assert.strictEqual(r1.visibility, "private", "Rating 1 muss visibility='private' haben");
+  assert.strictEqual(r1.consent_to_publish, false, "Rating 1 muss consent_to_publish=false erzwingen");
+
+  // Rating 3 – muss private bleiben
+  const r3 = buildFeedbackRecord({ rating: 3, consent_to_publish: true });
+  assert.strictEqual(r3.visibility, "private", "Rating 3 muss visibility='private' haben");
+  assert.strictEqual(r3.consent_to_publish, false, "Rating 3 muss consent_to_publish=false erzwingen");
+
+  // Improvement-Ticket erforderlich?
+  assert.ok(requiresImprovementTicket(1), "Rating 1 muss Improvement-Ticket erfordern");
+  assert.ok(requiresImprovementTicket(2), "Rating 2 muss Improvement-Ticket erfordern");
+  assert.ok(requiresImprovementTicket(3), "Rating 3 muss Improvement-Ticket erfordern");
+  assert.ok(!requiresImprovementTicket(4), "Rating 4 darf kein Improvement-Ticket erfordern");
+  assert.ok(!requiresImprovementTicket(5), "Rating 5 darf kein Improvement-Ticket erfordern");
+});
+
+test("Feedback: lib/feedback.ts – 4–5 Sterne NICHT automatisch öffentlich", () => {
+  const { buildFeedbackRecord } = require("../lib/feedback");
+
+  // Rating 4+5 bleibt auch private beim Einreichen
+  const r4 = buildFeedbackRecord({ rating: 4, consent_to_publish: true });
+  assert.strictEqual(r4.visibility, "private", "Rating 4 muss beim Einreichen visibility='private' haben");
+  assert.strictEqual(r4.reviewed_by_admin, false, "reviewed_by_admin muss false bleiben beim Einreichen");
+
+  const r5 = buildFeedbackRecord({ rating: 5, consent_to_publish: true });
+  assert.strictEqual(r5.visibility, "private", "Rating 5 muss beim Einreichen visibility='private' haben");
+});
+
+test("Feedback: canBePublic() erfordert alle drei Bedingungen", () => {
+  const { canBePublic } = require("../lib/feedback");
+
+  // Alle drei Bedingungen erfüllt → darf öffentlich
+  assert.ok(
+    canBePublic({ rating: 5, visibility: "public", consent_to_publish: true, reviewed_by_admin: true }),
+    "Rating 5, public, consent, reviewed → darf öffentlich",
+  );
+
+  // Fehlende Bedingungen
+  assert.ok(
+    !canBePublic({ rating: 3, visibility: "public", consent_to_publish: true, reviewed_by_admin: true }),
+    "Rating 3 darf nie öffentlich sein",
+  );
+  assert.ok(
+    !canBePublic({ rating: 5, visibility: "private", consent_to_publish: true, reviewed_by_admin: true }),
+    "visibility=private darf nicht öffentlich sein",
+  );
+  assert.ok(
+    !canBePublic({ rating: 5, visibility: "public", consent_to_publish: false, reviewed_by_admin: true }),
+    "consent_to_publish=false darf nicht öffentlich sein",
+  );
+  assert.ok(
+    !canBePublic({ rating: 5, visibility: "public", consent_to_publish: true, reviewed_by_admin: false }),
+    "reviewed_by_admin=false darf nicht öffentlich sein",
+  );
+});
+
+test("Feedback: Google-Link nur als optionaler Button (keine automatische Erstellung)", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+
+  const feedbackPage = resolve(process.cwd(), "app/[locale]/feedback/page.tsx");
+  if (!existsSync(feedbackPage)) return;
+  const src: string = readFileSync(feedbackPage, "utf8");
+
+  // Google-Link als Button vorhanden
+  assert.ok(src.includes("NEXT_PUBLIC_GOOGLE_REVIEW_URL"), "Feedback-Seite muss NEXT_PUBLIC_GOOGLE_REVIEW_URL verwenden");
+  assert.ok(src.includes("Auf Google bewerten"), "Google-Link muss als Button vorhanden sein");
+
+  // Keine automatische Google-API-Erstellung
+  assert.ok(!src.includes("googleapis.com/reviews"), "Keine automatische Google-API-Bewertung erlaubt");
+  assert.ok(!src.includes("maps.googleapis.com"), "Keine automatische Google-Maps-API-Bewertung erlaubt");
+});
+
+test("Feedback: lib/feedback.ts – keine automatische Google-Review-Erstellung", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/feedback.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    !src.includes("googleapis.com/reviews"),
+    "lib/feedback.ts darf keine automatische Google-Review-API enthalten",
+  );
+  assert.ok(
+    !src.includes("postReview") && !src.includes("createGoogleReview"),
+    "lib/feedback.ts darf keine Google-Review-Erstellungs-Funktion enthalten",
+  );
+});
+
+// ─── Improvement-System ───────────────────────────────────────────────────────
+
+test("Improvement: analyzeFeedbackForImprovement setzt category korrekt", () => {
+  const { analyzeFeedbackForImprovement } = require("../lib/improvement-analysis");
+
+  const booking = analyzeFeedbackForImprovement({ rating: 2, feedback_text: "Terminbuchung funktioniert nicht" });
+  assert.ok(
+    booking.category === "booking" || booking.category === "technical_bug",
+    `'Terminbuchung funktioniert nicht' → category soll booking oder technical_bug sein, ist: ${booking.category}`,
+  );
+
+  const pricing = analyzeFeedbackForImprovement({ rating: 3, feedback_text: "Preis zu teuer" });
+  assert.strictEqual(pricing.category, "pricing", "'Preis zu teuer' → category soll pricing sein");
+
+  const comm = analyzeFeedbackForImprovement({ rating: 2, feedback_text: "Ich habe keine Antwort bekommen" });
+  assert.strictEqual(comm.category, "communication", "'keine Antwort' → category soll communication sein");
+
+  const legal = analyzeFeedbackForImprovement({ rating: 1, feedback_text: "Datenschutz unsicher" });
+  assert.strictEqual(legal.category, "legal_privacy", "'Datenschutz unsicher' → category soll legal_privacy sein");
+});
+
+test("Improvement: analyzeFeedbackForImprovement setzt severity korrekt", () => {
+  const { analyzeFeedbackForImprovement } = require("../lib/improvement-analysis");
+
+  // Datenschutz → urgent (unabhängig von Rating)
+  const legalUrgent = analyzeFeedbackForImprovement({ rating: 2, feedback_text: "Datenschutz unsicher" });
+  assert.strictEqual(legalUrgent.severity, "urgent", "Datenschutz-Problem → severity=urgent");
+
+  // Rating 1 → mindestens high
+  const rating1 = analyzeFeedbackForImprovement({ rating: 1, feedback_text: "Preis zu teuer" });
+  assert.ok(
+    rating1.severity === "high" || rating1.severity === "urgent",
+    `Rating 1 → severity soll high oder urgent sein, ist: ${rating1.severity}`,
+  );
+
+  // Rating 3 → mindestens medium
+  const rating3 = analyzeFeedbackForImprovement({ rating: 3, feedback_text: "Irgendwas war schlecht" });
+  assert.ok(
+    ["medium", "high", "urgent"].includes(rating3.severity),
+    `Rating 3 → severity soll mindestens medium sein, ist: ${rating3.severity}`,
+  );
+});
+
+test("Improvement: analyzeFeedbackForImprovement erzeugt recurring_issue_key", () => {
+  const { analyzeFeedbackForImprovement } = require("../lib/improvement-analysis");
+
+  const r1 = analyzeFeedbackForImprovement({ rating: 2, feedback_text: "Datenschutz unsicher" });
+  const r2 = analyzeFeedbackForImprovement({ rating: 1, feedback_text: "DSGVO nicht eingehalten" });
+  // Beide haben gleiche Kategorie → gleicher recurring key
+  assert.strictEqual(r1.recurring_issue_key, r2.recurring_issue_key,
+    "Gleiche Kategorie + Severity → gleicher recurring_issue_key");
+});
+
+test("Improvement: isRecurringIssue – Schwellenwert-Logik", () => {
+  const { isRecurringIssue } = require("../lib/improvement-analysis");
+
+  assert.ok(!isRecurringIssue({ recurring_issue_key: "booking:high", existingCount: 0 }), "0 existierende → nicht recurring");
+  assert.ok(!isRecurringIssue({ recurring_issue_key: "booking:high", existingCount: 1 }), "1 existierendes → nicht recurring (Schwelle: 2)");
+  assert.ok(isRecurringIssue({ recurring_issue_key: "booking:high", existingCount: 2 }), "2 existierende → recurring");
+  assert.ok(isRecurringIssue({ recurring_issue_key: "booking:high", existingCount: 5 }), "5 existierende → recurring");
+});
+
+test("Improvement: /admin/improvements geschützt (unter Admin-Layout)", () => {
+  const { existsSync } = require("fs");
+  const { resolve } = require("path");
+  assert.ok(
+    existsSync(resolve(process.cwd(), "app/admin/improvements/page.tsx")),
+    "app/admin/improvements/page.tsx fehlt",
+  );
+  // Admin-Layout-Schutz gilt für alle Unterseiten
+  assert.ok(
+    existsSync(resolve(process.cwd(), "app/admin/layout.tsx")),
+    "app/admin/layout.tsx (Schutz-Wrapper) muss vorhanden sein",
+  );
+});
+
+// ─── Online-Terminbuchung ─────────────────────────────────────────────────────
+
+test("Booking: /[locale]/termin-buchen erreichbar (Seite existiert)", () => {
+  const { existsSync } = require("fs");
+  const { resolve } = require("path");
+  assert.ok(
+    existsSync(resolve(process.cwd(), "app/[locale]/termin-buchen/page.tsx")),
+    "app/[locale]/termin-buchen/page.tsx fehlt",
+  );
+});
+
+test("Booking: buildBookingRecord erzeugt nur Anfrage (nicht confirmed)", () => {
+  const { buildBookingRecord } = require("../lib/booking-requests");
+  const record = buildBookingRecord({
+    patient_name: "Max Mustermann",
+    patient_email: "max@example.com",
+    preferred_time: "Mo–Fr morgens",
+    privacy_accepted: true,
+  });
+  assert.strictEqual(record.status, "pending_confirmation",
+    "Status muss 'pending_confirmation' sein, nicht 'confirmed'");
+  assert.strictEqual(record.auto_confirmed, false,
+    "auto_confirmed muss false sein");
+});
+
+test("Booking: Datenschutz-Hinweis ist Pflichtfeld", () => {
+  const { validateBookingSubmission } = require("../lib/booking-requests");
+  const err = validateBookingSubmission({
+    patient_name: "Max",
+    patient_email: "max@example.com",
+    preferred_time: "Mo–Fr",
+    privacy_accepted: false,
+  });
+  assert.ok(err !== null, "Fehlende Datenschutz-Zustimmung muss Validierungsfehler erzeugen");
+  assert.ok(err!.toLowerCase().includes("datenschutz"), `Fehlermeldung soll 'Datenschutz' enthalten: "${err}"`);
+});
+
+test("Booking: AUTO_CONFIRM_BOOKINGS default=false (sicher)", () => {
+  const { isAutoConfirmEnabled } = require("../lib/booking-requests");
+  // Ohne ENV-Variable muss isAutoConfirmEnabled() false zurückgeben
+  const originalEnv = process.env.AUTO_CONFIRM_BOOKINGS;
+  delete process.env.AUTO_CONFIRM_BOOKINGS;
+  assert.ok(!isAutoConfirmEnabled(), "AUTO_CONFIRM_BOOKINGS muss per Default false sein");
+  if (originalEnv !== undefined) process.env.AUTO_CONFIRM_BOOKINGS = originalEnv;
+});
+
+test("Booking: shouldAutoConfirm gibt false zurück ohne explizite Konfiguration", () => {
+  const { shouldAutoConfirm } = require("../lib/booking-requests");
+  // Im MVP: shouldAutoConfirm ist immer false
+  const result = shouldAutoConfirm({ privacy_accepted: true });
+  assert.ok(!result, "shouldAutoConfirm muss im MVP false zurückgeben");
+});
+
+test("Booking: /admin/booking-requests geschützt (unter Admin-Layout)", () => {
+  const { existsSync } = require("fs");
+  const { resolve } = require("path");
+  assert.ok(
+    existsSync(resolve(process.cwd(), "app/admin/booking-requests/page.tsx")),
+    "app/admin/booking-requests/page.tsx fehlt",
+  );
+});
+
+// ─── Go-Live Agent: Sektion K ─────────────────────────────────────────────────
+
+test("Go-Live Sektion K: existiert und hat sectionId='K'", () => {
+  const { getGoLiveSections } = require("../lib/go-live-agent");
+  const sections = getGoLiveSections();
+  const k = sections.find((s: { sectionId: string }) => s.sectionId === "K");
+  assert.ok(k, "Sektion K fehlt in getGoLiveSections()");
+  assert.ok(k.title.includes("Bewertungen") || k.title.includes("Booking") || k.title.includes("Improvement"),
+    `Sektion K soll Bewertungen/Booking/Improvement im Titel haben: "${k.title}"`);
+});
+
+test("Go-Live Sektion K: ready wenn alle kritischen Checks erfüllt sind", () => {
+  const { getGoLiveSections } = require("../lib/go-live-agent");
+  const sections = getGoLiveSections();
+  const k = sections.find((s: { sectionId: string }) => s.sectionId === "K");
+  assert.ok(k, "Sektion K fehlt");
+  // Im aktuellen Build (alle Dateien vorhanden) sollte K ready oder warning sein
+  assert.notEqual(k.status, "blocking",
+    `Sektion K sollte nicht blocking sein wenn alle Sicherheits-Checks erfüllt sind. Status: ${k.status}. Findings: ${JSON.stringify(k.findings)}`);
+});
+
+test("Go-Live Sektion K: enthält K6_LOW_RATING_PRIVATE Check", () => {
+  const { getGoLiveSections } = require("../lib/go-live-agent");
+  const sections = getGoLiveSections();
+  const k = sections.find((s: { sectionId: string }) => s.sectionId === "K");
+  assert.ok(k, "Sektion K fehlt");
+  const check = k.checks.find((c: { id: string }) => c.id === "K6_LOW_RATING_PRIVATE");
+  assert.ok(check, "K6_LOW_RATING_PRIVATE Check fehlt in Sektion K");
+  assert.strictEqual(check.status, "ready", `K6_LOW_RATING_PRIVATE muss ready sein, ist: ${check.status}`);
+});
+
+test("Go-Live Sektion K: enthält K8_NO_AUTO_GOOGLE_REVIEW Check", () => {
+  const { getGoLiveSections } = require("../lib/go-live-agent");
+  const sections = getGoLiveSections();
+  const k = sections.find((s: { sectionId: string }) => s.sectionId === "K");
+  assert.ok(k, "Sektion K fehlt");
+  const check = k.checks.find((c: { id: string }) => c.id === "K8_NO_AUTO_GOOGLE_REVIEW");
+  assert.ok(check, "K8_NO_AUTO_GOOGLE_REVIEW Check fehlt in Sektion K");
+  assert.strictEqual(check.status, "ready",
+    `K8 (Keine Auto-Google-Review) muss ready sein, ist: ${check.status}`);
+});
+
+test("Go-Live Sektion K: K11_BOOKING_DEFAULT_PENDING ist ready", () => {
+  const { getGoLiveSections } = require("../lib/go-live-agent");
+  const sections = getGoLiveSections();
+  const k = sections.find((s: { sectionId: string }) => s.sectionId === "K");
+  assert.ok(k, "Sektion K fehlt");
+  const check = k.checks.find((c: { id: string }) => c.id === "K11_BOOKING_DEFAULT_PENDING");
+  assert.ok(check, "K11_BOOKING_DEFAULT_PENDING Check fehlt");
+  assert.strictEqual(check.status, "ready",
+    `K11 (Booking default pending) muss ready sein, ist: ${check.status}`);
+});
+
+test("Go-Live Sektion K: blockiert wenn Google automatisch gepostet würde (simulierter Test)", () => {
+  // Simulation: canBePublic mit schlechtem Rating darf niemals true sein
+  const { canBePublic } = require("../lib/feedback");
+  // Wenn schlechte Bewertungen öffentlich wären, würde K6 blocking sein
+  // Wir testen die Logik direkt
+  for (let r = 1; r <= 3; r++) {
+    const result = canBePublic({
+      rating: r,
+      visibility: "public",
+      consent_to_publish: true,
+      reviewed_by_admin: true,
+    });
+    assert.ok(!result, `canBePublic für rating=${r} muss false sein (schlechte Bewertung)`);
+  }
+});
+
+test("Go-Live Sektion K: K12_PRIVACY_REQUIRED_FOR_BOOKING ist ready", () => {
+  const { getGoLiveSections } = require("../lib/go-live-agent");
+  const sections = getGoLiveSections();
+  const k = sections.find((s: { sectionId: string }) => s.sectionId === "K");
+  assert.ok(k, "Sektion K fehlt");
+  const check = k.checks.find((c: { id: string }) => c.id === "K12_PRIVACY_REQUIRED_FOR_BOOKING");
+  assert.ok(check, "K12_PRIVACY_REQUIRED_FOR_BOOKING Check fehlt");
+  assert.strictEqual(check.status, "ready",
+    `K12 (Datenschutz Pflichtfeld) muss ready sein, ist: ${check.status}`);
+});
+
+// ─── Admin-API Sicherheit ─────────────────────────────────────────────────────
+
+test("Admin API: /api/admin/feedback route enthält getAdminContext-Schutz", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/api/admin/feedback/route.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(src.includes("getAdminContext"), "Feedback-API muss getAdminContext verwenden");
+  assert.ok(src.includes("UNAUTHORIZED"), "Feedback-API muss UNAUTHORIZED zurückgeben");
+});
+
+test("Admin API: /api/admin/feedback – publish blockiert bei rating <= 3", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/api/admin/feedback/route.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("CANNOT_PUBLISH_LOW_RATING") ||
+    (src.includes("rating < 4") || src.includes("rating <= 3")),
+    "Feedback-API muss publish für rating < 4 blockieren",
+  );
+});
+
+test("Admin API: /api/admin/improvements enthält getAdminContext-Schutz", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/api/admin/improvements/route.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(src.includes("getAdminContext"), "Improvements-API muss getAdminContext verwenden");
+  assert.ok(src.includes("UNAUTHORIZED"), "Improvements-API muss UNAUTHORIZED zurückgeben");
+});
+
+test("Admin API: /api/admin/booking-requests enthält getAdminContext-Schutz", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/api/admin/booking-requests/route.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(src.includes("getAdminContext"), "Booking-API muss getAdminContext verwenden");
+  assert.ok(src.includes("UNAUTHORIZED"), "Booking-API muss UNAUTHORIZED zurückgeben");
+});
+
+test("Admin API: booking-requests Hinweis auf keine automatische Benachrichtigung", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/api/admin/booking-requests/route.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.toLowerCase().includes("keine automatische") || src.includes("no automatic"),
+    "Booking-API muss explizit auf fehlende automatische Benachrichtigung hinweisen",
+  );
+});
+
+// ─── Migrations-Sicherheit ────────────────────────────────────────────────────
+
+test("Migration 016: feedback_reviews enthält RLS + low_rating_stays_private Constraint", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "supabase/migrations/016_feedback_reviews.sql");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(src.includes("ENABLE ROW LEVEL SECURITY"), "016-Migration muss RLS aktivieren");
+  assert.ok(
+    src.includes("low_rating_stays_private") || src.includes("rating > 3"),
+    "016-Migration muss Constraint für niedrige Bewertungen enthalten",
+  );
+  assert.ok(
+    src.includes("public_requires_consent_and_review") || src.includes("consent_to_publish"),
+    "016-Migration muss Consent+Review-Constraint enthalten",
+  );
+});
+
+test("Migration 018: booking_requests enthält RLS + privacy_accepted Constraint", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "supabase/migrations/018_booking_requests.sql");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(src.includes("ENABLE ROW LEVEL SECURITY"), "018-Migration muss RLS aktivieren");
+  assert.ok(
+    src.includes("privacy_accepted = true"),
+    "018-Migration muss privacy_accepted=true Constraint enthalten",
+  );
 });

@@ -149,6 +149,12 @@ export default async function LocaleLandingPage({
               {tNav("contact")}
             </Link>
             <Link
+              href={`/${locale}/termin-buchen`}
+              className="hidden rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:inline"
+            >
+              Termin buchen
+            </Link>
+            <Link
               href="/auth/login"
               className="rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
             >
@@ -261,6 +267,53 @@ export default async function LocaleLandingPage({
         </ul>
       </section>
 
+      {/* Online-Terminbuchung Sektion */}
+      <section className="mx-auto max-w-6xl px-4 py-16">
+        <div
+          className="rounded-2xl border p-8"
+          style={{
+            backgroundColor: "var(--color-surface)",
+            borderColor: "var(--color-border)",
+          }}
+        >
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex-1">
+              <div className="mb-2 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium" style={{ backgroundColor: "var(--color-surface-2)", color: "var(--color-muted)" }}>
+                <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
+                Online-Terminbuchung vorbereitet
+              </div>
+              <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+                Terminanfragen online empfangen
+              </h2>
+              <p className="mt-2 text-sm text-slate-600 dark:text-slate-400 max-w-lg">
+                Patienten können online eine Terminanfrage stellen. Die Praxis bestätigt
+                Termine manuell oder – falls ausdrücklich aktiviert – automatisch nach
+                sicheren Regeln.
+              </p>
+              <ul className="mt-4 space-y-1.5 text-sm text-slate-600 dark:text-slate-400">
+                <li className="flex items-center gap-2">
+                  <span style={{ color: "var(--color-accent)" }}>✓</span>
+                  Name, E-Mail, gewünschter Zeitraum und Anliegen
+                </li>
+                <li className="flex items-center gap-2">
+                  <span style={{ color: "var(--color-accent)" }}>✓</span>
+                  Datenschutzhinweis als Pflichtfeld
+                </li>
+                <li className="flex items-center gap-2">
+                  <span style={{ color: "var(--color-accent)" }}>✓</span>
+                  Keine automatische Bestätigung ohne Praxis-Freigabe
+                </li>
+              </ul>
+            </div>
+            <div className="shrink-0">
+              <Link href={`/${locale}/termin-buchen`} className="btn-brand">
+                Termin buchen →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section
         className="mx-auto max-w-3xl rounded-3xl px-8 py-16 text-center mx-4 my-8"
@@ -320,6 +373,12 @@ export default async function LocaleLandingPage({
             </Link>
             <Link href={`/${locale}/kontakt`} className="transition hover:text-slate-900 dark:hover:text-slate-100">
               {tNav("contact")}
+            </Link>
+            <Link href={`/${locale}/termin-buchen`} className="transition hover:text-slate-900 dark:hover:text-slate-100">
+              Termin buchen
+            </Link>
+            <Link href={`/${locale}/feedback`} className="transition hover:text-slate-900 dark:hover:text-slate-100">
+              Feedback
             </Link>
           </div>
           <div className="mt-6 border-t pt-6 text-xs" style={{ borderColor: "var(--color-border)", color: "var(--color-muted)" }}>

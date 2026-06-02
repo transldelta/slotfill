@@ -32,6 +32,8 @@ type BookingEntry = {
   note: string | null;
   status: BookingStatus;
   auto_confirmed: boolean;
+  confirmation_mode: "manual" | "auto" | null;
+  email_status: string | null;
   internal_note: string | null;
   created_at: string;
   // Slot-Felder (aus Migration 023)
@@ -75,6 +77,7 @@ export default function AdminBookingRequestsPage() {
 
   const [emailResults, setEmailResults] = useState<Record<string, EmailResult>>({});
   const [emailEnabled, setEmailEnabled] = useState<boolean | null>(null);
+  const [autoConfirmActive, setAutoConfirmActive] = useState<boolean | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -85,6 +88,12 @@ export default function AdminBookingRequestsPage() {
       const data = await res.json();
       setItems(data.requests ?? []);
       setTotal(data.total ?? 0);
+      if (data.auto_confirm_active !== undefined) {
+        setAutoConfirmActive(data.auto_confirm_active as boolean);
+      }
+      if (data.email_notifications_active !== undefined) {
+        setEmailEnabled(data.email_notifications_active as boolean);
+      }
     }
     setLoading(false);
   }, [filter]);
@@ -153,22 +162,53 @@ export default function AdminBookingRequestsPage() {
             Buchungsanfragen
           </h1>
           <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
-            {total} Anfragen · Keine automatische Bestätigung ohne Konfiguration
+            {total} Anfragen
+            {autoConfirmActive
+              ? " · Automatische Bestätigung aktiv"
+              : " · Keine automatische Bestätigung ohne Konfiguration"}
           </p>
         </div>
       </div>
 
-      {/* E-Mail-Status Banner */}
-      {emailEnabled === true ? (
+      {/* Status-Banner: Auto-Confirm + E-Mail */}
+      {autoConfirmActive && emailEnabled ? (
+        /* Beides aktiv: Idealer Betriebsmodus */
+        <div
+          data-testid="auto-confirm-active-banner"
+          className="flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 p-4 text-xs text-green-800 dark:border-green-900/30 dark:bg-green-900/10 dark:text-green-300"
+        >
+          <MailCheck className="h-4 w-4 shrink-0" />
+          <span>
+            <strong>Automatische Bestätigung aktiv.</strong> Patienten erhalten
+            nach erfolgreicher Prüfung automatisch eine E-Mail.
+          </span>
+        </div>
+      ) : autoConfirmActive && !emailEnabled ? (
+        /* Auto-Confirm aktiv, aber E-Mail deaktiviert */
+        <div className="flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-800 dark:border-amber-900/30 dark:bg-amber-900/10 dark:text-amber-300">
+          <MailX className="h-4 w-4 shrink-0" />
+          <span>
+            <strong>Automatische Bestätigung aktiv</strong>, aber
+            E-Mail-Benachrichtigungen deaktiviert. Patienten erhalten keine
+            automatischen E-Mails. Setze{" "}
+            <code className="rounded bg-amber-100 px-1 dark:bg-amber-900/30">
+              BOOKING_EMAIL_NOTIFICATIONS_ENABLED=true
+            </code>{" "}
+            um E-Mails zu aktivieren.
+          </span>
+        </div>
+      ) : emailEnabled ? (
+        /* Nur E-Mail aktiv, kein Auto-Confirm */
         <div className="flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 p-4 text-xs text-green-800 dark:border-green-900/30 dark:bg-green-900/10 dark:text-green-300">
           <MailCheck className="h-4 w-4 shrink-0" />
           <span>
             <strong>E-Mail-Benachrichtigungen aktiv:</strong> Patienten erhalten
-            nach Bestätigung oder Ablehnung automatisch eine transaktionale
-            E-Mail.
+            nach manueller Bestätigung oder Ablehnung automatisch eine
+            transaktionale E-Mail.
           </span>
         </div>
       ) : emailEnabled === false ? (
+        /* Nichts aktiv: E-Mail explizit deaktiviert */
         <div className="flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-800 dark:border-amber-900/30 dark:bg-amber-900/10 dark:text-amber-300">
           <MailX className="h-4 w-4 shrink-0" />
           <span>
@@ -181,6 +221,7 @@ export default function AdminBookingRequestsPage() {
           </span>
         </div>
       ) : (
+        /* Status noch nicht geladen */
         <div className="flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-800 dark:border-amber-900/30 dark:bg-amber-900/10 dark:text-amber-300">
           <Mail className="h-4 w-4 shrink-0" />
           <span>
@@ -236,13 +277,31 @@ export default function AdminBookingRequestsPage() {
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0 flex-1">
-                    {/* Status + Zeitstempel */}
+                    {/* Status + Auto-Confirm-Badge + Zeitstempel */}
                     <div className="flex flex-wrap items-center gap-2">
                       <span
                         className={`text-sm font-semibold ${getBookingStatusColor(item.status)}`}
                       >
                         {getBookingStatusLabel(item.status)}
                       </span>
+
+                      {/* Auto-Confirm Badge */}
+                      {(item.auto_confirmed || item.confirmation_mode === "auto") && (
+                        <span
+                          data-testid="auto-confirmed-badge"
+                          className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
+                        >
+                          Automatisch bestätigt
+                        </span>
+                      )}
+
+                      {/* E-Mail fehlgeschlagen Badge */}
+                      {item.auto_confirmed && item.email_status === "send_failed" && (
+                        <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700 dark:bg-red-900/30 dark:text-red-300">
+                          E-Mail fehlgeschlagen
+                        </span>
+                      )}
+
                       <span className="text-xs text-slate-400">
                         {new Date(item.created_at).toLocaleDateString("de-DE", {
                           year: "numeric",

@@ -7,6 +7,7 @@ import {
   validateBookingSubmission,
   isPlaceholderTime,
 } from "@/lib/booking-requests";
+import { evaluateAutoConfirm } from "@/lib/auto-confirm";
 
 const schema = z.object({
   patient_name: z.string().trim().min(1).max(100),
@@ -30,7 +31,7 @@ const schema = z.object({
 });
 
 export type SubmitBookingResult =
-  | { code: "BOOKING_SAVED"; bookingId: string }
+  | { code: "BOOKING_SAVED"; bookingId: string; autoConfirmed: boolean }
   | { code: "BOOKING_ERROR"; message: string }
   | { code: "PRIVACY_NOT_ACCEPTED" }
   | { code: "VALIDATION_ERROR"; message: string };
@@ -40,12 +41,12 @@ export type SubmitBookingResult =
  *
  * Sicherheitsregeln:
  * - privacy_accepted = true ist Pflicht
- * - auto_confirmed = false (DEFAULT)
- * - Status = pending_confirmation (nicht automatisch confirmed)
  * - Platzhalter-Texte ("einen freien Slot auswählen") werden abgelehnt
- * - requested_date / requested_time werden nur gespeichert wenn gültige Werte
- * - Keine echten Nachrichten ohne Provider
- * - Patient sieht ehrlichen Hinweis: "Praxis bestätigt manuell"
+ * - requested_date / requested_time: nur gültige Formate werden gespeichert
+ * - Nach dem INSERT: evaluateAutoConfirm() prüft alle Bedingungen
+ * - Auto-Confirm: nur wenn practice.auto_confirm_bookings = true UND Slot frei
+ * - Kein Auto-Confirm ohne echten Slot oder ohne E-Mail-Adresse
+ * - Keine echten Nachrichten ohne konfigurierten E-Mail-Provider
  */
 export async function submitBookingRequest(
   formData: FormData,
@@ -104,6 +105,16 @@ export async function submitBookingRequest(
     return { code: "VALIDATION_ERROR", message: validationError };
   }
 
+  // Nur echte Slot-Daten speichern (Regex-Schutz)
+  const cleanRequestedDate =
+    requested_date && /^\d{4}-\d{2}-\d{2}$/.test(requested_date)
+      ? requested_date
+      : null;
+  const cleanRequestedTime =
+    requested_time && /^\d{2}:\d{2}$/.test(requested_time)
+      ? requested_time
+      : null;
+
   const record = buildBookingRecord({
     patient_name,
     patient_email,
@@ -112,15 +123,8 @@ export async function submitBookingRequest(
     note,
     privacy_accepted,
     tenant_id,
-    // Nur setzen wenn echte Slot-Daten vorhanden
-    requested_date:
-      requested_date && /^\d{4}-\d{2}-\d{2}$/.test(requested_date)
-        ? requested_date
-        : null,
-    requested_time:
-      requested_time && /^\d{2}:\d{2}$/.test(requested_time)
-        ? requested_time
-        : null,
+    requested_date: cleanRequestedDate,
+    requested_time: cleanRequestedTime,
   });
 
   const supabase = createClient();
@@ -139,5 +143,21 @@ export async function submitBookingRequest(
     };
   }
 
-  return { code: "BOOKING_SAVED", bookingId: saved.id };
+  // ── Auto-Confirm evaluieren ────────────────────────────────────────────
+  // evaluateAutoConfirm prüft alle Bedingungen und bestätigt ggf. sofort.
+  // Fehler hier dürfen die Buchungs-Bestätigung nicht crashen.
+  let autoConfirmed = false;
+  try {
+    const autoResult = await evaluateAutoConfirm(saved.id, supabase);
+    autoConfirmed = autoResult.confirmed;
+  } catch (err) {
+    console.error("[booking] auto-confirm error:", err);
+    // Buchung bleibt gespeichert – kein Fehler an den Patienten
+  }
+
+  return {
+    code: "BOOKING_SAVED",
+    bookingId: saved.id,
+    autoConfirmed,
+  };
 }

@@ -96,6 +96,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       slots: [],
       has_rules: false,
+      practice_id: practiceId,
       message:
         "Aktuell keine Online-Zeitfenster verfügbar. Bitte Wunschzeit als Text angeben.",
     });
@@ -117,6 +118,7 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({
     slots,
     has_rules: true,
+    practice_id: practiceId, // Damit die Patientenseite tenant_id setzen kann
     ...(slots.length === 0
       ? {
           message: `Keine freien Termine in den nächsten ${daysAhead} Tagen. Bitte Wunschzeit als Text angeben.`,

@@ -28,6 +28,7 @@ export default function TerminBuchenPage() {
   // Form-State
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
+  const [autoConfirmed, setAutoConfirmed] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Slot-Lade-State
@@ -35,11 +36,12 @@ export default function TerminBuchenPage() {
   const [slots, setSlots] = useState<BookingSlot[]>([]);
   const [hasRules, setHasRules] = useState(false);
   const [slotsMessage, setSlotsMessage] = useState<string | null>(null);
+  const [practiceId, setPracticeId] = useState<string | null>(null);
 
   // Ausgewählter Slot
   const [selectedSlotKey, setSelectedSlotKey] = useState(PLACEHOLDER_SLOT);
 
-  // Slots beim Mount laden
+  // Slots + practice_id beim Mount laden
   useEffect(() => {
     async function loadSlots() {
       setSlotsLoading(true);
@@ -50,6 +52,8 @@ export default function TerminBuchenPage() {
           setSlots(data.slots ?? []);
           setHasRules(data.has_rules ?? false);
           setSlotsMessage(data.message ?? null);
+          // practice_id für Auto-Confirm-Zuordnung speichern
+          if (data.practice_id) setPracticeId(data.practice_id as string);
         }
       } catch {
         // Netzwerkfehler: Text-Eingabe als Fallback
@@ -103,6 +107,7 @@ export default function TerminBuchenPage() {
     setLoading(false);
 
     if (result.code === "BOOKING_SAVED") {
+      setAutoConfirmed(result.autoConfirmed);
       setDone(true);
     } else if (result.code === "PRIVACY_NOT_ACCEPTED") {
       setError("Datenschutz- und Buchungshinweis muss akzeptiert werden.");
@@ -134,29 +139,64 @@ export default function TerminBuchenPage() {
             className="mx-auto h-16 w-16"
             style={{ color: "var(--color-accent)" }}
           />
-          <h1 className="mt-4 text-2xl font-bold text-slate-900 dark:text-slate-100">
-            Anfrage übermittelt!
-          </h1>
-          <p className="mt-3 text-slate-600 dark:text-slate-400">
-            Ihre Anfrage wurde übermittelt. Die Praxis bestätigt den Termin
-            manuell. Sie erhalten eine Rückmeldung sobald Ihre Anfrage geprüft
-            wurde.
-          </p>
-          <div
-            className="mt-6 rounded-xl border p-4 text-sm text-left"
-            style={{
-              borderColor: "var(--color-border)",
-              backgroundColor: "var(--color-surface)",
-            }}
-          >
-            <p className="font-medium text-slate-700 dark:text-slate-300">
-              Wichtiger Hinweis:
-            </p>
-            <p className="mt-1 text-slate-600 dark:text-slate-400">
-              Ihre Anfrage ist noch keine verbindliche Terminbestätigung. Die
-              Praxis prüft Verfügbarkeit und Eignung und meldet sich bei Ihnen.
-            </p>
-          </div>
+
+          {autoConfirmed ? (
+            /* Auto-Confirm Erfolg */
+            <>
+              <h1
+                className="mt-4 text-2xl font-bold text-slate-900 dark:text-slate-100"
+                data-testid="auto-confirm-success-heading"
+              >
+                Termin bestätigt!
+              </h1>
+              <p className="mt-3 text-slate-600 dark:text-slate-400">
+                Ihr Termin wurde automatisch bestätigt. Sie erhalten eine
+                Bestätigung per E-Mail.
+              </p>
+              <div
+                className="mt-6 rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-left dark:border-green-900/30 dark:bg-green-900/10"
+              >
+                <p className="font-medium text-green-800 dark:text-green-300">
+                  ✅ Automatisch bestätigt
+                </p>
+                <p className="mt-1 text-green-700 dark:text-green-400">
+                  Die Praxis hat für diesen Zeitraum automatische Bestätigungen
+                  aktiviert. Bitte prüfen Sie Ihr E-Mail-Postfach.
+                </p>
+              </div>
+            </>
+          ) : (
+            /* Manuelle Prüfung */
+            <>
+              <h1 className="mt-4 text-2xl font-bold text-slate-900 dark:text-slate-100">
+                Anfrage übermittelt!
+              </h1>
+              <p
+                className="mt-3 text-slate-600 dark:text-slate-400"
+                data-testid="manual-confirm-message"
+              >
+                Ihre Anfrage wurde übermittelt und wird manuell geprüft. Sie
+                erhalten eine Rückmeldung sobald Ihre Anfrage bearbeitet wurde.
+              </p>
+              <div
+                className="mt-6 rounded-xl border p-4 text-sm text-left"
+                style={{
+                  borderColor: "var(--color-border)",
+                  backgroundColor: "var(--color-surface)",
+                }}
+              >
+                <p className="font-medium text-slate-700 dark:text-slate-300">
+                  Wichtiger Hinweis:
+                </p>
+                <p className="mt-1 text-slate-600 dark:text-slate-400">
+                  Ihre Anfrage ist noch keine verbindliche Terminbestätigung.
+                  Die Praxis prüft Verfügbarkeit und Eignung und meldet sich
+                  bei Ihnen.
+                </p>
+              </div>
+            </>
+          )}
+
           <Link
             href={`/${locale}`}
             className="mt-8 inline-block text-sm text-blue-600 hover:underline dark:text-blue-400"
@@ -231,6 +271,11 @@ export default function TerminBuchenPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+          {/* Praxis-ID – wird für Auto-Confirm-Zuordnung benötigt */}
+          {practiceId && (
+            <input type="hidden" name="tenant_id" value={practiceId} />
+          )}
+
           {/* Name */}
           <div>
             <label

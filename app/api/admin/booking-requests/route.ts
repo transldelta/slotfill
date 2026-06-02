@@ -6,9 +6,10 @@
  * - Nur Admin-Zugang
  * - Keine automatische Benachrichtigung direkt nach Patienten-Anfrage
  * - E-Mail ERST nach manuellem Admin-Klick (confirm/decline)
- * - Manuelle Bestätigung / Ablehnung
- * - auto_confirmed bleibt false außer explizit konfiguriert
+ * - Archivieren = Soft-Delete (kein hartes DELETE, keine E-Mail)
+ * - auto_confirmed bleibt false außer Slot-Check erfolgt
  * - RESEND_API_KEY niemals in Client-Responses
+ * - Keine automatische Benachrichtigung beim Archivieren
  */
 
 import { NextRequest, NextResponse } from "next/server";
@@ -18,6 +19,7 @@ import {
   isBookingEmailEnabled,
   type BookingEmailData,
 } from "@/lib/booking-email";
+import { writeAuditLog } from "@/lib/audit-log";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -40,10 +42,17 @@ export async function GET(request: NextRequest) {
     .order("created_at", { ascending: false })
     .range(offset, offset + limit - 1);
 
-  if (filter === "pending") query = query.eq("status", "pending_confirmation");
-  else if (filter === "confirmed") query = query.eq("status", "confirmed");
-  else if (filter === "declined") query = query.eq("status", "declined");
-  else if (filter === "cancelled") query = query.eq("status", "cancelled");
+  // Archived-Filter: nur archivierte anzeigen
+  if (filter === "archived") {
+    query = query.eq("status", "archived");
+  } else {
+    // Alle anderen Filter: archivierte ausblenden
+    query = query.neq("status", "archived");
+    if (filter === "pending") query = query.eq("status", "pending_confirmation");
+    else if (filter === "confirmed") query = query.eq("status", "confirmed");
+    else if (filter === "declined") query = query.eq("status", "declined");
+    else if (filter === "cancelled") query = query.eq("status", "cancelled");
+  }
 
   const { data, error, count } = await query;
   if (error) {
@@ -66,17 +75,20 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ code: "INVALID_JSON" }, { status: 400 });
   }
 
-  const { id, action, internal_note } = body;
+  const { id, action, internal_note, confirmed_date, confirmed_time } = body;
   if (!id || typeof id !== "string") {
     return NextResponse.json({ code: "MISSING_ID" }, { status: 400 });
   }
 
-  // Für confirm/decline: Buchungsdaten vor dem Update laden (für E-Mail-Versand)
+  // Für confirm/decline/archive: Buchungsdaten vor dem Update laden
   let bookingData: BookingEmailData | null = null;
-  if (action === "confirm" || action === "decline") {
+  if (action === "confirm" || action === "confirm_with_slot" || action === "decline") {
     const { data: existing, error: fetchError } = await ctx.admin
       .from("booking_requests")
-      .select("id, patient_name, patient_email, preferred_time, note, tenant_id")
+      .select(
+        "id, patient_name, patient_email, preferred_time, note, tenant_id, " +
+        "confirmed_date, confirmed_time",
+      )
       .eq("id", id)
       .single();
 
@@ -86,11 +98,12 @@ export async function PATCH(request: NextRequest) {
         { status: 404 },
       );
     }
-    bookingData = existing as BookingEmailData;
+    bookingData = existing as unknown as BookingEmailData;
   }
 
+  const now = new Date().toISOString();
   const updates: Record<string, unknown> = {
-    updated_at: new Date().toISOString(),
+    updated_at: now,
   };
 
   if (internal_note && typeof internal_note === "string") {
@@ -99,20 +112,58 @@ export async function PATCH(request: NextRequest) {
 
   switch (action) {
     case "confirm":
+      // Einfache Bestätigung ohne konkreten Slot
       updates.status = "confirmed";
+      updates.confirmation_mode = "manual";
       break;
+
+    case "confirm_with_slot":
+      // Bestätigung MIT konkretem Datum + Uhrzeit (Admin wählt Slot)
+      if (
+        !confirmed_date ||
+        typeof confirmed_date !== "string" ||
+        !confirmed_time ||
+        typeof confirmed_time !== "string"
+      ) {
+        return NextResponse.json(
+          { code: "MISSING_SLOT", message: "confirmed_date und confirmed_time erforderlich" },
+          { status: 400 },
+        );
+      }
+      updates.status = "confirmed";
+      updates.confirmation_mode = "manual";
+      updates.confirmed_date = confirmed_date;
+      updates.confirmed_time = confirmed_time;
+      // bookingData mit konkretem Slot anreichern für E-Mail
+      if (bookingData) {
+        bookingData.confirmed_date = confirmed_date;
+        bookingData.confirmed_time = confirmed_time;
+      }
+      break;
+
     case "decline":
       updates.status = "declined";
       break;
+
     case "cancel":
       updates.status = "cancelled";
       break;
+
     case "set_pending":
       updates.status = "pending_confirmation";
       break;
+
+    case "archive":
+      // Soft-Delete: Archivieren ohne E-Mail
+      // Keine automatische Benachrichtigung beim Archivieren.
+      updates.status = "archived";
+      updates.archived_at = now;
+      break;
+
     case "add_note":
       // Nur Notiz hinzufügen, kein Status-Wechsel
       break;
+
     default:
       return NextResponse.json({ code: "UNKNOWN_ACTION" }, { status: 400 });
   }
@@ -128,15 +179,39 @@ export async function PATCH(request: NextRequest) {
 
   // Keine automatische Benachrichtigung direkt nach Patienten-Anfrage.
   // E-Mail ERST nach manuellem Admin-Klick (confirm/decline).
+  // Archivieren sendet KEINE E-Mail.
   // RESEND_API_KEY und Patientendaten werden NIE in der Response ausgegeben.
   let emailStatus: string | null = null;
   let emailCode: string | null = null;
 
-  if ((action === "confirm" || action === "decline") && bookingData) {
-    const emailType = action === "confirm" ? "confirmation" : "decline";
+  const sendsEmail =
+    action === "confirm" || action === "confirm_with_slot" || action === "decline";
+
+  if (sendsEmail && bookingData) {
+    const emailType = action === "decline" ? "decline" : "confirmation";
     const result = await sendBookingEmail(bookingData, emailType, ctx.user.email ?? null);
     emailStatus = result.status;
     emailCode = result.code;
+
+    // E-Mail-Status in DB speichern (nur Code, kein Secret)
+    await ctx.admin
+      .from("booking_requests")
+      .update({
+        email_status: result.status,
+        email_sent_at: result.status === "sent" ? now : null,
+      })
+      .eq("id", id);
+  }
+
+  // Archivierungs-Audit (keine E-Mail, kein Secret)
+  if (action === "archive") {
+    await writeAuditLog({
+      action: "booking_archived",
+      area: "booking",
+      status: "success",
+      actorEmail: ctx.user.email ?? null,
+      metadata: { booking_id: id },
+    });
   }
 
   const response: Record<string, unknown> = {
@@ -146,7 +221,6 @@ export async function PATCH(request: NextRequest) {
     email_notifications_enabled: isBookingEmailEnabled(),
   };
 
-  // E-Mail-Status zurückgeben (kein Secret, keine Patientendaten)
   if (emailStatus !== null) {
     response.email_status = emailStatus;
     response.email_code = emailCode;

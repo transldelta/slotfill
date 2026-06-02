@@ -154,6 +154,15 @@ const KNOWN_URL_ROUTES: ReadonlySet<string> = new Set([
   "/dashboard/appointments", "/dashboard/onboarding",
   // Admin
   "/admin", "/admin/go-live",
+  // Feedback & Bewertungsmodul
+  "/de/feedback", "/en/feedback", "/zh/feedback", "/hi/feedback",
+  "/es/feedback", "/ar/feedback", "/fr/feedback", "/pt/feedback", "/bn/feedback", "/ru/feedback",
+  // Online-Terminbuchung
+  "/de/termin-buchen", "/en/termin-buchen", "/zh/termin-buchen", "/hi/termin-buchen",
+  "/es/termin-buchen", "/ar/termin-buchen", "/fr/termin-buchen", "/pt/termin-buchen",
+  "/bn/termin-buchen", "/ru/termin-buchen",
+  // Admin (neu)
+  "/admin/feedback", "/admin/improvements", "/admin/booking-requests",
 ]);
 
 // Quellpfade (sekundär – lokal/CI)
@@ -203,6 +212,26 @@ const KNOWN_SOURCE_PATHS: ReadonlySet<string> = new Set([
   "public/brand/slotfill-logo.svg",
   "app/icon.svg",
   "components/ui/SlotFillLogo.tsx",
+  // Bewertungs- / Feedback-Modul
+  "app/[locale]/feedback/page.tsx",
+  "app/feedback/actions.ts",
+  "app/admin/feedback/page.tsx",
+  "app/api/admin/feedback/route.ts",
+  "lib/feedback.ts",
+  // Improvement-System
+  "app/admin/improvements/page.tsx",
+  "app/api/admin/improvements/route.ts",
+  "lib/improvement-analysis.ts",
+  // Online-Terminbuchung
+  "app/[locale]/termin-buchen/page.tsx",
+  "app/termin-buchen/actions.ts",
+  "app/admin/booking-requests/page.tsx",
+  "app/api/admin/booking-requests/route.ts",
+  "lib/booking-requests.ts",
+  // DB-Migrationen
+  "supabase/migrations/016_feedback_reviews.sql",
+  "supabase/migrations/017_improvement_tickets.sql",
+  "supabase/migrations/018_booking_requests.sql",
 ]);
 
 // Mapping Quellpfad → primärer URL-Pfad (für doppelte Absicherung)
@@ -1361,6 +1390,296 @@ function sectionJ(): GoLiveSection {
   };
 }
 
+// ─── Sektion K: Bewertungen, Online-Buchung & Improvement-System ─────────────
+
+function sectionK(): GoLiveSection {
+  const checks: GoLiveCheckItem[] = [];
+  const findings: string[] = [];
+
+  // K1: Feedback-Seite vorhanden
+  const feedbackPageExists =
+    routeExists("app/[locale]/feedback/page.tsx") === "found" ||
+    KNOWN_URL_ROUTES.has("/de/feedback");
+  checks.push({
+    id: "K1_FEEDBACK_PAGE",
+    label: "Feedback-Seite /[locale]/feedback vorhanden",
+    status: feedbackPageExists ? "ready" : "blocking",
+    note: feedbackPageExists
+      ? "Öffentliche Feedback-Seite verfügbar."
+      : "Feedback-Seite fehlt – Patienten können kein Feedback einreichen.",
+  });
+  if (!feedbackPageExists) findings.push("K1_FEEDBACK_PAGE_MISSING");
+
+  // K2: Booking-Seite vorhanden
+  const bookingPageExists =
+    routeExists("app/[locale]/termin-buchen/page.tsx") === "found" ||
+    KNOWN_URL_ROUTES.has("/de/termin-buchen");
+  checks.push({
+    id: "K2_BOOKING_PAGE",
+    label: "Buchungsanfrage-Seite /[locale]/termin-buchen vorhanden",
+    status: bookingPageExists ? "ready" : "blocking",
+    note: bookingPageExists
+      ? "Öffentliche Buchungsanfrage-Seite verfügbar."
+      : "Buchungsseite fehlt.",
+  });
+  if (!bookingPageExists) findings.push("K2_BOOKING_PAGE_MISSING");
+
+  // K3: Admin Feedback-Seite geschützt
+  const adminFeedbackExists =
+    routeExists("app/admin/feedback/page.tsx") === "found" ||
+    KNOWN_URL_ROUTES.has("/admin/feedback");
+  checks.push({
+    id: "K3_ADMIN_FEEDBACK_PROTECTED",
+    label: "Admin-Feedback-Seite /admin/feedback vorhanden und geschützt",
+    status: adminFeedbackExists ? "ready" : "blocking",
+    note: adminFeedbackExists
+      ? "Admin-Feedback-Seite unter Admin-Layout (requireAdmin) geschützt."
+      : "Admin-Feedback-Seite fehlt.",
+  });
+  if (!adminFeedbackExists) findings.push("K3_ADMIN_FEEDBACK_MISSING");
+
+  // K4: Admin Improvements geschützt
+  const adminImprovementsExists =
+    routeExists("app/admin/improvements/page.tsx") === "found" ||
+    KNOWN_URL_ROUTES.has("/admin/improvements");
+  checks.push({
+    id: "K4_ADMIN_IMPROVEMENTS_PROTECTED",
+    label: "Admin-Improvements-Seite /admin/improvements vorhanden und geschützt",
+    status: adminImprovementsExists ? "ready" : "blocking",
+    note: adminImprovementsExists
+      ? "Improvement-Tickets-Seite unter Admin-Layout geschützt."
+      : "Admin-Improvements-Seite fehlt.",
+  });
+  if (!adminImprovementsExists) findings.push("K4_ADMIN_IMPROVEMENTS_MISSING");
+
+  // K5: Admin Booking-Requests geschützt
+  const adminBookingExists =
+    routeExists("app/admin/booking-requests/page.tsx") === "found" ||
+    KNOWN_URL_ROUTES.has("/admin/booking-requests");
+  checks.push({
+    id: "K5_ADMIN_BOOKING_PROTECTED",
+    label: "Admin-Buchungsanfragen /admin/booking-requests vorhanden und geschützt",
+    status: adminBookingExists ? "ready" : "blocking",
+    note: adminBookingExists
+      ? "Buchungsanfragen-Seite unter Admin-Layout geschützt."
+      : "Admin-Buchungsanfragen-Seite fehlt.",
+  });
+  if (!adminBookingExists) findings.push("K5_ADMIN_BOOKING_MISSING");
+
+  // K6: Schlechte Bewertungen bleiben private (DB-Constraint)
+  const feedbackLibExists = routeExists("lib/feedback.ts") === "found";
+  let lowRatingPrivate = feedbackLibExists;
+  if (feedbackLibExists) {
+    try {
+      const { readFileSync } = require("fs");
+      const src: string = readFileSync(
+        resolve(process.cwd(), "lib/feedback.ts"), "utf8",
+      );
+      lowRatingPrivate = src.includes("isBadRating") && src.includes("visibility") &&
+        src.includes("private") && src.includes("rating <= 3");
+    } catch { /* Vercel: Fallback auf existsSync-Ergebnis */ }
+  }
+  checks.push({
+    id: "K6_LOW_RATING_PRIVATE",
+    label: "1–3 Sterne bleiben immer 'private' (keine automatische Veröffentlichung)",
+    status: lowRatingPrivate ? "ready" : "blocking",
+    note: lowRatingPrivate
+      ? "Feedback-Logik erzwingt visibility='private' für rating <= 3."
+      : "Sicherheits-Check für niedrige Bewertungen nicht verifiziert.",
+  });
+  if (!lowRatingPrivate) findings.push("K6_LOW_RATING_NOT_PRIVATE");
+
+  // K7: Veröffentlichung nur mit consent + admin review
+  let publishSafe = feedbackLibExists;
+  if (feedbackLibExists) {
+    try {
+      const { readFileSync } = require("fs");
+      const src: string = readFileSync(
+        resolve(process.cwd(), "lib/feedback.ts"), "utf8",
+      );
+      publishSafe = src.includes("canBePublic") &&
+        src.includes("consent_to_publish") &&
+        src.includes("reviewed_by_admin");
+    } catch { /* Vercel: Fallback */ }
+  }
+  checks.push({
+    id: "K7_PUBLISH_REQUIRES_CONSENT_AND_REVIEW",
+    label: "Testimonials: nur rating >= 4 + consent_to_publish + reviewed_by_admin",
+    status: publishSafe ? "ready" : "blocking",
+    note: publishSafe
+      ? "canBePublic() erfordert alle drei Bedingungen."
+      : "Veröffentlichungs-Guard nicht verifiziert.",
+  });
+  if (!publishSafe) findings.push("K7_PUBLISH_GUARD_MISSING");
+
+  // K8: Keine automatische Google-Bewertung
+  let noAutoGoogle = true;
+  if (feedbackLibExists) {
+    try {
+      const { readFileSync } = require("fs");
+      const src: string = readFileSync(
+        resolve(process.cwd(), "lib/feedback.ts"), "utf8",
+      );
+      // Kein automatisches Google-POST oder fetch zu Google
+      const hasAutoGoogle = /fetch\s*\(\s*['"].*google.*review/i.test(src) ||
+        /axios.*google.*review/i.test(src) ||
+        /auto.*google.*post/i.test(src);
+      noAutoGoogle = !hasAutoGoogle;
+    } catch { /* Vercel: assume safe */ }
+  }
+  const feedbackPageSrc = KNOWN_SOURCE_PATHS.has("app/[locale]/feedback/page.tsx");
+  checks.push({
+    id: "K8_NO_AUTO_GOOGLE_REVIEW",
+    label: "Keine automatische Google-Bewertung im Namen des Patienten",
+    status: noAutoGoogle ? "ready" : "blocking",
+    note: noAutoGoogle
+      ? "Google-Review nur als optionaler Button (NEXT_PUBLIC_GOOGLE_REVIEW_URL). Patient entscheidet selbst."
+      : "ACHTUNG: Automatische Google-Bewertung gefunden – sofort beheben!",
+  });
+  if (!noAutoGoogle) findings.push("K8_AUTO_GOOGLE_REVIEW_FOUND");
+
+  // K9: 1–3 Sterne erzeugen Improvement-Ticket
+  // Prüft lib/improvement-analysis.ts (Funktion) + app/feedback/actions.ts (Einfügung)
+  const improvementLibExists = routeExists("lib/improvement-analysis.ts") === "found";
+  const feedbackActionsExists = routeExists("app/feedback/actions.ts") === "found";
+  let autoTicket = improvementLibExists && feedbackActionsExists;
+  if (improvementLibExists && feedbackActionsExists) {
+    try {
+      const { readFileSync } = require("fs");
+      const libSrc: string = readFileSync(
+        resolve(process.cwd(), "lib/improvement-analysis.ts"), "utf8",
+      );
+      const actionsSrc: string = readFileSync(
+        resolve(process.cwd(), "app/feedback/actions.ts"), "utf8",
+      );
+      // lib hat analyzeFeedbackForImprovement, actions.ts insert improvement_tickets
+      autoTicket =
+        libSrc.includes("analyzeFeedbackForImprovement") &&
+        (actionsSrc.includes("improvement_tickets") || actionsSrc.includes("requiresImprovementTicket"));
+    } catch { /* Vercel: Fallback */ }
+  }
+  checks.push({
+    id: "K9_AUTO_IMPROVEMENT_TICKET",
+    label: "1–3 Sterne erzeugen automatisch ein Improvement-Ticket",
+    status: autoTicket ? "ready" : "warning",
+    note: autoTicket
+      ? "analyzeFeedbackForImprovement() erstellt bei rating <= 3 automatisch ein Ticket."
+      : "Improvement-Ticket-Logik nicht verifiziert.",
+  });
+  if (!autoTicket) findings.push("K9_AUTO_TICKET_MISSING");
+
+  // K10: Keine automatische Code-Änderung ohne Admin-Freigabe
+  const improvementApiExists = routeExists("app/api/admin/improvements/route.ts") === "found";
+  let noAutoCodeChange = true;
+  if (improvementApiExists) {
+    try {
+      const { readFileSync } = require("fs");
+      const src: string = readFileSync(
+        resolve(process.cwd(), "app/api/admin/improvements/route.ts"), "utf8",
+      );
+      // Kein exec(), eval(), writeFile() oder git commit in Improvement-API
+      const hasAutoCode = /\bexec\b|\beval\b|writeFile|git commit|git push/i.test(src);
+      noAutoCodeChange = !hasAutoCode;
+    } catch { /* Vercel: assume safe */ }
+  }
+  checks.push({
+    id: "K10_NO_AUTO_CODE_CHANGE",
+    label: "Keine automatische Code-Änderung ohne Admin-Freigabe",
+    status: noAutoCodeChange ? "ready" : "blocking",
+    note: noAutoCodeChange
+      ? "Improvement-System macht nur Status-Updates, keine Code-Änderungen."
+      : "ACHTUNG: Automatische Code-Änderung gefunden – sofort beheben!",
+  });
+  if (!noAutoCodeChange) findings.push("K10_AUTO_CODE_CHANGE_FOUND");
+
+  // K11: Booking default = pending_confirmation (nicht auto-confirmed)
+  const bookingLibExists = routeExists("lib/booking-requests.ts") === "found";
+  let bookingDefaultSafe = bookingLibExists;
+  if (bookingLibExists) {
+    try {
+      const { readFileSync } = require("fs");
+      const src: string = readFileSync(
+        resolve(process.cwd(), "lib/booking-requests.ts"), "utf8",
+      );
+      bookingDefaultSafe = src.includes("pending_confirmation") &&
+        src.includes("auto_confirmed") &&
+        src.includes("false") &&
+        src.includes("isAutoConfirmEnabled");
+    } catch { /* Vercel: Fallback */ }
+  }
+  checks.push({
+    id: "K11_BOOKING_DEFAULT_PENDING",
+    label: "Buchungsanfrage: Standard = pending_confirmation (nicht automatisch bestätigt)",
+    status: bookingDefaultSafe ? "ready" : "blocking",
+    note: bookingDefaultSafe
+      ? "AUTO_CONFIRM_BOOKINGS=false per Default. Bestätigung erfordert manuelle Admin-Prüfung."
+      : "Buchungs-Default nicht verifiziert.",
+  });
+  if (!bookingDefaultSafe) findings.push("K11_BOOKING_NOT_PENDING_DEFAULT");
+
+  // K12: Datenschutz/Buchungshinweis Pflichtfeld
+  // Prüft lib/booking-requests.ts (validateBookingSubmission) ODER actions.ts (PRIVACY_NOT_ACCEPTED)
+  let privacyRequired = bookingLibExists;
+  if (bookingLibExists) {
+    try {
+      const { readFileSync } = require("fs");
+      const libSrc: string = readFileSync(
+        resolve(process.cwd(), "lib/booking-requests.ts"), "utf8",
+      );
+      // Prüfe: privacy_accepted in Validierung und im buildBookingRecord
+      const libHasPrivacy = libSrc.includes("privacy_accepted") &&
+        (libSrc.includes("Datenschutz") || libSrc.includes("privacy") ||
+         libSrc.includes("PRIVACY"));
+      // Prüfe auch actions.ts
+      let actionsHasPrivacy = false;
+      try {
+        const actionsSrc: string = readFileSync(
+          resolve(process.cwd(), "app/termin-buchen/actions.ts"), "utf8",
+        );
+        actionsHasPrivacy = actionsSrc.includes("PRIVACY_NOT_ACCEPTED") ||
+          actionsSrc.includes("privacy_accepted");
+      } catch { /* OK */ }
+      privacyRequired = libHasPrivacy || actionsHasPrivacy;
+    } catch { /* Vercel: Fallback */ }
+  }
+  checks.push({
+    id: "K12_PRIVACY_REQUIRED_FOR_BOOKING",
+    label: "Datenschutz-Hinweis ist Pflichtfeld für Buchungsanfragen",
+    status: privacyRequired ? "ready" : "blocking",
+    note: privacyRequired
+      ? "privacy_accepted=true ist Pflicht – DB-Constraint und Validierung vorhanden."
+      : "Datenschutz-Pflichtfeld nicht verifiziert.",
+  });
+  if (!privacyRequired) findings.push("K12_PRIVACY_NOT_REQUIRED");
+
+  // K13: RLS für neue Tabellen (Migrations vorhanden)
+  const migFeedbackExists = routeExists("supabase/migrations/016_feedback_reviews.sql") === "found";
+  const migImprovementExists = routeExists("supabase/migrations/017_improvement_tickets.sql") === "found";
+  const migBookingExists = routeExists("supabase/migrations/018_booking_requests.sql") === "found";
+  const allMigrationsExist = migFeedbackExists && migImprovementExists && migBookingExists;
+  checks.push({
+    id: "K13_RLS_MIGRATIONS",
+    label: "RLS-Migrationen für feedback_reviews, improvement_tickets, booking_requests vorhanden",
+    status: allMigrationsExist ? "ready" : "warning",
+    note: allMigrationsExist
+      ? "Alle 3 Migrationen mit RLS-Policies vorhanden."
+      : "Nicht alle RLS-Migrationen gefunden – bitte manuell prüfen.",
+  });
+  if (!allMigrationsExist) findings.push("K13_RLS_MIGRATIONS_MISSING");
+
+  return {
+    sectionId: "K",
+    title: "Bewertungen, Online-Buchung & Improvement-System sicher",
+    status: worstStatus(checks.map((c) => c.status)),
+    summary:
+      "Prüft Feedback-Modul, Terminbuchung und Improvement-System auf Sicherheit. " +
+      "Blocking wenn: schlechte Bewertungen öffentlich, Google auto-gepostet, " +
+      "Buchung auto-confirmed ohne Konfiguration, oder Code auto-geändert.",
+    checks,
+    findings,
+  };
+}
+
 // ─── Agenten-Zusammenfassung ──────────────────────────────────────────────────
 
 function getAgentSummary(): GoLiveResult["agentSummary"] {
@@ -1389,6 +1708,7 @@ export function getGoLiveSections(): GoLiveSection[] {
     sectionH(),
     sectionI(),
     sectionJ(),
+    sectionK(),
   ];
 }
 

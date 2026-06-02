@@ -2714,3 +2714,120 @@ test("BookingSettings: Seite zeigt Praxis-Selector wenn mehrere Praxen vorhanden
     "Seite muss practices_list-Endpoint nutzen um alle Praxen zu laden",
   );
 });
+
+// ─── Bug Fix 3: Kein No-Practice-State wenn Praxis im Dropdown ──────────────
+
+test("BookingSettings: 'Keine Praxis gefunden' NUR wenn practices.length === 0", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/admin/booking-settings/page.tsx");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // Die Seite darf noPractice-State nicht mehr verwenden (entfernt in Bug Fix 3)
+  assert.ok(
+    !src.includes("noPractice") || !src.includes("setNoPractice"),
+    "Seite darf keinen noPractice-State mehr nutzen – stattdessen practices.length === 0 prüfen",
+  );
+  // Stattdessen: Bedingung muss auf practices.length basieren
+  assert.ok(
+    src.includes("practices.length === 0") || src.includes("practices.length==0"),
+    "Seite muss 'Keine Praxis gefunden' nur bei practices.length === 0 zeigen",
+  );
+});
+
+test("BookingSettings: Leere availability_rules zeigen Einstellungen (kein Fehler-State)", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const apiPath = resolve(process.cwd(), "app/api/admin/booking-settings/route.ts");
+  if (!existsSync(apiPath)) return;
+  const apiSrc: string = readFileSync(apiPath, "utf8");
+  // API muss bei Fehler leeres Array statt 500 zurückgeben
+  assert.ok(
+    apiSrc.includes("rules: []") || apiSrc.includes("rules:[]"),
+    "API muss bei fehlender availability_rules-Tabelle leeres Array zurückgeben (kein 500)",
+  );
+  assert.ok(
+    apiSrc.includes("_tableError"),
+    "API muss _tableError-Flag setzen wenn Tabelle noch nicht existiert",
+  );
+  // Page darf leere Regeln nicht als 'keine Praxis' interpretieren
+  const pagePath = resolve(process.cwd(), "app/admin/booking-settings/page.tsx");
+  if (!existsSync(pagePath)) return;
+  const pageSrc: string = readFileSync(pagePath, "utf8");
+  assert.ok(
+    !pageSrc.includes("rules.length === 0") ||
+      !pageSrc.includes("noPractice"),
+    "Seite darf leere Regeln nicht als fehlende Praxis interpretieren",
+  );
+});
+
+test("BookingSettings: GET-Endpoint akzeptiert practiceId (camelCase) als Query-Param", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/api/admin/booking-settings/route.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // Route muss beide Schreibweisen akzeptieren
+  assert.ok(
+    src.includes("practiceId") || src.includes("practice_id"),
+    "GET-Endpoint muss practiceId (camelCase) als Query-Param akzeptieren",
+  );
+  assert.ok(
+    src.includes("get(\"practiceId\")") || src.includes("get('practiceId')"),
+    "GET-Endpoint muss searchParams.get('practiceId') unterstützen",
+  );
+  assert.ok(
+    src.includes("get(\"practice_id\")") || src.includes("get('practice_id')"),
+    "GET-Endpoint muss searchParams.get('practice_id') unterstützen",
+  );
+});
+
+test("BookingSettings: PUT-Endpoint akzeptiert practiceId (camelCase) im Body", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/api/admin/booking-settings/route.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // PUT-Body-Parsing muss camelCase practiceId unterstützen
+  assert.ok(
+    src.includes("body.practiceId") || src.includes("practiceId"),
+    "PUT-Endpoint muss practiceId (camelCase) im Body akzeptieren",
+  );
+  // Sicherstellen dass booking_slot_minutes, booking_buffer_minutes, auto_confirm_bookings
+  // alle in der PUT-Logik vorkommen
+  assert.ok(
+    src.includes("booking_slot_minutes"),
+    "PUT muss booking_slot_minutes verarbeiten können",
+  );
+  assert.ok(
+    src.includes("booking_buffer_minutes"),
+    "PUT muss booking_buffer_minutes verarbeiten können",
+  );
+  assert.ok(
+    src.includes("auto_confirm_bookings"),
+    "PUT muss auto_confirm_bookings verarbeiten können",
+  );
+});
+
+test("BookingSettings: Seite nutzt effectiveSettings-Fallback damit Form immer angezeigt wird", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/admin/booking-settings/page.tsx");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // effectiveSettings muss als Fallback für null-settings definiert sein
+  assert.ok(
+    src.includes("effectiveSettings") || src.includes("effective_settings"),
+    "Seite muss effectiveSettings-Fallback nutzen damit Form auch ohne geladene Settings anzeigt",
+  );
+  // saveSettings darf NICHT auf !settings prüfen (würde Speichern blockieren)
+  const saveSettingsFn = src.slice(
+    src.indexOf("async function saveSettings") !== -1
+      ? src.indexOf("async function saveSettings")
+      : src.indexOf("saveSettings"),
+  ).slice(0, 300);
+  assert.ok(
+    !saveSettingsFn.includes("if (!settings)"),
+    "saveSettings darf nicht auf '!settings' prüfen – stattdessen selectedPracticeId prüfen",
+  );
+});

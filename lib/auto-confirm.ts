@@ -167,6 +167,11 @@ export async function evaluateAutoConfirm(
     .eq("weekday", weekday)
     .eq("is_active", true);
 
+  // Postgres gibt TIME-Spalten als "HH:MM:SS" zurück.
+  // generateTimeSlotsForRule() erzeugt "HH:MM" (ohne Sekunden).
+  // Normalisierung auf "HH:MM" ist zwingend für den includes()-Vergleich.
+  const requestedTimeNorm = b.requested_time!.slice(0, 5); // "12:00:00" → "12:00"
+
   const slotIsValid =
     (
       rules as Array<{
@@ -182,7 +187,7 @@ export async function evaluateAutoConfirm(
         rule.slot_minutes,
         rule.buffer_minutes,
       );
-      return validTimes.includes(b.requested_time!);
+      return validTimes.includes(requestedTimeNorm);
     }) ?? false;
 
   if (!slotIsValid) {
@@ -262,6 +267,19 @@ export async function evaluateAutoConfirm(
   }
 
   // ── Alle Checks bestanden: Buchung automatisch bestätigen ─────────────
+  await writeAuditLog({
+    action: "booking_auto_confirm_started",
+    area: "booking",
+    status: "success",
+    actorEmail: null,
+    practiceId,
+    metadata: {
+      booking_id: bookingId,
+      requested_date: b.requested_date,
+      requested_time: b.requested_time,
+    },
+  });
+
   const now = new Date().toISOString();
 
   const { error: confirmError } = await supabase
@@ -309,12 +327,26 @@ export async function evaluateAutoConfirm(
     /* E-Mail-Status-Update darf Buchung nicht rückgängig machen */
   }
 
-  // Audit-Log schreiben
+  // Audit-Log: Auto-Confirm erfolgreich
+  await writeAuditLog({
+    action: "booking_auto_confirm_success",
+    area: "booking",
+    status: "success",
+    actorEmail: null,
+    practiceId,
+    metadata: {
+      booking_id: bookingId,
+      confirmed_date: b.requested_date,
+      confirmed_time: b.requested_time,
+    },
+  });
+
+  // Audit-Log: E-Mail-Status
   await writeAuditLog({
     action: emailSent
-      ? "booking_auto_confirmed_email_sent"
+      ? "booking_auto_confirm_email_sent"
       : emailResult.status === "send_failed"
-        ? "booking_auto_confirmed_email_failed"
+        ? "booking_auto_confirm_email_failed"
         : "booking_auto_confirmed_email_skipped",
     area: "booking",
     status: emailSent ? "success" : emailResult.status === "send_failed" ? "failed" : "success",
@@ -326,6 +358,7 @@ export async function evaluateAutoConfirm(
       confirmed_time: b.requested_time,
       email_status: emailResult.status,
       email_code: emailResult.code,
+      ...(emailResult.status === "send_failed" ? { error: emailResult.code } : {}),
     },
   });
 

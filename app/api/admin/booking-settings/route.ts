@@ -209,14 +209,14 @@ export async function GET(request: NextRequest) {
 
   // ── Default: Praxis-Einstellungen ─────────────────────────────────────────
   //
-  // Zuerst mit Booking-Spalten versuchen. Falls die noch nicht existieren
-  // (Migration 023 noch nicht gelaufen), auf Basis-SELECT + Defaults fallen.
-  // So funktioniert die Seite auch wenn die DB-Spalten noch fehlen.
+  // DB-Spalten: auto_confirm_bookings, slot_minutes, buffer_minutes
+  // API-Response-Keys (Frontend): booking_slot_minutes, booking_buffer_minutes
+  // (Mapping nötig weil DB-Spaltennamen sich von alten API-Keys unterscheiden)
   //
   const { data: full, error: fullError } = await ctx.admin
     .from("practices")
     .select(
-      "id, name, auto_confirm_bookings, booking_slot_minutes, booking_buffer_minutes",
+      "id, name, auto_confirm_bookings, slot_minutes, buffer_minutes",
     )
     .eq("id", practiceId)
     .maybeSingle();
@@ -230,11 +230,13 @@ export async function GET(request: NextRequest) {
         auto_confirm_bookings:
           (full as Record<string, unknown>).auto_confirm_bookings ??
           SETTINGS_DEFAULTS.auto_confirm_bookings,
+        // Frontend erwartet booking_slot_minutes / booking_buffer_minutes
+        // DB-Spalten heißen slot_minutes / buffer_minutes
         booking_slot_minutes:
-          (full as Record<string, unknown>).booking_slot_minutes ??
+          (full as Record<string, unknown>).slot_minutes ??
           SETTINGS_DEFAULTS.booking_slot_minutes,
         booking_buffer_minutes:
-          (full as Record<string, unknown>).booking_buffer_minutes ??
+          (full as Record<string, unknown>).buffer_minutes ??
           SETTINGS_DEFAULTS.booking_buffer_minutes,
       },
       practice_id: practiceId,
@@ -307,13 +309,15 @@ export async function PUT(request: NextRequest) {
       typeof booking_slot_minutes === "number" &&
       [15, 20, 30, 45, 60].includes(booking_slot_minutes)
     ) {
-      updates.booking_slot_minutes = booking_slot_minutes;
+      // DB-Spalte heißt slot_minutes (nicht booking_slot_minutes)
+      updates.slot_minutes = booking_slot_minutes;
     }
     if (
       typeof booking_buffer_minutes === "number" &&
       booking_buffer_minutes >= 0
     ) {
-      updates.booking_buffer_minutes = booking_buffer_minutes;
+      // DB-Spalte heißt buffer_minutes (nicht booking_buffer_minutes)
+      updates.buffer_minutes = booking_buffer_minutes;
     }
 
     const { error } = await ctx.admin

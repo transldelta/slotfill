@@ -17,7 +17,8 @@ export type BookingStatus =
   | "pending_confirmation"
   | "confirmed"
   | "declined"
-  | "cancelled";
+  | "cancelled"
+  | "archived";
 
 export interface BookingRequest {
   id: string;
@@ -31,6 +32,15 @@ export interface BookingRequest {
   privacy_accepted: boolean;
   auto_confirmed: boolean;
   internal_note: string | null;
+  // Erweiterungen (Migration 021)
+  requested_date?: string | null;
+  requested_time?: string | null;
+  confirmed_date?: string | null;
+  confirmed_time?: string | null;
+  confirmation_mode?: "manual" | "auto";
+  email_status?: string | null;
+  email_sent_at?: string | null;
+  archived_at?: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -43,6 +53,9 @@ export interface BookingSubmission {
   note?: string;
   privacy_accepted: boolean;
   tenant_id?: string;
+  // Optionale konkrete Wunsch-Slot-Angaben (Migration 021)
+  requested_date?: string;
+  requested_time?: string;
 }
 
 // ─── Sicherheits-Konfiguration ────────────────────────────────────────────
@@ -58,23 +71,34 @@ export function isAutoConfirmEnabled(): boolean {
 }
 
 /**
- * Prüft ob eine Anfrage automatisch bestätigt werden darf.
- * Alle Bedingungen MÜSSEN erfüllt sein:
- *   a) AUTO_CONFIRM_BOOKINGS=true (ENV-Variable)
- *   b) privacy_accepted=true
- *   c) keine manuelle Prüfung erforderlich
+ * Prüft ob eine Anfrage für Auto-Confirm in Frage kommt (Vorbedingungen).
+ * Die eigentliche Slot-Prüfung übernimmt lib/booking-slots.ts → evaluateAutoConfirm().
  *
- * Im aktuellen MVP: Auto-Confirm nur als Vorbereitung.
- * Slot-Verfügbarkeit und Konflikte werden noch manuell geprüft.
+ * Vorbedingungen:
+ *   a) AUTO_CONFIRM_BOOKINGS=true (ENV-Variable) ODER practice.auto_confirm_bookings
+ *   b) privacy_accepted=true
+ *   c) requested_date und requested_time vorhanden
+ *   d) patient_email vorhanden
+ *
+ * Diese Funktion prüft NUR Vorbedingungen – keine DB-Abfragen.
+ * Slot-Konflikte und Blocking prüft evaluateAutoConfirm() in lib/booking-slots.ts.
  */
 export function shouldAutoConfirm(data: {
   privacy_accepted: boolean;
+  requested_date?: string | null;
+  requested_time?: string | null;
+  patient_email?: string | null;
+  /** Optional: practice-level setting aus DB */
+  practiceAutoConfirm?: boolean;
 }): boolean {
-  if (!isAutoConfirmEnabled()) return false;
+  const globalFlag = isAutoConfirmEnabled();
+  const practiceFlag = data.practiceAutoConfirm === true;
+  if (!globalFlag && !practiceFlag) return false;
   if (!data.privacy_accepted) return false;
-  // Im MVP: Auto-Confirm ist vorbereitet aber noch nicht vollautomatisch.
-  // Admin-Prüfung bleibt empfohlen.
-  return false; // Bleibt false bis vollständige Slot-Prüfung implementiert ist
+  if (!data.requested_date?.trim()) return false;
+  if (!data.requested_time?.trim()) return false;
+  if (!data.patient_email?.trim()) return false;
+  return true;
 }
 
 // ─── Validierung ──────────────────────────────────────────────────────────
@@ -107,6 +131,7 @@ export function validateBookingSubmission(
 /**
  * Erstellt die Datenbankzeile für eine neue Buchungsanfrage.
  * Erzwingt: auto_confirmed=false, status=pending_confirmation.
+ * Optionale Felder: requested_date, requested_time (für Slot-Auswahl).
  */
 export function buildBookingRecord(
   data: BookingSubmission,
@@ -122,9 +147,13 @@ export function buildBookingRecord(
     privacy_accepted: data.privacy_accepted,
     // Status: ausstehende Bestätigung (KEINE automatische Bestätigung per Default)
     status: "pending_confirmation",
-    // Auto-Confirm immer false beim Erstellen
+    // Auto-Confirm immer false beim Erstellen (wird ggf. nach Slot-Check aktualisiert)
     auto_confirmed: false,
     internal_note: null,
+    // Optionale Wunsch-Slot-Angaben
+    requested_date: data.requested_date?.trim() || null,
+    requested_time: data.requested_time?.trim() || null,
+    confirmation_mode: "manual",
   };
 }
 
@@ -137,6 +166,7 @@ export function getBookingStatusLabel(status: BookingStatus): string {
     confirmed: "Bestätigt",
     declined: "Abgelehnt",
     cancelled: "Abgesagt",
+    archived: "Archiviert",
   };
   return labels[status];
 }
@@ -148,6 +178,7 @@ export function getBookingStatusColor(status: BookingStatus): string {
     confirmed: "text-green-600",
     declined: "text-red-600",
     cancelled: "text-slate-500",
+    archived: "text-slate-400",
   };
   return colors[status];
 }

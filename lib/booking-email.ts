@@ -46,6 +46,9 @@ export interface BookingEmailData {
   preferred_time: string;
   note: string | null;
   tenant_id?: string | null;
+  /** Konkreter bestätigter Termin (optional – wenn Admin Datum+Uhrzeit setzt) */
+  confirmed_date?: string | null;
+  confirmed_time?: string | null;
 }
 
 // ─── Konfiguration ─────────────────────────────────────────────────────────
@@ -64,6 +67,28 @@ export function isBookingEmailEnabled(): boolean {
  */
 export function getBookingReplyTo(): string {
   return process.env.BOOKING_REPLY_TO_EMAIL ?? CONTACT_EMAIL;
+}
+
+// ─── Hilfsfunktionen ─────────────────────────────────────────────────────
+
+/**
+ * Formatiert Datum + Uhrzeit lesbar auf Deutsch.
+ * Beispiel: "2026-06-10" + "14:30" → "Dienstag, 10.06.2026 um 14:30 Uhr"
+ */
+export function formatGermanDateTime(date: string, time: string): string {
+  try {
+    const d = new Date(date + "T" + time);
+    const weekday = d.toLocaleDateString("de-DE", { weekday: "long" });
+    const dateStr = d.toLocaleDateString("de-DE", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+    const timeStr = time.slice(0, 5); // HH:MM
+    return `${weekday}, ${dateStr} um ${timeStr} Uhr`;
+  } catch {
+    return `${date} ${time}`;
+  }
 }
 
 // ─── HTML-Templates ────────────────────────────────────────────────────────
@@ -101,8 +126,15 @@ function layout(innerHtml: string): string {
  */
 export function bookingConfirmationHtml(booking: BookingEmailData): string {
   const safeName = escapeHtml(booking.patient_name);
-  const safeTime = escapeHtml(booking.preferred_time);
   const safeNote = booking.note ? escapeHtml(booking.note) : null;
+
+  // Konkreten Termin bevorzugen, sonst Wunsch-Zeitraum anzeigen
+  const hasConcreteSlot = booking.confirmed_date && booking.confirmed_time;
+  const safeDisplayTime = hasConcreteSlot
+    ? escapeHtml(formatGermanDateTime(booking.confirmed_date!, booking.confirmed_time!))
+    : escapeHtml(booking.preferred_time);
+
+  const timeLabel = hasConcreteSlot ? "Ihr Termin" : "Angefragter Zeitraum";
 
   const noteRow = safeNote
     ? `<tr>
@@ -120,8 +152,8 @@ export function bookingConfirmationHtml(booking: BookingEmailData): string {
     </p>
     <table style="border-collapse:collapse;width:100%;font-size:14px;margin-bottom:20px;">
       <tr>
-        <td style="padding:6px 0;color:#64748b;font-size:13px;white-space:nowrap;padding-right:16px;">Zeitraum</td>
-        <td style="padding:6px 0;font-size:13px;font-weight:600;">${safeTime}</td>
+        <td style="padding:6px 0;color:#64748b;font-size:13px;white-space:nowrap;padding-right:16px;">${timeLabel}</td>
+        <td style="padding:6px 0;font-size:13px;font-weight:600;">${safeDisplayTime}</td>
       </tr>
       ${noteRow}
     </table>

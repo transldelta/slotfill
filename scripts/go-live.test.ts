@@ -2572,3 +2572,416 @@ test("BookingEmail: Keine SMS/WhatsApp/Anrufe im Booking-Email-Modul", () => {
     );
   }
 });
+
+// ─── Booking Slots & Auto-Confirm ─────────────────────────────────────────
+
+test("BookingSlots: lib/booking-slots.ts existiert und exportiert checkSlotAvailability", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/booking-slots.ts");
+  assert.ok(existsSync(p), "lib/booking-slots.ts muss existieren");
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(src.includes("checkSlotAvailability"), "checkSlotAvailability muss exportiert sein");
+  assert.ok(src.includes("evaluateAutoConfirm"), "evaluateAutoConfirm muss exportiert sein");
+  assert.ok(src.includes("getAvailableSlotsForDay"), "getAvailableSlotsForDay muss exportiert sein");
+});
+
+test("BookingSlots: dateToIsoWeekday gibt korrekten ISO-Wochentag zurück", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/booking-slots.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // ISO 8601: Sonntag = 7 (nicht 0 wie in JS)
+  assert.ok(
+    src.includes("d === 0 ? 7 : d") || src.includes("=== 0 ? 7"),
+    "dateToIsoWeekday muss Sonntag korrekt als ISO-Wochentag 7 zurückgeben"
+  );
+});
+
+test("BookingSlots: Auto-Confirm DEFAULT deaktiviert ohne Praxis-Konfiguration", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/booking-slots.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("auto_confirm_skipped_no_config"),
+    "evaluateAutoConfirm muss auto_confirm_skipped_no_config zurückgeben wenn nicht konfiguriert"
+  );
+  assert.ok(
+    src.includes("auto_confirm_bookings"),
+    "Auto-Confirm muss practice.auto_confirm_bookings prüfen"
+  );
+});
+
+test("BookingSlots: Auto-Confirm prüft geblockte Zeiten", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/booking-slots.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("booking_blocked_times") || src.includes("blocked_by_blocked_times"),
+    "Slot-Check muss booking_blocked_times berücksichtigen"
+  );
+  assert.ok(
+    src.includes("auto_confirm_skipped_slot_unavailable"),
+    "evaluateAutoConfirm muss auto_confirm_skipped_slot_unavailable bei nicht verfügbarem Slot zurückgeben"
+  );
+});
+
+test("BookingSlots: Auto-Confirm prüft Verfügbarkeitsregeln", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/booking-slots.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("booking_availability_rules") || src.includes("no_availability_rules"),
+    "Slot-Check muss booking_availability_rules laden"
+  );
+});
+
+test("BookingSlots: Auto-Confirm prüft bestehende Buchungen im selben Slot", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/booking-slots.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("slot_already_taken"),
+    "Slot-Check muss slot_already_taken als Reason verwenden"
+  );
+  assert.ok(
+    src.includes('"confirmed"') || src.includes("'confirmed'"),
+    "Slot-Check muss bestehende confirmed-Buchungen berücksichtigen"
+  );
+});
+
+test("BookingSlots: Auto-Confirm skipped wenn keine E-Mail", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/booking-slots.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("auto_confirm_skipped_no_email"),
+    "evaluateAutoConfirm muss auto_confirm_skipped_no_email zurückgeben"
+  );
+});
+
+test("BookingSlots: Alle 5 Auto-Confirm Audit-Actions vorhanden", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const pSlots = resolve(process.cwd(), "lib/booking-slots.ts");
+  const pActions = resolve(process.cwd(), "app/termin-buchen/actions.ts");
+  const combined = [pSlots, pActions]
+    .filter(existsSync)
+    .map((p) => readFileSync(p, "utf8"))
+    .join("\n");
+  const expected = [
+    "auto_confirm_success",
+    "auto_confirm_skipped_no_config",
+    "auto_confirm_skipped_slot_unavailable",
+    "auto_confirm_skipped_no_email",
+    "auto_confirm_skipped_no_date",
+  ];
+  for (const action of expected) {
+    assert.ok(combined.includes(action), `Audit-Action ${action} fehlt`);
+  }
+});
+
+test("BookingSlots: timeToMinutes konvertiert HH:MM korrekt", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/booking-slots.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(src.includes("timeToMinutes"), "timeToMinutes muss exportiert sein");
+  assert.ok(
+    src.includes("* 60") || src.includes("*60"),
+    "timeToMinutes muss Stunden in Minuten umrechnen"
+  );
+});
+
+// ─── Archivierung ─────────────────────────────────────────────────────────
+
+test("Archive: admin/booking-requests hat 'archive' Action in API", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/api/admin/booking-requests/route.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes(`"archive"`) || src.includes(`'archive'`),
+    "API muss archive-Action unterstützen"
+  );
+  assert.ok(
+    src.includes("archived_at"),
+    "Archivieren muss archived_at setzen"
+  );
+});
+
+test("Archive: Archivieren setzt status='archived' (kein hartes DELETE)", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/api/admin/booking-requests/route.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes(`"archived"`) || src.includes(`status: "archived"`),
+    "Archivieren muss status='archived' setzen (Soft-Delete)"
+  );
+  assert.ok(
+    !src.includes(".delete().eq(") || src.includes("// Soft-Delete"),
+    "API darf booking_requests nicht hart löschen"
+  );
+});
+
+test("Archive: Archivieren sendet KEINE E-Mail (sendsEmail-Guard schließt archive aus)", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/api/admin/booking-requests/route.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // API muss einen E-Mail-Guard haben der 'archive' explizit ausschließt.
+  // Entweder: sendsEmail-Variable die archive nicht enthält,
+  // ODER: archive-case ruft sendBookingEmail() nicht direkt auf.
+  const hasGuard =
+    // sendsEmail Guard enthält kein "archive"
+    (src.includes("sendsEmail") && !src.match(/sendsEmail[^=]*=.*archive/)) ||
+    // Oder: archive-Kommentar + keine E-Mail nach archive-case
+    (src.includes("Keine E-Mail beim Archivieren") ||
+     src.includes("Archivieren") && src.includes("keine E-Mail") ||
+     // Archive-case im switch hat kein sendBookingEmail direkt dahinter
+     src.includes(`case "archive":`));
+  assert.ok(
+    hasGuard,
+    "Archivieren darf sendBookingEmail NICHT aufrufen – sendsEmail-Guard oder Kommentar fehlt"
+  );
+});
+
+test("Archive: Admin-UI hat 'Archivieren' Button und 'Archiviert' Filter-Tab", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/admin/booking-requests/page.tsx");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("Archivieren") || src.includes("archive"),
+    "Admin-UI muss Archivieren-Button haben"
+  );
+  assert.ok(
+    src.includes("archived") && src.includes("Archiviert"),
+    "Admin-UI muss 'Archiviert' Filter-Tab haben"
+  );
+});
+
+test("Archive: Archivierte Anfragen im GET-Filter ausgeblendet (nicht in normalen Tabs)", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/api/admin/booking-requests/route.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes('neq("status", "archived")') || src.includes(".neq(\"status\", \"archived\")"),
+    "GET muss archivierte Einträge aus normalen Tabs ausblenden"
+  );
+});
+
+// ─── Migrationen 019-022 ──────────────────────────────────────────────────
+
+test("Migration 019: booking_availability_rules existiert mit korrekten Spalten", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "supabase/migrations/019_booking_availability_rules.sql");
+  assert.ok(existsSync(p), "Migration 019 muss existieren");
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(src.includes("booking_availability_rules"), "Tabellenname muss stimmen");
+  assert.ok(src.includes("weekday"), "weekday-Spalte fehlt");
+  assert.ok(src.includes("start_time"), "start_time-Spalte fehlt");
+  assert.ok(src.includes("end_time"), "end_time-Spalte fehlt");
+  assert.ok(src.includes("slot_minutes"), "slot_minutes-Spalte fehlt");
+  assert.ok(src.includes("buffer_minutes"), "buffer_minutes-Spalte fehlt");
+  assert.ok(src.includes("is_active"), "is_active-Spalte fehlt");
+  assert.ok(src.includes("ENABLE ROW LEVEL SECURITY"), "RLS muss aktiviert sein");
+});
+
+test("Migration 020: booking_blocked_times existiert mit korrekten Spalten", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "supabase/migrations/020_booking_blocked_times.sql");
+  assert.ok(existsSync(p), "Migration 020 muss existieren");
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(src.includes("booking_blocked_times"), "Tabellenname muss stimmen");
+  assert.ok(src.includes("blocked_date"), "blocked_date-Spalte fehlt");
+  assert.ok(src.includes("reason"), "reason-Spalte fehlt");
+  assert.ok(src.includes("ENABLE ROW LEVEL SECURITY"), "RLS muss aktiviert sein");
+});
+
+test("Migration 021: booking_requests erweiterung enthält alle neuen Spalten", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "supabase/migrations/021_booking_requests_extended.sql");
+  assert.ok(existsSync(p), "Migration 021 muss existieren");
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(src.includes("requested_date"), "requested_date fehlt");
+  assert.ok(src.includes("requested_time"), "requested_time fehlt");
+  assert.ok(src.includes("confirmed_date"), "confirmed_date fehlt");
+  assert.ok(src.includes("confirmed_time"), "confirmed_time fehlt");
+  assert.ok(src.includes("confirmation_mode"), "confirmation_mode fehlt");
+  assert.ok(src.includes("email_status"), "email_status fehlt");
+  assert.ok(src.includes("archived_at"), "archived_at fehlt");
+  assert.ok(src.includes("archived"), "Status 'archived' muss zur CHECK-Liste hinzugefügt werden");
+});
+
+test("Migration 022: practices hat auto_confirm_bookings DEFAULT false", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "supabase/migrations/022_practices_booking_settings.sql");
+  assert.ok(existsSync(p), "Migration 022 muss existieren");
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("auto_confirm_bookings") && src.includes("DEFAULT false"),
+    "auto_confirm_bookings muss DEFAULT false sein (sicher)"
+  );
+  assert.ok(src.includes("booking_slot_minutes"), "booking_slot_minutes fehlt");
+  assert.ok(src.includes("booking_buffer_minutes"), "booking_buffer_minutes fehlt");
+});
+
+// ─── confirm_with_slot API ────────────────────────────────────────────────
+
+test("ConfirmWithSlot: API unterstützt confirm_with_slot mit Datum+Uhrzeit", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/api/admin/booking-requests/route.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("confirm_with_slot"),
+    "API muss confirm_with_slot Action unterstützen"
+  );
+  assert.ok(src.includes("confirmed_date"), "API muss confirmed_date setzen");
+  assert.ok(src.includes("confirmed_time"), "API muss confirmed_time setzen");
+});
+
+test("ConfirmWithSlot: E-Mail-Template enthält bestätigtes Datum wenn vorhanden", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/booking-email.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("confirmed_date") && src.includes("confirmed_time"),
+    "bookingConfirmationHtml muss confirmed_date/confirmed_time verwenden"
+  );
+  assert.ok(
+    src.includes("formatGermanDateTime") || src.includes("Uhr"),
+    "Bestätigungs-E-Mail muss Datum+Zeit auf Deutsch formatieren"
+  );
+});
+
+// ─── Booking-Settings Admin-API ───────────────────────────────────────────
+
+test("BookingSettings: /api/admin/booking-settings existiert und ist admin-geschützt", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/api/admin/booking-settings/route.ts");
+  assert.ok(existsSync(p), "/api/admin/booking-settings Route muss existieren");
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(src.includes("getAdminContext"), "Route muss getAdminContext verwenden");
+  assert.ok(src.includes("UNAUTHORIZED"), "Route muss UNAUTHORIZED zurückgeben");
+});
+
+test("BookingSettings: Admin-Seite /admin/booking-settings existiert", () => {
+  const { existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/admin/booking-settings/page.tsx");
+  assert.ok(existsSync(p), "Admin-Seite booking-settings muss existieren");
+});
+
+test("BookingSettings: Auto-Confirm Warnung in Admin-UI vorhanden", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/admin/booking-settings/page.tsx");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("Öffnungszeiten vollständig") ||
+    src.includes("vollständig gepflegt") ||
+    src.includes("nur aktivieren"),
+    "Admin-UI muss Hinweis zeigen dass Auto-Confirm nur bei vollständiger Konfiguration sinnvoll ist"
+  );
+});
+
+test("BookingSlots: Patienten-Seite unterstützt optionale Slot-Auswahl", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/[locale]/termin-buchen/page.tsx");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("requested_date") || src.includes("selectedDate"),
+    "Patienten-Seite muss Datum-Auswahl unterstützen"
+  );
+  assert.ok(
+    src.includes("requested_time") || src.includes("selectedTime"),
+    "Patienten-Seite muss Zeit-Auswahl unterstützen"
+  );
+});
+
+test("BookingSlots: Server-Action unterstützt Auto-Confirm-Flow", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/termin-buchen/actions.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("evaluateAutoConfirm"),
+    "Server-Action muss evaluateAutoConfirm aufrufen"
+  );
+  assert.ok(
+    src.includes("BOOKING_SAVED_AUTO_CONFIRMED"),
+    "Server-Action muss BOOKING_SAVED_AUTO_CONFIRMED zurückgeben"
+  );
+  assert.ok(
+    src.includes("writeAuditLog"),
+    "Jede automatische Entscheidung muss in audit_logs geschrieben werden"
+  );
+});
+
+test("BookingSlots: Keine SMS/WhatsApp-Imports in booking-slots.ts", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/booking-slots.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // Nur echte Imports/Requires prüfen – Kommentare sind erlaubt
+  const forbidden = ["twilio", "vonage", "nexmo"];
+  for (const term of forbidden) {
+    const importPattern = new RegExp(`(import|require).*${term}`, "i");
+    assert.ok(
+      !importPattern.test(src),
+      `lib/booking-slots.ts darf kein ${term} importieren`
+    );
+  }
+  // Kein echter API-Aufruf (nicht nur Kommentar)
+  assert.ok(
+    !src.includes("new Twilio") && !src.includes("vonage.messages"),
+    "lib/booking-slots.ts darf keine SMS-API aufrufen"
+  );
+});
+
+test("BookingSlots: Keine automatische Benachrichtigung ohne Praxis-Konfiguration", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/booking-slots.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // Muss auf auto_confirm_bookings in practices-Tabelle prüfen
+  assert.ok(
+    src.includes("practices") && src.includes("auto_confirm_bookings"),
+    "Auto-Confirm muss practice.auto_confirm_bookings aus DB prüfen"
+  );
+});

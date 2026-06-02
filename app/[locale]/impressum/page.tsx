@@ -18,5 +18,5 @@ export default async function LocaleImpressumPage({
 }) {
   const { locale } = await params;
   const safeLocale = locales.includes(locale as Locale) ? locale : "de";
-  return <ImpressumContent backHref={`/${safeLocale}`} />;
+  return <ImpressumContent backHref={`/${safeLocale}`} locale={safeLocale} />;
 }

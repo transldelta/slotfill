@@ -1,34 +1,104 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { CalendarClock, CheckCircle2 } from "lucide-react";
+import { CalendarClock, CheckCircle2, Info } from "lucide-react";
 import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { SlotFillLogo } from "@/components/ui/SlotFillLogo";
 import { submitBookingRequest } from "@/app/termin-buchen/actions";
 
+// ─── Typen ─────────────────────────────────────────────────────────────────
+
+interface BookingSlot {
+  date: string;  // "YYYY-MM-DD"
+  time: string;  // "HH:MM"
+  label: string; // "Mo. 15.01.2024 · 10:00 Uhr"
+}
+
+// Dieser Wert markiert die Platzhalter-Option – er darf nie abgesendet werden
+const PLACEHOLDER_SLOT = "__placeholder__";
+
+// ─── Seite ─────────────────────────────────────────────────────────────────
+
 export default function TerminBuchenPage() {
   const params = useParams();
   const locale = (params.locale as string) ?? "de";
 
+  // Form-State
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Slot-Lade-State
+  const [slotsLoading, setSlotsLoading] = useState(true);
+  const [slots, setSlots] = useState<BookingSlot[]>([]);
+  const [hasRules, setHasRules] = useState(false);
+  const [slotsMessage, setSlotsMessage] = useState<string | null>(null);
+
+  // Ausgewählter Slot
+  const [selectedSlotKey, setSelectedSlotKey] = useState(PLACEHOLDER_SLOT);
+
+  // Slots beim Mount laden
+  useEffect(() => {
+    async function loadSlots() {
+      setSlotsLoading(true);
+      try {
+        const res = await fetch("/api/booking-slots");
+        if (res.ok) {
+          const data = await res.json();
+          setSlots(data.slots ?? []);
+          setHasRules(data.has_rules ?? false);
+          setSlotsMessage(data.message ?? null);
+        }
+      } catch {
+        // Netzwerkfehler: Text-Eingabe als Fallback
+      } finally {
+        setSlotsLoading(false);
+      }
+    }
+    loadSlots();
+  }, []);
+
+  // Aktuell gewählter Slot (null wenn Platzhalter oder kein Slot)
+  const selectedSlot: BookingSlot | null =
+    selectedSlotKey === PLACEHOLDER_SLOT
+      ? null
+      : (slots.find((s) => `${s.date}T${s.time}` === selectedSlotKey) ?? null);
+
+  // Zeige Slot-Selector wenn Regeln existieren und Slots vorhanden sind
+  const showSlotSelector = hasRules && slots.length > 0;
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setLoading(true);
     setError(null);
 
     const fd = new FormData(e.currentTarget);
+
+    // Slot-Validierung (Client-seitig)
+    if (showSlotSelector) {
+      if (!selectedSlot) {
+        setError("Bitte wählen Sie einen freien Zeitslot aus.");
+        return;
+      }
+    }
+
+    // preferred_time darf kein Platzhalter sein
+    const pt = (fd.get("preferred_time") as string | null)?.trim() ?? "";
+    if (!pt || pt.toLowerCase().includes("einen freien slot auswählen")) {
+      setError(
+        "Bitte wählen Sie einen Zeitslot aus oder geben Sie einen Wunschzeitraum an.",
+      );
+      return;
+    }
+
     const privacyAccepted = fd.get("privacy_accepted") === "true";
     if (!privacyAccepted) {
-      setLoading(false);
       setError("Bitte akzeptieren Sie den Datenschutz- und Buchungshinweis.");
       return;
     }
 
+    setLoading(true);
     const result = await submitBookingRequest(fd);
     setLoading(false);
 
@@ -37,7 +107,7 @@ export default function TerminBuchenPage() {
     } else if (result.code === "PRIVACY_NOT_ACCEPTED") {
       setError("Datenschutz- und Buchungshinweis muss akzeptiert werden.");
     } else if (result.code === "VALIDATION_ERROR") {
-      setError(result.message);
+      setError(result.message ?? "Ungültige Eingabe.");
     } else {
       toast.error("Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.");
     }
@@ -46,8 +116,17 @@ export default function TerminBuchenPage() {
   // ── Erfolgs-Anzeige ──────────────────────────────────────────────────
   if (done) {
     return (
-      <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--color-bg)" }}>
-        <header className="border-b px-4 py-3" style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}>
+      <div
+        className="min-h-screen flex flex-col"
+        style={{ backgroundColor: "var(--color-bg)" }}
+      >
+        <header
+          className="border-b px-4 py-3"
+          style={{
+            borderColor: "var(--color-border)",
+            backgroundColor: "var(--color-surface)",
+          }}
+        >
           <SlotFillLogo href={`/${locale}`} size={30} />
         </header>
         <main className="mx-auto max-w-lg flex-1 px-4 py-16 text-center">
@@ -59,19 +138,23 @@ export default function TerminBuchenPage() {
             Anfrage übermittelt!
           </h1>
           <p className="mt-3 text-slate-600 dark:text-slate-400">
-            Ihre Anfrage wurde übermittelt. Die Praxis bestätigt den Termin manuell.
-            Sie erhalten eine Rückmeldung sobald Ihre Anfrage geprüft wurde.
+            Ihre Anfrage wurde übermittelt. Die Praxis bestätigt den Termin
+            manuell. Sie erhalten eine Rückmeldung sobald Ihre Anfrage geprüft
+            wurde.
           </p>
           <div
             className="mt-6 rounded-xl border p-4 text-sm text-left"
-            style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
+            style={{
+              borderColor: "var(--color-border)",
+              backgroundColor: "var(--color-surface)",
+            }}
           >
             <p className="font-medium text-slate-700 dark:text-slate-300">
               Wichtiger Hinweis:
             </p>
             <p className="mt-1 text-slate-600 dark:text-slate-400">
-              Ihre Anfrage ist noch keine verbindliche Terminbestätigung.
-              Die Praxis prüft Verfügbarkeit und Eignung und meldet sich bei Ihnen.
+              Ihre Anfrage ist noch keine verbindliche Terminbestätigung. Die
+              Praxis prüft Verfügbarkeit und Eignung und meldet sich bei Ihnen.
             </p>
           </div>
           <Link
@@ -87,8 +170,17 @@ export default function TerminBuchenPage() {
 
   // ── Formular ─────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--color-bg)" }}>
-      <header className="border-b px-4 py-3" style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}>
+    <div
+      className="min-h-screen flex flex-col"
+      style={{ backgroundColor: "var(--color-bg)" }}
+    >
+      <header
+        className="border-b px-4 py-3"
+        style={{
+          borderColor: "var(--color-border)",
+          backgroundColor: "var(--color-surface)",
+        }}
+      >
         <SlotFillLogo href={`/${locale}`} size={30} />
       </header>
 
@@ -115,10 +207,13 @@ export default function TerminBuchenPage() {
           </div>
         </div>
 
-        {/* Wichtiger Hinweis-Banner */}
+        {/* Hinweis-Banner */}
         <div
           className="mt-6 rounded-xl border p-4 text-sm"
-          style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
+          style={{
+            borderColor: "var(--color-border)",
+            backgroundColor: "var(--color-surface)",
+          }}
         >
           <p className="font-medium text-slate-700 dark:text-slate-300">
             🗓 Wie funktioniert es?
@@ -206,28 +301,102 @@ export default function TerminBuchenPage() {
             />
           </div>
 
-          {/* Gewünschter Zeitraum */}
+          {/* ── Zeitfenster-Auswahl (oder Freitext-Fallback) ─────────────── */}
           <div>
-            <label
-              htmlFor="preferred_time"
-              className="block text-sm font-medium text-slate-700 dark:text-slate-300"
-            >
-              Gewünschter Zeitraum <span className="text-red-500">*</span>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+              {showSlotSelector ? (
+                <>
+                  Zeitfenster auswählen <span className="text-red-500">*</span>
+                </>
+              ) : (
+                <>
+                  Gewünschter Zeitraum <span className="text-red-500">*</span>
+                </>
+              )}
             </label>
-            <input
-              id="preferred_time"
-              name="preferred_time"
-              type="text"
-              required
-              maxLength={200}
-              placeholder="z. B. Mo–Fr morgens, oder: KW 25 nachmittags"
-              className="mt-1 w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2"
-              style={{
-                borderColor: "var(--color-border)",
-                backgroundColor: "var(--color-surface)",
-                color: "var(--color-text)",
-              }}
-            />
+
+            {slotsLoading ? (
+              /* Lade-Indikator */
+              <div className="mt-1 flex items-center gap-2 rounded-lg border px-3 py-2 text-sm text-slate-400"
+                style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}>
+                <span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-slate-300 border-t-slate-500" />
+                Verfügbare Zeitfenster werden geladen…
+              </div>
+            ) : showSlotSelector ? (
+              /* Slot-Selector */
+              <>
+                <select
+                  data-testid="slot-selector"
+                  value={selectedSlotKey}
+                  onChange={(e) => setSelectedSlotKey(e.target.value)}
+                  className="mt-1 w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2"
+                  style={{
+                    borderColor: "var(--color-border)",
+                    backgroundColor: "var(--color-surface)",
+                    color: selectedSlotKey === PLACEHOLDER_SLOT
+                      ? "var(--color-text-muted, #94a3b8)"
+                      : "var(--color-text)",
+                  }}
+                  aria-label="Zeitfenster auswählen"
+                >
+                  <option value={PLACEHOLDER_SLOT} disabled>
+                    — Bitte einen freien Slot auswählen —
+                  </option>
+                  {slots.map((slot) => (
+                    <option
+                      key={`${slot.date}T${slot.time}`}
+                      value={`${slot.date}T${slot.time}`}
+                    >
+                      {slot.label}
+                    </option>
+                  ))}
+                </select>
+
+                {/* Hidden inputs mit Slot-Daten für Server Action */}
+                <input
+                  type="hidden"
+                  name="preferred_time"
+                  value={selectedSlot?.label ?? ""}
+                />
+                <input
+                  type="hidden"
+                  name="requested_date"
+                  value={selectedSlot?.date ?? ""}
+                />
+                <input
+                  type="hidden"
+                  name="requested_time"
+                  value={selectedSlot?.time ?? ""}
+                />
+              </>
+            ) : (
+              /* Freitext-Fallback wenn keine Slots konfiguriert */
+              <>
+                {slotsMessage && (
+                  <div className="mt-1 flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-700 dark:border-amber-900/30 dark:bg-amber-900/10 dark:text-amber-400">
+                    <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                    <span>{slotsMessage}</span>
+                  </div>
+                )}
+                <input
+                  id="preferred_time"
+                  name="preferred_time"
+                  type="text"
+                  required
+                  maxLength={200}
+                  placeholder="z. B. Mo–Fr morgens, oder: KW 25 nachmittags"
+                  className="mt-1 w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2"
+                  style={{
+                    borderColor: "var(--color-border)",
+                    backgroundColor: "var(--color-surface)",
+                    color: "var(--color-text)",
+                  }}
+                />
+                {/* Keine Slot-Daten → leer */}
+                <input type="hidden" name="requested_date" value="" />
+                <input type="hidden" name="requested_time" value="" />
+              </>
+            )}
           </div>
 
           {/* Anliegen */}
@@ -254,7 +423,13 @@ export default function TerminBuchenPage() {
           </div>
 
           {/* Datenschutz / Buchungshinweis (Pflicht) */}
-          <div className="flex items-start gap-3 rounded-xl border p-4" style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}>
+          <div
+            className="flex items-start gap-3 rounded-xl border p-4"
+            style={{
+              borderColor: "var(--color-border)",
+              backgroundColor: "var(--color-surface)",
+            }}
+          >
             <input
               id="privacy_accepted"
               name="privacy_accepted"
@@ -277,8 +452,8 @@ export default function TerminBuchenPage() {
                 Datenschutzhinweis
               </Link>{" "}
               gelesen und bin damit einverstanden, dass meine Daten zur
-              Bearbeitung der Terminanfrage verarbeitet werden.
-              Meine Anfrage ist noch keine verbindliche Terminbestätigung.{" "}
+              Bearbeitung der Terminanfrage verarbeitet werden. Meine Anfrage
+              ist noch keine verbindliche Terminbestätigung.{" "}
               <span className="text-red-500">*</span>
             </label>
           </div>
@@ -289,15 +464,15 @@ export default function TerminBuchenPage() {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || slotsLoading || (showSlotSelector && !selectedSlot)}
             className="btn-brand w-full disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? "Wird gesendet…" : "Anfrage absenden"}
           </button>
 
-          <p className="text-xs text-slate-500 dark:text-slate-400 text-center">
-            Keine automatische Bestätigung. Die Praxis prüft Ihre Anfrage manuell
-            und meldet sich bei Ihnen.
+          <p className="text-center text-xs text-slate-500 dark:text-slate-400">
+            Keine automatische Bestätigung. Die Praxis prüft Ihre Anfrage
+            manuell und meldet sich bei Ihnen.
           </p>
         </form>
       </main>

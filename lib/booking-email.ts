@@ -46,6 +46,12 @@ export interface BookingEmailData {
   preferred_time: string;
   note: string | null;
   tenant_id?: string | null;
+  // Bestätigter Termin (hat Vorrang vor preferred_time)
+  confirmed_date?: string | null; // "YYYY-MM-DD"
+  confirmed_time?: string | null; // "HH:MM"
+  // Angefragter Slot (Fallback wenn confirmed nicht gesetzt)
+  requested_date?: string | null;
+  requested_time?: string | null;
 }
 
 // ─── Konfiguration ─────────────────────────────────────────────────────────
@@ -94,14 +100,30 @@ function layout(innerHtml: string): string {
 }
 
 /**
+ * Formatiert ein Datum (YYYY-MM-DD) auf Deutsch: "15.01.2024".
+ * Rein serverseitig – kein Import aus lib/booking-slots nötig.
+ */
+function formatDateDE(date: string): string {
+  const d = new Date(date + "T00:00:00");
+  const day = String(d.getDate()).padStart(2, "0");
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const year = d.getFullYear();
+  return `${day}.${month}.${year}`;
+}
+
+/**
  * HTML-Template: Terminbestätigung
  *
  * Absender: SlotFill Team (kein persönlicher Name).
  * Patient entschied sich für eine Anfrage – Admin hat manuell bestätigt.
+ *
+ * Reihenfolge:
+ *   1. confirmed_date + confirmed_time  → "Ihr Termin: 15.01.2024 · 10:00 Uhr"
+ *   2. requested_date + requested_time  → "Angefragter Slot: …"
+ *   3. preferred_time (Freitext)        → "Vereinbarter Zeitraum: …"
  */
 export function bookingConfirmationHtml(booking: BookingEmailData): string {
   const safeName = escapeHtml(booking.patient_name);
-  const safeTime = escapeHtml(booking.preferred_time);
   const safeNote = booking.note ? escapeHtml(booking.note) : null;
 
   const noteRow = safeNote
@@ -111,6 +133,34 @@ export function bookingConfirmationHtml(booking: BookingEmailData): string {
        </tr>`
     : "";
 
+  // Datum/Uhrzeit bevorzugen (confirmed → requested → preferred_time)
+  let timeRow: string;
+  if (booking.confirmed_date && booking.confirmed_time) {
+    const safeDate = escapeHtml(formatDateDE(booking.confirmed_date));
+    const safeTime = escapeHtml(booking.confirmed_time);
+    timeRow = `<tr>
+      <td style="padding:6px 0;color:#64748b;font-size:13px;white-space:nowrap;padding-right:16px;">Ihr Termin</td>
+      <td style="padding:6px 0;font-size:14px;font-weight:700;color:#166534;">
+        📅 ${safeDate} &middot; ${safeTime} Uhr
+      </td>
+    </tr>`;
+  } else if (booking.requested_date && booking.requested_time) {
+    const safeDate = escapeHtml(formatDateDE(booking.requested_date));
+    const safeTime = escapeHtml(booking.requested_time);
+    timeRow = `<tr>
+      <td style="padding:6px 0;color:#64748b;font-size:13px;white-space:nowrap;padding-right:16px;">Ihr Termin</td>
+      <td style="padding:6px 0;font-size:14px;font-weight:700;color:#166534;">
+        📅 ${safeDate} &middot; ${safeTime} Uhr
+      </td>
+    </tr>`;
+  } else {
+    const safeTime = escapeHtml(booking.preferred_time);
+    timeRow = `<tr>
+      <td style="padding:6px 0;color:#64748b;font-size:13px;white-space:nowrap;padding-right:16px;">Zeitraum</td>
+      <td style="padding:6px 0;font-size:13px;font-weight:600;">${safeTime}</td>
+    </tr>`;
+  }
+
   return layout(`
     <p style="font-size:15px;line-height:1.6;margin:0 0 16px;">
       Guten Tag ${safeName},
@@ -119,10 +169,7 @@ export function bookingConfirmationHtml(booking: BookingEmailData): string {
       Ihre Terminanfrage wurde von der Praxis <strong>best&auml;tigt</strong>.
     </p>
     <table style="border-collapse:collapse;width:100%;font-size:14px;margin-bottom:20px;">
-      <tr>
-        <td style="padding:6px 0;color:#64748b;font-size:13px;white-space:nowrap;padding-right:16px;">Zeitraum</td>
-        <td style="padding:6px 0;font-size:13px;font-weight:600;">${safeTime}</td>
-      </tr>
+      ${timeRow}
       ${noteRow}
     </table>
     <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:14px;font-size:13px;color:#166534;margin-bottom:20px;">

@@ -10,6 +10,7 @@ import {
   Briefcase,
   Bug,
   Building2,
+  CalendarClock,
   LayoutDashboard,
   LineChart,
   Mail,
@@ -46,6 +47,11 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     { href: "/admin/marketing", label: t("marketing.title"), icon: LineChart },
     { href: "/admin/go-live", label: t("goLive.nav"), icon: Rocket },
     { href: "/admin/communication", label: "Kommunikation", icon: Radio },
+    {
+      href: "/admin/booking-settings",
+      label: "Buchungs-Einstellungen",
+      icon: CalendarClock,
+    },
   ];
 
   function isActive(href: string) {

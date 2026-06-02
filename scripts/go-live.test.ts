@@ -2572,3 +2572,60 @@ test("BookingEmail: Keine SMS/WhatsApp/Anrufe im Booking-Email-Modul", () => {
     );
   }
 });
+
+// ─── Fix: /admin/booking-settings Route & Sidebar ────────────────────────────
+
+test("BookingSettings: /admin/booking-settings page.tsx existiert auf main-kompatiblem Pfad", () => {
+  const { existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/admin/booking-settings/page.tsx");
+  assert.ok(
+    existsSync(p),
+    "/admin/booking-settings: page.tsx muss unter app/admin/booking-settings/ liegen",
+  );
+});
+
+test("BookingSettings: /api/admin/booking-settings/route.ts existiert und ist admin-geschützt", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/api/admin/booking-settings/route.ts");
+  assert.ok(existsSync(p), "/api/admin/booking-settings Route muss existieren");
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(src.includes("getAdminContext"), "Route muss getAdminContext verwenden");
+  assert.ok(src.includes("UNAUTHORIZED"), "Route muss UNAUTHORIZED zurückgeben");
+  assert.ok(src.includes("NO_PRACTICE"), "Route muss NO_PRACTICE zurückgeben wenn keine Praxis");
+});
+
+test("BookingSettings: Admin-Sidebar enthält Link zu /admin/booking-settings", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "components/admin-shell.tsx");
+  assert.ok(existsSync(p), "admin-shell.tsx muss existieren");
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("/admin/booking-settings"),
+    "Admin-Sidebar muss Link zu /admin/booking-settings enthalten",
+  );
+  assert.ok(
+    src.includes("Buchungs-Einstellungen"),
+    "Admin-Sidebar muss Label 'Buchungs-Einstellungen' enthalten",
+  );
+});
+
+test("BookingSettings: Seite zeigt Fehlermeldung wenn keine Praxis vorhanden", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/admin/booking-settings/page.tsx");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("Keine Praxis gefunden") ||
+      src.includes("keine Praxis") ||
+      src.includes("NO_PRACTICE"),
+    "Seite muss Hinweis zeigen wenn keine Praxis gefunden wird",
+  );
+  assert.ok(
+    src.includes("noPractice") || src.includes("no-practice"),
+    "Seite muss noPractice-State oder data-testid='no-practice-message' behandeln",
+  );
+});

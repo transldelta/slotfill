@@ -5,6 +5,7 @@ import {
   AlertTriangle,
   Building2,
   CalendarOff,
+  ChevronDown,
   Clock,
   PlusCircle,
   Trash2,
@@ -17,6 +18,13 @@ type PracticeSettings = {
   auto_confirm_bookings: boolean;
   booking_slot_minutes: number;
   booking_buffer_minutes: number;
+};
+
+type PracticeOption = {
+  id: string;
+  name: string;
+  email: string | null;
+  status: string | null;
 };
 
 type AvailabilityRule = {
@@ -52,6 +60,11 @@ const WEEKDAY_LABELS: Record<number, string> = {
 const SLOT_OPTIONS = [15, 20, 30, 45, 60];
 
 export default function BookingSettingsPage() {
+  const [practices, setPractices] = useState<PracticeOption[]>([]);
+  const [selectedPracticeId, setSelectedPracticeId] = useState<string | null>(
+    null,
+  );
+
   const [settings, setSettings] = useState<PracticeSettings | null>(null);
   const [noPractice, setNoPractice] = useState(false);
   const [rules, setRules] = useState<AvailabilityRule[]>([]);
@@ -59,7 +72,6 @@ export default function BookingSettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  // Neues Regel-Formular
   const [newRule, setNewRule] = useState({
     weekday: 1,
     start_time: "08:00",
@@ -69,7 +81,6 @@ export default function BookingSettingsPage() {
     is_active: true,
   });
 
-  // Neue gesperrte Zeit
   const [newBlocked, setNewBlocked] = useState({
     blocked_date: "",
     start_time: "",
@@ -77,45 +88,92 @@ export default function BookingSettingsPage() {
     reason: "",
   });
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    setNoPractice(false);
-
-    const settRes = await fetch("/api/admin/booking-settings?resource=settings");
-
-    if (settRes.status === 404) {
-      // Keine Praxis gefunden – sauber anzeigen, kein Crash
-      setNoPractice(true);
-      setLoading(false);
-      return;
+  // ── Alle Praxen laden (für Selector) ──────────────────────────────────────
+  const loadPractices = useCallback(async () => {
+    const res = await fetch(
+      "/api/admin/booking-settings?resource=practices_list",
+    );
+    if (!res.ok) return;
+    const d = await res.json();
+    const list: PracticeOption[] = d.practices ?? [];
+    setPractices(list);
+    // Wenn noch keine Auswahl: aktive Praxis bevorzugen, sonst erste
+    if (!selectedPracticeId && list.length > 0) {
+      const active = list.find((p) => p.status === "active");
+      setSelectedPracticeId((active ?? list[0]).id);
     }
+  }, [selectedPracticeId]);
 
-    if (settRes.ok) {
+  // ── Einstellungen einer konkreten Praxis laden ─────────────────────────────
+  const loadSettings = useCallback(
+    async (practiceId: string) => {
+      setLoading(true);
+      setNoPractice(false);
+      setSettings(null);
+      setRules([]);
+      setBlocked([]);
+
+      const pid = `practice_id=${encodeURIComponent(practiceId)}`;
+
+      const settRes = await fetch(
+        `/api/admin/booking-settings?resource=settings&${pid}`,
+      );
+
+      if (settRes.status === 404) {
+        setNoPractice(true);
+        setLoading(false);
+        return;
+      }
+      if (!settRes.ok) {
+        // DB-Fehler oder unerwarteter Fehler – "keine Praxis" anzeigen
+        setNoPractice(true);
+        setLoading(false);
+        return;
+      }
+
       const d = await settRes.json();
-      setSettings(d.settings);
-    }
+      setSettings(d.settings ?? null);
 
-    // Regeln und gesperrte Zeiten nur laden wenn Praxis existiert
-    const [rulesRes, blockedRes] = await Promise.all([
-      fetch("/api/admin/booking-settings?resource=availability_rules"),
-      fetch("/api/admin/booking-settings?resource=blocked_times"),
-    ]);
+      const [rulesRes, blockedRes] = await Promise.all([
+        fetch(
+          `/api/admin/booking-settings?resource=availability_rules&${pid}`,
+        ),
+        fetch(`/api/admin/booking-settings?resource=blocked_times&${pid}`),
+      ]);
 
-    if (rulesRes.ok) {
-      const d = await rulesRes.json();
-      setRules(d.rules ?? []);
-    }
-    if (blockedRes.ok) {
-      const d = await blockedRes.json();
-      setBlocked(d.blocked ?? []);
-    }
+      if (rulesRes.ok) {
+        const r = await rulesRes.json();
+        setRules(r.rules ?? []);
+      }
+      if (blockedRes.ok) {
+        const b = await blockedRes.json();
+        setBlocked(b.blocked ?? []);
+      }
 
-    setLoading(false);
-  }, []);
+      setLoading(false);
+    },
+    [],
+  );
 
+  // ── Initialer Load ─────────────────────────────────────────────────────────
   useEffect(() => {
-    load();
-  }, [load]);
+    loadPractices();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ── Neu laden wenn selectedPracticeId sich ändert ─────────────────────────
+  useEffect(() => {
+    if (selectedPracticeId) {
+      loadSettings(selectedPracticeId);
+    }
+  }, [selectedPracticeId, loadSettings]);
+
+  // ── Hilfsfunktionen ────────────────────────────────────────────────────────
+
+  function practiceIdParam(): string {
+    return selectedPracticeId
+      ? `practice_id=${encodeURIComponent(selectedPracticeId)}`
+      : "";
+  }
 
   async function saveSettings(patch: Partial<PracticeSettings>) {
     if (!settings) return;
@@ -123,7 +181,11 @@ export default function BookingSettingsPage() {
     const res = await fetch("/api/admin/booking-settings", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "update_settings", ...patch }),
+      body: JSON.stringify({
+        action: "update_settings",
+        practice_id: selectedPracticeId,
+        ...patch,
+      }),
     });
     setSaving(false);
     if (res.ok) {
@@ -138,11 +200,15 @@ export default function BookingSettingsPage() {
     const res = await fetch("/api/admin/booking-settings", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "upsert_rule", ...newRule }),
+      body: JSON.stringify({
+        action: "upsert_rule",
+        practice_id: selectedPracticeId,
+        ...newRule,
+      }),
     });
     if (res.ok) {
       toast.success("Regel hinzugefügt");
-      load();
+      if (selectedPracticeId) loadSettings(selectedPracticeId);
     } else {
       const d = await res.json();
       toast.error(d.message ?? "Fehler");
@@ -153,11 +219,15 @@ export default function BookingSettingsPage() {
     const res = await fetch("/api/admin/booking-settings", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "delete_rule", rule_id: id }),
+      body: JSON.stringify({
+        action: "delete_rule",
+        rule_id: id,
+        practice_id: selectedPracticeId,
+      }),
     });
     if (res.ok) {
       toast.success("Regel gelöscht");
-      load();
+      if (selectedPracticeId) loadSettings(selectedPracticeId);
     } else {
       toast.error("Fehler beim Löschen");
     }
@@ -171,12 +241,21 @@ export default function BookingSettingsPage() {
     const res = await fetch("/api/admin/booking-settings", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "add_blocked", ...newBlocked }),
+      body: JSON.stringify({
+        action: "add_blocked",
+        practice_id: selectedPracticeId,
+        ...newBlocked,
+      }),
     });
     if (res.ok) {
       toast.success("Gesperrte Zeit hinzugefügt");
-      setNewBlocked({ blocked_date: "", start_time: "", end_time: "", reason: "" });
-      load();
+      setNewBlocked({
+        blocked_date: "",
+        start_time: "",
+        end_time: "",
+        reason: "",
+      });
+      if (selectedPracticeId) loadSettings(selectedPracticeId);
     } else {
       toast.error("Fehler beim Speichern");
     }
@@ -186,36 +265,92 @@ export default function BookingSettingsPage() {
     const res = await fetch("/api/admin/booking-settings", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "delete_blocked", blocked_id: id }),
+      body: JSON.stringify({
+        action: "delete_blocked",
+        blocked_id: id,
+        practice_id: selectedPracticeId,
+      }),
     });
     if (res.ok) {
       toast.success("Sperre entfernt");
-      load();
+      if (selectedPracticeId) loadSettings(selectedPracticeId);
     } else {
       toast.error("Fehler beim Löschen");
     }
   }
 
-  // ── Ladezustand ────────────────────────────────────────────────────────────
+  // ── Render ─────────────────────────────────────────────────────────────────
+
+  const pageHeader = (
+    <div>
+      <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+        Buchungseinstellungen
+      </h1>
+      <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
+        Öffnungszeiten, Slot-Länge und automatische Bestätigung
+      </p>
+    </div>
+  );
+
+  // Praxis-Auswahlschalter (zeigt nur wenn >1 Praxis vorhanden)
+  const practiceSelector =
+    practices.length > 1 ? (
+      <div
+        className="flex items-center gap-2 rounded-xl border p-4"
+        style={{
+          borderColor: "var(--color-border)",
+          backgroundColor: "var(--color-surface)",
+        }}
+      >
+        <Building2 className="h-4 w-4 shrink-0 text-slate-400" />
+        <label
+          htmlFor="practice-select"
+          className="text-sm font-medium text-slate-700 dark:text-slate-300 shrink-0"
+        >
+          Praxis:
+        </label>
+        <div className="relative flex-1">
+          <select
+            id="practice-select"
+            data-testid="practice-selector"
+            value={selectedPracticeId ?? ""}
+            onChange={(e) => setSelectedPracticeId(e.target.value)}
+            className="w-full appearance-none rounded-lg border pl-3 pr-8 py-1.5 text-sm"
+            style={{
+              borderColor: "var(--color-border)",
+              backgroundColor: "var(--color-surface)",
+              color: "var(--color-text)",
+            }}
+          >
+            {practices.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+                {p.status === "active" ? " ✓" : ""}
+                {p.email ? ` – ${p.email}` : ""}
+              </option>
+            ))}
+          </select>
+          <ChevronDown className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+        </div>
+      </div>
+    ) : null;
+
   if (loading) {
     return (
-      <div className="py-16 text-center text-sm text-slate-500">Lädt…</div>
+      <div className="space-y-6 max-w-2xl">
+        {pageHeader}
+        {practiceSelector}
+        <div className="py-12 text-center text-sm text-slate-500">Lädt…</div>
+      </div>
     );
   }
 
-  // ── Keine Praxis gefunden – sauber anzeigen, kein Crash ───────────────────
+  // ── Keine Praxis gefunden ─────────────────────────────────────────────────
   if (noPractice || !settings) {
     return (
       <div className="space-y-6 max-w-2xl">
-        <div>
-          <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">
-            Buchungseinstellungen
-          </h1>
-          <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
-            Öffnungszeiten, Slot-Länge und automatische Bestätigung
-          </p>
-        </div>
-
+        {pageHeader}
+        {practiceSelector}
         <div
           data-testid="no-practice-message"
           className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-5 dark:border-amber-900/30 dark:bg-amber-900/10"
@@ -244,17 +379,10 @@ export default function BookingSettingsPage() {
   // ── Hauptansicht ───────────────────────────────────────────────────────────
   return (
     <div className="space-y-8 max-w-2xl">
-      <div>
-        <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">
-          Buchungseinstellungen
-        </h1>
-        <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
-          Öffnungszeiten, Slot-Länge und automatische Bestätigung
-          {settings.name && (
-            <span className="ml-1 text-slate-400">– {settings.name}</span>
-          )}
-        </p>
-      </div>
+      {pageHeader}
+
+      {/* Praxis-Auswahlschalter (nur wenn >1 Praxis) */}
+      {practiceSelector}
 
       {/* Allgemeine Einstellungen */}
       <section
@@ -266,6 +394,11 @@ export default function BookingSettingsPage() {
       >
         <h2 className="font-semibold text-slate-800 dark:text-slate-200">
           Allgemein
+          {settings.name && (
+            <span className="ml-2 text-sm font-normal text-slate-400">
+              – {settings.name}
+            </span>
+          )}
         </h2>
 
         {/* Slot-Länge */}
@@ -369,7 +502,7 @@ export default function BookingSettingsPage() {
         </div>
       </section>
 
-      {/* Öffnungszeiten / Verfügbarkeitsregeln */}
+      {/* Öffnungszeiten */}
       <section
         className="rounded-xl border p-5 space-y-4"
         style={{
@@ -384,7 +517,6 @@ export default function BookingSettingsPage() {
           </h2>
         </div>
 
-        {/* Bestehende Regeln */}
         {rules.length === 0 ? (
           <p className="text-sm text-slate-500 dark:text-slate-400">
             Noch keine Öffnungszeiten gepflegt. Ohne Regeln ist kein
@@ -426,7 +558,6 @@ export default function BookingSettingsPage() {
           </div>
         )}
 
-        {/* Neue Regel hinzufügen */}
         <div
           className="rounded-lg border border-dashed p-4 space-y-3"
           style={{ borderColor: "var(--color-border)" }}
@@ -442,7 +573,10 @@ export default function BookingSettingsPage() {
               <select
                 value={newRule.weekday}
                 onChange={(e) =>
-                  setNewRule({ ...newRule, weekday: parseInt(e.target.value, 10) })
+                  setNewRule({
+                    ...newRule,
+                    weekday: parseInt(e.target.value, 10),
+                  })
                 }
                 className="w-full rounded-lg border px-2 py-1.5 text-sm"
                 style={{
@@ -580,15 +714,14 @@ export default function BookingSettingsPage() {
               >
                 <div>
                   <span className="font-medium text-red-800 dark:text-red-300">
-                    {new Date(bt.blocked_date + "T00:00:00").toLocaleDateString(
-                      "de-DE",
-                      {
-                        weekday: "short",
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "numeric",
-                      },
-                    )}
+                    {new Date(
+                      bt.blocked_date + "T00:00:00",
+                    ).toLocaleDateString("de-DE", {
+                      weekday: "short",
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    })}
                   </span>
                   {bt.start_time ? (
                     <span className="ml-2 text-red-600 dark:text-red-400">
@@ -618,7 +751,6 @@ export default function BookingSettingsPage() {
           </div>
         )}
 
-        {/* Neue Sperre */}
         <div
           className="rounded-lg border border-dashed p-4 space-y-3"
           style={{ borderColor: "var(--color-border)" }}
@@ -635,7 +767,10 @@ export default function BookingSettingsPage() {
                 type="date"
                 value={newBlocked.blocked_date}
                 onChange={(e) =>
-                  setNewBlocked({ ...newBlocked, blocked_date: e.target.value })
+                  setNewBlocked({
+                    ...newBlocked,
+                    blocked_date: e.target.value,
+                  })
                 }
                 className="w-full rounded-lg border px-2 py-1.5 text-sm"
                 style={{

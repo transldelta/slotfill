@@ -2,43 +2,88 @@
  * GET  /api/admin/booking-settings – Buchungseinstellungen laden
  * PUT  /api/admin/booking-settings – Buchungseinstellungen speichern
  *
- * GET  /api/admin/booking-settings?resource=settings
- * GET  /api/admin/booking-settings?resource=availability_rules
- * GET  /api/admin/booking-settings?resource=blocked_times
- * PUT  { action: "update_settings", ... }  – Praxis-Einstellungen
- * PUT  { action: "upsert_rule", ... }       – Öffnungszeit anlegen/ändern
- * PUT  { action: "delete_rule", rule_id }   – Öffnungszeit löschen
- * PUT  { action: "add_blocked", ... }       – Gesperrte Zeit hinzufügen
- * PUT  { action: "delete_blocked", ... }    – Gesperrte Zeit entfernen
+ * GET  ?resource=settings            – Praxis-Einstellungen
+ * GET  ?resource=availability_rules  – Öffnungszeiten
+ * GET  ?resource=blocked_times       – Gesperrte Zeiten
+ * GET  ?resource=practices_list      – Alle Praxen (für Selector)
+ * PUT  { action: "update_settings" }  – Praxis-Einstellungen speichern
+ * PUT  { action: "upsert_rule" }       – Öffnungszeit anlegen/ändern
+ * PUT  { action: "delete_rule" }       – Öffnungszeit löschen
+ * PUT  { action: "add_blocked" }       – Gesperrte Zeit hinzufügen
+ * PUT  { action: "delete_blocked" }    – Gesperrte Zeit entfernen
+ *
+ * Praxis-Auflösung (resolvePracticeId – 4-stufig, kein Crash):
+ *   1. practices.auth_uid = ctx.user.id     (normaler Practice-Owner)
+ *   2. practices.email    = ctx.user.email  (Admin mit passender Praxis-E-Mail)
+ *   3. subscriptions.status = 'active'      (aktive Praxis bevorzugen)
+ *   4. erste vorhandene Praxis              (letzter Fallback)
  *
  * Sicherheitsregeln:
  * - Nur Admin-Zugang (getAdminContext)
- * - Praxis-ID kommt aus der DB (nicht aus dem Client)
+ * - Praxis-ID kommt aus DB (nie aus dem Client)
  * - auto_confirm_bookings DEFAULT false – Hinweis in UI obligatorisch
  * - KEINE automatische Bestätigung bei Speichern der Einstellungen
+ * - Keine Praxis-Duplikate werden angelegt
  * - Keine Secrets im Response
  */
 
 import { NextRequest, NextResponse } from "next/server";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { getAdminContext } from "@/lib/admin";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-// ─── Praxis-ID aus DB laden (sicher, nicht aus Client) ─────────────────────
+// ─── Praxis-Auflösung (4-stufig, kein INSERT, kein Crash) ─────────────────
 
-async function getPracticeId(
-  admin: ReturnType<typeof import("@/lib/supabase").createClient>,
+async function resolvePracticeId(
+  admin: SupabaseClient,
+  userId: string,
+  userEmail: string | undefined | null,
 ): Promise<string | null> {
-  // Erste aktive Praxis als Default-Kontext für Einstellungen.
-  const { data } = await admin
+  // 1. Normalfall: Praxis ist per auth_uid mit dem Auth-User verknüpft
+  const { data: byAuth } = await admin
+    .from("practices")
+    .select("id")
+    .eq("auth_uid", userId)
+    .order("created_at", { ascending: true })
+    .limit(1)
+    .maybeSingle();
+  if (byAuth?.id) return byAuth.id;
+
+  // 2. Fallback für Admins: Praxis-E-Mail stimmt mit Admin-E-Mail überein
+  if (userEmail) {
+    const { data: byEmail } = await admin
+      .from("practices")
+      .select("id")
+      .eq("email", userEmail)
+      .order("created_at", { ascending: true })
+      .limit(1)
+      .maybeSingle();
+    if (byEmail?.id) return byEmail.id;
+  }
+
+  // 3. Bevorzuge Praxis mit aktivem Abo (Status 'active')
+  const { data: activeSub } = await admin
+    .from("subscriptions")
+    .select("practice_id")
+    .eq("status", "active")
+    .order("created_at", { ascending: true })
+    .limit(1)
+    .maybeSingle();
+  if (activeSub?.practice_id) return activeSub.practice_id as string;
+
+  // 4. Absoluter Fallback: erste vorhandene Praxis
+  const { data: first } = await admin
     .from("practices")
     .select("id")
     .order("created_at", { ascending: true })
     .limit(1)
-    .single();
-  return data?.id ?? null;
+    .maybeSingle();
+  return first?.id ?? null;
 }
+
+// ─── GET ───────────────────────────────────────────────────────────────────
 
 export async function GET(request: NextRequest) {
   const ctx = await getAdminContext();
@@ -50,7 +95,45 @@ export async function GET(request: NextRequest) {
   const resource = url.searchParams.get("resource") ?? "settings";
   const practiceIdParam = url.searchParams.get("practice_id");
 
-  const practiceId = practiceIdParam ?? (await getPracticeId(ctx.admin));
+  // practices_list: alle verfügbaren Praxen für den Auswahl-Selector
+  if (resource === "practices_list") {
+    const { data, error } = await ctx.admin
+      .from("practices")
+      .select(
+        "id, name, email, subscriptions ( status )",
+      )
+      .order("created_at", { ascending: true });
+
+    if (error) {
+      return NextResponse.json(
+        { code: "DB_ERROR", message: error.message },
+        { status: 500 },
+      );
+    }
+
+    const list = (data ?? []).map((p) => {
+      const sub = Array.isArray(p.subscriptions)
+        ? p.subscriptions[0]
+        : p.subscriptions;
+      return {
+        id: p.id,
+        name: p.name,
+        email: p.email,
+        status: (sub as { status?: string } | null)?.status ?? null,
+      };
+    });
+
+    return NextResponse.json({ practices: list });
+  }
+
+  // Praxis-ID auflösen: explizit übergeben oder automatisch ermitteln
+  const practiceId =
+    practiceIdParam ??
+    (await resolvePracticeId(
+      ctx.admin,
+      ctx.user.id,
+      ctx.user.email,
+    ));
 
   if (!practiceId) {
     return NextResponse.json({ code: "NO_PRACTICE" }, { status: 404 });
@@ -97,14 +180,22 @@ export async function GET(request: NextRequest) {
       "id, name, auto_confirm_bookings, booking_slot_minutes, booking_buffer_minutes",
     )
     .eq("id", practiceId)
-    .single();
+    .maybeSingle();
 
-  if (error || !data) {
-    return NextResponse.json({ code: "DB_ERROR" }, { status: 500 });
+  if (error) {
+    return NextResponse.json(
+      { code: "DB_ERROR", message: error.message },
+      { status: 500 },
+    );
+  }
+  if (!data) {
+    return NextResponse.json({ code: "NO_PRACTICE" }, { status: 404 });
   }
 
   return NextResponse.json({ settings: data, practice_id: practiceId });
 }
+
+// ─── PUT ───────────────────────────────────────────────────────────────────
 
 export async function PUT(request: NextRequest) {
   const ctx = await getAdminContext();
@@ -123,7 +214,7 @@ export async function PUT(request: NextRequest) {
 
   const practiceId =
     (typeof bodyPracticeId === "string" ? bodyPracticeId : null) ??
-    (await getPracticeId(ctx.admin));
+    (await resolvePracticeId(ctx.admin, ctx.user.id, ctx.user.email));
 
   if (!practiceId) {
     return NextResponse.json({ code: "NO_PRACTICE" }, { status: 404 });
@@ -131,8 +222,11 @@ export async function PUT(request: NextRequest) {
 
   // ─── Praxis-Einstellungen aktualisieren ──────────────────────────────
   if (action === "update_settings" || !action) {
-    const { auto_confirm_bookings, booking_slot_minutes, booking_buffer_minutes } =
-      body;
+    const {
+      auto_confirm_bookings,
+      booking_slot_minutes,
+      booking_buffer_minutes,
+    } = body;
 
     const updates: Record<string, unknown> = {
       updated_at: new Date().toISOString(),

@@ -2629,3 +2629,88 @@ test("BookingSettings: Seite zeigt Fehlermeldung wenn keine Praxis vorhanden", (
     "Seite muss noPractice-State oder data-testid='no-practice-message' behandeln",
   );
 });
+
+// ─── Fix: Praxis-Auflösung per Admin-E-Mail ───────────────────────────────────
+
+test("BookingSettings: API nutzt auth_uid als primären Lookup-Pfad", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/api/admin/booking-settings/route.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("auth_uid"),
+    "Route muss auth_uid als primären Lookup-Pfad nutzen",
+  );
+  assert.ok(
+    src.includes(".eq(\"auth_uid\"") || src.includes(".eq('auth_uid'"),
+    "Route muss practices.auth_uid = userId abfragen",
+  );
+});
+
+test("BookingSettings: API nutzt E-Mail als Fallback wenn kein auth_uid-Match", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/api/admin/booking-settings/route.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("userEmail") || src.includes("user.email"),
+    "Route muss E-Mail des Admins als Fallback nutzen",
+  );
+  assert.ok(
+    src.includes(".eq(\"email\"") || src.includes(".eq('email'"),
+    "Route muss practices.email = userEmail als Fallback abfragen",
+  );
+});
+
+test("BookingSettings: API bevorzugt aktive Praxis (subscriptions.status = active)", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/api/admin/booking-settings/route.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("subscriptions") && src.includes("active"),
+    "Route muss aktive Praxis per subscriptions.status = active bevorzugen",
+  );
+  assert.ok(
+    src.includes("practice_id"),
+    "Route muss practice_id aus subscriptions lesen",
+  );
+});
+
+test("BookingSettings: API legt keine Praxis-Duplikate an (kein INSERT in practices)", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/api/admin/booking-settings/route.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // Die Route darf kein INSERT in die practices-Tabelle machen
+  const insertPractices =
+    src.includes(".insert(") &&
+    src
+      .split(".insert(")
+      .slice(1)
+      .some((chunk: string) => chunk.includes("practices"));
+  assert.ok(
+    !insertPractices,
+    "booking-settings Route darf keine neuen Praxen anlegen (kein INSERT INTO practices)",
+  );
+});
+
+test("BookingSettings: Seite zeigt Praxis-Selector wenn mehrere Praxen vorhanden", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/admin/booking-settings/page.tsx");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("practice-selector") || src.includes("practiceSelector"),
+    "Seite muss einen Praxis-Selector enthalten wenn mehrere Praxen existieren",
+  );
+  assert.ok(
+    src.includes("practices_list"),
+    "Seite muss practices_list-Endpoint nutzen um alle Praxen zu laden",
+  );
+});

@@ -2794,7 +2794,7 @@ test("BookingSettings: PUT-Endpoint akzeptiert practiceId (camelCase) im Body", 
     "PUT-Endpoint muss practiceId (camelCase) im Body akzeptieren",
   );
   // Sicherstellen dass booking_slot_minutes, booking_buffer_minutes, auto_confirm_bookings
-  // alle in der PUT-Logik vorkommen
+  // alle in der PUT-Logik vorkommen (API-Keys vom Frontend)
   assert.ok(
     src.includes("booking_slot_minutes"),
     "PUT muss booking_slot_minutes verarbeiten können",
@@ -2806,6 +2806,15 @@ test("BookingSettings: PUT-Endpoint akzeptiert practiceId (camelCase) im Body", 
   assert.ok(
     src.includes("auto_confirm_bookings"),
     "PUT muss auto_confirm_bookings verarbeiten können",
+  );
+  // DB-Spalten müssen slot_minutes / buffer_minutes sein (ohne booking_-Prefix)
+  assert.ok(
+    src.includes("updates.slot_minutes") || src.includes("slot_minutes ="),
+    "PUT muss in DB-Spalte slot_minutes (nicht booking_slot_minutes) schreiben",
+  );
+  assert.ok(
+    src.includes("updates.buffer_minutes") || src.includes("buffer_minutes ="),
+    "PUT muss in DB-Spalte buffer_minutes (nicht booking_buffer_minutes) schreiben",
   );
 });
 
@@ -3287,5 +3296,59 @@ test("Migration 024: Indizes für practice_id, weekday und blocked_date vorhande
   assert.ok(
     src.includes("idx_booking_blocked_practice_date"),
     "024-Migration muss kombinierten Index auf booking_blocked_times(practice_id, blocked_date) anlegen",
+  );
+});
+
+// ─── Auto-Confirm: Zeitformat-Normalisierung (kritischer Bug-Fix) ─────────────
+
+test("AutoConfirm: requested_time wird auf HH:MM normalisiert (Postgres gibt HH:MM:SS zurück)", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/auto-confirm.ts");
+  assert.ok(existsSync(p), "lib/auto-confirm.ts muss existieren");
+  const src: string = readFileSync(p, "utf8");
+  // Muss .slice(0, 5) oder ähnliche Normalisierung enthalten
+  assert.ok(
+    src.includes(".slice(0, 5)") || src.includes("substring(0, 5)"),
+    "auto-confirm.ts muss requested_time auf HH:MM normalisieren (.slice(0, 5)) – Postgres gibt TIME als HH:MM:SS zurück",
+  );
+});
+
+test("AutoConfirm: requestedTimeNorm wird für validTimes.includes() genutzt (nicht roher DB-Wert)", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/auto-confirm.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // requestedTimeNorm muss definiert und im includes() verwendet werden
+  assert.ok(
+    src.includes("requestedTimeNorm"),
+    "auto-confirm.ts muss requestedTimeNorm Variable nutzen (normalisiertes HH:MM)",
+  );
+  assert.ok(
+    src.includes("validTimes.includes(requestedTimeNorm)"),
+    "validTimes.includes() muss requestedTimeNorm (HH:MM) nicht b.requested_time (HH:MM:SS) verwenden",
+  );
+});
+
+test("AutoConfirm: booking_settings-Route liest slot_minutes (nicht booking_slot_minutes) aus DB", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/api/admin/booking-settings/route.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // SELECT muss slot_minutes / buffer_minutes enthalten (DB-Spaltenname)
+  assert.ok(
+    src.includes('"slot_minutes"') || src.includes("slot_minutes, buffer_minutes"),
+    "booking-settings GET muss slot_minutes aus DB lesen (DB-Spaltenname ohne booking_-Prefix)",
+  );
+  // updates darf NICHT booking_slot_minutes als DB-Key setzen
+  assert.ok(
+    !src.includes("updates.booking_slot_minutes"),
+    "booking-settings PUT darf nicht updates.booking_slot_minutes setzen (Spalte existiert nicht in DB)",
+  );
+  assert.ok(
+    !src.includes("updates.booking_buffer_minutes"),
+    "booking-settings PUT darf nicht updates.booking_buffer_minutes setzen (Spalte existiert nicht in DB)",
   );
 });

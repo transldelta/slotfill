@@ -6,6 +6,10 @@
  * GET  ?resource=availability_rules  – Öffnungszeiten
  * GET  ?resource=blocked_times       – Gesperrte Zeiten
  * GET  ?resource=practices_list      – Alle Praxen (für Selector)
+ *
+ * Query-Params (GET): practice_id ODER practiceId  (beide akzeptiert)
+ * Body-Params  (PUT): practice_id ODER practiceId  (beide akzeptiert)
+ *
  * PUT  { action: "update_settings" }  – Praxis-Einstellungen speichern
  * PUT  { action: "upsert_rule" }       – Öffnungszeit anlegen/ändern
  * PUT  { action: "delete_rule" }       – Öffnungszeit löschen
@@ -18,13 +22,17 @@
  *   3. subscriptions.status = 'active'      (aktive Praxis bevorzugen)
  *   4. erste vorhandene Praxis              (letzter Fallback)
  *
+ * Robustheit:
+ *   - Settings-SELECT fällt auf Basis-Felder + Defaults zurück wenn
+ *     Booking-Spalten noch nicht existieren (Migration noch nicht gelaufen)
+ *   - availability_rules / blocked_times: bei Fehler leere Arrays statt 500
+ *   - Keine Praxis-Duplikate (kein INSERT in practices)
+ *
  * Sicherheitsregeln:
- * - Nur Admin-Zugang (getAdminContext)
- * - Praxis-ID kommt aus DB (nie aus dem Client)
- * - auto_confirm_bookings DEFAULT false – Hinweis in UI obligatorisch
- * - KEINE automatische Bestätigung bei Speichern der Einstellungen
- * - Keine Praxis-Duplikate werden angelegt
- * - Keine Secrets im Response
+ *   - Nur Admin-Zugang (getAdminContext)
+ *   - Praxis-ID kommt aus DB (nie aus dem Client) oder explizit übergeben
+ *   - auto_confirm_bookings DEFAULT false
+ *   - Keine Secrets im Response
  */
 
 import { NextRequest, NextResponse } from "next/server";
@@ -33,6 +41,14 @@ import { getAdminContext } from "@/lib/admin";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+// ─── Booking-Spalten-Default (falls Spalten noch nicht existieren) ──────────
+
+const SETTINGS_DEFAULTS = {
+  auto_confirm_bookings: false,
+  booking_slot_minutes: 30,
+  booking_buffer_minutes: 0,
+} as const;
 
 // ─── Praxis-Auflösung (4-stufig, kein INSERT, kein Crash) ─────────────────
 
@@ -83,6 +99,23 @@ async function resolvePracticeId(
   return first?.id ?? null;
 }
 
+// ─── practice_id aus Query-Params lesen (snake_case + camelCase) ────────────
+
+function getPracticeIdParam(url: URL): string | null {
+  return (
+    url.searchParams.get("practice_id") ??
+    url.searchParams.get("practiceId") ??
+    null
+  );
+}
+
+// ─── practice_id aus PUT-Body lesen (snake_case + camelCase) ────────────────
+
+function getPracticeIdFromBody(body: Record<string, unknown>): string | null {
+  const v = body.practice_id ?? body.practiceId;
+  return typeof v === "string" ? v : null;
+}
+
 // ─── GET ───────────────────────────────────────────────────────────────────
 
 export async function GET(request: NextRequest) {
@@ -93,22 +126,29 @@ export async function GET(request: NextRequest) {
 
   const url = new URL(request.url);
   const resource = url.searchParams.get("resource") ?? "settings";
-  const practiceIdParam = url.searchParams.get("practice_id");
+  const practiceIdParam = getPracticeIdParam(url);
 
-  // practices_list: alle verfügbaren Praxen für den Auswahl-Selector
+  // ── practices_list: alle Praxen für Selector ──────────────────────────────
   if (resource === "practices_list") {
     const { data, error } = await ctx.admin
       .from("practices")
-      .select(
-        "id, name, email, subscriptions ( status )",
-      )
+      .select("id, name, email, subscriptions ( status )")
       .order("created_at", { ascending: true });
 
     if (error) {
-      return NextResponse.json(
-        { code: "DB_ERROR", message: error.message },
-        { status: 500 },
-      );
+      // Fallback: ohne subscriptions-Join
+      const { data: basic } = await ctx.admin
+        .from("practices")
+        .select("id, name, email")
+        .order("created_at", { ascending: true });
+
+      const list = (basic ?? []).map((p) => ({
+        id: p.id,
+        name: p.name,
+        email: p.email,
+        status: null,
+      }));
+      return NextResponse.json({ practices: list });
     }
 
     const list = (data ?? []).map((p) => {
@@ -126,19 +166,16 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ practices: list });
   }
 
-  // Praxis-ID auflösen: explizit übergeben oder automatisch ermitteln
+  // ── Praxis-ID auflösen ────────────────────────────────────────────────────
   const practiceId =
     practiceIdParam ??
-    (await resolvePracticeId(
-      ctx.admin,
-      ctx.user.id,
-      ctx.user.email,
-    ));
+    (await resolvePracticeId(ctx.admin, ctx.user.id, ctx.user.email));
 
   if (!practiceId) {
     return NextResponse.json({ code: "NO_PRACTICE" }, { status: 404 });
   }
 
+  // ── availability_rules ────────────────────────────────────────────────────
   if (resource === "availability_rules") {
     const { data, error } = await ctx.admin
       .from("booking_availability_rules")
@@ -148,14 +185,13 @@ export async function GET(request: NextRequest) {
       .order("start_time");
 
     if (error) {
-      return NextResponse.json(
-        { code: "DB_ERROR", message: error.message },
-        { status: 500 },
-      );
+      // Tabelle existiert möglicherweise noch nicht → leere Liste zurückgeben
+      return NextResponse.json({ rules: [], _tableError: error.message });
     }
     return NextResponse.json({ rules: data ?? [] });
   }
 
+  // ── blocked_times ─────────────────────────────────────────────────────────
   if (resource === "blocked_times") {
     const { data, error } = await ctx.admin
       .from("booking_blocked_times")
@@ -165,16 +201,19 @@ export async function GET(request: NextRequest) {
       .order("blocked_date");
 
     if (error) {
-      return NextResponse.json(
-        { code: "DB_ERROR", message: error.message },
-        { status: 500 },
-      );
+      // Tabelle existiert möglicherweise noch nicht → leere Liste zurückgeben
+      return NextResponse.json({ blocked: [], _tableError: error.message });
     }
     return NextResponse.json({ blocked: data ?? [] });
   }
 
-  // Default: Praxis-Einstellungen
-  const { data, error } = await ctx.admin
+  // ── Default: Praxis-Einstellungen ─────────────────────────────────────────
+  //
+  // Zuerst mit Booking-Spalten versuchen. Falls die noch nicht existieren
+  // (Migration 023 noch nicht gelaufen), auf Basis-SELECT + Defaults fallen.
+  // So funktioniert die Seite auch wenn die DB-Spalten noch fehlen.
+  //
+  const { data: full, error: fullError } = await ctx.admin
     .from("practices")
     .select(
       "id, name, auto_confirm_bookings, booking_slot_minutes, booking_buffer_minutes",
@@ -182,17 +221,46 @@ export async function GET(request: NextRequest) {
     .eq("id", practiceId)
     .maybeSingle();
 
-  if (error) {
-    return NextResponse.json(
-      { code: "DB_ERROR", message: error.message },
-      { status: 500 },
-    );
+  if (!fullError && full) {
+    // Normalfall: alle Spalten vorhanden
+    return NextResponse.json({
+      settings: {
+        id: full.id,
+        name: full.name,
+        auto_confirm_bookings:
+          (full as Record<string, unknown>).auto_confirm_bookings ??
+          SETTINGS_DEFAULTS.auto_confirm_bookings,
+        booking_slot_minutes:
+          (full as Record<string, unknown>).booking_slot_minutes ??
+          SETTINGS_DEFAULTS.booking_slot_minutes,
+        booking_buffer_minutes:
+          (full as Record<string, unknown>).booking_buffer_minutes ??
+          SETTINGS_DEFAULTS.booking_buffer_minutes,
+      },
+      practice_id: practiceId,
+    });
   }
-  if (!data) {
+
+  // Fallback: Praxis existiert, aber Booking-Spalten fehlen noch
+  const { data: basic, error: basicError } = await ctx.admin
+    .from("practices")
+    .select("id, name")
+    .eq("id", practiceId)
+    .maybeSingle();
+
+  if (basicError || !basic) {
     return NextResponse.json({ code: "NO_PRACTICE" }, { status: 404 });
   }
 
-  return NextResponse.json({ settings: data, practice_id: practiceId });
+  return NextResponse.json({
+    settings: {
+      id: basic.id,
+      name: basic.name,
+      ...SETTINGS_DEFAULTS,
+    },
+    practice_id: practiceId,
+    _settingsDefaults: true,
+  });
 }
 
 // ─── PUT ───────────────────────────────────────────────────────────────────
@@ -210,10 +278,10 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ code: "INVALID_JSON" }, { status: 400 });
   }
 
-  const { action, practice_id: bodyPracticeId } = body;
+  const { action } = body;
 
   const practiceId =
-    (typeof bodyPracticeId === "string" ? bodyPracticeId : null) ??
+    getPracticeIdFromBody(body) ??
     (await resolvePracticeId(ctx.admin, ctx.user.id, ctx.user.email));
 
   if (!practiceId) {

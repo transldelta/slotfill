@@ -199,6 +199,10 @@ const KNOWN_SOURCE_PATHS: ReadonlySet<string> = new Set([
   "lib/brand.ts",
   "lib/email/templates.ts",
   "lib/onboarding.ts",
+  // Brand & Design-Assets
+  "public/brand/slotfill-logo.svg",
+  "app/icon.svg",
+  "components/ui/SlotFillLogo.tsx",
 ]);
 
 // Mapping Quellpfad → primärer URL-Pfad (für doppelte Absicherung)

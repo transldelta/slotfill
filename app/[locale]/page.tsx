@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { SlotFillLogo } from "@/components/ui/SlotFillLogo";
 import { locales, type Locale } from "@/i18n/routing";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://slotfill.de";
@@ -105,7 +106,7 @@ export default async function LocaleLandingPage({
   const schemaOrg = buildSchemaOrg(locale);
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+    <div className="min-h-screen text-slate-900 dark:text-slate-100" style={{ backgroundColor: "var(--color-bg)" }}>
       {/* Schema.org JSON-LD */}
       <script
         type="application/ld+json"
@@ -113,36 +114,60 @@ export default async function LocaleLandingPage({
       />
 
       {/* Header */}
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-        <span className="text-lg font-bold">{tNav("brand")}</span>
-        <nav className="flex items-center gap-4 text-sm">
-          <a href="#features" className="hidden hover:underline sm:inline">
-            {tNav("features")}
-          </a>
-          <Link href={`/${locale}/pricing`} className="hover:underline">
-            {tNav("pricing")}
-          </Link>
-          <Link href={`/${locale}/blog`} className="hidden hover:underline sm:inline">
-            {tNav("blog")}
-          </Link>
-          <Link href={`/${locale}/kontakt`} className="hidden hover:underline sm:inline">
-            {tNav("contact")}
-          </Link>
-          <Link href="/auth/login" className="hover:underline">
-            {tNav("login")}
-          </Link>
-          <Link
-            href={`/${locale}/pricing`}
-            className="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700"
-          >
-            {tNav("getStarted")}
-          </Link>
-          <LanguageSwitcher currentLocale={locale as Locale} currentPath="/" />
-        </nav>
+      <header
+        className="sticky top-0 z-40 border-b backdrop-blur-md"
+        style={{
+          backgroundColor: "color-mix(in srgb, var(--color-bg) 85%, transparent)",
+          borderColor: "var(--color-border)",
+        }}
+      >
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+          <SlotFillLogo href={`/${locale}`} size={34} />
+          <nav className="flex items-center gap-1 text-sm">
+            <a
+              href="#features"
+              className="hidden rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:inline"
+            >
+              {tNav("features")}
+            </a>
+            <Link
+              href={`/${locale}/pricing`}
+              className="rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
+            >
+              {tNav("pricing")}
+            </Link>
+            <Link
+              href={`/${locale}/blog`}
+              className="hidden rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:inline"
+            >
+              {tNav("blog")}
+            </Link>
+            <Link
+              href={`/${locale}/kontakt`}
+              className="hidden rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:inline"
+            >
+              {tNav("contact")}
+            </Link>
+            <Link
+              href="/auth/login"
+              className="rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
+            >
+              {tNav("login")}
+            </Link>
+            <Link href={`/${locale}/pricing`} className="btn-brand ml-1 px-4 py-2 text-xs">
+              {tNav("getStarted")}
+            </Link>
+            <LanguageSwitcher currentLocale={locale as Locale} currentPath="/" />
+          </nav>
+        </div>
       </header>
 
       {/* Hero */}
       <section className="mx-auto max-w-3xl px-4 py-20 text-center">
+        <div className="mb-4 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium" style={{ borderColor: "var(--color-border)", color: "var(--color-muted)", backgroundColor: "var(--color-surface)" }}>
+          <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "var(--color-accent)" }} />
+          Terminmanagement für Arztpraxen
+        </div>
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
           {t("heroTitle")}
         </h1>
@@ -150,15 +175,12 @@ export default async function LocaleLandingPage({
           {t("heroSubtitle")}
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Link
-            href={`/${locale}/pricing`}
-            className="rounded-lg bg-blue-600 px-6 py-3 text-sm font-medium text-white transition hover:bg-blue-700"
-          >
+          <Link href={`/${locale}/pricing`} className="btn-brand">
             {t("ctaPrimary")}
           </Link>
           <a
             href="#features"
-            className="rounded-lg border border-slate-300 px-6 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+            className="btn-outline-brand"
           >
             {t("ctaSecondary")}
           </a>
@@ -176,14 +198,21 @@ export default async function LocaleLandingPage({
         <h2 className="mb-10 text-center text-2xl font-bold">
           {t("featuresTitle")}
         </h2>
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {features.map((f) => (
             <div
               key={f.title}
-              className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900"
+              className="group rounded-2xl border p-6 shadow-sm transition-all duration-200 hover:shadow-brand"
+              style={{
+                backgroundColor: "var(--color-surface)",
+                borderColor: "var(--color-border)",
+              }}
             >
-              <div className="mb-3 inline-flex rounded-lg bg-blue-50 p-2 text-blue-600 dark:bg-blue-900/20 dark:text-blue-300">
-                <f.icon className="h-5 w-5" />
+              <div
+                className="mb-3 inline-flex rounded-xl p-2.5"
+                style={{ background: "var(--gradient-brand)" }}
+              >
+                <f.icon className="h-5 w-5 text-white" />
               </div>
               <h3 className="font-semibold">{f.title}</h3>
               <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
@@ -214,9 +243,16 @@ export default async function LocaleLandingPage({
           ).map((point) => (
             <li
               key={point}
-              className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white px-5 py-4 text-left shadow-sm dark:border-slate-800 dark:bg-slate-900"
+              className="flex items-start gap-3 rounded-xl border px-5 py-4 text-left shadow-sm"
+              style={{
+                backgroundColor: "var(--color-surface)",
+                borderColor: "var(--color-border)",
+              }}
             >
-              <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-green-500" />
+              <CheckCircle2
+                className="mt-0.5 h-5 w-5 shrink-0"
+                style={{ color: "var(--color-accent)" }}
+              />
               <span className="text-sm text-slate-700 dark:text-slate-300">
                 {point}
               </span>
@@ -226,21 +262,28 @@ export default async function LocaleLandingPage({
       </section>
 
       {/* CTA */}
-      <section className="mx-auto max-w-3xl px-4 py-16 text-center">
-        <h2 className="text-2xl font-bold">{t("ctaBlockTitle")}</h2>
-        <p className="mt-2 text-slate-600 dark:text-slate-300">
+      <section
+        className="mx-auto max-w-3xl rounded-3xl px-8 py-16 text-center mx-4 my-8"
+        style={{
+          background: "var(--gradient-brand)",
+          margin: "2rem auto",
+          maxWidth: "48rem",
+        }}
+      >
+        <h2 className="text-2xl font-bold text-white">{t("ctaBlockTitle")}</h2>
+        <p className="mt-2 text-white/80">
           {t("ctaBlockSubtitle")}
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Link
             href={`/${locale}/pricing`}
-            className="rounded-lg bg-blue-600 px-6 py-3 text-sm font-medium text-white transition hover:bg-blue-700"
+            className="inline-flex items-center justify-center rounded-lg bg-white px-6 py-3 text-sm font-semibold text-slate-900 shadow-lg transition hover:bg-slate-50"
           >
             {t("ctaPrimary")}
           </Link>
           <Link
             href={`/${locale}/pricing`}
-            className="rounded-lg border border-slate-300 px-6 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+            className="inline-flex items-center justify-center rounded-lg border border-white/40 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
           >
             {t("comparePrices")}
           </Link>
@@ -248,32 +291,43 @@ export default async function LocaleLandingPage({
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-slate-200 dark:border-slate-800">
-        <div className="mx-auto max-w-6xl px-4 py-8 text-sm text-slate-500 dark:text-slate-400">
-          <div className="flex flex-wrap gap-4">
-            <Link href={`/${locale}/impressum`} className="hover:underline">
+      <footer
+        className="border-t"
+        style={{
+          backgroundColor: "var(--color-surface)",
+          borderColor: "var(--color-border)",
+        }}
+      >
+        <div className="mx-auto max-w-6xl px-4 py-10">
+          <div className="mb-6 flex items-center justify-between">
+            <SlotFillLogo href={`/${locale}`} size={30} />
+          </div>
+          <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm" style={{ color: "var(--color-muted)" }}>
+            <Link href={`/${locale}/impressum`} className="transition hover:text-slate-900 dark:hover:text-slate-100">
               {tLegal("impressumTitle")}
             </Link>
-            <Link href={`/${locale}/datenschutz`} className="hover:underline">
+            <Link href={`/${locale}/datenschutz`} className="transition hover:text-slate-900 dark:hover:text-slate-100">
               {tLegal("datenschutzTitle")}
             </Link>
-            <Link href={`/${locale}/agb`} className="hover:underline">
+            <Link href={`/${locale}/agb`} className="transition hover:text-slate-900 dark:hover:text-slate-100">
               {tLegal("agbTitle")}
             </Link>
-            <Link href={`/${locale}/avv`} className="hover:underline">
+            <Link href={`/${locale}/avv`} className="transition hover:text-slate-900 dark:hover:text-slate-100">
               AVV
             </Link>
-            <Link href={`/${locale}/blog`} className="hover:underline">
+            <Link href={`/${locale}/blog`} className="transition hover:text-slate-900 dark:hover:text-slate-100">
               {tNav("blog")}
             </Link>
-            <Link href={`/${locale}/kontakt`} className="hover:underline">
+            <Link href={`/${locale}/kontakt`} className="transition hover:text-slate-900 dark:hover:text-slate-100">
               {tNav("contact")}
             </Link>
           </div>
-          <p className="mt-4">{t("footerNote")}</p>
-          <p className="mt-2">
-            © {new Date().getFullYear()} {tNav("brand")}. {t("rights")}
-          </p>
+          <div className="mt-6 border-t pt-6 text-xs" style={{ borderColor: "var(--color-border)", color: "var(--color-muted)" }}>
+            <p>{t("footerNote")}</p>
+            <p className="mt-1">
+              © {new Date().getFullYear()} {tNav("brand")}. {t("rights")}
+            </p>
+          </div>
         </div>
       </footer>
     </div>

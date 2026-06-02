@@ -2,34 +2,73 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Brand CSS Variables ──────────────────────────────────────────────────
+   Semantic tokens used throughout the app.
+   Light mode: clean white with blue/teal accents.
+   Dark mode: deep navy background (not pure black) with vibrant accents.
+   ────────────────────────────────────────────────────────────────────────── */
 @layer base {
   :root {
+    /* Shadcn-compatible HSL tokens (used by tailwind.config.ts) */
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    --foreground: 222 47% 11%;
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 214 32% 91%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 214 32% 96%;
+    --muted-foreground: 215 16% 47%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 221 83% 53%;
     --radius: 0.5rem;
+
+    /* ── Semantic Brand Tokens ── */
+    --color-bg:        #ffffff;
+    --color-surface:   #f8fafc;       /* slate-50 */
+    --color-surface-2: #f1f5f9;       /* slate-100 */
+    --color-primary:   #2563eb;       /* blue-600 */
+    --color-primary-h: #1d4ed8;       /* blue-700 (hover) */
+    --color-accent:    #0d9488;       /* teal-600 */
+    --color-accent-h:  #0f766e;       /* teal-700 (hover) */
+    --color-border:    #e2e8f0;       /* slate-200 */
+    --color-text:      #0f172a;       /* slate-900 */
+    --color-muted:     #64748b;       /* slate-500 */
+
+    /* Gradient shorthand */
+    --gradient-brand:  linear-gradient(135deg, #2563eb 0%, #0d9488 100%);
+    --gradient-brand-hover: linear-gradient(135deg, #1d4ed8 0%, #0f766e 100%);
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
+    /* Shadcn-compatible HSL tokens – deep navy palette */
+    --background: 222 47% 8%;
+    --foreground: 213 31% 95%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 47% 8%;
+    --secondary: 217 33% 17%;
     --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    --border: 217 33% 20%;
+    --input: 217 33% 20%;
+    --ring: 224 76% 48%;
+
+    /* ── Semantic Brand Tokens (dark) ── */
+    --color-bg:        #0f1729;       /* deep navy */
+    --color-surface:   #162035;       /* slightly lighter navy */
+    --color-surface-2: #1a2740;       /* card backgrounds */
+    --color-primary:   #3b82f6;       /* blue-500 */
+    --color-primary-h: #2563eb;       /* blue-600 (hover) */
+    --color-accent:    #14b8a6;       /* teal-400 */
+    --color-accent-h:  #0d9488;       /* teal-500 (hover) */
+    --color-border:    #1e3054;       /* subtle dark border */
+    --color-text:      #f1f5f9;       /* slate-100 */
+    --color-muted:     #94a3b8;       /* slate-400 */
+
+    /* Gradient shorthand */
+    --gradient-brand:  linear-gradient(135deg, #3b82f6 0%, #14b8a6 100%);
+    --gradient-brand-hover: linear-gradient(135deg, #2563eb 0%, #0d9488 100%);
   }
 }
 
@@ -39,5 +78,31 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* ─── Gradient Button Utility ──────────────────────────────────────────── */
+@layer components {
+  .btn-brand {
+    @apply inline-flex items-center justify-center rounded-lg px-6 py-3 text-sm font-semibold text-white transition-all duration-200;
+    background: var(--gradient-brand);
+    box-shadow: 0 2px 12px rgba(37, 99, 235, 0.25);
+  }
+  .btn-brand:hover {
+    background: var(--gradient-brand-hover);
+    box-shadow: 0 4px 18px rgba(37, 99, 235, 0.35);
+    transform: translateY(-1px);
+  }
+  .btn-brand:active {
+    transform: translateY(0);
+  }
+
+  .btn-outline-brand {
+    @apply inline-flex items-center justify-center rounded-lg border px-6 py-3 text-sm font-semibold transition-all duration-200;
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+  .btn-outline-brand:hover {
+    background-color: var(--color-surface-2);
   }
 }

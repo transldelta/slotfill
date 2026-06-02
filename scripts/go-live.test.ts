@@ -1828,3 +1828,120 @@ test("Brand: Kein echter SMS/WhatsApp-Versand im Trial ohne Provider-Konfigurati
     `Abschnitt I (Messaging) soll nicht blocking sein im Standard-Modus. Status: ${i.status}`,
   );
 });
+
+// ─── Logo & Premium Colors ────────────────────────────────────────────────────
+
+test("Logo: SVG-Datei public/brand/slotfill-logo.svg existiert", () => {
+  const { existsSync } = require("fs");
+  const { resolve } = require("path");
+  assert.ok(
+    existsSync(resolve(process.cwd(), "public/brand/slotfill-logo.svg")),
+    "public/brand/slotfill-logo.svg fehlt",
+  );
+});
+
+test("Logo: SVG enthält gradient-Definition (Blau → Teal)", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "public/brand/slotfill-logo.svg");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(src.includes("<linearGradient"), "Logo-SVG muss linearGradient enthalten");
+  assert.ok(
+    src.includes("#2563eb") || src.includes("#3b82f6"),
+    "Logo muss blaue Primärfarbe (#2563eb oder #3b82f6) enthalten",
+  );
+  assert.ok(
+    src.includes("#0d9488") || src.includes("#14b8a6"),
+    "Logo muss teal Akzentfarbe (#0d9488 oder #14b8a6) enthalten",
+  );
+});
+
+test("Logo: app/icon.svg existiert (Browser-Favicon)", () => {
+  const { existsSync } = require("fs");
+  const { resolve } = require("path");
+  assert.ok(
+    existsSync(resolve(process.cwd(), "app/icon.svg")),
+    "app/icon.svg (Browser-Favicon) fehlt",
+  );
+});
+
+test("Logo: SlotFillLogo-Komponente existiert", () => {
+  const { existsSync } = require("fs");
+  const { resolve } = require("path");
+  assert.ok(
+    existsSync(resolve(process.cwd(), "components/ui/SlotFillLogo.tsx")),
+    "components/ui/SlotFillLogo.tsx fehlt",
+  );
+});
+
+test("Logo: SlotFillLogo-Komponente enthält alt-Text 'SlotFill Logo'", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "components/ui/SlotFillLogo.tsx");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(src.includes('alt="SlotFill Logo"'), "SlotFillLogo muss alt-Text 'SlotFill Logo' haben");
+});
+
+test("Logo: Landing-Page importiert SlotFillLogo-Komponente", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/[locale]/page.tsx");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(src.includes("SlotFillLogo"), "Landing Page muss SlotFillLogo importieren und nutzen");
+});
+
+test("Premium Colors: globals.css enthält --color-bg CSS-Variable", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/globals.css");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(src.includes("--color-bg"), "globals.css muss --color-bg definieren");
+  assert.ok(src.includes("--color-surface"), "globals.css muss --color-surface definieren");
+  assert.ok(src.includes("--color-primary"), "globals.css muss --color-primary definieren");
+  assert.ok(src.includes("--color-accent"), "globals.css muss --color-accent definieren");
+  assert.ok(src.includes("--color-border"), "globals.css muss --color-border definieren");
+  assert.ok(src.includes("--color-text"), "globals.css muss --color-text definieren");
+  assert.ok(src.includes("--color-muted"), "globals.css muss --color-muted definieren");
+});
+
+test("Premium Colors: globals.css enthält Gradient-Button .btn-brand", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/globals.css");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(src.includes(".btn-brand"), "globals.css muss .btn-brand Utility-Klasse enthalten");
+  assert.ok(src.includes("--gradient-brand"), "globals.css muss --gradient-brand definieren");
+});
+
+test("Premium Colors: Dark Mode nutzt dunkles Navy (nicht #000000)", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/globals.css");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // Dark mode background should be navy, not pure black
+  assert.ok(
+    !src.includes("--color-bg:        #000000") && !src.includes("--color-bg: #000"),
+    "Dark mode darf kein reines Schwarz (#000) als --color-bg haben",
+  );
+  // Should have a dark navy value
+  assert.ok(
+    src.includes("#0f1729") || src.includes("#0f172a") || src.includes("#111827"),
+    "Dark mode --color-bg soll ein dunkles Navy (z.B. #0f1729) sein",
+  );
+});
+
+test("Premium Colors: tailwind.config.ts enthält brand-Farbpalette", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "tailwind.config.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(src.includes("brand:"), "tailwind.config.ts muss brand-Farbpalette enthalten");
+  assert.ok(src.includes("gradient-brand"), "tailwind.config.ts muss gradient-brand enthalten");
+});

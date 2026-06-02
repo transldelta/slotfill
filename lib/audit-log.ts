@@ -5,7 +5,8 @@ export type AuditArea =
   | "security"
   | "messaging"
   | "stripe"
-  | "cron";
+  | "cron"
+  | "booking";
 
 export type AuditInput = {
   action: string;

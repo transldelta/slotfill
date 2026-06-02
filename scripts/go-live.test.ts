@@ -3185,3 +3185,107 @@ test("AutoConfirm: Patientenerfolg-Seite zeigt Auto-Confirm-Text wenn automatisc
     "Patientenseite muss tenant_id als hidden input übergeben (Auto-Confirm-Zuordnung)",
   );
 });
+
+// ─── Migration 024: Fehlende Buchungs-Tabellen ────────────────────────────────
+
+test("Migration 024: Datei existiert (024_booking_availability_tables.sql)", () => {
+  const { existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "supabase/migrations/024_booking_availability_tables.sql");
+  assert.ok(existsSync(p), "supabase/migrations/024_booking_availability_tables.sql muss existieren");
+});
+
+test("Migration 024: booking_availability_rules idempotent mit CREATE TABLE IF NOT EXISTS", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "supabase/migrations/024_booking_availability_tables.sql");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("CREATE TABLE IF NOT EXISTS public.booking_availability_rules"),
+    "024-Migration muss booking_availability_rules mit IF NOT EXISTS anlegen",
+  );
+});
+
+test("Migration 024: booking_blocked_times idempotent mit CREATE TABLE IF NOT EXISTS", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "supabase/migrations/024_booking_availability_tables.sql");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("CREATE TABLE IF NOT EXISTS public.booking_blocked_times"),
+    "024-Migration muss booking_blocked_times mit IF NOT EXISTS anlegen",
+  );
+});
+
+test("Migration 024: booking_availability_rules hat alle Pflicht-Spalten", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "supabase/migrations/024_booking_availability_tables.sql");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  const required = ["practice_id", "weekday", "start_time", "end_time", "slot_minutes", "buffer_minutes", "is_active"];
+  for (const col of required) {
+    assert.ok(src.includes(col), `024-Migration: booking_availability_rules muss Spalte '${col}' enthalten`);
+  }
+});
+
+test("Migration 024: booking_blocked_times hat alle Pflicht-Spalten", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "supabase/migrations/024_booking_availability_tables.sql");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  const required = ["practice_id", "blocked_date", "start_time", "end_time", "reason"];
+  for (const col of required) {
+    assert.ok(src.includes(col), `024-Migration: booking_blocked_times muss Spalte '${col}' enthalten`);
+  }
+});
+
+test("Migration 024: RLS auf beiden Tabellen aktiviert", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "supabase/migrations/024_booking_availability_tables.sql");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // Muss mindestens 2× ENABLE ROW LEVEL SECURITY vorkommen (je Tabelle einmal)
+  const rls = (src.match(/ENABLE ROW LEVEL SECURITY/g) ?? []).length;
+  assert.ok(rls >= 2, `024-Migration muss RLS auf beiden Tabellen aktivieren (gefunden: ${rls}×)`);
+});
+
+test("Migration 024: service_role Vollzugriff-Policies für beide Tabellen", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "supabase/migrations/024_booking_availability_tables.sql");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("Service role can manage availability rules"),
+    "024-Migration muss service_role-Policy für availability_rules enthalten",
+  );
+  assert.ok(
+    src.includes("Service role can manage blocked times"),
+    "024-Migration muss service_role-Policy für blocked_times enthalten",
+  );
+});
+
+test("Migration 024: Indizes für practice_id, weekday und blocked_date vorhanden", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "supabase/migrations/024_booking_availability_tables.sql");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("idx_booking_availability_practice"),
+    "024-Migration muss Index auf booking_availability_rules(practice_id) anlegen",
+  );
+  assert.ok(
+    src.includes("idx_booking_availability_weekday"),
+    "024-Migration muss Index auf booking_availability_rules(weekday) anlegen",
+  );
+  assert.ok(
+    src.includes("idx_booking_blocked_practice_date"),
+    "024-Migration muss kombinierten Index auf booking_blocked_times(practice_id, blocked_date) anlegen",
+  );
+});

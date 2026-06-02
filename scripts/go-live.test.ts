@@ -1280,6 +1280,169 @@ test("Legal: Footer in app/[locale]/page.tsx verlinkt auf locale-spezifische Leg
   );
 });
 
+// ─── Legal i18n & RTL ────────────────────────────────────────────────────────
+
+test("Legal i18n: lib/legal-content.ts existiert und exportiert getLegalContent", () => {
+  const contentPath = resolve(process.cwd(), "lib/legal-content.ts");
+  assert.ok(existsSync(contentPath), "lib/legal-content.ts fehlt");
+  const mod = require("../lib/legal-content");
+  assert.ok(typeof mod.getLegalContent === "function", "getLegalContent muss eine Funktion sein");
+  assert.ok(typeof mod.isRtlLocale === "function", "isRtlLocale muss eine Funktion sein");
+  assert.ok(typeof mod.isLegalDraft === "function", "isLegalDraft muss eine Funktion sein");
+});
+
+test("Legal i18n: DE-AGB enthält 'Allgemeine Geschäftsbedingungen'", () => {
+  const { getLegalContent } = require("../lib/legal-content");
+  const c = getLegalContent("de");
+  assert.ok(
+    c.agbTitle.includes("Allgemeine Geschäftsbedingungen"),
+    `DE agbTitle muss 'Allgemeine Geschäftsbedingungen' enthalten, ist: '${c.agbTitle}'`,
+  );
+});
+
+test("Legal i18n: EN-AGB enthält 'Terms and Conditions', nicht 'Allgemeine Geschäftsbedingungen'", () => {
+  const { getLegalContent } = require("../lib/legal-content");
+  const c = getLegalContent("en");
+  assert.ok(
+    c.agbTitle === "Terms and Conditions",
+    `EN agbTitle muss 'Terms and Conditions' sein, ist: '${c.agbTitle}'`,
+  );
+  assert.ok(
+    !c.agbTitle.includes("Allgemeine Geschäftsbedingungen"),
+    "EN agbTitle darf nicht 'Allgemeine Geschäftsbedingungen' enthalten",
+  );
+});
+
+test("Legal i18n: FR-AGB enthält 'Conditions générales', nicht 'Allgemeine Geschäftsbedingungen'", () => {
+  const { getLegalContent } = require("../lib/legal-content");
+  const c = getLegalContent("fr");
+  assert.ok(
+    c.agbTitle.includes("Conditions générales"),
+    `FR agbTitle muss 'Conditions générales' enthalten, ist: '${c.agbTitle}'`,
+  );
+  assert.ok(
+    !c.agbTitle.includes("Allgemeine Geschäftsbedingungen"),
+    "FR agbTitle darf nicht 'Allgemeine Geschäftsbedingungen' enthalten",
+  );
+});
+
+test("Legal i18n: AR-AGB enthält arabischen Titel 'الشروط والأحكام', nicht 'Allgemeine Geschäftsbedingungen'", () => {
+  const { getLegalContent } = require("../lib/legal-content");
+  const c = getLegalContent("ar");
+  assert.ok(
+    c.agbTitle === "الشروط والأحكام",
+    `AR agbTitle muss 'الشروط والأحكام' sein, ist: '${c.agbTitle}'`,
+  );
+  assert.ok(
+    !c.agbTitle.includes("Allgemeine Geschäftsbedingungen"),
+    "AR agbTitle darf nicht 'Allgemeine Geschäftsbedingungen' enthalten",
+  );
+});
+
+test("Legal i18n: AR-Locale ist RTL (dir='rtl')", () => {
+  const { getLegalContent, isRtlLocale } = require("../lib/legal-content");
+  const c = getLegalContent("ar");
+  assert.equal(c.dir, "rtl", "AR locale muss dir='rtl' haben");
+  assert.ok(isRtlLocale("ar"), "isRtlLocale('ar') muss true zurückgeben");
+  assert.ok(!isRtlLocale("de"), "isRtlLocale('de') muss false zurückgeben");
+  assert.ok(!isRtlLocale("en"), "isRtlLocale('en') muss false zurückgeben");
+});
+
+test("Legal i18n: AgbContent-Quellcode enthält RTL-Handling (dir='rtl' für AR)", () => {
+  const { readFileSync } = require("fs");
+  const src: string = readFileSync(
+    resolve(process.cwd(), "components/legal/AgbContent.tsx"),
+    "utf8",
+  );
+  assert.ok(
+    src.includes("rtl"),
+    "AgbContent muss 'rtl' für Arabic enthalten",
+  );
+  assert.ok(
+    src.includes("isRtlLocale") || src.includes("isRtl"),
+    "AgbContent muss RTL-Prüfung verwenden (isRtlLocale oder isRtl)",
+  );
+});
+
+test("Legal i18n: Nicht-DE-Locale haben authorityNotice (Hinweis auf dt. Originalfassung)", () => {
+  const { getLegalContent } = require("../lib/legal-content");
+  const nonDeLocales = ["en", "fr", "es", "ar", "pt", "ru", "zh", "hi", "bn"];
+  for (const loc of nonDeLocales) {
+    const c = getLegalContent(loc);
+    assert.ok(
+      c.authorityNotice && c.authorityNotice.length > 10,
+      `Locale '${loc}' muss authorityNotice enthalten (Hinweis: dt. Version ist maßgeblich)`,
+    );
+    assert.ok(
+      c.authorityLinkLabel && c.authorityLinkLabel.length > 3,
+      `Locale '${loc}' muss authorityLinkLabel enthalten`,
+    );
+  }
+});
+
+test("Legal i18n: ES-AGB enthält 'Términos y condiciones', nicht 'Allgemeine Geschäftsbedingungen'", () => {
+  const { getLegalContent } = require("../lib/legal-content");
+  const c = getLegalContent("es");
+  assert.ok(
+    c.agbTitle.includes("Términos"),
+    `ES agbTitle muss 'Términos' enthalten, ist: '${c.agbTitle}'`,
+  );
+  assert.ok(
+    !c.agbTitle.includes("Allgemeine Geschäftsbedingungen"),
+    "ES agbTitle darf nicht 'Allgemeine Geschäftsbedingungen' enthalten",
+  );
+});
+
+test("Legal i18n: noindex bleibt gesetzt, solange LEGAL_REVIEW_APPROVED nicht 'true' ist", () => {
+  const { isLegalDraft } = require("../lib/legal-content");
+  // Im Testmodus ist LEGAL_REVIEW_APPROVED nicht gesetzt → isDraft = true
+  const originalEnv = process.env.LEGAL_REVIEW_APPROVED;
+  delete process.env.LEGAL_REVIEW_APPROVED;
+  assert.ok(isLegalDraft(), "isLegalDraft() muss true sein wenn LEGAL_REVIEW_APPROVED nicht gesetzt");
+  process.env.LEGAL_REVIEW_APPROVED = "false";
+  assert.ok(isLegalDraft(), "isLegalDraft() muss true sein wenn LEGAL_REVIEW_APPROVED='false'");
+  process.env.LEGAL_REVIEW_APPROVED = "true";
+  assert.ok(!isLegalDraft(), "isLegalDraft() muss false sein wenn LEGAL_REVIEW_APPROVED='true'");
+  // Restore
+  if (originalEnv === undefined) {
+    delete process.env.LEGAL_REVIEW_APPROVED;
+  } else {
+    process.env.LEGAL_REVIEW_APPROVED = originalEnv;
+  }
+});
+
+test("Legal i18n: AgbContent rendert DE-Titel 'Allgemeine Geschäftsbedingungen' bei locale=de", () => {
+  const { readFileSync } = require("fs");
+  const src: string = readFileSync(
+    resolve(process.cwd(), "components/legal/AgbContent.tsx"),
+    "utf8",
+  );
+  // Die DE-Vollversion muss vorhanden sein (§ 1-8 Blöcke)
+  assert.ok(src.includes("§ 1"), "AgbContent DE muss § 1 enthalten");
+  assert.ok(src.includes("§ 3"), "AgbContent DE muss § 3 enthalten");
+  assert.ok(src.includes("isDE"), "AgbContent muss isDE-Flag für bedingte Ausgabe verwenden");
+});
+
+test("Legal i18n: AgbContent-Nicht-DE gibt keine deutschen §-Überschriften aus (conditionelles Rendering)", () => {
+  const { readFileSync } = require("fs");
+  const src: string = readFileSync(
+    resolve(process.cwd(), "components/legal/AgbContent.tsx"),
+    "utf8",
+  );
+  // Die §§ müssen innerhalb des isDE-Blocks sein, nicht für alle Locales ausgegeben werden
+  // Prüfung: isDE && (... § 1 ...) – der Block mit §§ ist isDE-bedingt
+  assert.ok(
+    src.includes("{isDE && ("),
+    "AgbContent muss {isDE && (...)} Block für §§ verwenden – §§ nur für DE sichtbar",
+  );
+  assert.ok(
+    src.includes("{!isDE && ("),
+    "AgbContent muss {!isDE && (...)} Block für lokalisierte Zusammenfassung verwenden",
+  );
+});
+
+// ─── Automatische Kommunikation ──────────────────────────────────────────────
+
 test("Legal: Automatische Kommunikation enthält keinen persönlichen Namen", () => {
   const { readFileSync } = require("fs");
   const automatedFiles = [

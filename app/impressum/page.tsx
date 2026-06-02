@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 
 /** Root-Route /impressum – leitet Inhalt über shared Component. */
 export default function ImpressumPage() {
-  return <ImpressumContent backHref="/" />;
+  return <ImpressumContent backHref="/" locale="de" />;
 }

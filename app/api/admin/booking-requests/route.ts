@@ -63,7 +63,40 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  return NextResponse.json({ requests: data, total: count ?? 0, page, limit });
+  // Meta: Auto-Confirm und E-Mail aktiv? (für Admin-Banner)
+  let autoConfirmActive = false;
+  try {
+    // Praxis mit aktivem Abo suchen
+    const { data: activeSub } = await ctx.admin
+      .from("subscriptions")
+      .select("practice_id")
+      .eq("status", "active")
+      .order("created_at", { ascending: true })
+      .limit(1)
+      .maybeSingle();
+    const pid = (activeSub as { practice_id?: string } | null)?.practice_id;
+    if (pid) {
+      const { data: practice } = await ctx.admin
+        .from("practices")
+        .select("auto_confirm_bookings")
+        .eq("id", pid)
+        .maybeSingle();
+      autoConfirmActive =
+        (practice as { auto_confirm_bookings?: boolean } | null)
+          ?.auto_confirm_bookings === true;
+    }
+  } catch {
+    /* Meta darf GET nie crashen */
+  }
+
+  return NextResponse.json({
+    requests: data,
+    total: count ?? 0,
+    page,
+    limit,
+    auto_confirm_active: autoConfirmActive,
+    email_notifications_active: isBookingEmailEnabled(),
+  });
 }
 
 // ─── PATCH ─────────────────────────────────────────────────────────────────

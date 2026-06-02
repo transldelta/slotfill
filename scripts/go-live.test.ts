@@ -2988,3 +2988,200 @@ test("BookingSlot: Bestätigungs-E-Mail enthält Datum und Uhrzeit wenn confirme
     "Admin-API muss confirmed_date und confirmed_time speichern können",
   );
 });
+
+// ─── Auto-Confirm: Vollständige Prüfung ──────────────────────────────────────
+
+test("AutoConfirm: evaluateAutoConfirm existiert und prüft auto_confirm_bookings", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/auto-confirm.ts");
+  assert.ok(existsSync(p), "lib/auto-confirm.ts muss existieren");
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("evaluateAutoConfirm"),
+    "lib/auto-confirm.ts muss evaluateAutoConfirm exportieren",
+  );
+  assert.ok(
+    src.includes("auto_confirm_bookings"),
+    "evaluateAutoConfirm muss practices.auto_confirm_bookings prüfen",
+  );
+  assert.ok(
+    src.includes("auto_confirm_disabled"),
+    "evaluateAutoConfirm muss auto_confirm_disabled als Skip-Reason zurückgeben",
+  );
+});
+
+test("AutoConfirm: confirmation_mode wird auf 'auto' gesetzt bei erfolgreicher Bestätigung", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/auto-confirm.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("confirmation_mode") && src.includes("\"auto\""),
+    "evaluateAutoConfirm muss confirmation_mode = 'auto' setzen",
+  );
+  assert.ok(
+    src.includes("auto_confirmed: true"),
+    "evaluateAutoConfirm muss auto_confirmed = true setzen",
+  );
+  assert.ok(
+    src.includes("status") && src.includes("\"confirmed\""),
+    "evaluateAutoConfirm muss status = 'confirmed' setzen",
+  );
+});
+
+test("AutoConfirm: confirmed_date und confirmed_time aus requested_date/time übernommen", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/auto-confirm.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // Im UPDATE-Block müssen confirmed_date und confirmed_time gesetzt werden
+  assert.ok(
+    src.includes("confirmed_date") && src.includes("confirmed_time"),
+    "evaluateAutoConfirm muss confirmed_date und confirmed_time setzen",
+  );
+  // Und zwar aus den requested-Feldern
+  assert.ok(
+    src.includes("requested_date") && src.includes("requested_time"),
+    "evaluateAutoConfirm muss confirmed_date aus requested_date übernehmen",
+  );
+});
+
+test("AutoConfirm: Bestätigungs-E-Mail wird nach Auto-Confirm automatisch gesendet", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/auto-confirm.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("sendBookingEmail"),
+    "evaluateAutoConfirm muss sendBookingEmail aufrufen",
+  );
+  assert.ok(
+    src.includes("email_status"),
+    "evaluateAutoConfirm muss email_status in DB speichern",
+  );
+  assert.ok(
+    src.includes("email_sent_at"),
+    "evaluateAutoConfirm muss email_sent_at bei Erfolg setzen",
+  );
+  // Server Action muss evaluateAutoConfirm aufrufen
+  const actionPath = resolve(process.cwd(), "app/termin-buchen/actions.ts");
+  if (!existsSync(actionPath)) return;
+  const actionSrc: string = readFileSync(actionPath, "utf8");
+  assert.ok(
+    actionSrc.includes("evaluateAutoConfirm"),
+    "Server Action muss evaluateAutoConfirm nach INSERT aufrufen",
+  );
+  assert.ok(
+    actionSrc.includes("autoConfirmed"),
+    "Server Action muss autoConfirmed im Ergebnis zurückgeben",
+  );
+});
+
+test("AutoConfirm: Konflikt mit bestehender bestätigter Buchung => bleibt pending", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/auto-confirm.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("slot_conflict"),
+    "evaluateAutoConfirm muss slot_conflict als Skip-Reason unterstützen",
+  );
+  assert.ok(
+    src.includes("status") && src.includes("\"confirmed\"") && src.includes("neq"),
+    "evaluateAutoConfirm muss bestehende bestätigte Buchungen abfragen",
+  );
+});
+
+test("AutoConfirm: blocked_time => Auto-Confirm bleibt pending", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/auto-confirm.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("blocked_time"),
+    "evaluateAutoConfirm muss blocked_time als Skip-Reason unterstützen",
+  );
+  assert.ok(
+    src.includes("booking_blocked_times"),
+    "evaluateAutoConfirm muss booking_blocked_times Tabelle abfragen",
+  );
+});
+
+test("AutoConfirm: Auto-Confirm false => bleibt pending (kein Skip ohne Feature-Flag)", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/auto-confirm.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // Wenn auto_confirm_bookings = false, muss frühzeitig abgebrochen werden
+  assert.ok(
+    src.includes("auto_confirm_disabled") &&
+      src.includes("confirmed: false"),
+    "evaluateAutoConfirm muss false zurückgeben wenn auto_confirm_bookings deaktiviert",
+  );
+  assert.ok(
+    src.includes("no_slot_data"),
+    "evaluateAutoConfirm muss no_slot_data zurückgeben wenn kein Slot vorhanden",
+  );
+});
+
+test("AutoConfirm: Admin zeigt auto-bestätigte Buchungen im Tab Bestätigt mit Badge", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/admin/booking-requests/page.tsx");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // auto_confirmed und confirmation_mode müssen im Typ vorhanden sein
+  assert.ok(
+    src.includes("auto_confirmed") && src.includes("confirmation_mode"),
+    "Admin-Seite muss auto_confirmed und confirmation_mode aus DB lesen",
+  );
+  // Badge "Automatisch bestätigt"
+  assert.ok(
+    src.includes("Automatisch bestätigt"),
+    "Admin-Seite muss Badge 'Automatisch bestätigt' für auto-bestätigte Buchungen anzeigen",
+  );
+  // Banner muss auto_confirm_active berücksichtigen
+  assert.ok(
+    src.includes("auto_confirm_active") || src.includes("autoConfirmActive"),
+    "Admin-Seite muss Auto-Confirm-Status im Banner anzeigen",
+  );
+  assert.ok(
+    src.includes("Automatische Bestätigung aktiv"),
+    "Admin-Seite muss 'Automatische Bestätigung aktiv' im Banner zeigen wenn aktiv",
+  );
+});
+
+test("AutoConfirm: Patientenerfolg-Seite zeigt Auto-Confirm-Text wenn automatisch bestätigt", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/[locale]/termin-buchen/page.tsx");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // autoConfirmed State muss vorhanden sein
+  assert.ok(
+    src.includes("autoConfirmed"),
+    "Patientenseite muss autoConfirmed-State verwalten",
+  );
+  // Auto-Confirm Erfolgstext
+  assert.ok(
+    src.includes("automatisch bestätigt") || src.includes("Termin bestätigt"),
+    "Patientenseite muss Auto-Confirm-Erfolgstext zeigen",
+  );
+  // Anderer Text für manuelle Prüfung
+  assert.ok(
+    src.includes("manuell geprüft") || src.includes("wird manuell"),
+    "Patientenseite muss anderen Text zeigen wenn keine Auto-Bestätigung",
+  );
+  // tenant_id muss als hidden input vorhanden sein (für Auto-Confirm-Zuordnung)
+  assert.ok(
+    src.includes("tenant_id"),
+    "Patientenseite muss tenant_id als hidden input übergeben (Auto-Confirm-Zuordnung)",
+  );
+});

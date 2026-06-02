@@ -2,14 +2,22 @@
  * GET   /api/admin/booking-requests  – Liste aller Buchungsanfragen
  * PATCH /api/admin/booking-requests  – Status einer Anfrage ändern
  *
+ * PATCH-Actions:
+ *   confirm                – Bestätigen (ohne Datum; kopiert requested_date/time wenn vorhanden)
+ *   confirm_with_datetime  – Bestätigen MIT Datum/Uhrzeit (confirmed_date + confirmed_time)
+ *   decline                – Ablehnen
+ *   cancel                 – Absagen (nach Bestätigung)
+ *   set_pending            – Zurück auf ausstehend
+ *   add_note               – Interne Notiz hinzufügen
+ *
  * Sicherheitsregeln:
  * - Nur Admin-Zugang
  * - Keine automatische Benachrichtigung direkt nach Patienten-Anfrage
  * - E-Mail ERST nach manuellem Admin-Klick (confirm/decline)
- * - Manuelle Bestätigung / Ablehnung
  * - auto_confirmed bleibt false außer explizit konfiguriert
- * - RESEND_API_KEY niemals in Client-Responses
+ * - confirmed_date / confirmed_time: nur gültige Formate werden gespeichert
  */
+// RESEND_API_KEY niemals in Client-Responses zurückgeben
 
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminContext } from "@/lib/admin";
@@ -21,6 +29,8 @@ import {
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+// ─── GET ───────────────────────────────────────────────────────────────────
 
 export async function GET(request: NextRequest) {
   const ctx = await getAdminContext();
@@ -47,11 +57,16 @@ export async function GET(request: NextRequest) {
 
   const { data, error, count } = await query;
   if (error) {
-    return NextResponse.json({ code: "DB_ERROR", message: error.message }, { status: 500 });
+    return NextResponse.json(
+      { code: "DB_ERROR", message: error.message },
+      { status: 500 },
+    );
   }
 
   return NextResponse.json({ requests: data, total: count ?? 0, page, limit });
 }
+
+// ─── PATCH ─────────────────────────────────────────────────────────────────
 
 export async function PATCH(request: NextRequest) {
   const ctx = await getAdminContext();
@@ -71,12 +86,19 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ code: "MISSING_ID" }, { status: 400 });
   }
 
-  // Für confirm/decline: Buchungsdaten vor dem Update laden (für E-Mail-Versand)
+  // Buchungsdaten für E-Mail-Versand laden (confirm / confirm_with_datetime / decline)
   let bookingData: BookingEmailData | null = null;
-  if (action === "confirm" || action === "decline") {
+  if (
+    action === "confirm" ||
+    action === "confirm_with_datetime" ||
+    action === "decline"
+  ) {
     const { data: existing, error: fetchError } = await ctx.admin
       .from("booking_requests")
-      .select("id, patient_name, patient_email, preferred_time, note, tenant_id")
+      .select(
+        "id, patient_name, patient_email, preferred_time, note, tenant_id, " +
+          "requested_date, requested_time, confirmed_date, confirmed_time",
+      )
       .eq("id", id)
       .single();
 
@@ -86,7 +108,7 @@ export async function PATCH(request: NextRequest) {
         { status: 404 },
       );
     }
-    bookingData = existing as BookingEmailData;
+    bookingData = existing as unknown as BookingEmailData;
   }
 
   const updates: Record<string, unknown> = {
@@ -100,19 +122,63 @@ export async function PATCH(request: NextRequest) {
   switch (action) {
     case "confirm":
       updates.status = "confirmed";
+      // Wenn Patient konkret Slot gewählt hat: als confirmed_date/time übernehmen
+      if (bookingData) {
+        if (bookingData.requested_date && !bookingData.confirmed_date) {
+          updates.confirmed_date = bookingData.requested_date;
+          updates.confirmed_time = bookingData.requested_time ?? null;
+        }
+      }
       break;
+
+    case "confirm_with_datetime": {
+      // Bestätigen mit explizitem Datum und Uhrzeit
+      const cd = body.confirmed_date;
+      const ct = body.confirmed_time;
+      if (typeof cd !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(cd)) {
+        return NextResponse.json(
+          {
+            code: "INVALID_DATE",
+            message: "confirmed_date muss Format YYYY-MM-DD haben",
+          },
+          { status: 400 },
+        );
+      }
+      if (typeof ct !== "string" || !/^\d{2}:\d{2}$/.test(ct)) {
+        return NextResponse.json(
+          {
+            code: "INVALID_TIME",
+            message: "confirmed_time muss Format HH:MM haben",
+          },
+          { status: 400 },
+        );
+      }
+      updates.status = "confirmed";
+      updates.confirmed_date = cd;
+      updates.confirmed_time = ct;
+      // bookingData für E-Mail mit den bestätigten Werten anreichern
+      if (bookingData) {
+        bookingData = { ...bookingData, confirmed_date: cd, confirmed_time: ct };
+      }
+      break;
+    }
+
     case "decline":
       updates.status = "declined";
       break;
+
     case "cancel":
       updates.status = "cancelled";
       break;
+
     case "set_pending":
       updates.status = "pending_confirmation";
       break;
+
     case "add_note":
       // Nur Notiz hinzufügen, kein Status-Wechsel
       break;
+
     default:
       return NextResponse.json({ code: "UNKNOWN_ACTION" }, { status: 400 });
   }
@@ -123,18 +189,32 @@ export async function PATCH(request: NextRequest) {
     .eq("id", id);
 
   if (error) {
-    return NextResponse.json({ code: "DB_ERROR", message: error.message }, { status: 500 });
+    return NextResponse.json(
+      { code: "DB_ERROR", message: error.message },
+      { status: 500 },
+    );
   }
 
-  // Keine automatische Benachrichtigung direkt nach Patienten-Anfrage.
-  // E-Mail ERST nach manuellem Admin-Klick (confirm/decline).
-  // RESEND_API_KEY und Patientendaten werden NIE in der Response ausgegeben.
+  // E-Mail nach manuellem Klick (confirm / confirm_with_datetime / decline)
   let emailStatus: string | null = null;
   let emailCode: string | null = null;
 
-  if ((action === "confirm" || action === "decline") && bookingData) {
-    const emailType = action === "confirm" ? "confirmation" : "decline";
-    const result = await sendBookingEmail(bookingData, emailType, ctx.user.email ?? null);
+  if (
+    (action === "confirm" || action === "confirm_with_datetime" || action === "decline") &&
+    bookingData
+  ) {
+    const emailType = action === "decline" ? "decline" : "confirmation";
+    // confirmed_date/time für confirm-Aktion aus updates übernehmen
+    const emailData: BookingEmailData = {
+      ...bookingData,
+      confirmed_date:
+        (updates.confirmed_date as string | undefined) ??
+        bookingData.confirmed_date,
+      confirmed_time:
+        (updates.confirmed_time as string | undefined) ??
+        bookingData.confirmed_time,
+    };
+    const result = await sendBookingEmail(emailData, emailType, ctx.user.email ?? null);
     emailStatus = result.status;
     emailCode = result.code;
   }
@@ -146,7 +226,6 @@ export async function PATCH(request: NextRequest) {
     email_notifications_enabled: isBookingEmailEnabled(),
   };
 
-  // E-Mail-Status zurückgeben (kein Secret, keine Patientendaten)
   if (emailStatus !== null) {
     response.email_status = emailStatus;
     response.email_code = emailCode;

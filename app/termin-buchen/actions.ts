@@ -2,7 +2,11 @@
 
 import { z } from "zod";
 import { createClient } from "@/lib/supabase";
-import { buildBookingRecord, validateBookingSubmission } from "@/lib/booking-requests";
+import {
+  buildBookingRecord,
+  validateBookingSubmission,
+  isPlaceholderTime,
+} from "@/lib/booking-requests";
 
 const schema = z.object({
   patient_name: z.string().trim().min(1).max(100),
@@ -12,6 +16,17 @@ const schema = z.object({
   note: z.string().trim().max(1000).optional(),
   privacy_accepted: z.coerce.boolean(),
   tenant_id: z.string().uuid().optional(),
+  // Konkreter Slot (optional – leer wenn manuelle Zeitangabe)
+  requested_date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional()
+    .or(z.literal("")),
+  requested_time: z
+    .string()
+    .regex(/^\d{2}:\d{2}$/)
+    .optional()
+    .or(z.literal("")),
 });
 
 export type SubmitBookingResult =
@@ -27,6 +42,8 @@ export type SubmitBookingResult =
  * - privacy_accepted = true ist Pflicht
  * - auto_confirmed = false (DEFAULT)
  * - Status = pending_confirmation (nicht automatisch confirmed)
+ * - Platzhalter-Texte ("einen freien Slot auswählen") werden abgelehnt
+ * - requested_date / requested_time werden nur gespeichert wenn gültige Werte
  * - Keine echten Nachrichten ohne Provider
  * - Patient sieht ehrlichen Hinweis: "Praxis bestätigt manuell"
  */
@@ -41,18 +58,38 @@ export async function submitBookingRequest(
     note: formData.get("note") || undefined,
     privacy_accepted: formData.get("privacy_accepted") === "true",
     tenant_id: formData.get("tenant_id") || undefined,
+    requested_date: formData.get("requested_date") || "",
+    requested_time: formData.get("requested_time") || "",
   });
 
   if (!parsed.success) {
     return { code: "VALIDATION_ERROR", message: "Ungültige Eingabe." };
   }
 
-  const { patient_name, patient_email, patient_phone, preferred_time,
-    note, privacy_accepted, tenant_id } = parsed.data;
+  const {
+    patient_name,
+    patient_email,
+    patient_phone,
+    preferred_time,
+    note,
+    privacy_accepted,
+    tenant_id,
+    requested_date,
+    requested_time,
+  } = parsed.data;
 
   // Datenschutz-Pflicht
   if (!privacy_accepted) {
     return { code: "PRIVACY_NOT_ACCEPTED" };
+  }
+
+  // Platzhalter-Text niemals als Zeitraum speichern
+  if (isPlaceholderTime(preferred_time)) {
+    return {
+      code: "VALIDATION_ERROR",
+      message:
+        "Bitte wählen Sie einen konkreten Zeitslot aus oder geben Sie einen Wunschzeitraum an.",
+    };
   }
 
   const validationError = validateBookingSubmission({
@@ -75,6 +112,15 @@ export async function submitBookingRequest(
     note,
     privacy_accepted,
     tenant_id,
+    // Nur setzen wenn echte Slot-Daten vorhanden
+    requested_date:
+      requested_date && /^\d{4}-\d{2}-\d{2}$/.test(requested_date)
+        ? requested_date
+        : null,
+    requested_time:
+      requested_time && /^\d{2}:\d{2}$/.test(requested_time)
+        ? requested_time
+        : null,
   });
 
   const supabase = createClient();
@@ -87,7 +133,10 @@ export async function submitBookingRequest(
 
   if (error || !saved) {
     console.error("[booking] insert error:", error?.message);
-    return { code: "BOOKING_ERROR", message: "Terminanfrage konnte nicht gespeichert werden." };
+    return {
+      code: "BOOKING_ERROR",
+      message: "Terminanfrage konnte nicht gespeichert werden.",
+    };
   }
 
   return { code: "BOOKING_SAVED", bookingId: saved.id };

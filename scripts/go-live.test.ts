@@ -2831,3 +2831,160 @@ test("BookingSettings: Seite nutzt effectiveSettings-Fallback damit Form immer a
     "saveSettings darf nicht auf '!settings' prüfen – stattdessen selectedPracticeId prüfen",
   );
 });
+
+// ─── Bug Fix: Booking-Slot-Platzhalter-Validierung ───────────────────────────
+
+test("BookingSlot: Platzhalter-Text kann nicht als Zeitraum gespeichert werden", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+
+  // 1. lib/booking-requests.ts muss isPlaceholderTime + BOOKING_PLACEHOLDER_TEXTS exportieren
+  const libPath = resolve(process.cwd(), "lib/booking-requests.ts");
+  if (!existsSync(libPath)) return;
+  const libSrc: string = readFileSync(libPath, "utf8");
+  assert.ok(
+    libSrc.includes("isPlaceholderTime"),
+    "lib/booking-requests.ts muss isPlaceholderTime exportieren",
+  );
+  assert.ok(
+    libSrc.includes("BOOKING_PLACEHOLDER_TEXTS") || libSrc.includes("einen freien slot"),
+    "lib/booking-requests.ts muss Platzhalter-Texte definieren",
+  );
+  assert.ok(
+    libSrc.includes("Bitte wählen Sie einen konkreten Zeitslot"),
+    "validateBookingSubmission muss Platzhalter ablehnen",
+  );
+
+  // 2. Server Action muss isPlaceholderTime aufrufen
+  const actionPath = resolve(process.cwd(), "app/termin-buchen/actions.ts");
+  if (!existsSync(actionPath)) return;
+  const actionSrc: string = readFileSync(actionPath, "utf8");
+  assert.ok(
+    actionSrc.includes("isPlaceholderTime"),
+    "Server Action muss isPlaceholderTime prüfen bevor gespeichert wird",
+  );
+});
+
+test("BookingSlot: requested_date und requested_time werden in buildBookingRecord gespeichert", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/booking-requests.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // BookingSubmission muss requested_date / requested_time haben
+  assert.ok(
+    src.includes("requested_date"),
+    "BookingSubmission muss requested_date enthalten",
+  );
+  assert.ok(
+    src.includes("requested_time"),
+    "BookingSubmission muss requested_time enthalten",
+  );
+  // buildBookingRecord muss beide Felder setzen
+  const buildFn = src.slice(src.indexOf("function buildBookingRecord"));
+  assert.ok(
+    buildFn.includes("requested_date"),
+    "buildBookingRecord muss requested_date ins DB-Record schreiben",
+  );
+  assert.ok(
+    buildFn.includes("requested_time"),
+    "buildBookingRecord muss requested_time ins DB-Record schreiben",
+  );
+});
+
+test("BookingSlot: Admin zeigt requested_date und requested_time strukturiert an", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/admin/booking-requests/page.tsx");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // Seite muss requested_date und requested_time als eigene Felder anzeigen
+  assert.ok(
+    src.includes("requested_date") && src.includes("requested_time"),
+    "Admin-Seite muss requested_date und requested_time aus DB lesen",
+  );
+  assert.ok(
+    src.includes("Angefragtes Datum") || src.includes("angefragtes Datum"),
+    "Admin muss 'Angefragtes Datum' anzeigen (nicht nur Freitext 'Zeitraum')",
+  );
+  assert.ok(
+    src.includes("Angefragte Uhrzeit") || src.includes("angefragte Uhrzeit"),
+    "Admin muss 'Angefragte Uhrzeit' anzeigen",
+  );
+  // "Mit Termin bestätigen" Button muss vorhanden sein
+  assert.ok(
+    src.includes("Mit Termin bestätigen"),
+    "Admin-Seite muss Button 'Mit Termin bestätigen' mit Datum/Uhrzeit-Picker haben",
+  );
+  assert.ok(
+    src.includes("confirm_with_datetime"),
+    "Admin-Seite muss confirm_with_datetime Action aufrufen können",
+  );
+});
+
+test("BookingSlot: Anfrage ohne konkreten Slot zeigt manuelle Terminabstimmungs-Hinweis", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+
+  // lib/booking-requests.ts muss getBookingTimeDisplay mit Fallback-Text exportieren
+  const libPath = resolve(process.cwd(), "lib/booking-requests.ts");
+  if (!existsSync(libPath)) return;
+  const libSrc: string = readFileSync(libPath, "utf8");
+  assert.ok(
+    libSrc.includes("getBookingTimeDisplay"),
+    "lib/booking-requests.ts muss getBookingTimeDisplay exportieren",
+  );
+  assert.ok(
+    libSrc.includes("manuelle Terminabstimmung"),
+    "getBookingTimeDisplay muss 'manuelle Terminabstimmung erforderlich' Text zurückgeben",
+  );
+
+  // Admin-Seite muss getBookingTimeDisplay nutzen
+  const adminPath = resolve(process.cwd(), "app/admin/booking-requests/page.tsx");
+  if (!existsSync(adminPath)) return;
+  const adminSrc: string = readFileSync(adminPath, "utf8");
+  assert.ok(
+    adminSrc.includes("getBookingTimeDisplay"),
+    "Admin-Seite muss getBookingTimeDisplay für Zeitraum-Anzeige verwenden",
+  );
+});
+
+test("BookingSlot: Bestätigungs-E-Mail enthält Datum und Uhrzeit wenn confirmed_date gesetzt", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/booking-email.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // BookingEmailData muss confirmed_date / confirmed_time haben
+  assert.ok(
+    src.includes("confirmed_date"),
+    "BookingEmailData muss confirmed_date enthalten",
+  );
+  assert.ok(
+    src.includes("confirmed_time"),
+    "BookingEmailData muss confirmed_time enthalten",
+  );
+  // bookingConfirmationHtml muss confirmed_date/time bevorzugen
+  const confirmFn = src.slice(src.indexOf("function bookingConfirmationHtml"));
+  assert.ok(
+    confirmFn.includes("confirmed_date") && confirmFn.includes("confirmed_time"),
+    "bookingConfirmationHtml muss confirmed_date/time für E-Mail-Inhalt verwenden",
+  );
+  // Datum-Formatierung für DE-Darstellung
+  assert.ok(
+    src.includes("formatDateDE") || src.includes("toLocaleDateString"),
+    "E-Mail muss Datum in deutschem Format (TT.MM.JJJJ) formatieren",
+  );
+  // Admin-API muss confirm_with_datetime Action unterstützen
+  const apiPath = resolve(process.cwd(), "app/api/admin/booking-requests/route.ts");
+  if (!existsSync(apiPath)) return;
+  const apiSrc: string = readFileSync(apiPath, "utf8");
+  assert.ok(
+    apiSrc.includes("confirm_with_datetime"),
+    "Admin-API muss confirm_with_datetime Action unterstützen",
+  );
+  assert.ok(
+    apiSrc.includes("confirmed_date") && apiSrc.includes("confirmed_time"),
+    "Admin-API muss confirmed_date und confirmed_time speichern können",
+  );
+});

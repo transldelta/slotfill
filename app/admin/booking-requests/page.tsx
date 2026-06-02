@@ -1,10 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { CheckCircle, XCircle, Clock, MessageSquare } from "lucide-react";
+import { CheckCircle, XCircle, Clock, MessageSquare, Mail, MailX, MailCheck } from "lucide-react";
 import toast from "react-hot-toast";
 import { getBookingStatusLabel, getBookingStatusColor } from "@/lib/booking-requests";
+import { getEmailStatusLabel, getEmailStatusColor } from "@/lib/booking-email-client";
 import type { BookingStatus } from "@/lib/booking-requests";
+import type { BookingEmailStatus } from "@/lib/booking-email-client";
 
 type BookingEntry = {
   id: string;
@@ -27,6 +29,12 @@ const FILTER_OPTIONS = [
   { value: "cancelled", label: "Abgesagt" },
 ];
 
+/** Letztes E-Mail-Ergebnis pro Buchungs-ID */
+type EmailResult = {
+  status: BookingEmailStatus;
+  code: string;
+};
+
 export default function AdminBookingRequestsPage() {
   const [items, setItems] = useState<BookingEntry[]>([]);
   const [total, setTotal] = useState(0);
@@ -35,6 +43,8 @@ export default function AdminBookingRequestsPage() {
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [noteId, setNoteId] = useState<string | null>(null);
   const [noteText, setNoteText] = useState("");
+  const [emailResults, setEmailResults] = useState<Record<string, EmailResult>>({});
+  const [emailEnabled, setEmailEnabled] = useState<boolean | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -62,6 +72,18 @@ export default function AdminBookingRequestsPage() {
       toast.error(data.message ?? data.code ?? "Fehler");
       return;
     }
+
+    // E-Mail-Status speichern (kein Secret, kein Patientendaten-Leak)
+    if (data.email_status) {
+      setEmailResults((prev) => ({
+        ...prev,
+        [id]: { status: data.email_status as BookingEmailStatus, code: data.email_code ?? "" },
+      }));
+      if (data.email_notifications_enabled !== undefined) {
+        setEmailEnabled(data.email_notifications_enabled);
+      }
+    }
+
     toast.success("Status aktualisiert");
     setNoteId(null);
     setNoteText("");
@@ -81,12 +103,37 @@ export default function AdminBookingRequestsPage() {
         </div>
       </div>
 
-      {/* Hinweis */}
-      <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-800 dark:border-amber-900/30 dark:bg-amber-900/10 dark:text-amber-300">
-        <strong>Kommunikationshinweis:</strong> Keine automatische Benachrichtigung an Patienten.
-        Nach Bestätigung/Ablehnung bitte Patienten manuell per E-Mail informieren oder
-        einen Nachrichten-Provider konfigurieren.
-      </div>
+      {/* E-Mail-Benachrichtigungs-Status Banner */}
+      {emailEnabled === true ? (
+        <div className="flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 p-4 text-xs text-green-800 dark:border-green-900/30 dark:bg-green-900/10 dark:text-green-300">
+          <MailCheck className="h-4 w-4 shrink-0" />
+          <span>
+            <strong>E-Mail-Benachrichtigungen aktiv:</strong> Patienten erhalten nach Bestätigung
+            oder Ablehnung automatisch eine transaktionale E-Mail.
+          </span>
+        </div>
+      ) : emailEnabled === false ? (
+        <div className="flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-800 dark:border-amber-900/30 dark:bg-amber-900/10 dark:text-amber-300">
+          <MailX className="h-4 w-4 shrink-0" />
+          <span>
+            <strong>E-Mail-Benachrichtigungen deaktiviert:</strong> Patienten erhalten keine
+            automatischen E-Mails. Setze{" "}
+            <code className="rounded bg-amber-100 px-1 dark:bg-amber-900/30">
+              BOOKING_EMAIL_NOTIFICATIONS_ENABLED=true
+            </code>{" "}
+            um E-Mails zu aktivieren.
+          </span>
+        </div>
+      ) : (
+        <div className="flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-800 dark:border-amber-900/30 dark:bg-amber-900/10 dark:text-amber-300">
+          <Mail className="h-4 w-4 shrink-0" />
+          <span>
+            <strong>Kommunikationshinweis:</strong> Keine automatische Benachrichtigung an
+            Patienten. Nach Bestätigung/Ablehnung erfahre den E-Mail-Status im nächsten
+            Aktionsschritt.
+          </span>
+        </div>
+      )}
 
       {/* Filter */}
       <div className="flex flex-wrap gap-2">
@@ -160,6 +207,14 @@ export default function AdminBookingRequestsPage() {
                   {item.internal_note && (
                     <div className="mt-2 rounded-lg bg-blue-50 px-3 py-2 text-xs text-blue-700 dark:bg-blue-900/10 dark:text-blue-300">
                       📝 Interne Notiz: {item.internal_note}
+                    </div>
+                  )}
+
+                  {/* E-Mail-Status Badge (nach Admin-Aktion) */}
+                  {emailResults[item.id] && (
+                    <div className={`mt-2 flex items-center gap-1.5 text-xs font-medium ${getEmailStatusColor(emailResults[item.id].status)}`}>
+                      <Mail className="h-3.5 w-3.5" />
+                      {getEmailStatusLabel(emailResults[item.id].status)}
                     </div>
                   )}
                 </div>

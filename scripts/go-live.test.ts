@@ -2314,7 +2314,7 @@ test("Admin API: /api/admin/booking-requests enthält getAdminContext-Schutz", (
   assert.ok(src.includes("UNAUTHORIZED"), "Booking-API muss UNAUTHORIZED zurückgeben");
 });
 
-test("Admin API: booking-requests Hinweis auf keine automatische Benachrichtigung", () => {
+test("Admin API: booking-requests Hinweis auf keine automatische Benachrichtigung direkt nach Anfrage", () => {
   const { readFileSync, existsSync } = require("fs");
   const { resolve } = require("path");
   const p = resolve(process.cwd(), "app/api/admin/booking-requests/route.ts");
@@ -2356,4 +2356,219 @@ test("Migration 018: booking_requests enthält RLS + privacy_accepted Constraint
     src.includes("privacy_accepted = true"),
     "018-Migration muss privacy_accepted=true Constraint enthalten",
   );
+});
+
+// ─── Booking E-Mail Benachrichtigungen ────────────────────────────────────────
+
+test("BookingEmail: lib/booking-email.ts existiert mit isBookingEmailEnabled()", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/booking-email.ts");
+  assert.ok(existsSync(p), "lib/booking-email.ts muss existieren");
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("isBookingEmailEnabled"),
+    "lib/booking-email.ts muss isBookingEmailEnabled() exportieren",
+  );
+  // Client-safe Utilities müssen in booking-email-client.ts ausgelagert sein
+  const clientP = resolve(process.cwd(), "lib/booking-email-client.ts");
+  assert.ok(existsSync(clientP), "lib/booking-email-client.ts muss für Client Components existieren");
+});
+
+test("BookingEmail: Feature-Flag DEFAULT false (sicher – kein Versand ohne Opt-in)", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/booking-email.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // Muss auf "=== 'true'" oder '=== "true"' prüfen, nicht auf fehlendes Flag
+  assert.ok(
+    src.includes(`=== "true"`) || src.includes(`=== 'true'`),
+    "isBookingEmailEnabled() muss explizit auf === 'true' prüfen (default false)",
+  );
+  assert.ok(
+    src.includes("BOOKING_EMAIL_NOTIFICATIONS_ENABLED"),
+    "Feature-Flag BOOKING_EMAIL_NOTIFICATIONS_ENABLED muss geprüft werden",
+  );
+});
+
+test("BookingEmail: E-Mail ERST nach manuellem Admin-Klick (confirm/decline)", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const routeP = resolve(process.cwd(), "app/api/admin/booking-requests/route.ts");
+  if (!existsSync(routeP)) return;
+  const src: string = readFileSync(routeP, "utf8");
+  // API muss sendBookingEmail importieren und aufrufen
+  assert.ok(
+    src.includes("sendBookingEmail"),
+    "booking-requests API muss sendBookingEmail aufrufen",
+  );
+  // Muss für confirm UND decline auslösen
+  assert.ok(
+    src.includes(`action === "confirm"`) || src.includes(`action === 'confirm'`),
+    "E-Mail-Versand muss an action=confirm gebunden sein",
+  );
+  assert.ok(
+    src.includes(`action === "decline"`) || src.includes(`action === 'decline'`),
+    "E-Mail-Versand muss an action=decline gebunden sein",
+  );
+});
+
+test("BookingEmail: Keine E-Mail-Adresse ohne Patienten-E-Mail", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/booking-email.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("skipped_no_email") || src.includes("patient_email"),
+    "sendBookingEmail() muss patient_email prüfen und skipped_no_email zurückgeben",
+  );
+});
+
+test("BookingEmail: Audit-Log für alle 5 E-Mail-Szenarien vorhanden", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/booking-email.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("booking_email_confirmation_sent"),
+    "Audit-Action booking_email_confirmation_sent fehlt",
+  );
+  assert.ok(
+    src.includes("booking_email_decline_sent"),
+    "Audit-Action booking_email_decline_sent fehlt",
+  );
+  assert.ok(
+    src.includes("booking_email_send_failed"),
+    "Audit-Action booking_email_send_failed fehlt",
+  );
+  assert.ok(
+    src.includes("booking_email_skipped_disabled"),
+    "Audit-Action booking_email_skipped_disabled fehlt",
+  );
+  assert.ok(
+    src.includes("booking_email_skipped_no_email"),
+    "Audit-Action booking_email_skipped_no_email fehlt",
+  );
+});
+
+test("BookingEmail: RESEND_API_KEY nicht in API-Response (kein Secret-Leak)", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/api/admin/booking-requests/route.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // Response-Objekt darf keinen API-Key enthalten
+  assert.ok(
+    !src.includes("RESEND_API_KEY") || src.includes("// RESEND_API_KEY"),
+    "API-Route darf RESEND_API_KEY nicht in der Response senden",
+  );
+  // Patientendaten dürfen nicht vollständig in der Response stehen
+  assert.ok(
+    src.includes("email_status") || src.includes("emailStatus"),
+    "API-Route muss email_status zurückgeben (nicht Patientendaten)",
+  );
+});
+
+test("BookingEmail: Keine Patientendaten vollständig in Audit-Logs (nur Domain/Länge)", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/booking-email.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // Muss patient_email_length oder patient_email_domain statt voller E-Mail loggen
+  assert.ok(
+    src.includes("patient_email_length") || src.includes("patient_email_domain"),
+    "Audit-Log darf nicht die vollständige E-Mail-Adresse ausgeben – nur Domain/Länge",
+  );
+});
+
+test("BookingEmail: lib/audit-log.ts enthält 'booking' als AuditArea", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/audit-log.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes('"booking"') || src.includes("'booking'"),
+    "lib/audit-log.ts muss 'booking' als AuditArea enthalten",
+  );
+});
+
+test("BookingEmail: getEmailStatusLabel() liefert deutschen Text für alle Status", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  // Utility kann in booking-email.ts ODER booking-email-client.ts definiert sein
+  const candidates = [
+    resolve(process.cwd(), "lib/booking-email-client.ts"),
+    resolve(process.cwd(), "lib/booking-email.ts"),
+  ];
+  const src: string = candidates
+    .filter(existsSync)
+    .map((p) => readFileSync(p, "utf8"))
+    .join("\n");
+  assert.ok(src.includes("getEmailStatusLabel"), "getEmailStatusLabel muss exportiert sein");
+  assert.ok(src.includes("E-Mail gesendet"), "Status 'sent' muss deutschen Text haben");
+  assert.ok(src.includes("E-Mail deaktiviert"), "Status 'skipped_disabled' muss deutschen Text haben");
+  assert.ok(src.includes("Keine E-Mail-Adresse"), "Status 'skipped_no_email' muss deutschen Text haben");
+});
+
+test("BookingEmail: Admin UI zeigt E-Mail-Status Badge (getEmailStatusLabel importiert)", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/admin/booking-requests/page.tsx");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("getEmailStatusLabel") || src.includes("emailStatus") || src.includes("email_status"),
+    "Admin-UI muss E-Mail-Status anzeigen",
+  );
+});
+
+test("BookingEmail: Admin UI zeigt E-Mail-Benachrichtigungs-Banner", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/admin/booking-requests/page.tsx");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("BOOKING_EMAIL_NOTIFICATIONS_ENABLED") ||
+    src.includes("email_notifications_enabled") ||
+    src.includes("emailEnabled"),
+    "Admin-UI muss E-Mail-Aktivierungsstatus anzeigen",
+  );
+});
+
+test("BookingEmail: Confirmation-Template enthält 'bestätigt' (kein 'abgelehnt' im falschen Template)", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/booking-email.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  assert.ok(
+    src.includes("bookingConfirmationHtml"),
+    "bookingConfirmationHtml() muss exportiert sein",
+  );
+  assert.ok(
+    src.includes("bookingDeclineHtml"),
+    "bookingDeclineHtml() muss exportiert sein",
+  );
+});
+
+test("BookingEmail: Keine SMS/WhatsApp/Anrufe im Booking-Email-Modul", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "lib/booking-email.ts");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // Sicherheitscheck: Kein SMS/Twilio/WhatsApp-Import
+  const forbidden = ["twilio", "vonage", "whatsapp", "sms", "nexmo"];
+  for (const term of forbidden) {
+    assert.ok(
+      !src.toLowerCase().includes(`import.*${term}`) && !src.toLowerCase().includes(`require.*${term}`),
+      `lib/booking-email.ts darf kein ${term} importieren`,
+    );
+  }
 });

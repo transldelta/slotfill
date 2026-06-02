@@ -4,13 +4,20 @@
  *
  * Sicherheitsregeln:
  * - Nur Admin-Zugang
- * - Keine echten Nachrichten ohne Provider
+ * - Keine automatische Benachrichtigung direkt nach Patienten-Anfrage
+ * - E-Mail ERST nach manuellem Admin-Klick (confirm/decline)
  * - Manuelle Bestätigung / Ablehnung
  * - auto_confirmed bleibt false außer explizit konfiguriert
+ * - RESEND_API_KEY niemals in Client-Responses
  */
 
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminContext } from "@/lib/admin";
+import {
+  sendBookingEmail,
+  isBookingEmailEnabled,
+  type BookingEmailData,
+} from "@/lib/booking-email";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -64,6 +71,24 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ code: "MISSING_ID" }, { status: 400 });
   }
 
+  // Für confirm/decline: Buchungsdaten vor dem Update laden (für E-Mail-Versand)
+  let bookingData: BookingEmailData | null = null;
+  if (action === "confirm" || action === "decline") {
+    const { data: existing, error: fetchError } = await ctx.admin
+      .from("booking_requests")
+      .select("id, patient_name, patient_email, preferred_time, note, tenant_id")
+      .eq("id", id)
+      .single();
+
+    if (fetchError || !existing) {
+      return NextResponse.json(
+        { code: "NOT_FOUND", message: "Buchungsanfrage nicht gefunden" },
+        { status: 404 },
+      );
+    }
+    bookingData = existing as BookingEmailData;
+  }
+
   const updates: Record<string, unknown> = {
     updated_at: new Date().toISOString(),
   };
@@ -101,12 +126,31 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ code: "DB_ERROR", message: error.message }, { status: 500 });
   }
 
-  // Hinweis: Keine automatische Benachrichtigung ohne Provider-Konfiguration.
-  // Admin muss Patienten manuell informieren oder Provider konfigurieren.
-  return NextResponse.json({
+  // Keine automatische Benachrichtigung direkt nach Patienten-Anfrage.
+  // E-Mail ERST nach manuellem Admin-Klick (confirm/decline).
+  // RESEND_API_KEY und Patientendaten werden NIE in der Response ausgegeben.
+  let emailStatus: string | null = null;
+  let emailCode: string | null = null;
+
+  if ((action === "confirm" || action === "decline") && bookingData) {
+    const emailType = action === "confirm" ? "confirmation" : "decline";
+    const result = await sendBookingEmail(bookingData, emailType, ctx.user.email ?? null);
+    emailStatus = result.status;
+    emailCode = result.code;
+  }
+
+  const response: Record<string, unknown> = {
     code: "OK",
     id,
     action,
-    note: "Keine automatische Benachrichtigung gesendet. Provider muss konfiguriert sein.",
-  });
+    email_notifications_enabled: isBookingEmailEnabled(),
+  };
+
+  // E-Mail-Status zurückgeben (kein Secret, keine Patientendaten)
+  if (emailStatus !== null) {
+    response.email_status = emailStatus;
+    response.email_code = emailCode;
+  }
+
+  return NextResponse.json(response);
 }

@@ -6,7 +6,7 @@ interface SlotFillLogoProps {
   href?: string | null;
   /** Height in px (width scales proportionally). Default: 36. */
   size?: number;
-  /** Show the "SlotFill" wordmark next to the logo icon. Default: true. */
+  /** Show the "Clentra" wordmark next to the logo icon. Default: true. */
   showWordmark?: boolean;
   className?: string;
 }
@@ -30,7 +30,7 @@ export function SlotFillLogo({
     <span className={`inline-flex items-center gap-2 ${className}`}>
       <Image
         src="/brand/slotfill-logo.svg"
-        alt="SlotFill Logo"
+        alt="Clentra Logo"
         width={size}
         height={size}
         priority
@@ -46,7 +46,7 @@ export function SlotFillLogo({
             backgroundClip: "text",
           }}
         >
-          SlotFill
+          Clentra
         </span>
       )}
     </span>
@@ -55,7 +55,7 @@ export function SlotFillLogo({
   if (href === null) return inner;
 
   return (
-    <Link href={href} aria-label="SlotFill – zur Startseite">
+    <Link href={href} aria-label="Clentra – zur Startseite">
       {inner}
     </Link>
   );

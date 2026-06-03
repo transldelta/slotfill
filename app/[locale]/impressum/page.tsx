@@ -3,7 +3,7 @@ import { ImpressumContent } from "@/components/legal/ImpressumContent";
 import { locales, type Locale } from "@/i18n/routing";
 
 export const metadata: Metadata = {
-  title: "Impressum – SlotFill",
+  title: "Impressum – Clentra",
   robots: { index: false, follow: false },
 };
 

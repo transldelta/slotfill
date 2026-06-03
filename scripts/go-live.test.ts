@@ -1517,14 +1517,20 @@ test("Brand: lib/brand.ts existiert", () => {
   );
 });
 
-test("Brand: BRAND_NAME ist 'SlotFill'", () => {
+test("Brand: BRAND_NAME ist gesetzt (Clentra oder SlotFill)", () => {
   const { BRAND_NAME } = require("../lib/brand");
-  assert.equal(BRAND_NAME, "SlotFill", `BRAND_NAME soll 'SlotFill' sein, ist: ${BRAND_NAME}`);
+  assert.ok(
+    BRAND_NAME === "Clentra" || BRAND_NAME === "SlotFill",
+    `BRAND_NAME soll 'Clentra' oder 'SlotFill' sein, ist: ${BRAND_NAME}`,
+  );
 });
 
-test("Brand: BRAND_TEAM_NAME ist 'SlotFill Team'", () => {
+test("Brand: BRAND_TEAM_NAME ist gesetzt (Clentra Team oder SlotFill Team)", () => {
   const { BRAND_TEAM_NAME } = require("../lib/brand");
-  assert.equal(BRAND_TEAM_NAME, "SlotFill Team", `BRAND_TEAM_NAME soll 'SlotFill Team' sein, ist: ${BRAND_TEAM_NAME}`);
+  assert.ok(
+    BRAND_TEAM_NAME === "Clentra Team" || BRAND_TEAM_NAME === "SlotFill Team",
+    `BRAND_TEAM_NAME soll 'Clentra Team' oder 'SlotFill Team' sein, ist: ${BRAND_TEAM_NAME}`,
+  );
 });
 
 test("Brand: PERSONAL_SIGNATURE_ALLOWED ist false", () => {
@@ -1621,8 +1627,8 @@ test("Brand: contactConfirmationEmail existiert und enthält keinen persönliche
     "contactConfirmationEmail darf keine Gmail-Adresse enthalten",
   );
   assert.ok(
-    html.toLowerCase().includes("slotfill"),
-    "contactConfirmationEmail muss 'SlotFill' enthalten",
+    html.toLowerCase().includes("slotfill") || html.toLowerCase().includes("clentra"),
+    "contactConfirmationEmail muss Markenname ('Clentra' oder 'SlotFill') enthalten",
   );
 });
 
@@ -1638,8 +1644,8 @@ test("Brand: trialWelcomeEmail existiert und enthält keinen persönlichen Namen
     "trialWelcomeEmail darf keine Gmail-Adresse enthalten",
   );
   assert.ok(
-    html.toLowerCase().includes("slotfill"),
-    "trialWelcomeEmail muss 'SlotFill' enthalten",
+    html.toLowerCase().includes("slotfill") || html.toLowerCase().includes("clentra"),
+    "trialWelcomeEmail muss Markenname ('Clentra' oder 'SlotFill') enthalten",
   );
   assert.ok(
     html.includes("14"),
@@ -1666,8 +1672,8 @@ test("Brand: testPracticeEmail enthält keinen persönlichen Namen und keine pri
     "testPracticeEmail darf keine Gmail-Adresse enthalten",
   );
   assert.ok(
-    html.toLowerCase().includes("slotfill"),
-    "testPracticeEmail muss 'SlotFill' enthalten",
+    html.toLowerCase().includes("slotfill") || html.toLowerCase().includes("clentra"),
+    "testPracticeEmail muss Markenname ('Clentra' oder 'SlotFill') enthalten",
   );
 });
 
@@ -1875,13 +1881,16 @@ test("Logo: SlotFillLogo-Komponente existiert", () => {
   );
 });
 
-test("Logo: SlotFillLogo-Komponente enthält alt-Text 'SlotFill Logo'", () => {
+test("Logo: SlotFillLogo-Komponente enthält alt-Text mit Markenname (Clentra Logo oder SlotFill Logo)", () => {
   const { readFileSync, existsSync } = require("fs");
   const { resolve } = require("path");
   const p = resolve(process.cwd(), "components/ui/SlotFillLogo.tsx");
   if (!existsSync(p)) return;
   const src: string = readFileSync(p, "utf8");
-  assert.ok(src.includes('alt="SlotFill Logo"'), "SlotFillLogo muss alt-Text 'SlotFill Logo' haben");
+  assert.ok(
+    src.includes('alt="Clentra Logo"') || src.includes('alt="SlotFill Logo"'),
+    "SlotFillLogo muss alt-Text mit Markenname haben ('Clentra Logo' oder 'SlotFill Logo')",
+  );
 });
 
 test("Logo: Landing-Page importiert SlotFillLogo-Komponente", () => {

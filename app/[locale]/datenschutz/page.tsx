@@ -3,7 +3,7 @@ import { DatenschutzContent } from "@/components/legal/DatenschutzContent";
 import { locales, type Locale } from "@/i18n/routing";
 
 export const metadata: Metadata = {
-  title: "Datenschutzerklärung – SlotFill",
+  title: "Datenschutzerklärung – Clentra",
   robots: { index: false, follow: false },
 };
 

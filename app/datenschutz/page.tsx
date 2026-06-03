@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { DatenschutzContent } from "@/components/legal/DatenschutzContent";
 
 export const metadata: Metadata = {
-  title: "Datenschutzerklärung – SlotFill",
+  title: "Datenschutzerklärung – Clentra",
   robots: { index: false, follow: false },
 };
 

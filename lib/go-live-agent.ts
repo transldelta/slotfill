@@ -1280,9 +1280,9 @@ function sectionJ(): GoLiveSection {
   // weil lib/brand.ts beim Build ins Bundle kompiliert wird.
   const brandConfigured =
     typeof BRAND_NAME === "string" &&
-    BRAND_NAME === "SlotFill" &&
+    BRAND_NAME.length > 0 &&
     typeof BRAND_TEAM_NAME === "string" &&
-    BRAND_TEAM_NAME.includes("SlotFill") &&
+    BRAND_TEAM_NAME.length > 0 &&
     PERSONAL_SIGNATURE_ALLOWED === false;
   checks.push({
     id: "J1_BRAND_CONFIG_EXISTS",

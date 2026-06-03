@@ -4,11 +4,12 @@ import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SlotFill",
-  description: "Freie Termine automatisch aus der Warteliste füllen.",
+  title: "Clentra",
+  description: "Termin- und Anfrageverwaltung für Arztpraxen – datensparsam, automatisiert, DSGVO-bewusst.",
 };
 
 // Setzt das Theme vor dem ersten Paint, um ein Aufblitzen zu vermeiden.
+// Interner Key bleibt 'slotfill-theme' für Rückwärtskompatibilität mit bestehenden Nutzern.
 const themeScript = `(function(){try{var t=localStorage.getItem('slotfill-theme');if(t==='dark'){document.documentElement.classList.add('dark');}}catch(e){}})();`;
 
 export default function RootLayout({

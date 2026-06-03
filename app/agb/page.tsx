@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { AgbContent } from "@/components/legal/AgbContent";
 
 export const metadata: Metadata = {
-  title: "AGB – SlotFill",
+  title: "AGB – Clentra",
   robots: { index: false, follow: false },
 };
 

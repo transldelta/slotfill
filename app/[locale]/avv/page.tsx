@@ -3,7 +3,7 @@ import { AvvContent } from "@/components/legal/AvvContent";
 import { locales, type Locale } from "@/i18n/routing";
 
 export const metadata: Metadata = {
-  title: "AVV – Auftragsverarbeitungsvertrag – SlotFill",
+  title: "AVV – Auftragsverarbeitungsvertrag – Clentra",
   robots: { index: false, follow: false },
 };
 

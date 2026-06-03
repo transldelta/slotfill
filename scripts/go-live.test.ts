@@ -3352,3 +3352,77 @@ test("AutoConfirm: booking_settings-Route liest slot_minutes (nicht booking_slot
     "booking-settings PUT darf nicht updates.booking_buffer_minutes setzen (Spalte existiert nicht in DB)",
   );
 });
+
+// ─── BookingSettings UI: Selected-Practice-State-Bug ─────────────────────────
+
+test("BookingSettings UI: No-Practice-Box nur wenn practices.length === 0 UND !selectedPracticeId", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/admin/booking-settings/page.tsx");
+  assert.ok(existsSync(p), "app/admin/booking-settings/page.tsx muss existieren");
+  const src: string = readFileSync(p, "utf8");
+  // No-Practice-Guard muss BEIDE Bedingungen prüfen
+  assert.ok(
+    src.includes("practices.length === 0 && !selectedPracticeId") ||
+    src.includes("!selectedPracticeId && practices.length === 0"),
+    "No-Practice-Box darf NUR angezeigt werden wenn practices.length === 0 UND !selectedPracticeId – nicht allein durch practices.length === 0",
+  );
+});
+
+test("BookingSettings UI: practiceSelector wird auch bei einer (einzelnen) Praxis angezeigt", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/admin/booking-settings/page.tsx");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // Selector muss bei >= 1 Praxen erscheinen (nicht erst bei > 1)
+  assert.ok(
+    src.includes("practices.length >= 1"),
+    "practiceSelector muss bei practices.length >= 1 angezeigt werden (nicht erst bei > 1) damit eine einzelne Praxis klar sichtbar ist",
+  );
+});
+
+test("BookingSettings UI: Fallback-Logik wenn practices_list API leer zurückgibt", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/admin/booking-settings/page.tsx");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // Fallback via settings-Endpunkt wenn practices_list leer
+  assert.ok(
+    src.includes("resource=settings") && src.includes("list.length === 0"),
+    "page.tsx muss Fallback via settings-API enthalten wenn practices_list leer zurückgibt",
+  );
+});
+
+test("BookingSettings UI: saveSettings sendet practice_id an API", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/admin/booking-settings/page.tsx");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // PUT muss practice_id: selectedPracticeId übergeben
+  assert.ok(
+    src.includes("practice_id: selectedPracticeId"),
+    "saveSettings muss practice_id: selectedPracticeId im PUT-Body senden",
+  );
+});
+
+test("BookingSettings UI: Leere booking_availability_rules zeigen normale Einstellungen ohne No-Practice-State", () => {
+  const { readFileSync, existsSync } = require("fs");
+  const { resolve } = require("path");
+  const p = resolve(process.cwd(), "app/admin/booking-settings/page.tsx");
+  if (!existsSync(p)) return;
+  const src: string = readFileSync(p, "utf8");
+  // Leere Regeln → Hinweis-Text, NICHT no-practice-message
+  assert.ok(
+    src.includes("Noch keine Öffnungszeiten gepflegt"),
+    "Leere Öffnungszeiten müssen informellen Text zeigen, keinen No-Practice-State",
+  );
+  // no-practice-message darf NICHT durch leere rules ausgelöst werden
+  // (rules-Array ist getrennt von practice-State)
+  assert.ok(
+    !src.includes("rules.length === 0 && practices.length === 0"),
+    "Leere rules dürfen keinen No-Practice-State triggern",
+  );
+});

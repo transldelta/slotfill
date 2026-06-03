@@ -154,6 +154,34 @@ export default function BookingSettingsPage() {
       } catch {
         // Netzwerkfehler
       }
+
+      // Fallback: practices_list leer → Praxis via Settings-API auto-auflösen
+      // (tritt auf wenn auth_uid/email-Zuordnung fehlt aber Praxis existiert)
+      if (list.length === 0) {
+        try {
+          const fallbackRes = await fetch(
+            "/api/admin/booking-settings?resource=settings",
+          );
+          if (fallbackRes.ok) {
+            const d = await fallbackRes.json();
+            if (d.practice_id && d.settings) {
+              const pid = d.practice_id as string;
+              const syntheticPractice: PracticeOption = {
+                id: pid,
+                name: (d.settings as PracticeSettings).name ?? "Praxis",
+                email: null,
+                status: null,
+              };
+              list = [syntheticPractice];
+              // Settings direkt setzen – spart einen extra API-Round
+              setSettings(d.settings as PracticeSettings);
+            }
+          }
+        } catch {
+          // Fallback fehlgeschlagen – weiter mit leer
+        }
+      }
+
       setPractices(list);
 
       // 2. Beste Praxis vorauswählen und Einstellungen laden
@@ -326,9 +354,10 @@ export default function BookingSettingsPage() {
     </div>
   );
 
-  // Praxis-Auswahlschalter (nur wenn mehrere Praxen vorhanden)
+  // Praxis-Auswahlschalter: immer anzeigen wenn mindestens eine Praxis vorhanden.
+  // Auch bei nur 1 Praxis zeigen, damit klar ist welche Praxis konfiguriert wird.
   const practiceSelector =
-    practices.length > 1 ? (
+    practices.length >= 1 ? (
       <div
         className="flex items-center gap-2 rounded-xl border p-4"
         style={{
@@ -380,10 +409,12 @@ export default function BookingSettingsPage() {
 
   // ── Render: Keine Praxis gefunden ────────────────────────────────────────
   //
-  // EINZIGE Bedingung: practices.length === 0 nach dem Laden.
+  // Bedingung: practices.length === 0 UND selectedPracticeId === null.
+  // Doppelte Prüfung verhindert False-Positives wenn die Praxis zwar bekannt
+  // ist (selectedPracticeId gesetzt), aber die practices_list-API leer liefert.
   // API-Fehler beim Settings-Laden führen NICHT zu dieser Ansicht.
   //
-  if (practices.length === 0) {
+  if (practices.length === 0 && !selectedPracticeId) {
     return (
       <div className="space-y-6 max-w-2xl">
         {pageHeader}

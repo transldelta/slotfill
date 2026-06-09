@@ -22,7 +22,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "landing" });
   const tNav = await getTranslations({ locale, namespace: "nav" });
-  const title = `Clentra – ${t("heroTitle")}`;
+  const title = `PraxisFlow – ${t("heroTitle")}`;
   const description = t("heroSubtitle");
 
   return {
@@ -39,7 +39,7 @@ export async function generateMetadata({
       title,
       description,
       url: `/${locale}`,
-      siteName: "Clentra",
+      siteName: "PraxisFlow",
       locale: locale === "de" ? "de_DE" : locale,
       type: "website",
     },
@@ -58,11 +58,11 @@ function buildSchemaOrg(locale: string) {
     "@graph": [
       {
         "@type": "SoftwareApplication",
-        name: "Clentra",
+        name: "PraxisFlow",
         applicationCategory: "BusinessApplication",
         operatingSystem: "Web",
         description:
-          "Clentra hilft Arzt- und Facharztpraxen, kurzfristige Terminlücken aus der Warteliste zu füllen.",
+          "PraxisFlow hilft Arzt- und Facharztpraxen, kurzfristige Terminlücken aus der Warteliste zu füllen.",
         url: APP_URL,
         inLanguage: locale,
         offers: {
@@ -74,9 +74,9 @@ function buildSchemaOrg(locale: string) {
       },
       {
         "@type": "Organization",
-        name: "Clentra",
+        name: "PraxisFlow",
         url: APP_URL,
-        description: "Clentra – Software für die Wartelisten-Verwaltung in Arztpraxen.",
+        description: "PraxisFlow – Software für die Wartelisten-Verwaltung in Arztpraxen.",
       },
     ],
   };

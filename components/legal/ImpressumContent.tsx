@@ -6,7 +6,7 @@ import { getLegalContent, isRtlLocale, isLegalDraft } from "@/lib/legal-content"
  *
  * Persönliche Daten des Anbieters erscheinen ausschließlich auf dieser Seite
  * (gesetzliche Pflicht). In automatischer Kommunikation, Marketing und Trial-Mails
- * wird ausschließlich „Clentra Team" als Absender verwendet.
+ * wird ausschließlich „PraxisFlow Team" als Absender verwendet.
  *
  * ENTWURF – vor Veröffentlichung durch einen Rechtsanwalt prüfen lassen.
  */
@@ -65,7 +65,7 @@ export function ImpressumContent({
             {c.impressumSection1}
           </h2>
           <div className="mt-2 space-y-1 leading-relaxed">
-            <p className="font-medium">Clentra</p>
+            <p className="font-medium">PraxisFlow</p>
             <p>Brahim Ben Abla</p>
             <p>Schlesier Straße 64</p>
             <p>76227 Karlsruhe</p>
@@ -127,12 +127,12 @@ export function ImpressumContent({
             </h2>
             <div className="mt-2 space-y-1 leading-relaxed">
               <p>
-                Clentra ist ein SaaS-Angebot für Termin-, Anfrage-, Feedback- und Praxisautomatisierung.
+                PraxisFlow ist ein SaaS-Angebot für Termin-, Anfrage-, Feedback- und Praxisautomatisierung.
                 Die Plattform richtet sich ausschließlich an gewerbliche Nutzerinnen und Nutzer
                 (Arzt- und Therapiepraxen, Kliniken und Gesundheitsanbieter).
               </p>
               <p>
-                Clentra erbringt keine medizinischen Leistungen und ersetzt keine ärztliche Beratung,
+                PraxisFlow erbringt keine medizinischen Leistungen und ersetzt keine ärztliche Beratung,
                 Diagnose oder Behandlung.
               </p>
             </div>
@@ -170,8 +170,8 @@ export function ImpressumContent({
         <section className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/50">
           <p className="text-xs text-slate-500 dark:text-slate-400">
             {isDE
-              ? (<><strong>Intern:</strong> Persönliche Anbieterinformationen erscheinen ausschließlich auf dieser Seite (gesetzliche Pflicht nach § 5 DDG). In automatischer Kommunikation wird ausschließlich &bdquo;Clentra Team&ldquo; als Absender verwendet.</>)
-              : (<><strong>Note:</strong> Personal operator information appears only on this legal notice page (as required by German law § 5 DDG). All automated communication uses &ldquo;Clentra Team&rdquo; as the sender — never a personal name.</>)
+              ? (<><strong>Intern:</strong> Persönliche Anbieterinformationen erscheinen ausschließlich auf dieser Seite (gesetzliche Pflicht nach § 5 DDG). In automatischer Kommunikation wird ausschließlich &bdquo;PraxisFlow Team&ldquo; als Absender verwendet.</>)
+              : (<><strong>Note:</strong> Personal operator information appears only on this legal notice page (as required by German law § 5 DDG). All automated communication uses &ldquo;PraxisFlow Team&rdquo; as the sender — never a personal name.</>)
             }
           </p>
         </section>

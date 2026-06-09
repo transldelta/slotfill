@@ -39,7 +39,7 @@
     "thisWeek": "Esta semana",
     "thisMonth": "Este mes",
     "welcomeBack": "Bienvenido/a de nuevo",
-    "welcomeIntro": "¡Bienvenido/a a Clentra! Agrega tus primeros pacientes para comenzar.",
+    "welcomeIntro": "¡Bienvenido/a a PraxisFlow! Agrega tus primeros pacientes para comenzar.",
     "totalPatients": "Total de pacientes",
     "waitlistCount": "En lista de espera",
     "appointmentsToday": "Citas hoy",
@@ -72,7 +72,7 @@
     "status": "Estado"
   },
   "sidebar": {
-    "brand": "Clentra",
+    "brand": "PraxisFlow",
     "toggle": "Alternar menú"
   },
   "emptyState": {
@@ -228,7 +228,7 @@
       "dnsName": "Nombre",
       "dnsValue": "Valor",
       "dnsStatus": "Estado",
-      "testSubject": "Correo de prueba Clentra",
+      "testSubject": "Correo de prueba PraxisFlow",
       "testBody": "Este correo confirma que el envío de correos funciona.",
       "testSent": "Correo de prueba enviado a {recipient}.",
       "testFailed": "Correo de prueba fallido: {diagnosis}",
@@ -363,7 +363,7 @@
     "trialInfo": "Prueba gratis 14 días – después se requiere un plan de pago.",
     "trialNoCreditCard": "No se requiere tarjeta de crédito para la prueba.",
     "trialNoSms": "En la prueba no se envían SMS ni WhatsApp reales sin configuración deliberada del proveedor.",
-    "providerCostNote": "Los SMS y WhatsApp se gestionan a través de proveedores externos (p. ej. Twilio). Estos costes del proveedor no están incluidos automáticamente en el precio de Clentra."
+    "providerCostNote": "Los SMS y WhatsApp se gestionan a través de proveedores externos (p. ej. Twilio). Estos costes del proveedor no están incluidos automáticamente en el precio de PraxisFlow."
   },
   "subscription": {
     "title": "Tu suscripción",
@@ -399,7 +399,7 @@
     "LIMITS_RESET": "Límites restablecidos"
   },
   "nav": {
-    "brand": "Clentra",
+    "brand": "PraxisFlow",
     "features": "Funciones",
     "pricing": "Precios",
     "blog": "Blog",
@@ -409,11 +409,11 @@
   },
   "landing": {
     "heroTitle": "Cubrir automáticamente las citas desde la lista de espera",
-    "heroSubtitle": "Clentra prepara pacientes adecuados de la lista de espera cuando surge un espacio libre. SMS/WhatsApp puede conectarse opcionalmente a través de Twilio.",
+    "heroSubtitle": "PraxisFlow prepara pacientes adecuados de la lista de espera cuando surge un espacio libre. SMS/WhatsApp puede conectarse opcionalmente a través de Twilio.",
     "ctaPrimary": "Probar gratis",
     "ctaSecondary": "Ver funciones",
     "comparePrices": "Comparar precios",
-    "featuresTitle": "Qué hace Clentra por tu consultorio",
+    "featuresTitle": "Qué hace PraxisFlow por tu consultorio",
     "feature1Title": "Gestionar lista de espera",
     "feature1Desc": "Mantén a todos los pacientes en espera en un solo lugar.",
     "feature2Title": "Notificaciones preparadas",
@@ -427,7 +427,7 @@
     "footerNote": "El alojamiento y la protección de datos deben revisarse antes de publicar.",
     "rights": "Todos los derechos reservados.",
     "trustTitle": "La consulta mantiene el control",
-    "trustSubtitle": "Clentra apoya – las decisiones siempre las toma la consulta.",
+    "trustSubtitle": "PraxisFlow apoya – las decisiones siempre las toma la consulta.",
     "trustPoint1": "Ningún mensaje automático sin aprobación de la consulta.",
     "trustPoint2": "SMS y WhatsApp son opcionales y requieren configuración deliberada del proveedor.",
     "trustPoint3": "En modo estándar, los mensajes se preparan, no se envían automáticamente.",
@@ -437,7 +437,7 @@
   },
   "blog": {
     "title": "Blog",
-    "subtitle": "Consejos y novedades sobre Clentra y la organización de consultorios.",
+    "subtitle": "Consejos y novedades sobre PraxisFlow y la organización de consultorios.",
     "empty": "Aún no hay publicaciones.",
     "readMore": "Leer más",
     "back": "Volver al blog",
@@ -469,23 +469,23 @@
     "agbIntro": "Estos términos y condiciones son un borrador."
   },
   "email": {
-    "welcomeSubject": "Bienvenido/a a Clentra – Tu período de prueba comienza ahora",
+    "welcomeSubject": "Bienvenido/a a PraxisFlow – Tu período de prueba comienza ahora",
     "trialReminderSubject": "Tu período de prueba termina pronto – actualiza ahora",
-    "paymentSubject": "Confirmación de pago para Clentra",
+    "paymentSubject": "Confirmación de pago para PraxisFlow",
     "welcomeSent": "Correo de bienvenida enviado",
     "trialReminderSent": "Recordatorio de prueba enviado",
     "paymentSent": "Confirmación de pago enviada",
     "emailError": "No se pudo enviar el correo",
     "emailDisabled": "Envío de correo desactivado (falta RESEND_API_KEY)",
-    "fromName": "Equipo Clentra",
-    "welcomeBody": "Bienvenido/a a Clentra, {praxisName}. Tu período de prueba de 14 días ha comenzado.",
+    "fromName": "Equipo PraxisFlow",
+    "welcomeBody": "Bienvenido/a a PraxisFlow, {praxisName}. Tu período de prueba de 14 días ha comenzado.",
     "trialReminderBody": "Tu período de prueba termina en {daysLeft} días. Actualiza ahora para continuar.",
     "paymentBody": "Gracias por tu pago de {amount} €. Tu suscripción está activa.",
     "viewInvoice": "Ver confirmación de pago"
   },
   "onboarding": {
     "title": "Primeros pasos",
-    "subtitle": "Configura Clentra paso a paso.",
+    "subtitle": "Configura PraxisFlow paso a paso.",
     "start": "Iniciar incorporación",
     "completed": "Completado",
     "open": "Pendiente",
@@ -518,7 +518,7 @@
     "title": "Centro de confianza",
     "subtitle": "Notas de protección de datos, estado de notificaciones e información de seguridad.",
     "privacy": "Notas de protección de datos",
-    "privacy1": "Clentra almacena datos del consultorio, pacientes, citas y estado de notificaciones.",
+    "privacy1": "PraxisFlow almacena datos del consultorio, pacientes, citas y estado de notificaciones.",
     "privacy2": "No se muestran secretos en el navegador.",
     "privacy3": "Los datos de pacientes solo deben ingresarse con un propósito legítimo.",
     "privacy4": "El consultorio debe respetar el consentimiento para notificaciones.",
@@ -542,7 +542,7 @@
   },
   "help": {
     "title": "Ayuda",
-    "subtitle": "Respuestas a las preguntas más importantes sobre el uso de Clentra.",
+    "subtitle": "Respuestas a las preguntas más importantes sobre el uso de PraxisFlow.",
     "quickstart": "Inicio rápido",
     "qs1": "Agregar paciente",
     "qs2": "Agregar a lista de espera",

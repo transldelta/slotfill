@@ -4,7 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Clentra",
+  title: "PraxisFlow",
   description: "Termin- und Anfrageverwaltung für Arztpraxen – datensparsam, automatisiert, DSGVO-bewusst.",
 };
 

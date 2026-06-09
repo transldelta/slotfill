@@ -8,7 +8,7 @@ import { locales, type Locale } from "@/i18n/routing";
 import "../globals.css";
 
 export const metadata: Metadata = {
-  title: "Clentra",
+  title: "PraxisFlow",
   description: "Termin- und Anfrageverwaltung für Arztpraxen – datensparsam, automatisiert, DSGVO-bewusst.",
 };
 

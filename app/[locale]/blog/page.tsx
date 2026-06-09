@@ -20,7 +20,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "blog" });
   const tNav = await getTranslations({ locale, namespace: "nav" });
-  const title = `${t("title")} – Clentra`;
+  const title = `${t("title")} – PraxisFlow`;
   const description = t("subtitle");
 
   return {
@@ -37,7 +37,7 @@ export async function generateMetadata({
       title,
       description,
       url: `/${locale}/blog`,
-      siteName: "Clentra",
+      siteName: "PraxisFlow",
       locale: locale === "de" ? "de_DE" : locale,
       type: "website",
     },

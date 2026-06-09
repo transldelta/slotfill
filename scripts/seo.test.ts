@@ -118,17 +118,17 @@ test("SEO: Schema.org JSON-LD enthält keine Secrets", () => {
   const schemaOrg = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    name: "Clentra",
+    name: "PraxisFlow",
     applicationCategory: "BusinessApplication",
     operatingSystem: "Web",
-    description: "Clentra hilft Arztpraxen, Terminlücken zu füllen.",
+    description: "PraxisFlow hilft Arztpraxen, Terminlücken zu füllen.",
     url: "https://slotfill-pi.vercel.app",
   };
   assert.equal(assertNoSecretsInResponse(schemaOrg), true);
 });
 
-test("SEO: Schema.org ist kein MedicalOrganization (Clentra ist SaaS)", () => {
-  // Clentra ist eine SaaS, keine Arztpraxis → kein MedicalOrganization
+test("SEO: Schema.org ist kein MedicalOrganization (PraxisFlow ist SaaS)", () => {
+  // PraxisFlow ist eine SaaS, keine Arztpraxis → kein MedicalOrganization
   const schemaType = "SoftwareApplication";
   assert.notEqual(schemaType, "MedicalOrganization");
   assert.equal(schemaType, "SoftwareApplication");

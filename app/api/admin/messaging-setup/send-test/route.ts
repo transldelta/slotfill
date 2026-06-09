@@ -19,7 +19,7 @@ export async function POST() {
 
   const result = await sendAppointmentOfferMessage({
     to,
-    body: "Clentra Test-Nachricht: Der Nachrichten-Versand funktioniert.",
+    body: "PraxisFlow Test-Nachricht: Der Nachrichten-Versand funktioniert.",
   });
 
   return NextResponse.json({

@@ -385,8 +385,8 @@ test("Go-Live: FIRST_TEST_PRACTICE.md enthält keinen werblichen 'DSGVO-konform'
   const { readFileSync } = require("fs");
   const content: string = readFileSync(path, "utf8");
   // Erlaubt: "DSGVO-konform" als negativer Hinweis (in Verbots-Listen/Tabellen)
-  // Verboten: werbliche Behauptung wie "Clentra ist DSGVO-konform"
-  const werblicheBehauptung = /clentra\s+ist\s+dsgvo-konform/i.test(content) ||
+  // Verboten: werbliche Behauptung wie "PraxisFlow ist DSGVO-konform"
+  const werblicheBehauptung = /praxisflow\s+ist\s+dsgvo-konform/i.test(content) ||
     /wir\s+(sind|bieten)\s+.*dsgvo-konform/i.test(content);
   assert.ok(
     !werblicheBehauptung,
@@ -1464,14 +1464,14 @@ test("Legal: Automatische Kommunikation enthält keinen persönlichen Namen", ()
   }
 });
 
-test("Legal: Automatische Kommunikation verwendet 'Clentra Team'", () => {
+test("Legal: Automatische Kommunikation verwendet 'PraxisFlow Team'", () => {
   const { readFileSync } = require("fs");
   const templatesPath = resolve(process.cwd(), "lib/email/templates.ts");
   assert.ok(existsSync(templatesPath), "lib/email/templates.ts fehlt");
   const src: string = readFileSync(templatesPath, "utf8");
   assert.ok(
-    src.includes("BRAND_TEAM_NAME") || src.includes("Clentra Team"),
-    "lib/email/templates.ts muss 'Clentra Team' oder BRAND_TEAM_NAME als Absender verwenden",
+    src.includes("BRAND_TEAM_NAME") || src.includes("PraxisFlow Team"),
+    "lib/email/templates.ts muss 'PraxisFlow Team' oder BRAND_TEAM_NAME als Absender verwenden",
   );
 });
 
@@ -1517,14 +1517,14 @@ test("Brand: lib/brand.ts existiert", () => {
   );
 });
 
-test("Brand: BRAND_NAME ist 'Clentra'", () => {
+test("Brand: BRAND_NAME ist 'PraxisFlow'", () => {
   const { BRAND_NAME } = require("../lib/brand");
-  assert.equal(BRAND_NAME, "Clentra", `BRAND_NAME soll 'Clentra' sein, ist: ${BRAND_NAME}`);
+  assert.equal(BRAND_NAME, "PraxisFlow", `BRAND_NAME soll 'PraxisFlow' sein, ist: ${BRAND_NAME}`);
 });
 
-test("Brand: BRAND_TEAM_NAME ist 'Clentra Team'", () => {
+test("Brand: BRAND_TEAM_NAME ist 'PraxisFlow Team'", () => {
   const { BRAND_TEAM_NAME } = require("../lib/brand");
-  assert.equal(BRAND_TEAM_NAME, "Clentra Team", `BRAND_TEAM_NAME soll 'Clentra Team' sein, ist: ${BRAND_TEAM_NAME}`);
+  assert.equal(BRAND_TEAM_NAME, "PraxisFlow Team", `BRAND_TEAM_NAME soll 'PraxisFlow Team' sein, ist: ${BRAND_TEAM_NAME}`);
 });
 
 test("Brand: PERSONAL_SIGNATURE_ALLOWED ist false", () => {
@@ -1537,7 +1537,7 @@ test("Brand: PERSONAL_SIGNATURE_ALLOWED ist false", () => {
 });
 
 test("Brand: SUPPORT_EMAIL ist gesetzt und enthält keinen Klarnamen 'Brahim'", () => {
-  // Gmail ist als Übergangslösung erlaubt (kein clentra.de vorhanden).
+  // Gmail ist als Übergangslösung erlaubt (kein keine eigene Domain eingerichtet).
   // Kritisch: der Klarname des Betreibers darf nicht im Absendername auftauchen.
   // transl.delta@gmail.com enthält 'brahim' NICHT → Test bleibt schützend.
   const { SUPPORT_EMAIL } = require("../lib/brand");
@@ -1552,7 +1552,7 @@ test("Brand: SUPPORT_EMAIL ist gesetzt und enthält keinen Klarnamen 'Brahim'", 
 });
 
 test("Brand: CONTACT_EMAIL ist gesetzt und enthält keinen Klarnamen 'Brahim'", () => {
-  // Gmail ist als Übergangslösung erlaubt (kein clentra.de vorhanden).
+  // Gmail ist als Übergangslösung erlaubt (kein keine eigene Domain eingerichtet).
   // Kritisch: der Klarname des Betreibers darf nicht im Absendername auftauchen.
   // transl.delta@gmail.com enthält 'brahim' NICHT → Test bleibt schützend.
   const { CONTACT_EMAIL } = require("../lib/brand");
@@ -1628,8 +1628,8 @@ test("Brand: contactConfirmationEmail existiert und enthält keinen persönliche
     "contactConfirmationEmail darf 'Brahim' nicht enthalten",
   );
   assert.ok(
-    html.toLowerCase().includes("clentra"),
-    "contactConfirmationEmail muss 'Clentra' enthalten",
+    html.toLowerCase().includes("praxisflow"),
+    "contactConfirmationEmail muss 'PraxisFlow' enthalten",
   );
 });
 
@@ -1643,8 +1643,8 @@ test("Brand: trialWelcomeEmail existiert und enthält keinen persönlichen Namen
     "trialWelcomeEmail darf 'Brahim' nicht enthalten",
   );
   assert.ok(
-    html.toLowerCase().includes("clentra"),
-    "trialWelcomeEmail muss 'Clentra' enthalten",
+    html.toLowerCase().includes("praxisflow"),
+    "trialWelcomeEmail muss 'PraxisFlow' enthalten",
   );
   assert.ok(
     html.includes("14"),
@@ -1669,8 +1669,8 @@ test("Brand: testPracticeEmail enthält keinen persönlichen Namen", () => {
   const html: string = testPracticeEmail("Testpraxis");
   assert.ok(!html.includes("Brahim"), "testPracticeEmail darf 'Brahim' nicht enthalten");
   assert.ok(
-    html.toLowerCase().includes("clentra"),
-    "testPracticeEmail muss 'Clentra' enthalten",
+    html.toLowerCase().includes("praxisflow"),
+    "testPracticeEmail muss 'PraxisFlow' enthalten",
   );
 });
 
@@ -1878,13 +1878,18 @@ test("Logo: SlotFillLogo-Komponente existiert", () => {
   );
 });
 
-test("Logo: SlotFillLogo-Komponente enthält alt-Text 'Clentra Logo'", () => {
+test("Logo: SlotFillLogo-Komponente verwendet BRAND_NAME (White-Label-fähig)", () => {
+  // Neue Logo-Implementierung: reines inline SVG (kein <Image>).
+  // White-Label-fähig: Produktname kommt aus BRAND_NAME in lib/brand.ts.
   const { readFileSync, existsSync } = require("fs");
   const { resolve } = require("path");
   const p = resolve(process.cwd(), "components/ui/SlotFillLogo.tsx");
   if (!existsSync(p)) return;
   const src: string = readFileSync(p, "utf8");
-  assert.ok(src.includes('alt="Clentra Logo"'), "SlotFillLogo muss alt-Text 'Clentra Logo' haben");
+  // Muss BRAND_NAME aus lib/brand importieren
+  assert.ok(src.includes("BRAND_NAME"), "SlotFillLogo muss BRAND_NAME aus lib/brand verwenden");
+  // Muss aria-label für Accessibility haben
+  assert.ok(src.includes("aria-label"), "SlotFillLogo muss aria-label haben");
 });
 
 test("Logo: Landing-Page importiert SlotFillLogo-Komponente", () => {

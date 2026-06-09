@@ -1,8 +1,10 @@
 /**
  * lib/brand.ts – Zentrale Markenkommunikations-Konfiguration
  *
- * REGEL: Persönliche Namen erscheinen NICHT in automatischer Kommunikation.
+ * REGEL: Persönliche Namen erscheinen NICHT als Absender in automatischer Kommunikation.
  * Ausnahme: Impressum / Legal-Pflichtseiten (gesetzlich vorgeschrieben).
+ * CONTACT_EMAIL / SUPPORT_EMAIL: persönliche E-Mail als Übergangslösung bis zur
+ * Einrichtung einer geschäftlichen Adresse – kein Klarname im Absender.
  *
  * Alle öffentlich sichtbaren E-Mails, Formulare, Trial-Nachrichten und
  * Onboarding-Mails laufen unter "Clentra Team" – ohne Privatname.
@@ -20,21 +22,21 @@ export const BRAND_TEAM_NAME = "Clentra Team" as const;
 
 /**
  * Support-E-Mail (Transactional-Rückmeldungen).
- * Kein persönlicher Name, keine Gmail-Adresse.
- * Fallback-Domain "@clentra.de": nur E-Mail-Adresse, keine öffentliche URL.
- * Für Produktion SUPPORT_EMAIL als Umgebungsvariable setzen (z. B. via Resend).
+ * Fallback: persönliche E-Mail des Betreibers bis zur Einrichtung einer
+ * geschäftlichen Adresse. Für Produktion SUPPORT_EMAIL als Umgebungsvariable
+ * setzen (z. B. eine verifizierte Resend-Domain).
  */
 export const SUPPORT_EMAIL: string =
-  process.env.SUPPORT_EMAIL ?? "support@clentra.de";
+  process.env.SUPPORT_EMAIL ?? "transl.delta@gmail.com";
 
 /**
  * Kontakt-E-Mail (Eingang von Kontaktformularen).
- * Kein persönlicher Name, keine Gmail-Adresse.
- * Fallback-Domain "@clentra.de": nur E-Mail-Adresse, keine öffentliche URL.
- * Für Produktion CONTACT_EMAIL als Umgebungsvariable setzen.
+ * Fallback: persönliche E-Mail des Betreibers bis zur Einrichtung einer
+ * geschäftlichen Adresse. Für Produktion CONTACT_EMAIL als Umgebungsvariable
+ * setzen.
  */
 export const CONTACT_EMAIL: string =
-  process.env.CONTACT_EMAIL ?? "kontakt@clentra.de";
+  process.env.CONTACT_EMAIL ?? "transl.delta@gmail.com";
 
 /**
  * Öffentliche App-URL für Links in E-Mails und Metadata.

@@ -8,8 +8,8 @@ import { locales, type Locale } from "@/i18n/routing";
 import "../globals.css";
 
 export const metadata: Metadata = {
-  title: "SlotFill",
-  description: "Freie Termine automatisch aus der Warteliste füllen.",
+  title: "Clentra",
+  description: "Termin- und Anfrageverwaltung für Arztpraxen – datensparsam, automatisiert, DSGVO-bewusst.",
 };
 
 // Setzt das Theme vor dem ersten Paint, um ein Aufblitzen zu vermeiden.

@@ -39,7 +39,7 @@
     "thisWeek": "هذا الأسبوع",
     "thisMonth": "هذا الشهر",
     "welcomeBack": "مرحباً بعودتك",
-    "welcomeIntro": "مرحباً في SlotFill! أضف مرضاك الأوائل للبدء.",
+    "welcomeIntro": "مرحباً في Clentra! أضف مرضاك الأوائل للبدء.",
     "totalPatients": "إجمالي المرضى",
     "waitlistCount": "في قائمة الانتظار",
     "appointmentsToday": "مواعيد اليوم",
@@ -72,7 +72,7 @@
     "status": "الحالة"
   },
   "sidebar": {
-    "brand": "SlotFill",
+    "brand": "Clentra",
     "toggle": "تبديل القائمة"
   },
   "emptyState": {
@@ -228,7 +228,7 @@
       "dnsName": "الاسم",
       "dnsValue": "القيمة",
       "dnsStatus": "الحالة",
-      "testSubject": "بريد اختبار SlotFill",
+      "testSubject": "بريد اختبار Clentra",
       "testBody": "يؤكد هذا البريد أن الإرسال يعمل.",
       "testSent": "تم إرسال بريد الاختبار إلى {recipient}.",
       "testFailed": "فشل بريد الاختبار: {diagnosis}",
@@ -363,7 +363,7 @@
     "trialInfo": "جرّب مجاناً لمدة 14 يوماً – بعد ذلك يلزم خطة مدفوعة.",
     "trialNoCreditCard": "لا تحتاج إلى بطاقة ائتمان للتجربة.",
     "trialNoSms": "في التجربة لا يتم إرسال رسائل SMS أو واتساب حقيقية دون تهيئة متعمدة من المزود.",
-    "providerCostNote": "تتم معالجة الرسائل القصيرة وواتساب عبر مزودين خارجيين (مثل Twilio). تكاليف المزود هذه ليست مشمولة تلقائياً في سعر SlotFill."
+    "providerCostNote": "تتم معالجة الرسائل القصيرة وواتساب عبر مزودين خارجيين (مثل Twilio). تكاليف المزود هذه ليست مشمولة تلقائياً في سعر Clentra."
   },
   "subscription": {
     "title": "اشتراكك",
@@ -399,7 +399,7 @@
     "LIMITS_RESET": "تم إعادة تعيين الحدود"
   },
   "nav": {
-    "brand": "SlotFill",
+    "brand": "Clentra",
     "features": "الميزات",
     "pricing": "الأسعار",
     "blog": "المدونة",
@@ -409,11 +409,11 @@
   },
   "landing": {
     "heroTitle": "ملء مواعيد تلقائياً من قائمة الانتظار",
-    "heroSubtitle": "يُجهّز SlotFill مرضى مناسبين من قائمة الانتظار عند توفر فتحة موعد. يمكن ربط SMS/WhatsApp اختيارياً عبر Twilio.",
+    "heroSubtitle": "يُجهّز Clentra مرضى مناسبين من قائمة الانتظار عند توفر فتحة موعد. يمكن ربط SMS/WhatsApp اختيارياً عبر Twilio.",
     "ctaPrimary": "جرّب مجاناً",
     "ctaSecondary": "استعرض الميزات",
     "comparePrices": "مقارنة الأسعار",
-    "featuresTitle": "ما يقدمه SlotFill لعيادتك",
+    "featuresTitle": "ما يقدمه Clentra لعيادتك",
     "feature1Title": "إدارة قائمة الانتظار",
     "feature1Desc": "تتبّع جميع المرضى المنتظرين في مكان واحد.",
     "feature2Title": "إشعارات جاهزة",
@@ -427,7 +427,7 @@
     "footerNote": "يجب مراجعة الاستضافة وحماية البيانات قبل الإطلاق.",
     "rights": "جميع الحقوق محفوظة.",
     "trustTitle": "العيادة تحتفظ بالتحكم",
-    "trustSubtitle": "تدعم SlotFill – القرارات دائماً بيد العيادة.",
+    "trustSubtitle": "تدعم Clentra – القرارات دائماً بيد العيادة.",
     "trustPoint1": "لا رسائل تلقائية دون موافقة العيادة.",
     "trustPoint2": "الرسائل القصيرة وواتساب اختيارية وتتطلب تهيئة متعمدة من المزود.",
     "trustPoint3": "في الوضع الافتراضي، يتم إعداد الرسائل وليس إرسالها تلقائياً.",
@@ -437,7 +437,7 @@
   },
   "blog": {
     "title": "المدونة",
-    "subtitle": "نصائح وأخبار حول SlotFill وتنظيم العيادات.",
+    "subtitle": "نصائح وأخبار حول Clentra وتنظيم العيادات.",
     "empty": "لا منشورات منشورة بعد.",
     "readMore": "اقرأ المزيد",
     "back": "العودة للمدونة",
@@ -469,23 +469,23 @@
     "agbIntro": "هذه الشروط والأحكام مسودة."
   },
   "email": {
-    "welcomeSubject": "مرحباً في SlotFill – بدأت فترتك التجريبية",
+    "welcomeSubject": "مرحباً في Clentra – بدأت فترتك التجريبية",
     "trialReminderSubject": "فترتك التجريبية تنتهي قريباً",
-    "paymentSubject": "تأكيد الدفع لـ SlotFill",
+    "paymentSubject": "تأكيد الدفع لـ Clentra",
     "welcomeSent": "تم إرسال بريد الترحيب",
     "trialReminderSent": "تم إرسال تذكير التجربة",
     "paymentSent": "تم إرسال تأكيد الدفع",
     "emailError": "تعذر إرسال البريد",
     "emailDisabled": "إرسال البريد معطّل",
-    "fromName": "فريق SlotFill",
-    "welcomeBody": "مرحباً في SlotFill، {praxisName}! بدأت فترتك التجريبية لمدة 14 يوماً.",
+    "fromName": "فريق Clentra",
+    "welcomeBody": "مرحباً في Clentra، {praxisName}! بدأت فترتك التجريبية لمدة 14 يوماً.",
     "trialReminderBody": "فترتك التجريبية تنتهي خلال {daysLeft} أيام. قم بالترقية الآن.",
     "paymentBody": "شكراً لدفعك {amount} €. اشتراكك نشط.",
     "viewInvoice": "عرض تأكيد الدفع"
   },
   "onboarding": {
     "title": "الخطوات الأولى",
-    "subtitle": "إعداد SlotFill خطوة بخطوة.",
+    "subtitle": "إعداد Clentra خطوة بخطوة.",
     "start": "بدء الإعداد",
     "completed": "مكتمل",
     "open": "مفتوح",
@@ -518,7 +518,7 @@
     "title": "مركز الثقة",
     "subtitle": "ملاحظات حماية البيانات وحالة الإشعارات ومعلومات الأمان.",
     "privacy": "ملاحظات حماية البيانات",
-    "privacy1": "يخزن SlotFill بيانات العيادة والمرضى والمواعيد وحالة الإشعارات.",
+    "privacy1": "يخزن Clentra بيانات العيادة والمرضى والمواعيد وحالة الإشعارات.",
     "privacy2": "لا يتم عرض الأسرار في المتصفح.",
     "privacy3": "يجب إدخال بيانات المرضى فقط لأغراض مشروعة.",
     "privacy4": "يجب على العيادة احترام موافقة الإشعارات.",
@@ -542,7 +542,7 @@
   },
   "help": {
     "title": "المساعدة",
-    "subtitle": "إجابات على أهم الأسئلة حول استخدام SlotFill.",
+    "subtitle": "إجابات على أهم الأسئلة حول استخدام Clentra.",
     "quickstart": "البدء السريع",
     "qs1": "إضافة مريض",
     "qs2": "إضافة لقائمة الانتظار",

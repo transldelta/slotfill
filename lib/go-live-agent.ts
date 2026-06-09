@@ -600,7 +600,7 @@ function sectionC(): GoLiveSection {
     id: "C3_NO_COLD_OUTREACH",
     label: "Kein automatischer Outreach aus dem Kontaktformular",
     status: "ready",
-    note: "Kontaktformular ist eingehend (Praxis → SlotFill). Kein ausgehender automatischer Outreach.",
+    note: "Kontaktformular ist eingehend (Praxis → Clentra). Kein ausgehender automatischer Outreach.",
   });
 
   // C4: Was passiert nach Absenden – auto-detektiert via KNOWN_CONTENT
@@ -1280,9 +1280,9 @@ function sectionJ(): GoLiveSection {
   // weil lib/brand.ts beim Build ins Bundle kompiliert wird.
   const brandConfigured =
     typeof BRAND_NAME === "string" &&
-    BRAND_NAME === "SlotFill" &&
+    BRAND_NAME === "Clentra" &&
     typeof BRAND_TEAM_NAME === "string" &&
-    BRAND_TEAM_NAME.includes("SlotFill") &&
+    BRAND_TEAM_NAME.includes("Clentra") &&
     PERSONAL_SIGNATURE_ALLOWED === false;
   checks.push({
     id: "J1_BRAND_CONFIG_EXISTS",

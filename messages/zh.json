@@ -39,7 +39,7 @@
     "thisWeek": "本周",
     "thisMonth": "本月",
     "welcomeBack": "欢迎回来",
-    "welcomeIntro": "欢迎使用SlotFill！请添加您的第一位患者。",
+    "welcomeIntro": "欢迎使用Clentra！请添加您的第一位患者。",
     "totalPatients": "患者总数",
     "waitlistCount": "候诊名单",
     "appointmentsToday": "今日预约",
@@ -72,7 +72,7 @@
     "status": "状态"
   },
   "sidebar": {
-    "brand": "SlotFill",
+    "brand": "Clentra",
     "toggle": "切换菜单"
   },
   "emptyState": {
@@ -228,7 +228,7 @@
       "dnsName": "名称",
       "dnsValue": "值",
       "dnsStatus": "状态",
-      "testSubject": "SlotFill测试邮件",
+      "testSubject": "Clentra测试邮件",
       "testBody": "此测试邮件确认Resend邮件发送正常。",
       "testSent": "测试邮件已发送至 {recipient}。",
       "testFailed": "测试邮件失败：{diagnosis}",
@@ -363,7 +363,7 @@
     "trialInfo": "免费试用 14 天——之后需要付费方案。",
     "trialNoCreditCard": "试用期间无需信用卡。",
     "trialNoSms": "未主动配置服务提供商的情况下，试用期间不会发送真实短信或 WhatsApp。",
-    "providerCostNote": "短信和 WhatsApp 通过第三方服务商（如 Twilio）处理。这些服务商费用不自动包含在 SlotFill 价格中。"
+    "providerCostNote": "短信和 WhatsApp 通过第三方服务商（如 Twilio）处理。这些服务商费用不自动包含在 Clentra 价格中。"
   },
   "subscription": {
     "title": "您的订阅",
@@ -399,7 +399,7 @@
     "LIMITS_RESET": "限制已重置"
   },
   "nav": {
-    "brand": "SlotFill",
+    "brand": "Clentra",
     "features": "功能",
     "pricing": "价格",
     "blog": "博客",
@@ -409,11 +409,11 @@
   },
   "landing": {
     "heroTitle": "自动从候诊名单填补预约空档",
-    "heroSubtitle": "当预约出现空档时，SlotFill会从候诊名单中准备合适的患者。SMS/WhatsApp可通过Twilio选配。",
+    "heroSubtitle": "当预约出现空档时，Clentra会从候诊名单中准备合适的患者。SMS/WhatsApp可通过Twilio选配。",
     "ctaPrimary": "免费试用",
     "ctaSecondary": "查看功能",
     "comparePrices": "比较价格",
-    "featuresTitle": "SlotFill为您的诊所提供什么",
+    "featuresTitle": "Clentra为您的诊所提供什么",
     "feature1Title": "管理候诊名单",
     "feature1Desc": "将所有等待患者集中在一处查看。",
     "feature2Title": "准备好的通知",
@@ -427,7 +427,7 @@
     "footerNote": "上线前须最终审查托管和数据保护。",
     "rights": "保留所有权利。",
     "trustTitle": "诊所始终保持控制权",
-    "trustSubtitle": "SlotFill 提供支持——决策权始终在诊所手中。",
+    "trustSubtitle": "Clentra 提供支持——决策权始终在诊所手中。",
     "trustPoint1": "未经诊所批准，不发送任何自动消息。",
     "trustPoint2": "短信和 WhatsApp 是可选的，需要主动配置服务提供商。",
     "trustPoint3": "在默认模式下，消息仅被准备好，不会自动发送。",
@@ -437,7 +437,7 @@
   },
   "blog": {
     "title": "博客",
-    "subtitle": "SlotFill和诊所管理的技巧与资讯。",
+    "subtitle": "Clentra和诊所管理的技巧与资讯。",
     "empty": "暂无已发布的文章。",
     "readMore": "阅读更多",
     "back": "返回博客",
@@ -469,23 +469,23 @@
     "agbIntro": "本服务条款为草稿，上线前须最终审查。"
   },
   "email": {
-    "welcomeSubject": "欢迎使用SlotFill – 您的试用期现在开始",
+    "welcomeSubject": "欢迎使用Clentra – 您的试用期现在开始",
     "trialReminderSubject": "您的试用期即将结束 – 立即升级",
-    "paymentSubject": "SlotFill付款确认",
+    "paymentSubject": "Clentra付款确认",
     "welcomeSent": "欢迎邮件已发送",
     "trialReminderSent": "试用提醒已发送",
     "paymentSent": "付款确认已发送",
     "emailError": "邮件发送失败",
     "emailDisabled": "邮件发送已禁用（RESEND_API_KEY缺失）",
-    "fromName": "SlotFill团队",
-    "welcomeBody": "欢迎使用SlotFill，{praxisName}！您的14天试用期已开始。",
+    "fromName": "Clentra团队",
+    "welcomeBody": "欢迎使用Clentra，{praxisName}！您的14天试用期已开始。",
     "trialReminderBody": "您的试用期将在 {daysLeft} 天后结束，立即升级继续使用。",
     "paymentBody": "感谢您支付 {amount} €，您的订阅已激活。",
     "viewInvoice": "查看付款确认"
   },
   "onboarding": {
     "title": "入门指南",
-    "subtitle": "逐步设置SlotFill。",
+    "subtitle": "逐步设置Clentra。",
     "start": "开始引导",
     "completed": "已完成",
     "open": "待完成",
@@ -518,7 +518,7 @@
     "title": "信任中心",
     "subtitle": "数据保护说明、通知状态和安全信息。",
     "privacy": "数据保护说明",
-    "privacy1": "SlotFill存储诊所数据、患者数据、预约和通知状态。",
+    "privacy1": "Clentra存储诊所数据、患者数据、预约和通知状态。",
     "privacy2": "浏览器中不显示任何密钥。",
     "privacy3": "患者数据仅应在有合法目的时输入。",
     "privacy4": "诊所必须遵守通知同意规定。",
@@ -542,7 +542,7 @@
   },
   "help": {
     "title": "帮助",
-    "subtitle": "SlotFill使用中最重要问题的解答。",
+    "subtitle": "Clentra使用中最重要问题的解答。",
     "quickstart": "快速入门",
     "qs1": "添加患者",
     "qs2": "加入候诊名单",

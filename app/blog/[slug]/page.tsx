@@ -8,7 +8,7 @@ import { STATIC_BLOG_POSTS, getStaticPost } from "@/lib/blog-data";
 
 export const dynamic = "force-dynamic";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://slotfill.de";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://slotfill-pi.vercel.app";
 
 type Post = {
   slug: string;
@@ -59,10 +59,10 @@ export async function generateMetadata({
   params: { slug: string };
 }): Promise<Metadata> {
   const post = await loadPost(params.slug);
-  if (!post) return { title: "SlotFill Blog" };
+  if (!post) return { title: "Clentra Blog" };
 
-  const title = `${post.title} – SlotFill`;
-  const description = post.excerpt ?? "Praxistipps von SlotFill.";
+  const title = `${post.title} – Clentra`;
+  const description = post.excerpt ?? "Praxistipps von Clentra.";
 
   return {
     title,
@@ -73,7 +73,7 @@ export async function generateMetadata({
       title,
       description,
       url: `/blog/${post.slug}`,
-      siteName: "SlotFill",
+      siteName: "Clentra",
       locale: "de_DE",
       type: "article",
       publishedTime: post.published_at ?? undefined,
@@ -119,7 +119,7 @@ export default async function BlogPostPage({
       {/* CTA am Ende */}
       <div className="mt-10 rounded-xl border border-blue-100 bg-blue-50 p-6 text-center dark:border-blue-900/50 dark:bg-blue-950/30">
         <p className="font-semibold text-slate-900 dark:text-slate-100">
-          SlotFill kostenlos testen
+          Clentra kostenlos testen
         </p>
         <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
           14 Tage kostenlos – keine Kreditkarte erforderlich.

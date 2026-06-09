@@ -6,7 +6,7 @@ import { getLegalContent, isRtlLocale, isLegalDraft } from "@/lib/legal-content"
  *
  * Persönliche Daten des Anbieters erscheinen ausschließlich auf dieser Seite
  * (gesetzliche Pflicht). In automatischer Kommunikation, Marketing und Trial-Mails
- * wird ausschließlich &bdquo;SlotFill Team&ldquo; als Absender verwendet.
+ * wird ausschließlich „Clentra Team" als Absender verwendet.
  *
  * ENTWURF – vor Veröffentlichung durch einen Rechtsanwalt prüfen lassen.
  */
@@ -59,16 +59,17 @@ export function ImpressumContent({
 
       <div className="mt-8 space-y-6 text-sm text-slate-700 dark:text-slate-300">
 
-        {/* § 5 DDG – Pflichtangaben (Deutsch: gesetzlich vorgeschrieben, wird in allen Locales angezeigt) */}
+        {/* § 5 DDG – Pflichtangaben */}
         <section>
           <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">
             {c.impressumSection1}
           </h2>
-          <div className="mt-2 space-y-1">
-            <p>SlotFill</p>
-            <p>Betrieben durch: Brahim Ben Abla</p>
+          <div className="mt-2 space-y-1 leading-relaxed">
+            <p className="font-medium">Clentra</p>
+            <p>Brahim Ben Abla</p>
             <p>Schlesier Straße 64</p>
-            <p>76227 Karlsruhe, Deutschland</p>
+            <p>76227 Karlsruhe</p>
+            <p>Deutschland</p>
           </div>
         </section>
 
@@ -87,11 +88,21 @@ export function ImpressumContent({
                 transl.delta@gmail.com
               </a>
             </p>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+          </div>
+        </section>
+
+        {/* Umsatzsteuer */}
+        <section>
+          <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">
+            {isDE ? "Umsatzsteuer" : "VAT"}
+          </h2>
+          <div className="mt-2 space-y-1 leading-relaxed">
+            <p>
               {isDE
-                ? "(Hinweis: Diese Adresse ist vorläufig. Vor Produktivstart wird eine dedizierte geschäftliche E-Mail-Adresse eingerichtet.)"
-                : "(Note: This address is temporary. A dedicated business email will be set up before launch.)"}
+                ? "Umsatzsteuer-Identifikationsnummer gemäß § 27a Umsatzsteuergesetz:"
+                : "VAT identification number pursuant to § 27a German VAT Act (UStG):"}
             </p>
+            <p className="font-medium">DE310737989</p>
           </div>
         </section>
 
@@ -103,9 +114,30 @@ export function ImpressumContent({
           <div className="mt-2 space-y-1">
             <p>Brahim Ben Abla</p>
             <p>Schlesier Straße 64</p>
-            <p>76227 Karlsruhe, Deutschland</p>
+            <p>76227 Karlsruhe</p>
+            <p>Deutschland</p>
           </div>
         </section>
+
+        {/* Hinweis zur Plattform */}
+        {isDE && (
+          <section>
+            <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">
+              Hinweis zur Plattform
+            </h2>
+            <div className="mt-2 space-y-1 leading-relaxed">
+              <p>
+                Clentra ist ein SaaS-Angebot für Termin-, Anfrage-, Feedback- und Praxisautomatisierung.
+                Die Plattform richtet sich ausschließlich an gewerbliche Nutzerinnen und Nutzer
+                (Arzt- und Therapiepraxen, Kliniken und Gesundheitsanbieter).
+              </p>
+              <p>
+                Clentra erbringt keine medizinischen Leistungen und ersetzt keine ärztliche Beratung,
+                Diagnose oder Behandlung.
+              </p>
+            </div>
+          </section>
+        )}
 
         {/* Haftungsausschluss */}
         <section>
@@ -138,8 +170,8 @@ export function ImpressumContent({
         <section className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/50">
           <p className="text-xs text-slate-500 dark:text-slate-400">
             {isDE
-              ? (<><strong>Intern:</strong> Persönliche Anbieterinformationen erscheinen ausschließlich auf dieser Seite (gesetzliche Pflicht nach § 5 DDG). In automatischer Kommunikation, E-Mails, Trial-Benachrichtigungen und Marketing wird ausschließlich &bdquo;SlotFill Team&ldquo; als Absender verwendet.</>)
-              : (<><strong>Note:</strong> Personal operator information appears only on this legal notice page (as required by German law § 5 DDG). All automated communication uses &ldquo;SlotFill Team&rdquo; as the sender — never a personal name.</>)
+              ? (<><strong>Intern:</strong> Persönliche Anbieterinformationen erscheinen ausschließlich auf dieser Seite (gesetzliche Pflicht nach § 5 DDG). In automatischer Kommunikation wird ausschließlich &bdquo;Clentra Team&ldquo; als Absender verwendet.</>)
+              : (<><strong>Note:</strong> Personal operator information appears only on this legal notice page (as required by German law § 5 DDG). All automated communication uses &ldquo;Clentra Team&rdquo; as the sender — never a personal name.</>)
             }
           </p>
         </section>

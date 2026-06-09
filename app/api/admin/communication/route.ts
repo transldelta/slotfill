@@ -2,7 +2,7 @@
  * GET /api/admin/communication
  *
  * Gibt den aktuellen Status der Markenkommunikation zurück:
- * - Brand-Absender (SlotFill Team)
+ * - Brand-Absender (Clentra Team)
  * - E-Mail-Konfiguration
  * - Messaging-Konfiguration
  * - Sicherheits-Flags

@@ -71,12 +71,12 @@ export function AgbContent({
             <div className="mt-2 space-y-2 leading-relaxed">
               <p>
                 (1) Diese Allgemeinen Geschäftsbedingungen (AGB) gelten für alle Verträge zwischen
-                SlotFill (betrieben durch Brahim Ben Abla, Schlesier Straße 64, 76227 Karlsruhe –
+                Clentra (betrieben durch Brahim Ben Abla, Schlesier Straße 64, 76227 Karlsruhe –
                 nachfolgend &bdquo;Anbieter&ldquo;) und dem Nutzer der Plattform (nachfolgend &bdquo;Praxis&ldquo; oder
                 &bdquo;Nutzerin/Nutzer&ldquo;).
               </p>
               <p>
-                (2) SlotFill richtet sich ausschließlich an gewerbliche Nutzerinnen und Nutzer
+                (2) Clentra richtet sich ausschließlich an gewerbliche Nutzerinnen und Nutzer
                 (Unternehmer im Sinne des § 14 BGB), insbesondere an Arzt- und Therapiepraxen.
                 Verbraucher im Sinne des § 13 BGB sind vom Nutzungsvertrag ausgeschlossen.
               </p>
@@ -93,7 +93,7 @@ export function AgbContent({
             </h2>
             <div className="mt-2 space-y-2 leading-relaxed">
               <p>
-                (1) SlotFill ist eine webbasierte SaaS-Plattform zur Verwaltung von Patientenwarte­listen
+                (1) Clentra ist eine webbasierte SaaS-Plattform zur Verwaltung von Patientenwarte­listen
                 und zur Vorbereitung von Benachrichtigungen bei frei gewordenen Behandlungs­terminen.
               </p>
               <p>
@@ -156,7 +156,7 @@ export function AgbContent({
               </p>
               <p>
                 (2) Die Kosten des externen Providers trägt allein die Praxis. Der Anbieter
-                (SlotFill) ist kein Reseller und haftet nicht für Kosten oder Ausfälle des
+                (Clentra) ist kein Reseller und haftet nicht für Kosten oder Ausfälle des
                 externen Providers.
               </p>
               <p>
@@ -187,7 +187,7 @@ export function AgbContent({
                 Auftragsverarbeitungsvertrags (AVV) gemäß Art. 28 DSGVO zwingend erforderlich.</strong>{" "}
                 Ein AVV kann unter{" "}
                 <Link href={`/${locale}/avv`} className="text-blue-600 hover:underline dark:text-blue-400">
-                  slotfill.de/avv
+                  slotfill-pi.vercel.app/avv
                 </Link>{" "}
                 angefordert werden.
               </p>

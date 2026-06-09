@@ -74,7 +74,7 @@ export function DatenschutzContent({
             <div className="mt-2 space-y-1 leading-relaxed">
               <p>Verantwortlicher im Sinne der DSGVO:</p>
               <p className="mt-2">
-                SlotFill, betrieben durch Brahim Ben Abla<br />
+                Clentra, betrieben durch Brahim Ben Abla<br />
                 Schlesier Straße 64<br />
                 76227 Karlsruhe, Deutschland<br />
                 E-Mail:{" "}
@@ -94,7 +94,7 @@ export function DatenschutzContent({
               2. Datenschutzbewusster Ansatz
             </h2>
             <div className="mt-2 space-y-2 leading-relaxed">
-              <p>SlotFill wurde mit einem datenschutzbewussten Ansatz entwickelt. Das bedeutet:</p>
+              <p>Clentra wurde mit einem datenschutzbewussten Ansatz entwickelt. Das bedeutet:</p>
               <ul className="ml-4 list-disc space-y-1">
                 <li>Keine automatische Kaltakquise oder Massenversand ohne Einwilligung.</li>
                 <li>SMS- und WhatsApp-Nachrichten werden nur versendet, wenn die Praxis einen externen Provider bewusst aktiviert hat.</li>
@@ -121,7 +121,7 @@ export function DatenschutzContent({
               </div>
               <div>
                 <h3 className="font-medium">3.2 Patientendaten (Auftragsverarbeitung)</h3>
-                <p className="mt-1">Eingetragen von der Praxis (z. B. Name, Telefonnummer). SlotFill verarbeitet diese im Auftrag der Praxis (Art. 28 DSGVO). Die Praxis ist Verantwortliche/r.</p>
+                <p className="mt-1">Eingetragen von der Praxis (z. B. Name, Telefonnummer). Clentra verarbeitet diese im Auftrag der Praxis (Art. 28 DSGVO). Die Praxis ist Verantwortliche/r.</p>
               </div>
               <div>
                 <h3 className="font-medium">3.3 Technische Nutzungsdaten</h3>
@@ -170,7 +170,7 @@ export function DatenschutzContent({
               Praxen, die Patientendaten eingeben, schließen einen AVV gemäß Art. 28 DSGVO ab.
               Informationen unter{" "}
               <Link href={`/${locale}/avv`} className="text-blue-600 hover:underline dark:text-blue-400">
-                slotfill.de/avv
+                slotfill-pi.vercel.app/avv
               </Link>.
             </p>
           </section>
@@ -180,7 +180,7 @@ export function DatenschutzContent({
               7. Cookies und Tracking
             </h2>
             <p className="mt-2 leading-relaxed">
-              SlotFill verwendet technisch notwendige Cookies (Sitzungscookies). Keine Tracking-
+              Clentra verwendet technisch notwendige Cookies (Sitzungscookies). Keine Tracking-
               oder Marketing-Cookies ohne Einwilligung.{" "}
               <span className="rounded bg-amber-100 px-1 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
                 [zu prüfen]
@@ -207,7 +207,7 @@ export function DatenschutzContent({
               {c.dsSection1}
             </h2>
             <div className="mt-2 space-y-1 leading-relaxed">
-              <p>SlotFill — operated by Brahim Ben Abla</p>
+              <p>Clentra — operated by Brahim Ben Abla</p>
               <p>Schlesier Straße 64, 76227 Karlsruhe, Germany</p>
               <p>
                 Email:{" "}

@@ -47,7 +47,7 @@ Drei praktische Schritte für eine effektive Warteliste
 
 Welche Rolle digitale Tools spielen können
 
-Digitale Praxissoftware kann helfen, diesen Prozess zu vereinfachen. Statt manuell durch Papierlisten zu blättern, lassen sich Patienten mit passenden Kriterien schneller finden. Tools wie SlotFill unterstützen dabei, bei einer Terminlücke geeignete Kandidaten aus der Warteliste vorzubereiten, sodass die Praxis schnell reagieren kann.
+Digitale Praxissoftware kann helfen, diesen Prozess zu vereinfachen. Statt manuell durch Papierlisten zu blättern, lassen sich Patienten mit passenden Kriterien schneller finden. Tools wie Clentra unterstützen dabei, bei einer Terminlücke geeignete Kandidaten aus der Warteliste vorzubereiten, sodass die Praxis schnell reagieren kann.
 
 Wichtig: Jede Kontaktaufnahme mit Patienten erfordert ihre Einwilligung und sollte datenschutzbewusst gestaltet sein. Vor dem Einsatz digitaler Kommunikationswege empfiehlt sich eine rechtliche Prüfung.
 
@@ -55,7 +55,7 @@ Fazit
 
 Eine gut gepflegte Warteliste ist eine der wirkungsvollsten Maßnahmen, um kurzfristige Terminlücken zu schließen. Mit klarer Struktur, regelmäßiger Pflege und – bei Bedarf – digitaler Unterstützung lässt sich die Auslastung einer Praxis spürbar verbessern.
 
-SlotFill kostenlos testen: Jetzt 14 Tage testen und sehen, wie die Wartelisten-Verwaltung einfacher wird.`,
+Clentra kostenlos testen: Jetzt 14 Tage testen und sehen, wie die Wartelisten-Verwaltung einfacher wird.`,
   },
 
   {
@@ -94,9 +94,9 @@ Realistische Erwartungen
 
 Vorbereitete Benachrichtigungen lösen nicht jede Lücke. Mancher Termin bleibt trotzdem offen. Aber sie erhöhen die Chance, dass eine Absage nicht zu einem kompletten Ausfall wird – und entlasten gleichzeitig das Praxisteam.
 
-SlotFill unterstützt genau diesen Prozess: Bei einer Terminlücke werden passende Patienten aus der Warteliste vorbereitet, und die Praxis kann mit einem Klick einen sicheren Link an ausgewählte Personen versenden.
+Clentra unterstützt genau diesen Prozess: Bei einer Terminlücke werden passende Patienten aus der Warteliste vorbereitet, und die Praxis kann mit einem Klick einen sicheren Link an ausgewählte Personen versenden.
 
-Jetzt ausprobieren: Testen Sie SlotFill 14 Tage kostenlos.`,
+Jetzt ausprobieren: Testen Sie Clentra 14 Tage kostenlos.`,
   },
 
   {
@@ -132,17 +132,17 @@ Löschfristen: Patienten, die einen Termin erhalten haben oder nicht mehr auf de
 
 Auftragsverarbeitung: Wenn eine externe Software für die Warteliste genutzt wird, muss ein Auftragsverarbeitungsvertrag (AVV) mit dem Anbieter abgeschlossen werden.
 
-Was SlotFill in diesem Kontext leistet
+Was Clentra in diesem Kontext leistet
 
-SlotFill ist als datenschutzbewusstes Tool konzipiert: Patienten können nur dann über digitale Kanäle kontaktiert werden, wenn sie zuvor eingewilligt haben (opt-in). Der Standardmodus arbeitet ohne automatischen Nachrichtenversand – die Praxis behält die Kontrolle darüber, wer kontaktiert wird.
+Clentra ist als datenschutzbewusstes Tool konzipiert: Patienten können nur dann über digitale Kanäle kontaktiert werden, wenn sie zuvor eingewilligt haben (opt-in). Der Standardmodus arbeitet ohne automatischen Nachrichtenversand – die Praxis behält die Kontrolle darüber, wer kontaktiert wird.
 
-Hinweis: Die Verwendung von SlotFill ersetzt keine individuelle datenschutzrechtliche Prüfung. Jede Praxis ist verpflichtet, den Einsatz von Software für die Patientenkommunikation eigenverantwortlich zu prüfen.
+Hinweis: Die Verwendung von Clentra ersetzt keine individuelle datenschutzrechtliche Prüfung. Jede Praxis ist verpflichtet, den Einsatz von Software für die Patientenkommunikation eigenverantwortlich zu prüfen.
 
 Fazit
 
 Digitale Wartelisten können Praxen erheblich entlasten – wenn sie datenschutzbewusst eingesetzt werden. Der Schlüssel liegt in klaren Einwilligungsprozessen, Datensparsamkeit und einem verlässlichen Anbieter mit AVV.
 
-Kontakt aufnehmen: Bei Fragen zu SlotFill und dem Einsatz in Ihrer Praxis freuen wir uns auf Ihre Nachricht.`,
+Kontakt aufnehmen: Bei Fragen zu Clentra und dem Einsatz in Ihrer Praxis freuen wir uns auf Ihre Nachricht.`,
   },
 ];
 

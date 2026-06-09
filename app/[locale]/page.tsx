@@ -12,7 +12,7 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { SlotFillLogo } from "@/components/ui/SlotFillLogo";
 import { locales, type Locale } from "@/i18n/routing";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://slotfill.de";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://slotfill-pi.vercel.app";
 
 export async function generateMetadata({
   params,
@@ -22,7 +22,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "landing" });
   const tNav = await getTranslations({ locale, namespace: "nav" });
-  const title = `SlotFill – ${t("heroTitle")}`;
+  const title = `Clentra – ${t("heroTitle")}`;
   const description = t("heroSubtitle");
 
   return {
@@ -39,7 +39,7 @@ export async function generateMetadata({
       title,
       description,
       url: `/${locale}`,
-      siteName: "SlotFill",
+      siteName: "Clentra",
       locale: locale === "de" ? "de_DE" : locale,
       type: "website",
     },
@@ -58,11 +58,11 @@ function buildSchemaOrg(locale: string) {
     "@graph": [
       {
         "@type": "SoftwareApplication",
-        name: "SlotFill",
+        name: "Clentra",
         applicationCategory: "BusinessApplication",
         operatingSystem: "Web",
         description:
-          "SlotFill hilft Arzt- und Facharztpraxen, kurzfristige Terminlücken aus der Warteliste zu füllen.",
+          "Clentra hilft Arzt- und Facharztpraxen, kurzfristige Terminlücken aus der Warteliste zu füllen.",
         url: APP_URL,
         inLanguage: locale,
         offers: {
@@ -74,9 +74,9 @@ function buildSchemaOrg(locale: string) {
       },
       {
         "@type": "Organization",
-        name: "SlotFill",
+        name: "Clentra",
         url: APP_URL,
-        description: "SlotFill – Software für die Wartelisten-Verwaltung in Arztpraxen.",
+        description: "Clentra – Software für die Wartelisten-Verwaltung in Arztpraxen.",
       },
     ],
   };

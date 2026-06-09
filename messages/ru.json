@@ -39,7 +39,7 @@
     "thisWeek": "This Week",
     "thisMonth": "This Month",
     "welcomeBack": "Welcome back",
-    "welcomeIntro": "Welcome to SlotFill! Add your first patients to get started.",
+    "welcomeIntro": "Welcome to Clentra! Add your first patients to get started.",
     "totalPatients": "Total Patients",
     "waitlistCount": "On Waitlist",
     "appointmentsToday": "Appointments Today",
@@ -72,7 +72,7 @@
     "status": "Status"
   },
   "sidebar": {
-    "brand": "SlotFill",
+    "brand": "Clentra",
     "toggle": "Toggle Menu"
   },
   "emptyState": {
@@ -228,7 +228,7 @@
       "dnsName": "Name",
       "dnsValue": "Value",
       "dnsStatus": "Status",
-      "testSubject": "SlotFill Test Email",
+      "testSubject": "Clentra Test Email",
       "testBody": "This test email confirms that email sending via Resend is working.",
       "testSent": "Test email sent to {recipient}.",
       "testFailed": "Test email failed: {diagnosis}",
@@ -363,7 +363,7 @@
     "trialInfo": "Бесплатно 14 дней – после этого требуется платный план.",
     "trialNoCreditCard": "Кредитная карта для пробного периода не нужна.",
     "trialNoSms": "В пробном периоде без осознанной настройки провайдера реальные SMS или WhatsApp не отправляются.",
-    "providerCostNote": "SMS и WhatsApp обрабатываются через внешних провайдеров (напр. Twilio). Эти расходы провайдера автоматически не включены в цену SlotFill."
+    "providerCostNote": "SMS и WhatsApp обрабатываются через внешних провайдеров (напр. Twilio). Эти расходы провайдера автоматически не включены в цену Clentra."
   },
   "subscription": {
     "title": "Your Subscription",
@@ -399,7 +399,7 @@
     "LIMITS_RESET": "Limits reset"
   },
   "nav": {
-    "brand": "SlotFill",
+    "brand": "Clentra",
     "features": "Возможности",
     "pricing": "Тарифы",
     "blog": "Блог",
@@ -409,11 +409,11 @@
   },
   "landing": {
     "heroTitle": "Автоматически заполнять записи из листа ожидания",
-    "heroSubtitle": "SlotFill готовит подходящих пациентов из листа ожидания, когда освобождается слот. SMS/WhatsApp можно подключить опционально через Twilio.",
+    "heroSubtitle": "Clentra готовит подходящих пациентов из листа ожидания, когда освобождается слот. SMS/WhatsApp можно подключить опционально через Twilio.",
     "ctaPrimary": "Попробовать бесплатно",
     "ctaSecondary": "Посмотреть возможности",
     "comparePrices": "Сравнить тарифы",
-    "featuresTitle": "Что SlotFill делает для вашей клиники",
+    "featuresTitle": "Что Clentra делает для вашей клиники",
     "feature1Title": "Управление листом ожидания",
     "feature1Desc": "Отслеживайте всех ожидающих пациентов в одном месте.",
     "feature2Title": "Готовые уведомления",
@@ -427,7 +427,7 @@
     "footerNote": "Хостинг и защита данных должны быть проверены перед запуском.",
     "rights": "Все права защищены.",
     "trustTitle": "Практика сохраняет контроль",
-    "trustSubtitle": "SlotFill поддерживает – решения всегда принимает практика.",
+    "trustSubtitle": "Clentra поддерживает – решения всегда принимает практика.",
     "trustPoint1": "Никаких автоматических сообщений без одобрения практики.",
     "trustPoint2": "SMS и WhatsApp опциональны и требуют осознанной настройки провайдера.",
     "trustPoint3": "В стандартном режиме сообщения подготавливаются, но не отправляются автоматически.",
@@ -437,7 +437,7 @@
   },
   "blog": {
     "title": "Блог",
-    "subtitle": "Советы и новости о SlotFill и организации клиник.",
+    "subtitle": "Советы и новости о Clentra и организации клиник.",
     "empty": "Статьи ещё не опубликованы.",
     "readMore": "Читать далее",
     "back": "Назад в блог",
@@ -469,23 +469,23 @@
     "agbIntro": "Эти условия использования являются черновиком."
   },
   "email": {
-    "welcomeSubject": "Welcome to SlotFill – Your trial starts now",
+    "welcomeSubject": "Welcome to Clentra – Your trial starts now",
     "trialReminderSubject": "Your trial is ending soon – upgrade now",
-    "paymentSubject": "Payment confirmation for SlotFill",
+    "paymentSubject": "Payment confirmation for Clentra",
     "welcomeSent": "Welcome email sent",
     "trialReminderSent": "Trial reminder sent",
     "paymentSent": "Payment confirmation sent",
     "emailError": "Email could not be sent",
     "emailDisabled": "Email sending disabled (RESEND_API_KEY missing)",
-    "fromName": "SlotFill Team",
-    "welcomeBody": "Welcome to SlotFill, {praxisName}! Your 14-day trial has begun.",
+    "fromName": "Clentra Team",
+    "welcomeBody": "Welcome to Clentra, {praxisName}! Your 14-day trial has begun.",
     "trialReminderBody": "Your trial ends in {daysLeft} days. Upgrade now to continue.",
     "paymentBody": "Thank you for your payment of {amount} €. Your subscription is active.",
     "viewInvoice": "View Payment Confirmation"
   },
   "onboarding": {
     "title": "Getting Started",
-    "subtitle": "Set up SlotFill step by step.",
+    "subtitle": "Set up Clentra step by step.",
     "start": "Start Onboarding",
     "completed": "Completed",
     "open": "Open",
@@ -518,7 +518,7 @@
     "title": "Trust Center",
     "subtitle": "Data protection notes, notification status and security information.",
     "privacy": "Data Protection Notes",
-    "privacy1": "SlotFill stores practice data, patient data, appointments and notification status.",
+    "privacy1": "Clentra stores practice data, patient data, appointments and notification status.",
     "privacy2": "No secrets are displayed in the browser.",
     "privacy3": "Patient data should only be entered with a legitimate purpose.",
     "privacy4": "Consent for notifications must be observed by the practice.",
@@ -542,7 +542,7 @@
   },
   "help": {
     "title": "Help",
-    "subtitle": "Answers to the most important questions about using SlotFill.",
+    "subtitle": "Answers to the most important questions about using Clentra.",
     "quickstart": "Quick Start",
     "qs1": "Add patient",
     "qs2": "Add to waitlist",

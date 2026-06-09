@@ -7,11 +7,11 @@ import { STATIC_BLOG_POSTS, type StaticPost } from "@/lib/blog-data";
 
 export const dynamic = "force-dynamic";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://slotfill.de";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://slotfill-pi.vercel.app";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations();
-  const title = `${t("blog.title")} – SlotFill`;
+  const title = `${t("blog.title")} – Clentra`;
   const description = t("blog.subtitle");
 
   return {
@@ -23,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title,
       description,
       url: "/blog",
-      siteName: "SlotFill",
+      siteName: "Clentra",
       locale: "de_DE",
       type: "website",
     },

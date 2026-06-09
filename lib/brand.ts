@@ -5,36 +5,44 @@
  * Ausnahme: Impressum / Legal-Pflichtseiten (gesetzlich vorgeschrieben).
  *
  * Alle öffentlich sichtbaren E-Mails, Formulare, Trial-Nachrichten und
- * Onboarding-Mails laufen unter "SlotFill Team" – ohne Privatname.
+ * Onboarding-Mails laufen unter "Clentra Team" – ohne Privatname.
  *
  * Keine automatische Kaltakquise.
  * Keine echten SMS/WhatsApp ohne bewusste Provider-Konfiguration.
  * Kommunikation ist ausschließlich Inbound/Transactional.
  */
 
-/** Markenname – immer "SlotFill". */
-export const BRAND_NAME = "SlotFill" as const;
+/** Markenname – immer "Clentra". */
+export const BRAND_NAME = "Clentra" as const;
 
 /** Team-Absendername für alle automatischen Mails und Signaturen. */
-export const BRAND_TEAM_NAME = "SlotFill Team" as const;
+export const BRAND_TEAM_NAME = "Clentra Team" as const;
 
 /**
  * Support-E-Mail (Transactional-Rückmeldungen).
  * Kein persönlicher Name, keine Gmail-Adresse.
+ * Fallback-Domain "@clentra.de": nur E-Mail-Adresse, keine öffentliche URL.
+ * Für Produktion SUPPORT_EMAIL als Umgebungsvariable setzen (z. B. via Resend).
  */
 export const SUPPORT_EMAIL: string =
-  process.env.SUPPORT_EMAIL ?? "support@slotfill.de";
+  process.env.SUPPORT_EMAIL ?? "support@clentra.de";
 
 /**
  * Kontakt-E-Mail (Eingang von Kontaktformularen).
  * Kein persönlicher Name, keine Gmail-Adresse.
+ * Fallback-Domain "@clentra.de": nur E-Mail-Adresse, keine öffentliche URL.
+ * Für Produktion CONTACT_EMAIL als Umgebungsvariable setzen.
  */
 export const CONTACT_EMAIL: string =
-  process.env.CONTACT_EMAIL ?? "kontakt@slotfill.de";
+  process.env.CONTACT_EMAIL ?? "kontakt@clentra.de";
 
-/** Öffentliche App-URL für Links in E-Mails. */
+/**
+ * Öffentliche App-URL für Links in E-Mails und Metadata.
+ * Produktion: NEXT_PUBLIC_APP_URL=https://slotfill-pi.vercel.app setzen.
+ * Kein Hardcode einer Custom-Domain (solange diese nicht aktiv ist).
+ */
 export const PUBLIC_APP_URL: string =
-  process.env.NEXT_PUBLIC_APP_URL ?? "https://slotfill.de";
+  process.env.NEXT_PUBLIC_APP_URL ?? "https://slotfill-pi.vercel.app";
 
 /**
  * Sicherheits-Flag: persönliche Signaturen sind verboten.
@@ -44,13 +52,14 @@ export const PERSONAL_SIGNATURE_ALLOWED = false as const;
 
 /**
  * Pfade, in denen persönliche Anbieterinformationen gesetzlich
- * vorgeschrieben sind (Impressum, Datenschutz, AGB).
+ * vorgeschrieben sind (Impressum, Datenschutz, AGB, AVV).
  * Außerhalb dieser Pfade: keine persönlichen Namen.
  */
 export const PERSONAL_NAME_ALLOWED_PATHS = [
   "/impressum",
   "/datenschutz",
   "/agb",
+  "/avv",
 ] as const;
 
 /**

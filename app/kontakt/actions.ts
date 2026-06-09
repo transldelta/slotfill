@@ -16,7 +16,7 @@ const schema = z.object({
 //
 // Wenn RESEND_API_KEY gesetzt ist:
 //   1. Weiterleitung an CONTACT_EMAIL (intern)
-//   2. Eingangsbestätigung an den Absender (Absendername: "SlotFill Team")
+//   2. Eingangsbestätigung an den Absender (Absendername: "Clentra Team")
 // Wenn kein API-Key oder Fehler:
 //   - Nachricht in contact_messages speichern → CONTACT_STORED
 //   - UI zeigt ehrlich: "Anfrage wurde vorbereitet. E-Mail-Versand ist noch nicht konfiguriert."
@@ -56,10 +56,10 @@ export async function submitContact(
 
   if (internalResult.success) {
     // Eingangsbestätigung an den Absender
-    // Absender: "SlotFill Team" – kein persönlicher Name
+    // Absender: "Clentra Team" – kein persönlicher Name
     await sendEmail(
       email,
-      "Wir haben Ihre Anfrage erhalten – SlotFill",
+      "Wir haben Ihre Anfrage erhalten – Clentra",
       contactConfirmationEmail(name),
     ).catch((err) => {
       // Darf das Onboarding nicht crashen – nur loggen

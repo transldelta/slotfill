@@ -16,7 +16,7 @@ type ThemeContextValue = {
   setTheme: (theme: Theme) => void;
 };
 
-const STORAGE_KEY = "slotfill-theme";
+const STORAGE_KEY = "clentra-theme";
 
 const ThemeContext = createContext<ThemeContextValue>({
   theme: "light",

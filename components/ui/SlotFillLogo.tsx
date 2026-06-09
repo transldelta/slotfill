@@ -29,7 +29,7 @@ export function SlotFillLogo({
   const inner = (
     <span className={`inline-flex items-center gap-2 ${className}`}>
       <Image
-        src="/brand/slotfill-logo.svg"
+        src="/brand/clentra-logo.svg"
         alt="Clentra Logo"
         width={size}
         height={size}

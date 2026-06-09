@@ -385,8 +385,8 @@ test("Go-Live: FIRST_TEST_PRACTICE.md enthält keinen werblichen 'DSGVO-konform'
   const { readFileSync } = require("fs");
   const content: string = readFileSync(path, "utf8");
   // Erlaubt: "DSGVO-konform" als negativer Hinweis (in Verbots-Listen/Tabellen)
-  // Verboten: werbliche Behauptung wie "SlotFill ist DSGVO-konform"
-  const werblicheBehauptung = /slotfill\s+ist\s+dsgvo-konform/i.test(content) ||
+  // Verboten: werbliche Behauptung wie "Clentra ist DSGVO-konform"
+  const werblicheBehauptung = /clentra\s+ist\s+dsgvo-konform/i.test(content) ||
     /wir\s+(sind|bieten)\s+.*dsgvo-konform/i.test(content);
   assert.ok(
     !werblicheBehauptung,
@@ -1464,14 +1464,14 @@ test("Legal: Automatische Kommunikation enthält keinen persönlichen Namen", ()
   }
 });
 
-test("Legal: Automatische Kommunikation verwendet 'SlotFill Team'", () => {
+test("Legal: Automatische Kommunikation verwendet 'Clentra Team'", () => {
   const { readFileSync } = require("fs");
   const templatesPath = resolve(process.cwd(), "lib/email/templates.ts");
   assert.ok(existsSync(templatesPath), "lib/email/templates.ts fehlt");
   const src: string = readFileSync(templatesPath, "utf8");
   assert.ok(
-    src.includes("BRAND_TEAM_NAME") || src.includes("SlotFill Team"),
-    "lib/email/templates.ts muss 'SlotFill Team' oder BRAND_TEAM_NAME als Absender verwenden",
+    src.includes("BRAND_TEAM_NAME") || src.includes("Clentra Team"),
+    "lib/email/templates.ts muss 'Clentra Team' oder BRAND_TEAM_NAME als Absender verwenden",
   );
 });
 
@@ -1517,19 +1517,19 @@ test("Brand: lib/brand.ts existiert", () => {
   );
 });
 
-test("Brand: BRAND_NAME ist gesetzt (Clentra oder SlotFill)", () => {
+test("Brand: BRAND_NAME ist gesetzt (Clentra)", () => {
   const { BRAND_NAME } = require("../lib/brand");
   assert.ok(
-    BRAND_NAME === "Clentra" || BRAND_NAME === "SlotFill",
-    `BRAND_NAME soll 'Clentra' oder 'SlotFill' sein, ist: ${BRAND_NAME}`,
+    BRAND_NAME === "Clentra",
+    `BRAND_NAME soll 'Clentra' sein, ist: ${BRAND_NAME}`,
   );
 });
 
-test("Brand: BRAND_TEAM_NAME ist gesetzt (Clentra Team oder SlotFill Team)", () => {
+test("Brand: BRAND_TEAM_NAME ist gesetzt (Clentra Team)", () => {
   const { BRAND_TEAM_NAME } = require("../lib/brand");
   assert.ok(
-    BRAND_TEAM_NAME === "Clentra Team" || BRAND_TEAM_NAME === "SlotFill Team",
-    `BRAND_TEAM_NAME soll 'Clentra Team' oder 'SlotFill Team' sein, ist: ${BRAND_TEAM_NAME}`,
+    BRAND_TEAM_NAME === "Clentra Team",
+    `BRAND_TEAM_NAME soll 'Clentra Team' sein, ist: ${BRAND_TEAM_NAME}`,
   );
 });
 
@@ -1627,8 +1627,8 @@ test("Brand: contactConfirmationEmail existiert und enthält keinen persönliche
     "contactConfirmationEmail darf keine Gmail-Adresse enthalten",
   );
   assert.ok(
-    html.toLowerCase().includes("slotfill") || html.toLowerCase().includes("clentra"),
-    "contactConfirmationEmail muss Markenname ('Clentra' oder 'SlotFill') enthalten",
+    html.toLowerCase().includes("clentra"),
+    "contactConfirmationEmail muss Markenname 'Clentra' enthalten",
   );
 });
 
@@ -1644,8 +1644,8 @@ test("Brand: trialWelcomeEmail existiert und enthält keinen persönlichen Namen
     "trialWelcomeEmail darf keine Gmail-Adresse enthalten",
   );
   assert.ok(
-    html.toLowerCase().includes("slotfill") || html.toLowerCase().includes("clentra"),
-    "trialWelcomeEmail muss Markenname ('Clentra' oder 'SlotFill') enthalten",
+    html.toLowerCase().includes("clentra"),
+    "trialWelcomeEmail muss Markenname 'Clentra' enthalten",
   );
   assert.ok(
     html.includes("14"),
@@ -1672,8 +1672,8 @@ test("Brand: testPracticeEmail enthält keinen persönlichen Namen und keine pri
     "testPracticeEmail darf keine Gmail-Adresse enthalten",
   );
   assert.ok(
-    html.toLowerCase().includes("slotfill") || html.toLowerCase().includes("clentra"),
-    "testPracticeEmail muss Markenname ('Clentra' oder 'SlotFill') enthalten",
+    html.toLowerCase().includes("clentra"),
+    "testPracticeEmail muss Markenname 'Clentra' enthalten",
   );
 });
 
@@ -1888,8 +1888,8 @@ test("Logo: SlotFillLogo-Komponente enthält alt-Text mit Markenname (Clentra Lo
   if (!existsSync(p)) return;
   const src: string = readFileSync(p, "utf8");
   assert.ok(
-    src.includes('alt="Clentra Logo"') || src.includes('alt="SlotFill Logo"'),
-    "SlotFillLogo muss alt-Text mit Markenname haben ('Clentra Logo' oder 'SlotFill Logo')",
+    src.includes('alt="Clentra Logo"'),
+    "SlotFillLogo muss alt-Text 'Clentra Logo' haben",
   );
 });
 

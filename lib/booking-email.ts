@@ -114,7 +114,7 @@ function formatDateDE(date: string): string {
 /**
  * HTML-Template: Terminbestätigung
  *
- * Absender: SlotFill Team (kein persönlicher Name).
+ * Absender: Clentra Team (kein persönlicher Name).
  * Patient entschied sich für eine Anfrage – Admin hat manuell bestätigt.
  *
  * Reihenfolge:

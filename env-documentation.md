@@ -1,4 +1,4 @@
-# Umgebungsvariablen – SlotFill
+# Umgebungsvariablen – Clentra
 
 Alle Variablen werden serverseitig genutzt (Ausnahme: `NEXT_PUBLIC_APP_URL`).
 Secrets gehören niemals in den Client. Lege sie lokal in `.env.local` und in
@@ -14,9 +14,9 @@ Vercel unter **Settings → Environment Variables** an.
 | STRIPE_PRICE_STARTER | Nein* | Stripe Price ID – Plan Starter | price_... |
 | STRIPE_PRICE_PROFESSIONAL | Nein* | Stripe Price ID – Plan Professional | price_... |
 | STRIPE_PRICE_PRAXIS_PLUS | Nein* | Stripe Price ID – Plan Praxis Plus | price_... |
-| NEXT_PUBLIC_APP_URL | Ja | Öffentliche App-URL (für Links/Redirects) | http://localhost:3000 |
+| NEXT_PUBLIC_APP_URL | Ja | Öffentliche App-URL (für Links/Redirects) | https://clentra.de (Produktion) / http://localhost:3000 (lokal) |
 | RESEND_API_KEY | Nein | Resend API-Key (E-Mail) | re_... |
-| RESEND_FROM_EMAIL | Nein | Absender-E-Mail (verifizierte Domain) | SlotFill <onboarding@resend.dev> |
+| RESEND_FROM_EMAIL | Nein | Absender-E-Mail (verifizierte Domain) | Clentra <noreply@clentra.de> |
 | ADMIN_EMAILS | Ja | Admin-E-Mail-Adressen (kommagetrennt) | transl.delta@gmail.com |
 | MESSAGING_PROVIDER | Ja | Nachrichten-Anbieter | none \| twilio_sms \| twilio_whatsapp |
 | MESSAGING_DRY_RUN | Nein | Trockentest-Modus (kein echter Versand) | true |

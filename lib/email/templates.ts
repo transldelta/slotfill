@@ -8,7 +8,7 @@ import {
 } from "@/lib/brand";
 
 // Gemeinsames, schlichtes HTML-Layout für alle E-Mails.
-// Absender ist immer "SlotFill Team" – kein persönlicher Name.
+// Absender ist immer "Clentra Team" – kein persönlicher Name.
 function layout(innerHtml: string): string {
   const safeContact = escapeHtml(CONTACT_EMAIL);
   const safeUrl = escapeHtml(PUBLIC_APP_URL);
@@ -72,7 +72,7 @@ export function paymentEmail(
 
 /**
  * Eingangsbestätigung für Kontaktformular-Anfragen.
- * Absender: SlotFill Team (kein persönlicher Name).
+ * Absender: Clentra Team (kein persönlicher Name).
  * Keine Kaltakquise. Keine automatischen SMS/WhatsApp.
  */
 export function contactConfirmationEmail(senderName: string): string {
@@ -97,7 +97,7 @@ export function contactConfirmationEmail(senderName: string): string {
  * - 14 Tage Testphase
  * - keine Kreditkarte
  * - keine echten Nachrichten ohne Provider-Konfiguration
- * Absender: SlotFill Team (kein persönlicher Name).
+ * Absender: Clentra Team (kein persönlicher Name).
  */
 export function trialWelcomeEmail(
   praxisName: string,

@@ -209,7 +209,7 @@ const KNOWN_SOURCE_PATHS: ReadonlySet<string> = new Set([
   "lib/email/templates.ts",
   "lib/onboarding.ts",
   // Brand & Design-Assets
-  "public/brand/slotfill-logo.svg",
+  "public/brand/clentra-logo.svg",
   "app/icon.svg",
   "components/ui/SlotFillLogo.tsx",
   // Bewertungs- / Feedback-Modul
@@ -600,7 +600,7 @@ function sectionC(): GoLiveSection {
     id: "C3_NO_COLD_OUTREACH",
     label: "Kein automatischer Outreach aus dem Kontaktformular",
     status: "ready",
-    note: "Kontaktformular ist eingehend (Praxis → SlotFill). Kein ausgehender automatischer Outreach.",
+    note: "Kontaktformular ist eingehend (Praxis → Clentra). Kein ausgehender automatischer Outreach.",
   });
 
   // C4: Was passiert nach Absenden – auto-detektiert via KNOWN_CONTENT

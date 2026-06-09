@@ -32,9 +32,12 @@
 - [x] Keine alten Branding-Reste (SlotFill, Clentra) auf öffentlichen Seiten
 - [x] White-Label-fähig: 1 Datei ändern = gesamtes Produkt rebrandet
 - [x] Impressum mit echten Betreiberdaten (Brahim Ben Abla)
+- [x] Technischer Projektname dokumentiert: `slotfill` (GitHub/Vercel/Ordner)
 
 **Risiko:** Niedrig  
 **Nächster Schritt:** Käufer aktualisiert `lib/brand.ts` nach Kauf
+
+> **Info:** Der technische Name im GitHub-Repository, im Vercel-Dashboard und als Ordnername lautet `slotfill` – das ist der ursprüngliche Entwicklungsname. Der öffentliche Produktname `PraxisFlow` ist davon unabhängig und kann jederzeit geändert werden. Das Projekt kann nach Kauf mit jeder eigenen Domain verbunden werden.
 
 ---
 
@@ -206,4 +209,4 @@
 
 ---
 
-*Stand: Feature-Branch `feature/whitelabel-sale-polish` · PraxisFlow White-Label SaaS*
+*Stand: Feature-Branch `feature/finalize-praxisflow-branding` · PraxisFlow White-Label SaaS · Technischer Projektname: slotfill*

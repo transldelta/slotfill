@@ -40,8 +40,8 @@ export function ImpressumContent({
         <p className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-900/50 dark:bg-amber-900/20 dark:text-amber-300">
           <strong>{isDE ? "Hinweis:" : "Note:"}</strong>{" "}
           {isDE
-            ? "Dieser Text ist ein vorläufiger Entwurf und wurde noch nicht abschließend rechtlich geprüft. Vor dem Produktivstart muss er durch finale, rechtlich geprüfte Texte ersetzt werden. Er ersetzt keine Rechtsberatung."
-            : "This legal notice is a preliminary draft and has not yet been fully reviewed. It does not constitute legal advice."}
+            ? "Dieser Rechtstext ist als vorbereitetes Muster für den SaaS-Prototyp hinterlegt. Vor dem produktiven Einsatz mit echten Kunden ist eine finale rechtliche Prüfung durch einen Fachanwalt erforderlich. Er ersetzt keine Rechtsberatung."
+            : "This legal notice is a prepared template for the SaaS prototype. A final legal review is required before going live with real customers. It does not constitute legal advice."}
         </p>
       )}
 
@@ -166,12 +166,12 @@ export function ImpressumContent({
           </div>
         </section>
 
-        {/* Interner Hinweis */}
+        {/* Betreiber-Hinweis */}
         <section className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/50">
           <p className="text-xs text-slate-500 dark:text-slate-400">
             {isDE
-              ? (<><strong>Intern:</strong> Persönliche Anbieterinformationen erscheinen ausschließlich auf dieser Seite (gesetzliche Pflicht nach § 5 DDG). In automatischer Kommunikation wird ausschließlich &bdquo;PraxisFlow Team&ldquo; als Absender verwendet.</>)
-              : (<><strong>Note:</strong> Personal operator information appears only on this legal notice page (as required by German law § 5 DDG). All automated communication uses &ldquo;PraxisFlow Team&rdquo; as the sender — never a personal name.</>)
+              ? (<>Persönliche Anbieterangaben erscheinen gemäß § 5 DDG ausschließlich auf dieser Seite. In automatischer Kommunikation wird ausschließlich &bdquo;PraxisFlow Team&ldquo; als Absender verwendet.</>)
+              : (<>Personal operator information appears only on this legal notice page, as required by § 5 DDG. All automated communication uses &ldquo;PraxisFlow Team&rdquo; as the sender.</>)
             }
           </p>
         </section>

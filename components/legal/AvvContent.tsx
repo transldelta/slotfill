@@ -38,8 +38,8 @@ export function AvvContent({
       {/* Draft-Hinweis */}
       {isDraft && (
         <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-900/50 dark:bg-amber-900/20 dark:text-amber-300">
-          <strong>{isDE ? "ENTWURF –" : "DRAFT –"}</strong>{" "}
-          {c.avvDraftNotice.replace(/^(ENTWURF|DRAFT|BROUILLON|BORRADOR|مسودة|ЧЕРНОВИК|草稿|RASCUNHO|मसौदा|খসড়া)\s*[–-]\s*/i, "")}{" "}
+          <strong>{isDE ? "Hinweis:" : "Note:"}</strong>{" "}
+          {c.avvDraftNotice.replace(/^(ENTWURF|DRAFT|BROUILLON|BORRADOR|مسودة|ЧЕРНОВИК|草稿|RASCUNHO|मसौदा|খসড়া|Hinweis:|Note:)\s*[–-]?\s*/i, "")}{" "}
           {isDE
             ? <>Bitte wenden Sie sich bei Fragen an{" "}
               <a href="mailto:transl.delta@gmail.com" className="underline hover:no-underline">

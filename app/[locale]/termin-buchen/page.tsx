@@ -242,7 +242,7 @@ export default function TerminBuchenPage() {
               Termin anfragen
             </h1>
             <p className="text-sm text-slate-500 dark:text-slate-400">
-              Ihre Anfrage wird manuell durch die Praxis geprüft.
+              Füllen Sie das Formular aus – die Praxis meldet sich per E-Mail.
             </p>
           </div>
         </div>
@@ -256,12 +256,12 @@ export default function TerminBuchenPage() {
           }}
         >
           <p className="font-medium text-slate-700 dark:text-slate-300">
-            🗓 Wie funktioniert es?
+            Wie funktioniert es?
           </p>
           <p className="mt-1 text-slate-600 dark:text-slate-400">
             1. Füllen Sie das Formular aus und senden Sie Ihre Anfrage ab.
             <br />
-            2. Die Praxis prüft die Anfrage und bestätigt den Termin manuell.
+            2. Die Anfrage wird anhand der aktuellen Praxiseinstellungen geprüft. Ist ein freier Slot verfügbar und hat die Praxis automatische Bestätigung aktiviert, erhalten Sie sofort eine Bestätigung per E-Mail. Andernfalls bearbeitet die Praxis Ihre Anfrage manuell.
             <br />
             3. Sie erhalten eine Rückmeldung per E-Mail.
           </p>
@@ -516,8 +516,7 @@ export default function TerminBuchenPage() {
           </button>
 
           <p className="text-center text-xs text-slate-500 dark:text-slate-400">
-            Keine automatische Bestätigung. Die Praxis prüft Ihre Anfrage
-            manuell und meldet sich bei Ihnen.
+            Sie erhalten eine Rückmeldung per E-Mail, sobald Ihre Anfrage bearbeitet wurde.
           </p>
         </form>
       </main>

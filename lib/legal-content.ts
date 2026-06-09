@@ -108,7 +108,7 @@ const de: LegalLocaleData = {
   impressumTitle: "Impressum",
   avvTitle: "Auftragsverarbeitungsvertrag (AVV)",
   draftNotice:
-    "ENTWURF – nicht rechtskräftig. Dieser Text ist ein vorläufiger Entwurf und wurde noch nicht abschließend rechtlich geprüft. Er ersetzt keine Rechtsberatung und darf nicht als finale AGB verwendet werden. Vor dem Produktivstart muss eine rechtsanwaltliche Prüfung erfolgen.",
+    "Diese Rechtstexte sind als vorbereitete Muster für den SaaS-Prototyp hinterlegt. Vor dem produktiven Einsatz mit echten Kunden ist eine finale rechtliche Prüfung durch einen Fachanwalt erforderlich. Die Texte ersetzen keine Rechtsberatung.",
   authorityNotice: "",
   authorityLinkLabel: "",
   reviewNote: "[zu prüfen]",
@@ -154,7 +154,7 @@ const de: LegalLocaleData = {
   avvRequestSection: "AVV anfordern",
   avvSubprocessorsSection: "Unterauftragsverarbeiter (Sub-Prozessoren)",
   avvDraftNotice:
-    "ENTWURF – AVV-Dokument noch nicht finalisiert. Diese Seite informiert über die gesetzliche Pflicht zum AVV-Abschluss. Das vollständige AVV-Dokument wird vor dem Produktivstart bereitgestellt.",
+    "Dieses AVV-Dokument ist als vorbereitetes Muster für den SaaS-Prototyp hinterlegt und noch nicht finalisiert. Diese Seite informiert über die gesetzliche Pflicht zum AVV-Abschluss. Das vollständige, unterzeichnungsfähige AVV-Dokument wird vor dem Produktivstart bereitgestellt.",
 };
 
 const en: LegalLocaleData = {
@@ -166,7 +166,7 @@ const en: LegalLocaleData = {
   impressumTitle: "Legal Notice (Impressum)",
   avvTitle: "Data Processing Agreement (DPA)",
   draftNotice:
-    "DRAFT – not legally binding. This text is a preliminary draft and has not yet been fully reviewed by a lawyer. It does not constitute legal advice.",
+    "These legal texts are prepared templates for the SaaS prototype. A final legal review by a qualified lawyer is required before going live with real customers. These texts do not constitute legal advice.",
   authorityNotice:
     "This is a non-binding convenience translation. The German version is the legally authoritative version.",
   authorityLinkLabel: "View German original →",

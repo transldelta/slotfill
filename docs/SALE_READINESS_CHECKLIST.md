@@ -1,7 +1,16 @@
 # PraxisFlow – Sale Readiness Checklist
 
-> **Bewertung der Verkaufsreife des White-Label-SaaS.**  
-> Stand: automatisch generiert. Vor Verkauf manuell aktualisieren.
+> **Status: Verkaufsfähiger SaaS-Prototyp / MVP**  
+> Bewertung der Verkaufsreife des White-Label-SaaS.
+
+| | |
+|---|---|
+| **Produktname** | PraxisFlow |
+| **Technischer Projektname** | slotfill |
+| **Live-URL** | https://slotfill-pi.vercel.app |
+| **Rechtstexte** | Vorbereitet – finale Rechtsprüfung offen |
+| **E-Mail-Versand** | Resend vorbereitet – eigene Domain nötig |
+| **Zahlungsabwicklung** | Stripe vorbereitet – Produkte noch anzulegen |
 
 ---
 

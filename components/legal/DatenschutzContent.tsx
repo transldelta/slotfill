@@ -39,14 +39,14 @@ export function DatenschutzContent({
       {isDraft && (
         <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-900/50 dark:bg-amber-900/20 dark:text-amber-300">
           {isDE ? (
-            <><strong>ENTWURF – datenschutzbewusst vorbereitet, rechtlich noch nicht abschließend geprüft.</strong>{" "}
-            Diese Datenschutzerklärung ist ein vorläufiger Entwurf. Sie ersetzt keine Rechtsberatung und ist
-            keine Garantie für vollständige DSGVO-Konformität. Vor dem Produktivstart muss eine
-            Prüfung durch einen Datenschutzbeauftragten oder Rechtsanwalt erfolgen.</>
+            <><strong>Hinweis:</strong>{" "}
+            Diese Datenschutzerklärung ist als vorbereitetes Muster für den SaaS-Prototyp hinterlegt und datenschutzbewusst gestaltet.
+            Sie ersetzt keine Rechtsberatung. Vor dem produktiven Einsatz mit echten Kunden ist eine Prüfung
+            durch einen Datenschutzbeauftragten oder Rechtsanwalt erforderlich.</>
           ) : (
-            <><strong>DRAFT – privacy-conscious approach, not yet fully reviewed.</strong>{" "}
-            This policy is a preliminary draft. It does not constitute legal advice and is not a
-            guarantee of full GDPR compliance.</>
+            <><strong>Note:</strong>{" "}
+            This privacy policy is a prepared template for the SaaS prototype. It does not constitute legal advice.
+            A review by a qualified privacy lawyer is required before going live with real customers.</>
           )}
         </div>
       )}

@@ -1,7 +1,19 @@
 # PraxisFlow – Käufer-Übergabe-Dokumentation
 
-> **White-Label-fähiges SaaS für Termin- und Wartelistenverwaltung in Arzt- und Facharztpraxen.**  
+> **Status: Verkaufsfähiger SaaS-Prototyp / MVP**  
+> White-Label-fähiges SaaS für Termin- und Wartelistenverwaltung in Arzt- und Facharztpraxen.  
 > Produktname, Logo und Domain können nach Kauf in wenigen Minuten geändert werden.
+
+| | |
+|---|---|
+| **Öffentlicher Produktname** | PraxisFlow |
+| **Technischer Projektname** | slotfill (GitHub, Vercel, Ordner) |
+| **Live-URL** | https://slotfill-pi.vercel.app |
+| **Marke** | White-Label – vollständig umbenennbar |
+| **Rechtstexte** | Vorbereitet, finale Rechtsprüfung offen |
+| **E-Mail** | Resend-Integration vorbereitet |
+| **SMS/WhatsApp** | Twilio optional vorbereitet |
+| **Infrastruktur** | Supabase (PostgreSQL) + Vercel |
 
 ---
 
@@ -57,6 +69,7 @@ https://slotfill-pi.vercel.app
 ```
 
 > Kostenlos über Vercel Hobby-Plan. Keine Domain-Kosten nötig für den Start.
+> Der Käufer kann jederzeit eine eigene Domain verbinden: `NEXT_PUBLIC_APP_URL` in den Vercel-Einstellungen setzen.
 
 ---
 
@@ -218,15 +231,33 @@ LEGAL_REVIEW_APPROVED=true
 
 ---
 
-## Bekannte Einschränkungen
+## Offene Punkte vor echtem Kundenbetrieb
 
-| Punkt | Details |
-|---|---|
-| E-Mail-Versand | Benötigt verifizierten Resend-Account + Domain |
-| Stripe | Benötigt Stripe-Konto für Zahlungsabwicklung |
-| SMS/WhatsApp | Optional – ohne Twilio weiterhin funktionsfähig |
-| Mehrsprachigkeit | 10 Sprachen im Kern; weitere Locales einfach hinzufügbar |
-| Testphase aktuell | 14-tägige kostenlose Testphase (Stripe-Produkte konfigurieren) |
+| Punkt | Status | Details |
+|---|---|---|
+| E-Mail-Versand | ⚠️ Setup nötig | Resend-Account + verifizierte Domain einrichten |
+| Stripe-Produkte | ⚠️ Setup nötig | Produkte und Preise in Stripe anlegen |
+| Rechtstexte | ⚠️ Prüfung nötig | Anwalt prüfen lassen, dann `LEGAL_REVIEW_APPROVED=true` |
+| Demo-Daten | ⚠️ Bereinigen | Test-Praxis/Patienten/Buchungen vor Übergabe löschen |
+| Supabase-Region | ℹ️ Empfehlung | EU-Region (Frankfurt) wählen für DSGVO-Hosting |
+| SMS/WhatsApp | ℹ️ Optional | Funktioniert ohne Twilio vollständig; Twilio separat aktivierbar |
+| Domain | ℹ️ Optional | Eigene Domain über `NEXT_PUBLIC_APP_URL` verbinden |
+| Mehrsprachigkeit | ✅ Vorhanden | 10 Sprachen im Kern; weitere Locales einfach hinzufügbar |
+
+---
+
+## Demo-/Testdaten vor Käuferübergabe bereinigen
+
+Folgende Daten sollten vor der Übergabe aus der Supabase-Datenbank gelöscht werden:
+
+- **practices**: Alle Demo-Praxen (`DELETE FROM practices WHERE ...`)
+- **patients**: Alle Demo-Patienten
+- **booking_requests**: Alle Test-Buchungsanfragen
+- **contact_messages**: Alle Test-Kontaktnachrichten
+- **feedback_submissions**: Alle Demo-Feedbacks
+- **subscriptions**: Alle Test-Abonnements
+
+> Tipp: Neues Supabase-Projekt erstellen und Migrations frisch ausführen – das ist die sauberste Übergabe.
 
 ---
 

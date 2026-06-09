@@ -41,7 +41,7 @@ export function AgbContent({
       {/* Draft-Hinweis */}
       {isDraft && (
         <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-900/50 dark:bg-amber-900/20 dark:text-amber-300">
-          <strong>{isDE ? "ENTWURF –" : "DRAFT –"}</strong> {c.draftNotice.replace(/^(ENTWURF|DRAFT)\s*[–-]\s*/, "")}
+          <strong>{isDE ? "Hinweis:" : "Note:"}</strong>{" "}{c.draftNotice.replace(/^(ENTWURF|DRAFT|Hinweis:|Note:)\s*[–-]?\s*/i, "")}
         </div>
       )}
 

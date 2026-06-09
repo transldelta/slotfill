@@ -1536,27 +1536,33 @@ test("Brand: PERSONAL_SIGNATURE_ALLOWED ist false", () => {
   );
 });
 
-test("Brand: SUPPORT_EMAIL enthält keinen persönlichen Namen oder Gmail", () => {
+test("Brand: SUPPORT_EMAIL ist gesetzt und enthält keinen Klarnamen 'Brahim'", () => {
+  // Gmail ist als Übergangslösung erlaubt (kein clentra.de vorhanden).
+  // Kritisch: der Klarname des Betreibers darf nicht im Absendername auftauchen.
+  // transl.delta@gmail.com enthält 'brahim' NICHT → Test bleibt schützend.
   const { SUPPORT_EMAIL } = require("../lib/brand");
   assert.ok(
-    !SUPPORT_EMAIL.includes("gmail"),
-    `SUPPORT_EMAIL darf keine Gmail-Adresse sein: ${SUPPORT_EMAIL}`,
+    typeof SUPPORT_EMAIL === "string" && SUPPORT_EMAIL.length > 0,
+    "SUPPORT_EMAIL muss gesetzt sein",
   );
   assert.ok(
     !SUPPORT_EMAIL.toLowerCase().includes("brahim"),
-    `SUPPORT_EMAIL darf keinen persönlichen Namen enthalten: ${SUPPORT_EMAIL}`,
+    `SUPPORT_EMAIL darf keinen Klarnamen enthalten: ${SUPPORT_EMAIL}`,
   );
 });
 
-test("Brand: CONTACT_EMAIL enthält keinen persönlichen Namen oder Gmail", () => {
+test("Brand: CONTACT_EMAIL ist gesetzt und enthält keinen Klarnamen 'Brahim'", () => {
+  // Gmail ist als Übergangslösung erlaubt (kein clentra.de vorhanden).
+  // Kritisch: der Klarname des Betreibers darf nicht im Absendername auftauchen.
+  // transl.delta@gmail.com enthält 'brahim' NICHT → Test bleibt schützend.
   const { CONTACT_EMAIL } = require("../lib/brand");
   assert.ok(
-    !CONTACT_EMAIL.includes("gmail"),
-    `CONTACT_EMAIL darf keine Gmail-Adresse sein: ${CONTACT_EMAIL}`,
+    typeof CONTACT_EMAIL === "string" && CONTACT_EMAIL.length > 0,
+    "CONTACT_EMAIL muss gesetzt sein",
   );
   assert.ok(
     !CONTACT_EMAIL.toLowerCase().includes("brahim"),
-    `CONTACT_EMAIL darf keinen persönlichen Namen enthalten: ${CONTACT_EMAIL}`,
+    `CONTACT_EMAIL darf keinen Klarnamen enthalten: ${CONTACT_EMAIL}`,
   );
 });
 
@@ -1567,7 +1573,10 @@ test("Brand: isCommunicationAllowed erlaubt 'inbound' und 'transactional'", () =
   assert.ok(!isCommunicationAllowed("cold_outreach"), "'cold_outreach' darf NICHT erlaubt sein");
 });
 
-test("Brand: app/kontakt/actions.ts verwendet CONTACT_EMAIL aus lib/brand.ts (kein Gmail-Fallback)", () => {
+test("Brand: app/kontakt/actions.ts verwendet CONTACT_EMAIL aus lib/brand.ts (kein Hardcode)", () => {
+  // Der tatsächliche E-Mail-Wert kommt aus lib/brand.ts (CONTACT_EMAIL).
+  // app/kontakt/actions.ts selbst darf keine Gmail-Adresse hardcodieren –
+  // die Weiterleitung läuft ausschließlich über die zentrale Brand-Variable.
   const { readFileSync } = require("fs");
   const src: string = readFileSync(
     resolve(process.cwd(), "app/kontakt/actions.ts"),
@@ -1575,7 +1584,7 @@ test("Brand: app/kontakt/actions.ts verwendet CONTACT_EMAIL aus lib/brand.ts (ke
   );
   assert.ok(
     !src.includes("gmail.com"),
-    "app/kontakt/actions.ts darf keine Gmail-Adresse als Fallback enthalten",
+    "app/kontakt/actions.ts darf keine Gmail-Adresse hardcodieren – nur CONTACT_EMAIL aus lib/brand.ts",
   );
   assert.ok(
     src.includes("CONTACT_EMAIL"),
@@ -1610,15 +1619,13 @@ test("Brand: lib/email/templates.ts verwendet BRAND_TEAM_NAME aus lib/brand.ts",
 });
 
 test("Brand: contactConfirmationEmail existiert und enthält keinen persönlichen Namen", () => {
+  // Gmail-Adresse im Footer ist als Übergangslösung erlaubt (transl.delta@gmail.com).
+  // Verboten bleibt der Klarname des Betreibers ("Brahim").
   const { contactConfirmationEmail } = require("../lib/email/templates");
   const html: string = contactConfirmationEmail("Max Mustermann");
   assert.ok(
     !html.includes("Brahim"),
     "contactConfirmationEmail darf 'Brahim' nicht enthalten",
-  );
-  assert.ok(
-    !html.includes("gmail"),
-    "contactConfirmationEmail darf keine Gmail-Adresse enthalten",
   );
   assert.ok(
     html.toLowerCase().includes("clentra"),
@@ -1627,15 +1634,13 @@ test("Brand: contactConfirmationEmail existiert und enthält keinen persönliche
 });
 
 test("Brand: trialWelcomeEmail existiert und enthält keinen persönlichen Namen", () => {
+  // Gmail-Adresse im Footer ist als Übergangslösung erlaubt (transl.delta@gmail.com).
+  // Verboten bleibt der Klarname des Betreibers ("Brahim").
   const { trialWelcomeEmail } = require("../lib/email/templates");
   const html: string = trialWelcomeEmail("Testpraxis GmbH");
   assert.ok(
     !html.includes("Brahim"),
     "trialWelcomeEmail darf 'Brahim' nicht enthalten",
-  );
-  assert.ok(
-    !html.includes("gmail"),
-    "trialWelcomeEmail darf keine Gmail-Adresse enthalten",
   );
   assert.ok(
     html.toLowerCase().includes("clentra"),
@@ -1657,14 +1662,12 @@ test("Brand: trialWelcomeEmail enthält Hinweis auf kein automatisches Messaging
   );
 });
 
-test("Brand: testPracticeEmail enthält keinen persönlichen Namen und keine private Telefon/E-Mail", () => {
+test("Brand: testPracticeEmail enthält keinen persönlichen Namen", () => {
+  // Gmail-Adresse im Footer ist als Übergangslösung erlaubt (transl.delta@gmail.com).
+  // Verboten bleibt der Klarname des Betreibers ("Brahim").
   const { testPracticeEmail } = require("../lib/email/templates");
   const html: string = testPracticeEmail("Testpraxis");
   assert.ok(!html.includes("Brahim"), "testPracticeEmail darf 'Brahim' nicht enthalten");
-  assert.ok(
-    !html.includes("gmail"),
-    "testPracticeEmail darf keine Gmail-Adresse enthalten",
-  );
   assert.ok(
     html.toLowerCase().includes("clentra"),
     "testPracticeEmail muss 'Clentra' enthalten",

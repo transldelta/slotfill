@@ -44,7 +44,7 @@ Three practical steps for an effective waitlist
 
 How digital tools can help
 
-Practice management software can help simplify this process. Instead of manually going through paper lists, suitable patients can be found much faster. Tools like Clentra help prepare the right candidates from the waitlist when a slot becomes available, so the practice can respond quickly.
+Practice management software can help simplify this process. Instead of manually going through paper lists, suitable patients can be found much faster. Tools like PraxisFlow help prepare the right candidates from the waitlist when a slot becomes available, so the practice can respond quickly.
 
 Important: Any contact with patients requires their prior consent and should be handled in a data protection-conscious manner. A legal review is recommended before using digital communication channels.
 
@@ -52,7 +52,7 @@ Summary
 
 A well-maintained waitlist is one of the most effective measures for filling short-notice appointment slots. With a clear structure, regular maintenance and — where needed — digital support, a practice's capacity utilisation can be noticeably improved.
 
-Try Clentra free for 14 days and see how waitlist management becomes easier.`,
+Try PraxisFlow free for 14 days and see how waitlist management becomes easier.`,
   },
   {
     slug: "terminausfaelle-reduzieren-benachrichtigungen",
@@ -88,9 +88,9 @@ Realistic expectations
 
 Prepared notifications do not solve every gap. Some appointments will remain unfilled regardless. But they increase the chance that a cancellation does not become a complete loss — while also relieving the practice team.
 
-Clentra supports exactly this process: when an appointment slot opens up, suitable patients from the waitlist are prepared, and the practice can send a secure link to selected individuals with a single click.
+PraxisFlow supports exactly this process: when an appointment slot opens up, suitable patients from the waitlist are prepared, and the practice can send a secure link to selected individuals with a single click.
 
-Try it now: Test Clentra free for 14 days.`,
+Try it now: Test PraxisFlow free for 14 days.`,
   },
   {
     slug: "digitale-warteliste-datenschutz-einwilligung",
@@ -123,17 +123,17 @@ Deletion periods: Patients who have received an appointment or no longer wish to
 
 Processing agreements: If external software is used for the waitlist, a data processing agreement (DPA) must be concluded with the provider.
 
-What Clentra provides in this context
+What PraxisFlow provides in this context
 
-Clentra is designed with data protection in mind: patients can only be contacted via digital channels if they have previously consented (opt-in). The standard mode operates without automatic message sending — the practice retains control over who is contacted.
+PraxisFlow is designed with data protection in mind: patients can only be contacted via digital channels if they have previously consented (opt-in). The standard mode operates without automatic message sending — the practice retains control over who is contacted.
 
-Note: Using Clentra does not replace an individual data protection review. Each practice is responsible for independently reviewing the use of software for patient communication.
+Note: Using PraxisFlow does not replace an individual data protection review. Each practice is responsible for independently reviewing the use of software for patient communication.
 
 Summary
 
 Digital waitlists can significantly relieve practices — if used in a data protection-conscious manner. The key lies in clear consent processes, data minimisation and a reliable provider with a DPA.
 
-Contact us: For questions about Clentra and how to use it in your practice, we look forward to hearing from you.`,
+Contact us: For questions about PraxisFlow and how to use it in your practice, we look forward to hearing from you.`,
   },
 ];
 
@@ -163,7 +163,7 @@ Tres pasos prácticos para una lista de espera eficaz
 
 Qué papel pueden desempeñar las herramientas digitales
 
-El software de gestión de consultorios puede ayudar a simplificar este proceso. En lugar de revisar manualmente listas en papel, se pueden encontrar pacientes con los criterios adecuados con mayor rapidez. Herramientas como Clentra ayudan a preparar los candidatos idóneos de la lista de espera cuando se abre un hueco, para que el consultorio pueda responder rápidamente.
+El software de gestión de consultorios puede ayudar a simplificar este proceso. En lugar de revisar manualmente listas en papel, se pueden encontrar pacientes con los criterios adecuados con mayor rapidez. Herramientas como PraxisFlow ayudan a preparar los candidatos idóneos de la lista de espera cuando se abre un hueco, para que el consultorio pueda responder rápidamente.
 
 Importante: Cualquier contacto con pacientes requiere su consentimiento previo y debe gestionarse de forma respetuosa con la protección de datos. Se recomienda una revisión legal antes de utilizar canales de comunicación digitales.
 
@@ -171,7 +171,7 @@ Conclusión
 
 Una lista de espera bien mantenida es una de las medidas más eficaces para cubrir huecos de última hora. Con una estructura clara, mantenimiento regular y — cuando sea necesario — apoyo digital, la ocupación de un consultorio puede mejorar notablemente.
 
-Pruebe Clentra gratis durante 14 días y compruebe cómo se simplifica la gestión de la lista de espera.`,
+Pruebe PraxisFlow gratis durante 14 días y compruebe cómo se simplifica la gestión de la lista de espera.`,
   },
   {
     slug: "terminausfaelle-reduzieren-benachrichtigungen",
@@ -207,9 +207,9 @@ Expectativas realistas
 
 Las notificaciones preparadas no resuelven todos los huecos. Algunas citas permanecerán vacías de todos modos. Pero aumentan la probabilidad de que una cancelación no se convierta en una pérdida completa — y al mismo tiempo alivian al equipo del consultorio.
 
-Clentra apoya exactamente este proceso: cuando se libera un hueco, se preparan los pacientes adecuados de la lista de espera y el consultorio puede enviar un enlace seguro a las personas seleccionadas con un solo clic.
+PraxisFlow apoya exactamente este proceso: cuando se libera un hueco, se preparan los pacientes adecuados de la lista de espera y el consultorio puede enviar un enlace seguro a las personas seleccionadas con un solo clic.
 
-Pruébelo ahora: Pruebe Clentra gratis durante 14 días.`,
+Pruébelo ahora: Pruebe PraxisFlow gratis durante 14 días.`,
   },
   {
     slug: "digitale-warteliste-datenschutz-einwilligung",
@@ -242,17 +242,17 @@ Plazos de eliminación: Los pacientes que han obtenido una cita o que ya no dese
 
 Acuerdo de procesamiento de datos: Si se utiliza software externo para la lista de espera, debe celebrarse un acuerdo de procesamiento de datos (DPA) con el proveedor.
 
-Lo que Clentra ofrece en este contexto
+Lo que PraxisFlow ofrece en este contexto
 
-Clentra está diseñado de forma respetuosa con la protección de datos: los pacientes solo pueden ser contactados a través de canales digitales si han dado su consentimiento previamente (opt-in). El modo estándar funciona sin envío automático de mensajes — el consultorio mantiene el control sobre quién es contactado.
+PraxisFlow está diseñado de forma respetuosa con la protección de datos: los pacientes solo pueden ser contactados a través de canales digitales si han dado su consentimiento previamente (opt-in). El modo estándar funciona sin envío automático de mensajes — el consultorio mantiene el control sobre quién es contactado.
 
-Aviso: El uso de Clentra no reemplaza una revisión individual de protección de datos. Cada consultorio es responsable de revisar de forma independiente el uso de software para la comunicación con pacientes.
+Aviso: El uso de PraxisFlow no reemplaza una revisión individual de protección de datos. Cada consultorio es responsable de revisar de forma independiente el uso de software para la comunicación con pacientes.
 
 Conclusión
 
 Las listas de espera digitales pueden aliviar considerablemente a los consultorios — si se utilizan de forma respetuosa con la protección de datos. La clave está en procesos de consentimiento claros, minimización de datos y un proveedor de confianza con DPA.
 
-Contáctenos: Para preguntas sobre Clentra y su uso en su consultorio, estaremos encantados de recibir su mensaje.`,
+Contáctenos: Para preguntas sobre PraxisFlow y su uso en su consultorio, estaremos encantados de recibir su mensaje.`,
   },
 ];
 
@@ -282,7 +282,7 @@ Trois étapes pratiques pour une liste d'attente efficace
 
 Le rôle que peuvent jouer les outils numériques
 
-Les logiciels de gestion de cabinet peuvent aider à simplifier ce processus. Plutôt que de parcourir manuellement des listes papier, il est possible d'identifier bien plus rapidement les patients correspondant aux critères. Des outils comme Clentra aident à préparer les candidats adaptés depuis la liste d'attente lorsqu'un créneau devient disponible, afin que le cabinet puisse réagir rapidement.
+Les logiciels de gestion de cabinet peuvent aider à simplifier ce processus. Plutôt que de parcourir manuellement des listes papier, il est possible d'identifier bien plus rapidement les patients correspondant aux critères. Des outils comme PraxisFlow aident à préparer les candidats adaptés depuis la liste d'attente lorsqu'un créneau devient disponible, afin que le cabinet puisse réagir rapidement.
 
 Important : Tout contact avec les patients nécessite leur consentement préalable et doit être géré de manière respectueuse de la protection des données. Un examen juridique est recommandé avant d'utiliser des canaux de communication numériques.
 
@@ -290,7 +290,7 @@ Conclusion
 
 Une liste d'attente bien tenue est l'une des mesures les plus efficaces pour combler les créneaux libérés à court terme. Avec une structure claire, une mise à jour régulière et — si nécessaire — un support numérique, le taux d'occupation d'un cabinet peut être sensiblement amélioré.
 
-Essayez Clentra gratuitement pendant 14 jours et découvrez comment la gestion de la liste d'attente devient plus simple.`,
+Essayez PraxisFlow gratuitement pendant 14 jours et découvrez comment la gestion de la liste d'attente devient plus simple.`,
   },
   {
     slug: "terminausfaelle-reduzieren-benachrichtigungen",
@@ -326,9 +326,9 @@ Des attentes réalistes
 
 Les notifications préparées ne résolvent pas tous les créneaux vides. Certains rendez-vous resteront inoccupés malgré tout. Mais elles augmentent la probabilité qu'une annulation ne devienne pas une perte totale — tout en soulageant l'équipe du cabinet.
 
-Clentra soutient exactement ce processus : lorsqu'un créneau se libère, les patients adaptés sont sélectionnés depuis la liste d'attente et le cabinet peut envoyer un lien sécurisé aux personnes choisies en un seul clic.
+PraxisFlow soutient exactement ce processus : lorsqu'un créneau se libère, les patients adaptés sont sélectionnés depuis la liste d'attente et le cabinet peut envoyer un lien sécurisé aux personnes choisies en un seul clic.
 
-Essayez-le maintenant : Testez Clentra gratuitement pendant 14 jours.`,
+Essayez-le maintenant : Testez PraxisFlow gratuitement pendant 14 jours.`,
   },
   {
     slug: "digitale-warteliste-datenschutz-einwilligung",
@@ -361,17 +361,17 @@ Délais de suppression : Les patients ayant obtenu un rendez-vous ou ne souhaita
 
 Accord de traitement des données : Si un logiciel externe est utilisé pour la liste d'attente, un accord de traitement des données (ATD) doit être conclu avec le prestataire.
 
-Ce que Clentra apporte dans ce contexte
+Ce que PraxisFlow apporte dans ce contexte
 
-Clentra est conçu dans le respect de la protection des données : les patients ne peuvent être contactés via des canaux numériques que s'ils ont préalablement donné leur consentement (opt-in). Le mode standard fonctionne sans envoi automatique de messages — le cabinet garde le contrôle sur qui est contacté.
+PraxisFlow est conçu dans le respect de la protection des données : les patients ne peuvent être contactés via des canaux numériques que s'ils ont préalablement donné leur consentement (opt-in). Le mode standard fonctionne sans envoi automatique de messages — le cabinet garde le contrôle sur qui est contacté.
 
-Remarque : L'utilisation de Clentra ne remplace pas un examen individuel de protection des données. Chaque cabinet est responsable d'examiner de façon autonome l'utilisation de logiciels pour la communication avec les patients.
+Remarque : L'utilisation de PraxisFlow ne remplace pas un examen individuel de protection des données. Chaque cabinet est responsable d'examiner de façon autonome l'utilisation de logiciels pour la communication avec les patients.
 
 Conclusion
 
 Les listes d'attente numériques peuvent considérablement soulager les cabinets — si elles sont utilisées de manière respectueuse de la protection des données. La clé réside dans des processus de consentement clairs, la minimisation des données et un prestataire fiable disposant d'un ATD.
 
-Contactez-nous : Pour toute question sur Clentra et son utilisation dans votre cabinet, nous serons ravis de vous répondre.`,
+Contactez-nous : Pour toute question sur PraxisFlow et son utilisation dans votre cabinet, nous serons ravis de vous répondre.`,
   },
 ];
 
@@ -401,7 +401,7 @@ Três passos práticos para uma lista de espera eficaz
 
 O papel que as ferramentas digitais podem desempenhar
 
-O software de gestão de consultório pode ajudar a simplificar esse processo. Em vez de revisar manualmente listas em papel, os pacientes com os critérios adequados podem ser encontrados muito mais rapidamente. Ferramentas como o Clentra ajudam a preparar os candidatos mais adequados da lista de espera quando um horário fica disponível, para que o consultório possa responder rapidamente.
+O software de gestão de consultório pode ajudar a simplificar esse processo. Em vez de revisar manualmente listas em papel, os pacientes com os critérios adequados podem ser encontrados muito mais rapidamente. Ferramentas como o PraxisFlow ajudam a preparar os candidatos mais adequados da lista de espera quando um horário fica disponível, para que o consultório possa responder rapidamente.
 
 Importante: Qualquer contato com pacientes exige o consentimento prévio deles e deve ser feito de forma consciente quanto à proteção de dados. Recomenda-se uma revisão jurídica antes de utilizar canais de comunicação digitais.
 
@@ -409,7 +409,7 @@ Conclusão
 
 Uma lista de espera bem mantida é uma das medidas mais eficazes para preencher horários liberados de última hora. Com uma estrutura clara, manutenção regular e — quando necessário — suporte digital, o aproveitamento de um consultório pode melhorar sensivelmente.
 
-Experimente o Clentra gratuitamente por 14 dias e veja como a gestão da lista de espera fica mais simples.`,
+Experimente o PraxisFlow gratuitamente por 14 dias e veja como a gestão da lista de espera fica mais simples.`,
   },
   {
     slug: "terminausfaelle-reduzieren-benachrichtigungen",
@@ -445,9 +445,9 @@ Expectativas realistas
 
 Notificações preparadas não resolvem todos os horários vazios. Algumas consultas permanecerão sem preenchimento de qualquer forma. Mas aumentam a probabilidade de que um cancelamento não se torne uma perda total — ao mesmo tempo em que aliviam a equipe do consultório.
 
-O Clentra apoia exatamente esse processo: quando um horário se libera, os pacientes adequados da lista de espera são preparados e o consultório pode enviar um link seguro às pessoas selecionadas com um único clique.
+O PraxisFlow apoia exatamente esse processo: quando um horário se libera, os pacientes adequados da lista de espera são preparados e o consultório pode enviar um link seguro às pessoas selecionadas com um único clique.
 
-Experimente agora: Teste o Clentra gratuitamente por 14 dias.`,
+Experimente agora: Teste o PraxisFlow gratuitamente por 14 dias.`,
   },
   {
     slug: "digitale-warteliste-datenschutz-einwilligung",
@@ -480,17 +480,17 @@ Prazos de exclusão: Pacientes que obtiveram uma consulta ou que não desejam ma
 
 Contrato de processamento de dados: Se for utilizado software externo para a lista de espera, um contrato de processamento de dados (CPD) deve ser celebrado com o fornecedor.
 
-O que o Clentra oferece neste contexto
+O que o PraxisFlow oferece neste contexto
 
-O Clentra foi desenvolvido de forma consciente quanto à proteção de dados: os pacientes só podem ser contactados por canais digitais se tiverem dado o seu consentimento previamente (opt-in). O modo padrão funciona sem envio automático de mensagens — o consultório mantém o controle sobre quem é contactado.
+O PraxisFlow foi desenvolvido de forma consciente quanto à proteção de dados: os pacientes só podem ser contactados por canais digitais se tiverem dado o seu consentimento previamente (opt-in). O modo padrão funciona sem envio automático de mensagens — o consultório mantém o controle sobre quem é contactado.
 
-Aviso: O uso do Clentra não substitui uma avaliação individual de proteção de dados. Cada consultório é responsável por revisar de forma independente o uso de software para comunicação com pacientes.
+Aviso: O uso do PraxisFlow não substitui uma avaliação individual de proteção de dados. Cada consultório é responsável por revisar de forma independente o uso de software para comunicação com pacientes.
 
 Conclusão
 
 As listas de espera digitais podem aliviar consideravelmente os consultórios — se utilizadas de forma consciente quanto à proteção de dados. A chave está em processos de consentimento claros, minimização de dados e um fornecedor confiável com CPD.
 
-Entre em contato: Para dúvidas sobre o Clentra e seu uso em seu consultório, aguardamos sua mensagem.`,
+Entre em contato: Para dúvidas sobre o PraxisFlow e seu uso em seu consultório, aguardamos sua mensagem.`,
   },
 ];
 
@@ -520,7 +520,7 @@ const AR_POSTS: StaticPost[] = [
 
 الدور الذي يمكن أن تؤديه الأدوات الرقمية
 
-يمكن لبرامج إدارة العيادات أن تساعد في تبسيط هذه العملية. بدلاً من البحث يدوياً في قوائم ورقية، يمكن العثور على المرضى المناسبين بسرعة أكبر. تساعد أدوات مثل Clentra في تهيئة المرشحين المناسبين من قائمة الانتظار عند فتح موعد، مما يتيح للعيادة الاستجابة السريعة.
+يمكن لبرامج إدارة العيادات أن تساعد في تبسيط هذه العملية. بدلاً من البحث يدوياً في قوائم ورقية، يمكن العثور على المرضى المناسبين بسرعة أكبر. تساعد أدوات مثل PraxisFlow في تهيئة المرشحين المناسبين من قائمة الانتظار عند فتح موعد، مما يتيح للعيادة الاستجابة السريعة.
 
 ملاحظة مهمة: يستلزم التواصل مع المرضى موافقتهم المسبقة ويجب أن يتم بطريقة تراعي حماية البيانات. يُنصح بمراجعة قانونية قبل استخدام قنوات التواصل الرقمي.
 
@@ -528,7 +528,7 @@ const AR_POSTS: StaticPost[] = [
 
 قائمة الانتظار المنظمة هي من أكثر الإجراءات فعالية لملء الفجوات المفاجئة في الجدول الزمني. مع هيكل واضح وتحديث منتظم — وعند الحاجة — دعم رقمي، يمكن تحسين معدل استغلال طاقة العيادة بشكل ملحوظ.
 
-جرّب Clentra مجاناً لمدة 14 يوماً وانظر كيف تصبح إدارة قائمة الانتظار أسهل.`,
+جرّب PraxisFlow مجاناً لمدة 14 يوماً وانظر كيف تصبح إدارة قائمة الانتظار أسهل.`,
   },
   {
     slug: "terminausfaelle-reduzieren-benachrichtigungen",
@@ -564,9 +564,9 @@ const AR_POSTS: StaticPost[] = [
 
 الإشعارات المُعدّة مسبقاً لا تحل كل الفجوات. بعض المواعيد ستبقى شاغرة على أي حال. لكنها تزيد من احتمالية ألا يتحول الإلغاء إلى خسارة كاملة — مع تخفيف العبء عن فريق العيادة في الوقت نفسه.
 
-يدعم Clentra هذه العملية تحديداً: عند فتح موعد شاغر، يُعدّ المرضى المناسبون من قائمة الانتظار، ويمكن للعيادة إرسال رابط آمن للأشخاص المختارين بنقرة واحدة.
+يدعم PraxisFlow هذه العملية تحديداً: عند فتح موعد شاغر، يُعدّ المرضى المناسبون من قائمة الانتظار، ويمكن للعيادة إرسال رابط آمن للأشخاص المختارين بنقرة واحدة.
 
-جرّبه الآن: اختبر Clentra مجاناً لمدة 14 يوماً.`,
+جرّبه الآن: اختبر PraxisFlow مجاناً لمدة 14 يوماً.`,
   },
   {
     slug: "digitale-warteliste-datenschutz-einwilligung",
@@ -599,17 +599,17 @@ const AR_POSTS: StaticPost[] = [
 
 اتفاقية معالجة البيانات: عند استخدام برامج خارجية لإدارة قائمة الانتظار، يجب إبرام اتفاقية معالجة بيانات مع مزود الخدمة.
 
-ما يقدمه Clentra في هذا السياق
+ما يقدمه PraxisFlow في هذا السياق
 
-صُمّم Clentra بوعي تجاه حماية البيانات: لا يمكن التواصل مع المرضى عبر القنوات الرقمية إلا إذا وافقوا على ذلك مسبقاً (الاشتراك الاختياري). يعمل الوضع الافتراضي دون إرسال رسائل آلية — تحتفظ العيادة بالتحكم الكامل في من يتم التواصل معه.
+صُمّم PraxisFlow بوعي تجاه حماية البيانات: لا يمكن التواصل مع المرضى عبر القنوات الرقمية إلا إذا وافقوا على ذلك مسبقاً (الاشتراك الاختياري). يعمل الوضع الافتراضي دون إرسال رسائل آلية — تحتفظ العيادة بالتحكم الكامل في من يتم التواصل معه.
 
-تنبيه: لا يُغني استخدام Clentra عن مراجعة حماية البيانات الفردية. كل عيادة مسؤولة عن مراجعة استخدام البرامج للتواصل مع المرضى بشكل مستقل.
+تنبيه: لا يُغني استخدام PraxisFlow عن مراجعة حماية البيانات الفردية. كل عيادة مسؤولة عن مراجعة استخدام البرامج للتواصل مع المرضى بشكل مستقل.
 
 خلاصة
 
 يمكن لقوائم الانتظار الرقمية تخفيف العبء عن العيادات بشكل كبير — إذا استُخدمت بوعي تجاه حماية البيانات. المفتاح يكمن في عمليات موافقة واضحة، وتقليل البيانات إلى الحد الأدنى، ومزود موثوق به يمتلك اتفاقية معالجة بيانات.
 
-تواصل معنا: لأي أسئلة حول Clentra وكيفية استخدامه في عيادتك، يسعدنا تلقي رسالتك.`,
+تواصل معنا: لأي أسئلة حول PraxisFlow وكيفية استخدامه في عيادتك، يسعدنا تلقي رسالتك.`,
   },
 ];
 
@@ -639,7 +639,7 @@ const ZH_POSTS: StaticPost[] = [
 
 数字化工具能发挥什么作用
 
-诊所管理软件可以帮助简化这一流程。无需手动翻阅纸质名单，可以更快地找到符合条件的患者。Clentra等工具可以在出现预约空档时从候诊名单中准备好合适的候选人，帮助诊所快速响应。
+诊所管理软件可以帮助简化这一流程。无需手动翻阅纸质名单，可以更快地找到符合条件的患者。PraxisFlow等工具可以在出现预约空档时从候诊名单中准备好合适的候选人，帮助诊所快速响应。
 
 重要提示：联系患者需要获得其事先同意，且应以符合数据保护意识的方式进行。建议在使用数字通讯渠道前进行法律审查。
 
@@ -647,7 +647,7 @@ const ZH_POSTS: StaticPost[] = [
 
 维护良好的候诊名单是填补临时预约空档最有效的措施之一。通过清晰的结构、定期维护——以及必要时的数字化支持——诊所的预约使用率可以显著提升。
 
-免费试用Clentra 14天，看看候诊名单管理如何变得更简单。`,
+免费试用PraxisFlow 14天，看看候诊名单管理如何变得更简单。`,
   },
   {
     slug: "terminausfaelle-reduzieren-benachrichtigungen",
@@ -683,9 +683,9 @@ const ZH_POSTS: StaticPost[] = [
 
 预先准备的通知并不能解决所有空档问题。有些预约仍然可能无法填补。但它们增加了取消预约不会造成完全损失的可能性——同时也减轻了诊所团队的负担。
 
-Clentra正是为支持这一流程而设计：当出现预约空档时，从候诊名单中准备好合适的患者，诊所只需一键即可向选定的人发送安全链接。
+PraxisFlow正是为支持这一流程而设计：当出现预约空档时，从候诊名单中准备好合适的患者，诊所只需一键即可向选定的人发送安全链接。
 
-立即体验：免费试用Clentra 14天。`,
+立即体验：免费试用PraxisFlow 14天。`,
   },
   {
     slug: "digitale-warteliste-datenschutz-einwilligung",
@@ -718,17 +718,17 @@ Clentra正是为支持这一流程而设计：当出现预约空档时，从候�
 
 数据处理协议：如果使用外部软件管理候诊名单，必须与服务提供商签订数据处理协议（DPA）。
 
-Clentra在此提供的支持
+PraxisFlow在此提供的支持
 
-Clentra的设计注重数据保护意识：只有在患者事先同意（选择加入）的情况下，才能通过数字渠道与其联系。标准模式不进行自动消息发送——诊所完全掌控联系对象的决定权。
+PraxisFlow的设计注重数据保护意识：只有在患者事先同意（选择加入）的情况下，才能通过数字渠道与其联系。标准模式不进行自动消息发送——诊所完全掌控联系对象的决定权。
 
-注意：使用Clentra不能替代个人数据保护审查。每个诊所均有责任独立审查用于患者通讯的软件使用情况。
+注意：使用PraxisFlow不能替代个人数据保护审查。每个诊所均有责任独立审查用于患者通讯的软件使用情况。
 
 总结
 
 数字候诊名单可以显著减轻诊所负担——前提是以注重数据保护意识的方式使用。关键在于清晰的同意流程、数据最小化以及拥有数据处理协议的可靠服务提供商。
 
-联系我们：如有关于Clentra及其在您诊所应用的问题，欢迎随时与我们联系。`,
+联系我们：如有关于PraxisFlow及其在您诊所应用的问题，欢迎随时与我们联系。`,
   },
 ];
 
@@ -758,7 +758,7 @@ const HI_POSTS: StaticPost[] = [
 
 डिजिटल टूल क्या भूमिका निभा सकते हैं
 
-प्रैक्टिस मैनेजमेंट सॉफ्टवेयर इस प्रक्रिया को सरल बनाने में मदद कर सकता है। कागजी सूचियां मैन्युअल रूप से देखने की बजाय, उपयुक्त मानदंड वाले मरीज तेजी से मिल सकते हैं। Clentra जैसे टूल स्लॉट उपलब्ध होने पर प्रतीक्षा सूची से उपयुक्त उम्मीदवार तैयार करने में मदद करते हैं।
+प्रैक्टिस मैनेजमेंट सॉफ्टवेयर इस प्रक्रिया को सरल बनाने में मदद कर सकता है। कागजी सूचियां मैन्युअल रूप से देखने की बजाय, उपयुक्त मानदंड वाले मरीज तेजी से मिल सकते हैं। PraxisFlow जैसे टूल स्लॉट उपलब्ध होने पर प्रतीक्षा सूची से उपयुक्त उम्मीदवार तैयार करने में मदद करते हैं।
 
 महत्वपूर्ण: मरीजों से किसी भी संपर्क के लिए उनकी पूर्व सहमति आवश्यक है और डेटा सुरक्षा के प्रति जागरूक तरीके से किया जाना चाहिए। डिजिटल संचार चैनलों का उपयोग करने से पहले कानूनी समीक्षा की सिफारिश की जाती है।
 
@@ -766,7 +766,7 @@ const HI_POSTS: StaticPost[] = [
 
 अच्छी तरह से बनाए रखी गई प्रतीक्षा सूची अल्प सूचना पर खाली स्लॉट भरने के सबसे प्रभावी उपायों में से एक है। स्पष्ट संरचना, नियमित देखभाल और — जब आवश्यक हो — डिजिटल सहायता से प्रैक्टिस की भरण क्षमता में उल्लेखनीय सुधार हो सकता है।
 
-Clentra को 14 दिनों के लिए मुफ्त आजमाएं और देखें कि प्रतीक्षा सूची प्रबंधन कैसे आसान हो जाता है।`,
+PraxisFlow को 14 दिनों के लिए मुफ्त आजमाएं और देखें कि प्रतीक्षा सूची प्रबंधन कैसे आसान हो जाता है।`,
   },
   {
     slug: "terminausfaelle-reduzieren-benachrichtigungen",
@@ -798,9 +798,9 @@ Clentra को 14 दिनों के लिए मुफ्त आजमा�
 
 स्पष्ट संचार: सूचना स्पष्ट और सरल भाषा में होनी चाहिए। मरीज को पता होना चाहिए कि क्या उम्मीद करनी है, कैसे प्रतिक्रिया देनी है और अपॉइंटमेंट कब तक उपलब्ध है।
 
-Clentra इसी प्रक्रिया का समर्थन करता है: अपॉइंटमेंट स्लॉट खुलने पर, प्रतीक्षा सूची से उपयुक्त मरीज तैयार किए जाते हैं और प्रैक्टिस एक क्लिक से चुने गए लोगों को सुरक्षित लिंक भेज सकती है।
+PraxisFlow इसी प्रक्रिया का समर्थन करता है: अपॉइंटमेंट स्लॉट खुलने पर, प्रतीक्षा सूची से उपयुक्त मरीज तैयार किए जाते हैं और प्रैक्टिस एक क्लिक से चुने गए लोगों को सुरक्षित लिंक भेज सकती है।
 
-अभी आज़माएं: Clentra को 14 दिनों के लिए मुफ्त टेस्ट करें।`,
+अभी आज़माएं: PraxisFlow को 14 दिनों के लिए मुफ्त टेस्ट करें।`,
   },
   {
     slug: "digitale-warteliste-datenschutz-einwilligung",
@@ -831,13 +831,13 @@ Clentra इसी प्रक्रिया का समर्थन कर�
 
 हटाने की समय-सीमा: जिन मरीजों को अपॉइंटमेंट मिल गया है या जो अब सूची में नहीं रहना चाहते, उन्हें समय पर डिजिटल प्रतीक्षा सूची से हटाया जाना चाहिए।
 
-Clentra इस संदर्भ में क्या प्रदान करता है
+PraxisFlow इस संदर्भ में क्या प्रदान करता है
 
-Clentra को डेटा सुरक्षा के प्रति जागरूक तरीके से डिजाइन किया गया है: मरीजों से केवल तभी डिजिटल चैनलों के माध्यम से संपर्क किया जा सकता है जब उन्होंने पहले सहमति दी हो (ऑप्ट-इन)। स्टैंडर्ड मोड बिना स्वचालित संदेश भेजे काम करता है — प्रैक्टिस यह नियंत्रित करती है कि किससे संपर्क किया जाए।
+PraxisFlow को डेटा सुरक्षा के प्रति जागरूक तरीके से डिजाइन किया गया है: मरीजों से केवल तभी डिजिटल चैनलों के माध्यम से संपर्क किया जा सकता है जब उन्होंने पहले सहमति दी हो (ऑप्ट-इन)। स्टैंडर्ड मोड बिना स्वचालित संदेश भेजे काम करता है — प्रैक्टिस यह नियंत्रित करती है कि किससे संपर्क किया जाए।
 
-नोट: Clentra का उपयोग व्यक्तिगत डेटा सुरक्षा समीक्षा का विकल्प नहीं है।
+नोट: PraxisFlow का उपयोग व्यक्तिगत डेटा सुरक्षा समीक्षा का विकल्प नहीं है।
 
-हमसे संपर्क करें: Clentra के बारे में या अपनी प्रैक्टिस में इसके उपयोग के संबंध में किसी भी प्रश्न के लिए, हम आपके संदेश का स्वागत करते हैं।`,
+हमसे संपर्क करें: PraxisFlow के बारे में या अपनी प्रैक्टिस में इसके उपयोग के संबंध में किसी भी प्रश्न के लिए, हम आपके संदेश का स्वागत करते हैं।`,
   },
 ];
 
@@ -865,11 +865,11 @@ const BN_POSTS: StaticPost[] = [
 
 ৩. স্পষ্ট অগ্রাধিকার নির্ধারণ করুন: জরুরি চিকিৎসার প্রয়োজন আছে এমন রোগীদের অগ্রাধিকার দিন।
 
-Clentra-এর মতো টুলগুলো প্রতীক্ষা সূচি থেকে উপযুক্ত প্রার্থীদের প্রস্তুত করতে সাহায্য করে যখন একটি স্লট পাওয়া যায়।
+PraxisFlow-এর মতো টুলগুলো প্রতীক্ষা সূচি থেকে উপযুক্ত প্রার্থীদের প্রস্তুত করতে সাহায্য করে যখন একটি স্লট পাওয়া যায়।
 
 গুরুত্বপূর্ণ: রোগীদের সাথে যেকোনো যোগাযোগের জন্য তাদের পূর্বসম্মতি প্রয়োজন এবং তা তথ্য সুরক্ষার প্রতি সচেতনভাবে করতে হবে।
 
-Clentra ১৪ দিনের জন্য বিনামূল্যে পরীক্ষা করুন।`,
+PraxisFlow ১৪ দিনের জন্য বিনামূল্যে পরীক্ষা করুন।`,
   },
   {
     slug: "terminausfaelle-reduzieren-benachrichtigungen",
@@ -886,9 +886,9 @@ Clentra ১৪ দিনের জন্য বিনামূল্যে প�
 
 একটি ভিন্ন পদ্ধতি: সরাসরি কল করার পরিবর্তে, উপযুক্ত অপেক্ষমাণ রোগীদের জন্য একটি ব্যক্তিগতকৃত নিরাপদ লিংক প্রস্তুত করা হয়। এই লিংকের মাধ্যমে রোগীরা নিজেরাই সিদ্ধান্ত নিতে পারেন — ফোনে অপেক্ষা ছাড়াই।
 
-Clentra ঠিক এই প্রক্রিয়াকে সমর্থন করে: যখন একটি স্লট খালি হয়, উপযুক্ত রোগীদের প্রস্তুত করা হয় এবং প্র্যাকটিস এক ক্লিকে নির্বাচিত ব্যক্তিদের নিরাপদ লিংক পাঠাতে পারে।
+PraxisFlow ঠিক এই প্রক্রিয়াকে সমর্থন করে: যখন একটি স্লট খালি হয়, উপযুক্ত রোগীদের প্রস্তুত করা হয় এবং প্র্যাকটিস এক ক্লিকে নির্বাচিত ব্যক্তিদের নিরাপদ লিংক পাঠাতে পারে।
 
-এখনই চেষ্টা করুন: Clentra ১৪ দিনের জন্য বিনামূল্যে পরীক্ষা করুন।`,
+এখনই চেষ্টা করুন: PraxisFlow ১৪ দিনের জন্য বিনামূল্যে পরীক্ষা করুন।`,
   },
   {
     slug: "digitale-warteliste-datenschutz-einwilligung",
@@ -907,9 +907,9 @@ Clentra ঠিক এই প্রক্রিয়াকে সমর্থন
 
 অনেক ক্ষেত্রে প্রক্রিয়াকরণ একটি চুক্তির উপর ভিত্তি করে হতে পারে। অন্যান্য ক্ষেত্রে, বিশেষ করে ডিজিটাল চ্যানেলের মাধ্যমে যোগাযোগের জন্য, রোগীর সুস্পষ্ট সম্মতি প্রয়োজন।
 
-Clentra তথ্য সুরক্ষার প্রতি সচেতনভাবে ডিজাইন করা হয়েছে: রোগীরা কেবল তখনই ডিজিটাল চ্যানেলের মাধ্যমে যোগাযোগ করা যায় যখন তারা পূর্বে সম্মতি দিয়েছেন (অপ্ট-ইন)। স্ট্যান্ডার্ড মোড স্বয়ংক্রিয় বার্তা পাঠানো ছাড়াই কাজ করে।
+PraxisFlow তথ্য সুরক্ষার প্রতি সচেতনভাবে ডিজাইন করা হয়েছে: রোগীরা কেবল তখনই ডিজিটাল চ্যানেলের মাধ্যমে যোগাযোগ করা যায় যখন তারা পূর্বে সম্মতি দিয়েছেন (অপ্ট-ইন)। স্ট্যান্ডার্ড মোড স্বয়ংক্রিয় বার্তা পাঠানো ছাড়াই কাজ করে।
 
-আমাদের সাথে যোগাযোগ করুন: Clentra সম্পর্কে যেকোনো প্রশ্নের জন্য আমরা আপনার বার্তার অপেক্ষায় আছি।`,
+আমাদের সাথে যোগাযোগ করুন: PraxisFlow সম্পর্কে যেকোনো প্রশ্নের জন্য আমরা আপনার বার্তার অপেক্ষায় আছি।`,
   },
 ];
 
@@ -937,11 +937,11 @@ const RU_POSTS: StaticPost[] = [
 
 3. Устанавливайте чёткие приоритеты: пациенты с неотложной потребностью в лечении должны быть в приоритете.
 
-Инструменты вроде Clentra помогают подбирать подходящих кандидатов из листа ожидания при появлении свободного слота.
+Инструменты вроде PraxisFlow помогают подбирать подходящих кандидатов из листа ожидания при появлении свободного слота.
 
 Важно: любой контакт с пациентами требует их предварительного согласия и должен осуществляться с соблюдением требований защиты данных. Перед использованием цифровых каналов коммуникации рекомендуется юридическая проверка.
 
-Попробуйте Clentra бесплатно в течение 14 дней и убедитесь, насколько проще стало управление листом ожидания.`,
+Попробуйте PraxisFlow бесплатно в течение 14 дней и убедитесь, насколько проще стало управление листом ожидания.`,
   },
   {
     slug: "terminausfaelle-reduzieren-benachrichtigungen",
@@ -958,9 +958,9 @@ const RU_POSTS: StaticPost[] = [
 
 Другой подход: вместо прямого звонка для подходящих пациентов из листа ожидания готовится персональная безопасная ссылка. Через неё пациенты сами решают, хотят ли они записаться на освободившееся время — в своём темпе, без телефонного ожидания.
 
-Clentra поддерживает именно этот процесс: при появлении свободного слота подходящие пациенты подбираются из листа ожидания, и учреждение может одним кликом отправить безопасную ссылку выбранным лицам.
+PraxisFlow поддерживает именно этот процесс: при появлении свободного слота подходящие пациенты подбираются из листа ожидания, и учреждение может одним кликом отправить безопасную ссылку выбранным лицам.
 
-Попробуйте сейчас: тестируйте Clentra бесплатно 14 дней.`,
+Попробуйте сейчас: тестируйте PraxisFlow бесплатно 14 дней.`,
   },
   {
     slug: "digitale-warteliste-datenschutz-einwilligung",
@@ -983,11 +983,11 @@ Clentra поддерживает именно этот процесс: при п
 
 Минимизация данных: собирайте только необходимые данные. Ограничение цели: данные можно использовать только в той цели, для которой они были собраны. Своевременное удаление: пациентов, получивших запись или покинувших лист, следует своевременно удалять.
 
-Clentra разработан с учётом требований защиты данных: пациенты могут быть связаны через цифровые каналы только при наличии предварительного согласия (opt-in). Стандартный режим работает без автоматической отправки сообщений.
+PraxisFlow разработан с учётом требований защиты данных: пациенты могут быть связаны через цифровые каналы только при наличии предварительного согласия (opt-in). Стандартный режим работает без автоматической отправки сообщений.
 
-Примечание: использование Clentra не заменяет индивидуальную проверку защиты данных.
+Примечание: использование PraxisFlow не заменяет индивидуальную проверку защиты данных.
 
-Свяжитесь с нами: по вопросам о Clentra и его использовании в вашем учреждении мы рады вашему сообщению.`,
+Свяжитесь с нами: по вопросам о PraxisFlow и его использовании в вашем учреждении мы рады вашему сообщению.`,
   },
 ];
 

@@ -5,7 +5,7 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://slotfill-pi.vercel.a
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations();
-  const title = `${t("contact.title")} – Clentra`;
+  const title = `${t("contact.title")} – PraxisFlow`;
   const description = t("contact.subtitle");
 
   return {
@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title,
       description,
       url: "/kontakt",
-      siteName: "Clentra",
+      siteName: "PraxisFlow",
       locale: "de_DE",
       type: "website",
     },

@@ -130,7 +130,7 @@ export default function FeedbackPage() {
           Ihre Meinung zählt
         </h1>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-          Helfen Sie uns, Clentra für Arztpraxen besser zu machen.
+          Helfen Sie uns, PraxisFlow für Arztpraxen besser zu machen.
         </p>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
@@ -279,7 +279,7 @@ export default function FeedbackPage() {
                 htmlFor="consent_to_publish"
                 className="text-sm text-slate-600 dark:text-slate-400"
               >
-                Mein Feedback darf nach Prüfung durch das Clentra-Team als anonymes
+                Mein Feedback darf nach Prüfung durch das PraxisFlow-Team als anonymes
                 Testimonial auf der Website angezeigt werden. (Freiwillig)
               </label>
             </div>

@@ -1,6 +1,6 @@
-# Backup & Recovery – Clentra
+# Backup & Recovery – PraxisFlow
 
-Diese Checkliste ist eine Empfehlung. Clentra führt **keine** automatische
+Diese Checkliste ist eine Empfehlung. PraxisFlow führt **keine** automatische
 Backup-Wiederherstellung aus und erzeugt **keine** Datenbank-Dumps.
 
 ## Vor dem Produktivstart

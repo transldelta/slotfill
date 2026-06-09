@@ -101,7 +101,7 @@ export interface LegalLocaleData {
 
 const de: LegalLocaleData = {
   dir: "ltr",
-  backLabel: "Clentra",
+  backLabel: "PraxisFlow",
   standDate: "Stand: Mai 2026",
   agbTitle: "Allgemeine Geschäftsbedingungen (AGB)",
   datenschutzTitle: "Datenschutzerklärung",
@@ -159,7 +159,7 @@ const de: LegalLocaleData = {
 
 const en: LegalLocaleData = {
   dir: "ltr",
-  backLabel: "Clentra",
+  backLabel: "PraxisFlow",
   standDate: "As of: May 2026",
   agbTitle: "Terms and Conditions",
   datenschutzTitle: "Privacy Policy",
@@ -181,7 +181,7 @@ const en: LegalLocaleData = {
   agbSection6: "Liability",
   agbSection7: "Contract Term & Termination",
   agbSection8: "Final Provisions",
-  agbKeyB2bOnly: "Clentra is exclusively for commercial users (medical and therapy practices). Consumer use is excluded.",
+  agbKeyB2bOnly: "PraxisFlow is exclusively for commercial users (medical and therapy practices). Consumer use is excluded.",
   agbKeyNoSmsTrial: "In trial mode, no real SMS or WhatsApp messages are sent. All messages are simulated (dry-run) until a provider is actively configured.",
   agbKeyTrialDays: "Free 14-day trial period. No credit card required.",
   agbKeyProviderOptional: "Messaging providers (e.g. Twilio for SMS/WhatsApp) are optional and must be configured separately by the practice. Provider costs are borne by the practice.",
@@ -218,7 +218,7 @@ const en: LegalLocaleData = {
 
 const fr: LegalLocaleData = {
   dir: "ltr",
-  backLabel: "Clentra",
+  backLabel: "PraxisFlow",
   standDate: "Date : mai 2026",
   agbTitle: "Conditions générales d'utilisation",
   datenschutzTitle: "Politique de confidentialité",
@@ -240,7 +240,7 @@ const fr: LegalLocaleData = {
   agbSection6: "Responsabilité",
   agbSection7: "Durée du contrat et résiliation",
   agbSection8: "Dispositions finales",
-  agbKeyB2bOnly: "Clentra est exclusivement destiné aux utilisateurs professionnels (cabinets médicaux et thérapeutiques). L'utilisation par des consommateurs est exclue.",
+  agbKeyB2bOnly: "PraxisFlow est exclusivement destiné aux utilisateurs professionnels (cabinets médicaux et thérapeutiques). L'utilisation par des consommateurs est exclue.",
   agbKeyNoSmsTrial: "En mode essai, aucun vrai SMS ou message WhatsApp n'est envoyé. Tous les messages sont simulés jusqu'à la configuration active d'un fournisseur.",
   agbKeyTrialDays: "Période d'essai gratuite de 14 jours. Aucune carte de crédit requise.",
   agbKeyProviderOptional: "Les fournisseurs de messagerie (p. ex. Twilio) sont optionnels et doivent être configurés séparément par le cabinet. Les frais du fournisseur sont à la charge du cabinet.",
@@ -277,7 +277,7 @@ const fr: LegalLocaleData = {
 
 const es: LegalLocaleData = {
   dir: "ltr",
-  backLabel: "Clentra",
+  backLabel: "PraxisFlow",
   standDate: "Fecha: mayo 2026",
   agbTitle: "Términos y condiciones",
   datenschutzTitle: "Política de privacidad",
@@ -299,7 +299,7 @@ const es: LegalLocaleData = {
   agbSection6: "Responsabilidad",
   agbSection7: "Duración del contrato y rescisión",
   agbSection8: "Disposiciones finales",
-  agbKeyB2bOnly: "Clentra está destinado exclusivamente a usuarios comerciales (consultas médicas y terapéuticas). El uso por consumidores está excluido.",
+  agbKeyB2bOnly: "PraxisFlow está destinado exclusivamente a usuarios comerciales (consultas médicas y terapéuticas). El uso por consumidores está excluido.",
   agbKeyNoSmsTrial: "En modo de prueba, no se envían SMS ni mensajes de WhatsApp reales. Todos los mensajes se simulan hasta que se configure activamente un proveedor.",
   agbKeyTrialDays: "Período de prueba gratuito de 14 días. No se requiere tarjeta de crédito.",
   agbKeyProviderOptional: "Los proveedores de mensajería (p. ej. Twilio) son opcionales y deben configurarse por separado. Los costes del proveedor corren a cargo de la consulta.",
@@ -336,7 +336,7 @@ const es: LegalLocaleData = {
 
 const ar: LegalLocaleData = {
   dir: "rtl",
-  backLabel: "Clentra",
+  backLabel: "PraxisFlow",
   standDate: "التاريخ: مايو 2026",
   agbTitle: "الشروط والأحكام",
   datenschutzTitle: "سياسة الخصوصية",
@@ -358,7 +358,7 @@ const ar: LegalLocaleData = {
   agbSection6: "المسؤولية",
   agbSection7: "مدة العقد وإنهاؤه",
   agbSection8: "الأحكام الختامية",
-  agbKeyB2bOnly: "Clentra مخصص حصرياً للمستخدمين التجاريين (عيادات طبية وعلاجية). يُستثنى من ذلك المستهلكون الأفراد.",
+  agbKeyB2bOnly: "PraxisFlow مخصص حصرياً للمستخدمين التجاريين (عيادات طبية وعلاجية). يُستثنى من ذلك المستهلكون الأفراد.",
   agbKeyNoSmsTrial: "في وضع التجربة، لا تُرسَل رسائل SMS أو WhatsApp حقيقية. جميع الرسائل تُحاكى فقط حتى يتم تفعيل مزود خارجي.",
   agbKeyTrialDays: "فترة تجربة مجانية مدتها 14 يوماً. لا يلزم تقديم بطاقة ائتمان.",
   agbKeyProviderOptional: "مزودو المراسلة (مثل Twilio) اختياريون ويجب تكوينهم بشكل منفصل من قِبَل العيادة. تتحمل العيادة تكاليف المزود.",
@@ -395,7 +395,7 @@ const ar: LegalLocaleData = {
 
 const pt: LegalLocaleData = {
   dir: "ltr",
-  backLabel: "Clentra",
+  backLabel: "PraxisFlow",
   standDate: "Data: maio de 2026",
   agbTitle: "Termos e condições",
   datenschutzTitle: "Política de privacidade",
@@ -417,7 +417,7 @@ const pt: LegalLocaleData = {
   agbSection6: "Responsabilidade",
   agbSection7: "Duração do contrato e rescisão",
   agbSection8: "Disposições finais",
-  agbKeyB2bOnly: "Clentra destina-se exclusivamente a utilizadores comerciais (consultórios médicos e de terapia).",
+  agbKeyB2bOnly: "PraxisFlow destina-se exclusivamente a utilizadores comerciais (consultórios médicos e de terapia).",
   agbKeyNoSmsTrial: "No modo de experimentação, não são enviados SMS ou mensagens WhatsApp reais.",
   agbKeyTrialDays: "Período de experimentação gratuito de 14 dias. Não é necessário cartão de crédito.",
   agbKeyProviderOptional: "Os fornecedores de mensagens (p. ex. Twilio) são opcionais e configurados separadamente pelo consultório.",
@@ -445,7 +445,7 @@ const pt: LegalLocaleData = {
 
 const ru: LegalLocaleData = {
   dir: "ltr",
-  backLabel: "Clentra",
+  backLabel: "PraxisFlow",
   standDate: "Дата: май 2026",
   agbTitle: "Условия использования",
   datenschutzTitle: "Политика конфиденциальности",
@@ -464,7 +464,7 @@ const ru: LegalLocaleData = {
   agbSection5: "Защита данных и соглашение об обработке",
   agbSection6: "Ответственность", agbSection7: "Срок договора и расторжение",
   agbSection8: "Заключительные положения",
-  agbKeyB2bOnly: "Clentra предназначен исключительно для коммерческих пользователей (медицинские и терапевтические клиники).",
+  agbKeyB2bOnly: "PraxisFlow предназначен исключительно для коммерческих пользователей (медицинские и терапевтические клиники).",
   agbKeyNoSmsTrial: "В пробном режиме реальные SMS или сообщения WhatsApp не отправляются.",
   agbKeyTrialDays: "Бесплатный пробный период 14 дней. Кредитная карта не требуется.",
   agbKeyProviderOptional: "Провайдеры обмена сообщениями (например, Twilio) являются необязательными и настраиваются отдельно.",
@@ -494,7 +494,7 @@ const ru: LegalLocaleData = {
 
 const zh: LegalLocaleData = {
   dir: "ltr",
-  backLabel: "Clentra",
+  backLabel: "PraxisFlow",
   standDate: "日期：2026年5月",
   agbTitle: "服务条款",
   datenschutzTitle: "隐私政策",
@@ -509,7 +509,7 @@ const zh: LegalLocaleData = {
   agbSection1: "适用范围", agbSection2: "服务说明", agbSection3: "试用期",
   agbSection4: "消息服务与外部提供商", agbSection5: "数据保护与数据处理协议",
   agbSection6: "责任", agbSection7: "合同期限与终止", agbSection8: "最终条款",
-  agbKeyB2bOnly: "Clentra 专供商业用户（医疗和治疗诊所）使用。",
+  agbKeyB2bOnly: "PraxisFlow 专供商业用户（医疗和治疗诊所）使用。",
   agbKeyNoSmsTrial: "在试用模式下，不会发送真实的短信或WhatsApp消息。",
   agbKeyTrialDays: "14天免费试用期，无需信用卡。",
   agbKeyProviderOptional: "消息提供商（如 Twilio）为可选项，需由诊所单独配置。",
@@ -535,7 +535,7 @@ const zh: LegalLocaleData = {
 
 const hi: LegalLocaleData = {
   dir: "ltr",
-  backLabel: "Clentra",
+  backLabel: "PraxisFlow",
   standDate: "तारीख: मई 2026",
   agbTitle: "नियम और शर्तें",
   datenschutzTitle: "गोपनीयता नीति",
@@ -550,7 +550,7 @@ const hi: LegalLocaleData = {
   agbSection1: "दायरा", agbSection2: "सेवा विवरण", agbSection3: "परीक्षण अवधि",
   agbSection4: "संदेश सेवाएं और बाहरी प्रदाता", agbSection5: "डेटा सुरक्षा और प्रसंस्करण समझौता",
   agbSection6: "दायित्व", agbSection7: "अनुबंध अवधि और समाप्ति", agbSection8: "अंतिम प्रावधान",
-  agbKeyB2bOnly: "Clentra विशेष रूप से व्यावसायिक उपयोगकर्ताओं (चिकित्सा और थेरेपी क्लीनिक) के लिए है।",
+  agbKeyB2bOnly: "PraxisFlow विशेष रूप से व्यावसायिक उपयोगकर्ताओं (चिकित्सा और थेरेपी क्लीनिक) के लिए है।",
   agbKeyNoSmsTrial: "परीक्षण मोड में कोई वास्तविक SMS या WhatsApp संदेश नहीं भेजे जाते।",
   agbKeyTrialDays: "14 दिन का मुफ्त परीक्षण। क्रेडिट कार्ड की आवश्यकता नहीं।",
   agbKeyProviderOptional: "मैसेजिंग प्रदाता (जैसे Twilio) वैकल्पिक हैं और अलग से कॉन्फ़िगर किए जाते हैं।",
@@ -577,7 +577,7 @@ const hi: LegalLocaleData = {
 
 const bn: LegalLocaleData = {
   dir: "ltr",
-  backLabel: "Clentra",
+  backLabel: "PraxisFlow",
   standDate: "তারিখ: মে ২০২৬",
   agbTitle: "শর্তাবলী",
   datenschutzTitle: "গোপনীয়তা নীতি",
@@ -592,7 +592,7 @@ const bn: LegalLocaleData = {
   agbSection1: "প্রযোজ্যতার ক্ষেত্র", agbSection2: "পরিষেবার বিবরণ", agbSection3: "ট্রায়াল পিরিয়ড",
   agbSection4: "মেসেজিং পরিষেবা", agbSection5: "ডেটা সুরক্ষা",
   agbSection6: "দায়বদ্ধতা", agbSection7: "চুক্তির মেয়াদ", agbSection8: "চূড়ান্ত বিধান",
-  agbKeyB2bOnly: "Clentra শুধুমাত্র বাণিজ্যিক ব্যবহারকারীদের জন্য।",
+  agbKeyB2bOnly: "PraxisFlow শুধুমাত্র বাণিজ্যিক ব্যবহারকারীদের জন্য।",
   agbKeyNoSmsTrial: "ট্রায়াল মোডে কোনো বাস্তব SMS বা WhatsApp বার্তা পাঠানো হয় না।",
   agbKeyTrialDays: "১৪ দিনের বিনামূল্যে ট্রায়াল। ক্রেডিট কার্ডের প্রয়োজন নেই।",
   agbKeyProviderOptional: "মেসেজিং প্রদানকারীরা ঐচ্ছিক এবং আলাদাভাবে কনফিগার করা হয়।",

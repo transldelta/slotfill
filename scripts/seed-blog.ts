@@ -34,7 +34,7 @@ function loadEnvLocal() {
 // Legacy-Artikel (rückwärtskompatibel, werden übersprungen wenn schon vorhanden)
 const LEGACY_POSTS = [
   {
-    slug: "willkommen-bei-slotfill",
+    slug: "willkommen-bei-praxisflow",
     title: "Willkommen bei PraxisFlow",
     excerpt: "Wie PraxisFlow Ihrer Praxis hilft, kurzfristige Terminlücken zu füllen.",
     content:

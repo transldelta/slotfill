@@ -60,6 +60,20 @@ https://slotfill-pi.vercel.app
 
 ---
 
+## Technischer Projektname
+
+| Bereich | Name |
+|---|---|
+| Öffentlicher Produktname | **PraxisFlow** |
+| GitHub-Repository | `slotfill` (technischer Ursprungsname) |
+| Vercel-Projektname | `slotfill` |
+| Lokaler Ordnername | `slotfill/` |
+| Live-URL (aktuell) | `https://slotfill-pi.vercel.app` |
+
+> **Hinweis für Käufer:** Der technische Projektname im GitHub-Repository, im Vercel-Dashboard und als Ordnername lautet `slotfill`. Das ist der ursprüngliche technische Name und hat keinen Einfluss auf den öffentlichen Produktnamen. Der öffentliche Markenname `PraxisFlow` kann nach Kauf jederzeit in eine neue Marke umbenannt werden (nur `lib/brand.ts` ändern). Das Projekt kann mit einer eigenen Domain verbunden werden, indem `NEXT_PUBLIC_APP_URL` in den Vercel-Einstellungen gesetzt wird.
+
+---
+
 ## Admin-Bereich
 
 | Route | Funktion |

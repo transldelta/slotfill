@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "@/lib/i18n";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://clentra.de";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://slotfill-pi.vercel.app";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations();

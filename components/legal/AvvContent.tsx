@@ -2,12 +2,10 @@ import Link from "next/link";
 import { getLegalContent, isRtlLocale, isLegalDraft } from "@/lib/legal-content";
 
 /**
- * AVV / DPA – Auftragsverarbeitungsvertrag (Muster/Entwurf)
+ * AVV / DPA Informationsseite – lokalisiert
  *
  * Pflichtseite für Praxen, die Patientendaten in Clentra eingeben.
  * Ein unterzeichneter AVV ist gemäß Art. 28 DSGVO erforderlich.
- *
- * MUSTER / ENTWURF – vor produktivem Einsatz rechtlich prüfen lassen.
  */
 export function AvvContent({
   backHref = "/",
@@ -37,24 +35,23 @@ export function AvvContent({
         {c.avvSubtitle}
       </p>
 
-      {/* Muster/Entwurf-Banner – immer sichtbar */}
-      <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-900/50 dark:bg-amber-900/20 dark:text-amber-300">
-        <strong>{isDE ? "Muster / Entwurf –" : "Template / Draft –"}</strong>{" "}
-        {isDE
-          ? <>Dieses Dokument ist ein Musterentwurf und wurde noch nicht abschließend rechtlich geprüft.
-            Vor produktivem Einsatz bitte durch einen Rechtsanwalt oder Datenschutzbeauftragten
-            prüfen und individuell unterzeichnen lassen. Bei Fragen:{" "}
-            <a href="mailto:transl.delta@gmail.com" className="underline hover:no-underline">
-              transl.delta@gmail.com
-            </a>.</>
-          : <>This document is a template/draft and has not yet been fully reviewed.
-            Please have it reviewed and individually signed by a qualified attorney or DPO before going live.
-            For questions:{" "}
-            <a href="mailto:transl.delta@gmail.com" className="underline hover:no-underline">
-              transl.delta@gmail.com
-            </a>.</>
-        }
-      </div>
+      {/* Draft-Hinweis */}
+      {isDraft && (
+        <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-900/50 dark:bg-amber-900/20 dark:text-amber-300">
+          <strong>{isDE ? "ENTWURF –" : "DRAFT –"}</strong>{" "}
+          {c.avvDraftNotice.replace(/^(ENTWURF|DRAFT|BROUILLON|BORRADOR|مسودة|ЧЕРНОВИК|草稿|RASCUNHO|मसौदा|খসড়া)\s*[–-]\s*/i, "")}{" "}
+          {isDE
+            ? <>Bitte wenden Sie sich bei Fragen an{" "}
+              <a href="mailto:transl.delta@gmail.com" className="underline hover:no-underline">
+                transl.delta@gmail.com
+              </a>.</>
+            : <>For questions, please contact{" "}
+              <a href="mailto:transl.delta@gmail.com" className="underline hover:no-underline">
+                transl.delta@gmail.com
+              </a>.</>
+          }
+        </div>
+      )}
 
       {/* Maßgeblichkeits-Banner für Nicht-DE */}
       {!isDE && c.authorityNotice && (
@@ -79,11 +76,10 @@ export function AvvContent({
             {isDE ? (
               <>
                 <p>
-                  Wenn Ihre Praxis Patientendaten (z. B. Namen, Telefonnummern, Termindaten) in
-                  Clentra eingibt, verarbeitet Clentra diese Daten in Ihrem Auftrag. In diesem
-                  Fall sind Sie als Praxis <strong>Verantwortliche/r</strong> im Sinne des
-                  Art. 4 Nr. 7 DSGVO und Clentra ist <strong>Auftragsverarbeiter</strong> im
-                  Sinne des Art. 4 Nr. 8 DSGVO.
+                  Wenn Ihre Praxis Patientendaten (z. B. Namen, Telefonnummern) in Clentra eingibt,
+                  verarbeitet Clentra diese Daten in Ihrem Auftrag. In diesem Fall sind Sie als
+                  Praxis <strong>Verantwortliche/r</strong> im Sinne des Art. 4 Nr. 7 DSGVO und
+                  Clentra ist <strong>Auftragsverarbeiter</strong> im Sinne des Art. 4 Nr. 8 DSGVO.
                 </p>
                 <p>
                   Gemäß Art. 28 Abs. 3 DSGVO ist ein schriftlicher Auftragsverarbeitungsvertrag (AVV)
@@ -94,8 +90,8 @@ export function AvvContent({
             ) : (
               <>
                 <p>
-                  When your practice enters patient data (e.g. names, phone numbers, appointment data)
-                  into Clentra, Clentra processes that data on your behalf. Your practice is the
+                  When your practice enters patient data (e.g. names, phone numbers) into Clentra,
+                  Clentra processes that data on your behalf. In this case, your practice is the
                   <strong> data controller</strong> (Art. 4(7) GDPR) and Clentra is the
                   <strong> data processor</strong> (Art. 4(8) GDPR).
                 </p>
@@ -143,155 +139,39 @@ export function AvvContent({
           </div>
         </section>
 
-        {/* Muster-AVV – Inhalt */}
-        {isDE && (
-          <>
-            <section>
-              <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">
-                Muster-AVV – Inhalt (Entwurf)
-              </h2>
-              <div className="mt-2 rounded-lg border border-slate-200 bg-slate-50 p-4 space-y-4 dark:border-slate-700 dark:bg-slate-800/50">
-
-                <div>
-                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">§ 1 Gegenstand und Dauer</h3>
-                  <p className="mt-1 leading-relaxed">
-                    Dieser Vertrag regelt die Auftragsverarbeitung zwischen der Praxis
-                    (Verantwortlicher, nachfolgend &bdquo;Auftraggeber&ldquo;) und Clentra, betrieben durch
-                    Brahim Ben Abla, Schlesier Straße 64, 76227 Karlsruhe (Auftragsverarbeiter,
-                    nachfolgend &bdquo;Auftragnehmer&ldquo;). Die Laufzeit entspricht der Laufzeit des
-                    Hauptvertrags (Nutzungsvertrag Clentra).
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">§ 2 Art und Zweck der Verarbeitung</h3>
-                  <p className="mt-1 leading-relaxed">
-                    Der Auftragnehmer verarbeitet personenbezogene Daten ausschließlich
-                    zur Bereitstellung der Clentra-Plattform (Terminverwaltung, Buchungsanfragen,
-                    Benachrichtigungen, Feedback) im Auftrag des Auftraggebers. Eine Verarbeitung
-                    zu eigenen Zwecken ist ausgeschlossen.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">§ 3 Kategorien betroffener Personen und Datenarten</h3>
-                  <div className="mt-1 leading-relaxed space-y-1">
-                    <p><strong>Betroffene Personen:</strong> Patienten der Praxis, ggf. deren Kontaktpersonen.</p>
-                    <p><strong>Datenarten:</strong> Name, E-Mail-Adresse, Telefonnummer, gewünschter Termin,
-                    Anliegen/Notiz, Buchungsstatus, Bewertungsdaten.</p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                      Keine Verarbeitung besonderer Kategorien personenbezogener Daten (Art. 9 DSGVO)
-                      ohne ausdrückliche gesonderte Vereinbarung.
-                    </p>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">§ 4 Technische und organisatorische Maßnahmen (TOMs)</h3>
-                  <ul className="mt-1 ml-4 list-disc space-y-1 leading-relaxed">
-                    <li>Verschlüsselte Datenübertragung (HTTPS/TLS)</li>
-                    <li>Zugriffskontrollen und Authentifizierung (Supabase Auth)</li>
-                    <li>Row-Level Security in der Datenbank</li>
-                    <li>Protokollierung sicherheitsrelevanter Ereignisse (Audit-Log)</li>
-                    <li>Regelmäßige Datensicherung durch Supabase</li>
-                    <li>Zugriff auf Produktionsdaten nur für autorisiertes Personal</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">§ 5 Unterauftragsverarbeiter</h3>
-                  <p className="mt-1 leading-relaxed">
-                    Der Auftragnehmer setzt folgende Unterauftragsverarbeiter ein:
-                  </p>
-                  <ul className="mt-1 ml-4 list-disc space-y-1 leading-relaxed">
-                    <li><strong>Supabase Inc.</strong> – Datenbankhosting, Authentifizierung (EU-Serverstandort; SCCs)</li>
-                    <li><strong>Vercel Inc.</strong> – Webhosting und Deployment (USA; SCCs)</li>
-                    <li><strong>Resend Inc.</strong> – E-Mail-Versand (transaktionale Mails; SCCs)</li>
-                    <li><strong>Twilio Inc.</strong> (optional) – SMS/WhatsApp, nur bei bewusster Konfiguration durch die Praxis</li>
-                  </ul>
-                  <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
-                    Änderungen der Unterauftragnehmer werden dem Auftraggeber rechtzeitig mitgeteilt.
-                    Der Auftraggeber kann Änderungen widersprechen.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">§ 6 Löschung und Rückgabe</h3>
-                  <p className="mt-1 leading-relaxed">
-                    Nach Beendigung des Hauptvertrags werden alle personenbezogenen Daten
-                    auf Wunsch des Auftraggebers zurückgegeben oder unwiderruflich gelöscht,
-                    sofern keine gesetzliche Aufbewahrungspflicht entgegensteht.
-                    Der Auftraggeber kann einen Datenexport vor Vertragsende anfordern.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">§ 7 Kontrollrechte des Auftraggebers</h3>
-                  <p className="mt-1 leading-relaxed">
-                    Der Auftraggeber hat das Recht, die Einhaltung der Datenschutzvorschriften
-                    und dieses Vertrags durch den Auftragnehmer zu überprüfen (Audits, Inspektionen).
-                    Anfragen richten Sie an:{" "}
-                    <a href="mailto:transl.delta@gmail.com" className="text-blue-600 hover:underline dark:text-blue-400">
-                      transl.delta@gmail.com
-                    </a>
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">§ 8 Meldepflichten</h3>
-                  <p className="mt-1 leading-relaxed">
-                    Der Auftragnehmer informiert den Auftraggeber unverzüglich über bekannt
-                    gewordene Datenschutzverletzungen (Art. 33 DSGVO). Die Meldung enthält
-                    alle verfügbaren Informationen zur Verletzung und möglichen Auswirkungen.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">§ 9 Unterstützungspflichten</h3>
-                  <p className="mt-1 leading-relaxed">
-                    Der Auftragnehmer unterstützt den Auftraggeber bei der Erfüllung von
-                    Betroffenenrechten (Auskunft, Löschung, Berichtigung) sowie bei der
-                    Erstellung von Datenschutz-Folgenabschätzungen (Art. 35 DSGVO), soweit
-                    technisch und organisatorisch möglich.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">§ 10 Weisungsgebundenheit</h3>
-                  <p className="mt-1 leading-relaxed">
-                    Der Auftragnehmer verarbeitet Daten ausschließlich nach dokumentierten
-                    Weisungen des Auftraggebers. Weisungen werden schriftlich oder per E-Mail erteilt.
-                    Rechtswidrige Weisungen werden dem Auftraggeber unverzüglich gemeldet.
-                  </p>
-                </div>
-
-              </div>
-            </section>
-          </>
-        )}
-
-        {/* Was regelt der AVV (Nicht-DE-Zusammenfassung) */}
-        {!isDE && (
-          <section>
-            <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">
-              {c.avvWhatSection}
-            </h2>
-            <div className="mt-2 leading-relaxed">
-              <ul className="ml-4 list-disc space-y-1">
-                <li>Subject matter and duration of processing</li>
-                <li>Nature and purpose of the processing</li>
-                <li>Type of personal data and categories of data subjects</li>
-                <li>Obligations and rights of the controller (practice)</li>
-                <li>Binding instructions to the processor (Clentra)</li>
-                <li>Technical and organisational measures (TOMs)</li>
-                <li>Sub-processing arrangements (e.g. Supabase, Vercel, Resend)</li>
-                <li>Data deletion or return upon contract termination</li>
-                <li>Incident notification obligations</li>
-                <li>Rights of access and audit</li>
-              </ul>
-            </div>
-          </section>
-        )}
+        {/* Was regelt der AVV */}
+        <section>
+          <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">
+            {c.avvWhatSection}
+          </h2>
+          <div className="mt-2 leading-relaxed">
+            <ul className="ml-4 list-disc space-y-1">
+              {isDE ? (
+                <>
+                  <li>Gegenstand und Dauer der Verarbeitung</li>
+                  <li>Art und Zweck der Verarbeitung</li>
+                  <li>Art der personenbezogenen Daten und Kategorien betroffener Personen</li>
+                  <li>Pflichten und Rechte des Verantwortlichen (Praxis)</li>
+                  <li>Weisungsgebundenheit des Auftragsverarbeiters (Clentra)</li>
+                  <li>Technische und organisatorische Maßnahmen (TOM)</li>
+                  <li>Regelung zur Unterauftragsverarbeitung (z. B. Supabase, Vercel)</li>
+                  <li>Löschung oder Rückgabe von Daten nach Vertragsende</li>
+                </>
+              ) : (
+                <>
+                  <li>Subject matter and duration of processing</li>
+                  <li>Nature and purpose of the processing</li>
+                  <li>Type of personal data and categories of data subjects</li>
+                  <li>Obligations and rights of the controller (practice)</li>
+                  <li>Binding instructions to the processor (Clentra)</li>
+                  <li>Technical and organisational measures (TOMs)</li>
+                  <li>Sub-processing arrangements (e.g. Supabase, Vercel)</li>
+                  <li>Data deletion or return upon contract termination</li>
+                </>
+              )}
+            </ul>
+          </div>
+        </section>
 
         {/* AVV anfordern */}
         <section>
@@ -301,11 +181,11 @@ export function AvvContent({
           <div className="mt-2 space-y-2 leading-relaxed">
             <p>
               {isDE
-                ? "Das individuelle AVV-Dokument wird als PDF oder elektronisch unterzeichenbares Dokument bereitgestellt. Bitte vor dem Produktivstart anfordern."
-                : "The individual DPA document will be provided as a PDF or electronically signable document. Please request it before going live."}
+                ? "Das AVV-Dokument wird vor dem Produktivstart als PDF oder elektronisch unterzeichenbares Dokument bereitgestellt."
+                : "The DPA document will be provided as a PDF or electronically signable document before go-live."}
             </p>
             <p>
-              {isDE ? "Anfragen per E-Mail:" : "Contact by email:"}{" "}
+              {isDE ? "Anfragen:" : "Contact:"}{" "}
               <a
                 href="mailto:transl.delta@gmail.com?subject=AVV%20Clentra"
                 className="text-blue-600 hover:underline dark:text-blue-400"
@@ -313,6 +193,31 @@ export function AvvContent({
                 transl.delta@gmail.com
               </a>
             </p>
+          </div>
+        </section>
+
+        {/* Sub-Prozessoren */}
+        <section>
+          <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">
+            {c.avvSubprocessorsSection}
+          </h2>
+          <div className="mt-2 leading-relaxed">
+            <ul className="ml-4 list-disc space-y-1">
+              <li>
+                <strong>Supabase Inc.</strong> —{" "}
+                {isDE ? "Datenbankhosting und Authentifizierung (USA; SCCs)" : "Database hosting & authentication (USA; SCCs)"}
+              </li>
+              <li>
+                <strong>Vercel Inc.</strong> —{" "}
+                {isDE ? "Webhosting (USA; SCCs vorhanden)" : "Web hosting (USA; SCCs in place)"}
+              </li>
+              <li>
+                <strong>Twilio Inc.</strong> ({isDE ? "optional" : "optional"}) —{" "}
+                {isDE
+                  ? "SMS/WhatsApp-Versand, nur wenn von der Praxis bewusst konfiguriert"
+                  : "SMS/WhatsApp delivery, only when explicitly configured by the practice"}
+              </li>
+            </ul>
           </div>
         </section>
 

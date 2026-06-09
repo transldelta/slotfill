@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { createClient } from "@/lib/supabase";
 import { locales } from "@/i18n/routing";
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://slotfill-pi.vercel.app";
 
 // Öffentliche Seiten, die für jede Locale generiert werden
 const PUBLIC_PATHS = ["/", "/pricing", "/blog", "/kontakt"];

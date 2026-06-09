@@ -1,6 +1,6 @@
-# Backup & Recovery – SlotFill
+# Backup & Recovery – Clentra
 
-Diese Checkliste ist eine Empfehlung. SlotFill führt **keine** automatische
+Diese Checkliste ist eine Empfehlung. Clentra führt **keine** automatische
 Backup-Wiederherstellung aus und erzeugt **keine** Datenbank-Dumps.
 
 ## Vor dem Produktivstart

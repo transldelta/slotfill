@@ -35,10 +35,10 @@ function loadEnvLocal() {
 const LEGACY_POSTS = [
   {
     slug: "willkommen-bei-slotfill",
-    title: "Willkommen bei SlotFill",
-    excerpt: "Wie SlotFill Ihrer Praxis hilft, kurzfristige Terminlücken zu füllen.",
+    title: "Willkommen bei Clentra",
+    excerpt: "Wie Clentra Ihrer Praxis hilft, kurzfristige Terminlücken zu füllen.",
     content:
-      "SlotFill verbindet Ihre Warteliste mit Ihren Terminen. Fällt ein Termin aus, werden passende Patienten über einen sicheren Link informiert – so füllt sich die Lücke oft noch am selben Tag.",
+      "Clentra verbindet Ihre Warteliste mit Ihren Terminen. Fällt ein Termin aus, werden passende Patienten über einen sicheren Link informiert – so füllt sich die Lücke oft noch am selben Tag.",
     published_at: "2026-04-15T08:00:00.000Z",
   },
   {
@@ -46,7 +46,7 @@ const LEGACY_POSTS = [
     title: "Weniger Leerlauf in der Praxis",
     excerpt: "Drei einfache Schritte, um kurzfristige Absagen besser aufzufangen.",
     content:
-      "1. Pflegen Sie Ihre Warteliste. 2. Markieren Sie ausgefallene Termine. 3. Lassen Sie SlotFill die passenden Patienten vorbereiten.",
+      "1. Pflegen Sie Ihre Warteliste. 2. Markieren Sie ausgefallene Termine. 3. Lassen Sie Clentra die passenden Patienten vorbereiten.",
     published_at: "2026-04-22T08:00:00.000Z",
   },
 ];

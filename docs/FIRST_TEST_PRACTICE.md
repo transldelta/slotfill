@@ -8,7 +8,7 @@
 
 ## Zweck
 
-Bevor SlotFill für weitere Praxen geöffnet wird, soll eine einzige, sorgfältig ausgewählte
+Bevor Clentra für weitere Praxen geöffnet wird, soll eine einzige, sorgfältig ausgewählte
 Test-Praxis den gesamten Ablauf manuell durchgehen. Das Ziel: Fehler früh finden,
 Feedback sammeln und das Produkt verbessern – ohne echte Patienten oder echte Nachrichten zu gefährden.
 
@@ -44,7 +44,7 @@ Feedback sammeln und das Produkt verbessern – ohne echte Patienten oder echte 
 
 ## Schritt 3: Testpatienten anlegen
 
-- In der SlotFill-Oberfläche unter `/dashboard/patients` Testpatienten anlegen.
+- In der Clentra-Oberfläche unter `/dashboard/patients` Testpatienten anlegen.
 - **Keine echten Patientendaten** im Testmodus verwenden.
 - Eindeutige Test-Namen verwenden, z. B. "Test Patient 1", "Test Patient 2".
 - Telefonnummern: Nur Test-Nummern (z. B. eigene Mobilnummer der Praxis).

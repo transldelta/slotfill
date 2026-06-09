@@ -8,7 +8,7 @@ import { getLegalContent, isRtlLocale, isLegalDraft } from "@/lib/legal-content"
  * (gesetzliche Pflicht). In automatischer Kommunikation, Marketing und Trial-Mails
  * wird ausschließlich „Clentra Team" als Absender verwendet.
  *
- * ENTWURF – vor produktivem Einsatz durch einen Rechtsanwalt prüfen lassen.
+ * ENTWURF – vor Veröffentlichung durch einen Rechtsanwalt prüfen lassen.
  */
 export function ImpressumContent({
   backHref = "/",
@@ -40,8 +40,8 @@ export function ImpressumContent({
         <p className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-900/50 dark:bg-amber-900/20 dark:text-amber-300">
           <strong>{isDE ? "Hinweis:" : "Note:"}</strong>{" "}
           {isDE
-            ? "Dieser Text ist ein vorläufiger Entwurf – vor produktivem Einsatz bitte durch einen Rechtsanwalt prüfen lassen. Er ersetzt keine Rechtsberatung."
-            : "This legal notice is a preliminary draft. It does not constitute legal advice. Please review with a qualified attorney before going live."}
+            ? "Dieser Text ist ein vorläufiger Entwurf und wurde noch nicht abschließend rechtlich geprüft. Vor dem Produktivstart muss er durch finale, rechtlich geprüfte Texte ersetzt werden. Er ersetzt keine Rechtsberatung."
+            : "This legal notice is a preliminary draft and has not yet been fully reviewed. It does not constitute legal advice."}
         </p>
       )}
 
@@ -62,7 +62,7 @@ export function ImpressumContent({
         {/* § 5 DDG – Pflichtangaben */}
         <section>
           <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">
-            {isDE ? "Angaben gemäß § 5 DDG" : c.impressumSection1}
+            {c.impressumSection1}
           </h2>
           <div className="mt-2 space-y-1 leading-relaxed">
             <p className="font-medium">Clentra</p>
@@ -164,6 +164,16 @@ export function ImpressumContent({
               </p>
             </div>
           </div>
+        </section>
+
+        {/* Interner Hinweis */}
+        <section className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/50">
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            {isDE
+              ? (<><strong>Intern:</strong> Persönliche Anbieterinformationen erscheinen ausschließlich auf dieser Seite (gesetzliche Pflicht nach § 5 DDG). In automatischer Kommunikation wird ausschließlich &bdquo;Clentra Team&ldquo; als Absender verwendet.</>)
+              : (<><strong>Note:</strong> Personal operator information appears only on this legal notice page (as required by German law § 5 DDG). All automated communication uses &ldquo;Clentra Team&rdquo; as the sender — never a personal name.</>)
+            }
+          </p>
         </section>
 
       </div>

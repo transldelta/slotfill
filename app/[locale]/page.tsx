@@ -12,7 +12,7 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { SlotFillLogo } from "@/components/ui/SlotFillLogo";
 import { locales, type Locale } from "@/i18n/routing";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://clentra.de";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://slotfill-pi.vercel.app";
 
 export async function generateMetadata({
   params,
@@ -62,7 +62,7 @@ function buildSchemaOrg(locale: string) {
         applicationCategory: "BusinessApplication",
         operatingSystem: "Web",
         description:
-          "Clentra hilft Arzt- und Facharztpraxen, Terminanfragen und Wartelisten automatisiert zu verwalten.",
+          "Clentra hilft Arzt- und Facharztpraxen, kurzfristige Terminlücken aus der Warteliste zu füllen.",
         url: APP_URL,
         inLanguage: locale,
         offers: {
@@ -76,7 +76,7 @@ function buildSchemaOrg(locale: string) {
         "@type": "Organization",
         name: "Clentra",
         url: APP_URL,
-        description: "Clentra – Software für Terminmanagement und Praxisautomatisierung.",
+        description: "Clentra – Software für die Wartelisten-Verwaltung in Arztpraxen.",
       },
     ],
   };

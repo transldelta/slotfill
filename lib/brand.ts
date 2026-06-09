@@ -21,6 +21,8 @@ export const BRAND_TEAM_NAME = "Clentra Team" as const;
 /**
  * Support-E-Mail (Transactional-Rückmeldungen).
  * Kein persönlicher Name, keine Gmail-Adresse.
+ * Fallback-Domain "@clentra.de": nur E-Mail-Adresse, keine öffentliche URL.
+ * Für Produktion SUPPORT_EMAIL als Umgebungsvariable setzen (z. B. via Resend).
  */
 export const SUPPORT_EMAIL: string =
   process.env.SUPPORT_EMAIL ?? "support@clentra.de";
@@ -28,13 +30,19 @@ export const SUPPORT_EMAIL: string =
 /**
  * Kontakt-E-Mail (Eingang von Kontaktformularen).
  * Kein persönlicher Name, keine Gmail-Adresse.
+ * Fallback-Domain "@clentra.de": nur E-Mail-Adresse, keine öffentliche URL.
+ * Für Produktion CONTACT_EMAIL als Umgebungsvariable setzen.
  */
 export const CONTACT_EMAIL: string =
   process.env.CONTACT_EMAIL ?? "kontakt@clentra.de";
 
-/** Öffentliche App-URL für Links in E-Mails. */
+/**
+ * Öffentliche App-URL für Links in E-Mails und Metadata.
+ * Produktion: NEXT_PUBLIC_APP_URL=https://slotfill-pi.vercel.app setzen.
+ * Kein Hardcode einer Custom-Domain (solange diese nicht aktiv ist).
+ */
 export const PUBLIC_APP_URL: string =
-  process.env.NEXT_PUBLIC_APP_URL ?? "https://clentra.de";
+  process.env.NEXT_PUBLIC_APP_URL ?? "https://slotfill-pi.vercel.app";
 
 /**
  * Sicherheits-Flag: persönliche Signaturen sind verboten.

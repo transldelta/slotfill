@@ -8,7 +8,6 @@ import { getLegalContent, isRtlLocale, isLegalDraft } from "@/lib/legal-content"
  * Non-DE: Lokalisierter Titel + Zusammenfassung + Verweis auf dt. Originalfassung.
  *
  * KEINE Garantie "DSGVO-konform" – stattdessen "datenschutzbewusst vorbereitet".
- * ENTWURF – vor produktivem Einsatz durch Datenschutzbeauftragten/Rechtsanwalt prüfen lassen.
  */
 export function DatenschutzContent({
   backHref = "/",
@@ -42,7 +41,7 @@ export function DatenschutzContent({
           {isDE ? (
             <><strong>ENTWURF – datenschutzbewusst vorbereitet, rechtlich noch nicht abschließend geprüft.</strong>{" "}
             Diese Datenschutzerklärung ist ein vorläufiger Entwurf. Sie ersetzt keine Rechtsberatung und ist
-            keine Garantie für vollständige DSGVO-Konformität. Vor dem produktiven Einsatz muss eine
+            keine Garantie für vollständige DSGVO-Konformität. Vor dem Produktivstart muss eine
             Prüfung durch einen Datenschutzbeauftragten oder Rechtsanwalt erfolgen.</>
           ) : (
             <><strong>DRAFT – privacy-conscious approach, not yet fully reviewed.</strong>{" "}
@@ -74,8 +73,8 @@ export function DatenschutzContent({
             </h2>
             <div className="mt-2 space-y-1 leading-relaxed">
               <p>Verantwortlicher im Sinne der DSGVO:</p>
-              <p className="mt-2 font-medium">Clentra</p>
-              <p>Brahim Ben Abla<br />
+              <p className="mt-2">
+                Clentra, betrieben durch Brahim Ben Abla<br />
                 Schlesier Straße 64<br />
                 76227 Karlsruhe, Deutschland<br />
                 E-Mail:{" "}
@@ -83,10 +82,9 @@ export function DatenschutzContent({
                   transl.delta@gmail.com
                 </a>
               </p>
-              <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
-                Hinweis: Clentra verarbeitet im Auftrag der Praxen auch Daten von Patienten.
-                In diesem Rahmen ist die Praxis Verantwortliche/r, Clentra Auftragsverarbeiter (Art. 28 DSGVO).
-                Ein Auftragsverarbeitungsvertrag (AVV) ist gesetzlich vorgeschrieben.
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                (Hinweis: E-Mail-Adresse ist vorläufig. Vor Produktivstart wird eine geschäftliche
+                E-Mail-Adresse eingerichtet.)
               </p>
             </div>
           </section>
@@ -98,7 +96,6 @@ export function DatenschutzContent({
             <div className="mt-2 space-y-2 leading-relaxed">
               <p>Clentra wurde mit einem datenschutzbewussten Ansatz entwickelt. Das bedeutet:</p>
               <ul className="ml-4 list-disc space-y-1">
-                <li>Datensparsame Erhebung – nur was für den Betrieb erforderlich ist.</li>
                 <li>Keine automatische Kaltakquise oder Massenversand ohne Einwilligung.</li>
                 <li>SMS- und WhatsApp-Nachrichten werden nur versendet, wenn die Praxis einen externen Provider bewusst aktiviert hat.</li>
                 <li>Im Testmodus (Trial) werden keine echten Patientennachrichten versendet.</li>
@@ -107,8 +104,8 @@ export function DatenschutzContent({
               </ul>
               <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
                 &bdquo;Datenschutzbewusst vorbereitet&ldquo; bedeutet: technische und organisatorische
-                Maßnahmen wurden geplant und umgesetzt – nicht: vollständige DSGVO-Konformität
-                ist garantiert. Für rechtssichere Einschätzung bitte anwaltliche Beratung einholen.
+                Maßnahmen wurden geplant und teilweise umgesetzt – nicht: vollständige DSGVO-Konformität
+                ist garantiert.
               </p>
             </div>
           </section>
@@ -119,51 +116,16 @@ export function DatenschutzContent({
             </h2>
             <div className="mt-2 space-y-3 leading-relaxed">
               <div>
-                <h3 className="font-medium">3.1 Website-Zugriffe und technische Logs</h3>
-                <p className="mt-1">
-                  Beim Aufrufen dieser Website werden technische Zugriffsdaten verarbeitet
-                  (IP-Adresse, Zeitstempel, aufgerufene Seiten, Browser-Typ). Diese Daten dienen
-                  ausschließlich der Fehlerdiagnose und dem Betrieb. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.
-                </p>
+                <h3 className="font-medium">3.1 Praxis-Account-Daten</h3>
+                <p className="mt-1">Name, E-Mail-Adresse, Passwort (gehashed), Rechnungsinformationen. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO.</p>
               </div>
               <div>
-                <h3 className="font-medium">3.2 Praxis-/Admin-Accounts</h3>
-                <p className="mt-1">
-                  Name, E-Mail-Adresse, Passwort (gehashed), Einstellungen, Abonnementstatus.
-                  Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung).
-                </p>
+                <h3 className="font-medium">3.2 Patientendaten (Auftragsverarbeitung)</h3>
+                <p className="mt-1">Eingetragen von der Praxis (z. B. Name, Telefonnummer). Clentra verarbeitet diese im Auftrag der Praxis (Art. 28 DSGVO). Die Praxis ist Verantwortliche/r.</p>
               </div>
               <div>
-                <h3 className="font-medium">3.3 Termin- und Buchungsanfragen</h3>
-                <p className="mt-1">
-                  Name, E-Mail-Adresse, Telefonnummer (optional), gewünschter Termin, Anliegen/Notiz,
-                  Datenschutz-Einwilligung, Buchungsstatus.
-                  Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragsanbahnung) bzw. bei Patienten
-                  im Auftrag der Praxis (Art. 28 DSGVO).
-                </p>
-              </div>
-              <div>
-                <h3 className="font-medium">3.4 Feedback und Bewertungen</h3>
-                <p className="mt-1">
-                  Bewertungstext, Sternebewertung, Zeitstempel. Sofern anonym erhoben:
-                  kein Personenbezug. Bei namentlicher Zuordnung: Art. 6 Abs. 1 lit. b DSGVO.
-                </p>
-              </div>
-              <div>
-                <h3 className="font-medium">3.5 Patientendaten (Auftragsverarbeitung)</h3>
-                <p className="mt-1">
-                  Von der Praxis eingetragene Daten (z. B. Name, Telefonnummer, Termin, Anliegen).
-                  Clentra verarbeitet diese ausschließlich im Auftrag der Praxis (Art. 28 DSGVO).
-                  Die Praxis ist Verantwortliche/r – ein AVV ist abzuschließen.
-                </p>
-              </div>
-              <div>
-                <h3 className="font-medium">3.6 Audit-Logs und System-Logs</h3>
-                <p className="mt-1">
-                  Automatisch generierte Protokolle zu Systemereignissen (z. B. E-Mail-Versand,
-                  Buchungsbestätigungen, Fehler). Dienen der Nachvollziehbarkeit und Sicherheit.
-                  Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.
-                </p>
+                <h3 className="font-medium">3.3 Technische Nutzungsdaten</h3>
+                <p className="mt-1">Server-Logs (IP, Zeitstempel) zur Fehlerdiagnose. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.</p>
               </div>
             </div>
           </section>
@@ -172,122 +134,63 @@ export function DatenschutzContent({
             <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">
               4. Drittanbieter und Auftragsverarbeiter
             </h2>
-            <div className="mt-2 leading-relaxed">
-              <p className="mb-2">Folgende Dienstleister werden eingesetzt (je mit eigenem DPA):</p>
-              <ul className="ml-4 list-disc space-y-2">
-                <li>
-                  <strong>Vercel Inc.</strong> (San Francisco, USA) – Hosting und Deployment.
-                  Standard Contractual Clauses (SCC) gemäß Vercel-DPA.
-                </li>
-                <li>
-                  <strong>Supabase Inc.</strong> – Datenbank und Authentifizierung.
-                  Serverstandort EU (Frankfurt). Gemäß Supabase-DPA.
-                </li>
-                <li>
-                  <strong>Resend Inc.</strong> – E-Mail-Versand (Transaktionale Mails).
-                  Gemäß Resend-DPA/SCCs.
-                </li>
-                <li>
-                  <strong>STRATO AG</strong> (Berlin, Deutschland) – Domain-Registrierung
-                  für clentra.de.
-                </li>
-                <li>
-                  <strong>Twilio Inc.</strong> (optional, SMS/WhatsApp) – nur wenn von der
-                  Praxis bewusst aktiviert. Separate DPA erforderlich.
-                </li>
-              </ul>
-            </div>
+            <ul className="mt-2 ml-4 list-disc space-y-1 leading-relaxed">
+              <li><strong>Supabase</strong> (Datenbank, Authentifizierung) – gemäß Supabase-DPA.</li>
+              <li><strong>Vercel</strong> (Hosting) – gemäß Vercel-DPA.</li>
+              <li><strong>Twilio</strong> (optional, SMS/WhatsApp) – nur wenn von der Praxis bewusst konfiguriert. Separate DPA erforderlich.</li>
+            </ul>
           </section>
 
           <section>
             <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">
-              5. E-Mail-Benachrichtigungen
-            </h2>
-            <div className="mt-2 space-y-2 leading-relaxed">
-              <p>
-                Clentra versendet transaktionale E-Mails (Buchungsbestätigungen,
-                Willkommensnachrichten, Systembenachrichtigungen) über Resend.
-                Diese Mails werden ausschließlich im Zusammenhang mit dem Nutzungsvertrag
-                versendet – keine Werbemails ohne Einwilligung.
-              </p>
-              <p>
-                E-Mail-Adressen werden nicht an Dritte zu Marketingzwecken weitergegeben.
-              </p>
-            </div>
-          </section>
-
-          <section>
-            <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">
-              6. Ihre Rechte als betroffene Person
+              5. Ihre Rechte als betroffene Person
             </h2>
             <ul className="mt-2 ml-4 list-disc space-y-1 leading-relaxed">
-              <li>Auskunft (Art. 15 DSGVO)</li>
-              <li>Berichtigung (Art. 16 DSGVO)</li>
-              <li>Löschung (Art. 17 DSGVO)</li>
-              <li>Einschränkung der Verarbeitung (Art. 18 DSGVO)</li>
-              <li>Datenübertragbarkeit (Art. 20 DSGVO)</li>
-              <li>Widerspruch (Art. 21 DSGVO)</li>
-              <li>Beschwerde bei Aufsichtsbehörde (Art. 77 DSGVO)</li>
+              <li>Auskunft (Art. 15)</li>
+              <li>Berichtigung (Art. 16)</li>
+              <li>Löschung (Art. 17)</li>
+              <li>Einschränkung (Art. 18)</li>
+              <li>Datenübertragbarkeit (Art. 20)</li>
+              <li>Widerspruch (Art. 21)</li>
+              <li>Beschwerde bei Aufsichtsbehörde (Art. 77)</li>
             </ul>
             <p className="mt-2 leading-relaxed">
               Zuständige Aufsichtsbehörde:{" "}
-              <a
-                href="https://www.baden-wuerttemberg.datenschutz.de"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:underline dark:text-blue-400"
-              >
-                Landesbeauftragter für Datenschutz und Informationsfreiheit Baden-Württemberg (LfDI)
-              </a>
-            </p>
-            <p className="mt-2 leading-relaxed">
-              Anfragen richten Sie bitte an:{" "}
-              <a href="mailto:transl.delta@gmail.com" className="text-blue-600 hover:underline dark:text-blue-400">
-                transl.delta@gmail.com
+              <a href="https://www.baden-wuerttemberg.datenschutz.de" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline dark:text-blue-400">
+                LfDI Baden-Württemberg
               </a>
             </p>
           </section>
 
           <section>
             <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">
-              7. Auftragsverarbeitungsvertrag (AVV)
+              6. Auftragsverarbeitungsvertrag (AVV)
             </h2>
             <p className="mt-2 leading-relaxed">
-              Praxen, die Patientendaten in Clentra eingeben, sind gesetzlich verpflichtet,
-              einen Auftragsverarbeitungsvertrag (AVV) gemäß Art. 28 DSGVO abzuschließen.
-              Ohne AVV dürfen keine Patientendaten verarbeitet werden.
-              Informationen und Mustervertrag unter{" "}
-              <Link href={`/avv`} className="text-blue-600 hover:underline dark:text-blue-400">
-                clentra.de/avv
+              Praxen, die Patientendaten eingeben, schließen einen AVV gemäß Art. 28 DSGVO ab.
+              Informationen unter{" "}
+              <Link href={`/${locale}/avv`} className="text-blue-600 hover:underline dark:text-blue-400">
+                slotfill-pi.vercel.app/avv
               </Link>.
             </p>
           </section>
 
           <section>
             <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">
-              8. Cookies und Tracking
+              7. Cookies und Tracking
             </h2>
             <p className="mt-2 leading-relaxed">
-              Clentra verwendet technisch notwendige Cookies (Sitzungscookies für die Authentifizierung).
-              Es werden keine Tracking- oder Marketing-Cookies ohne ausdrückliche Einwilligung eingesetzt.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">
-              9. Datensicherheit
-            </h2>
-            <p className="mt-2 leading-relaxed">
-              Clentra setzt technische und organisatorische Maßnahmen (TOMs) ein, um Daten
-              zu schützen: verschlüsselte Übertragung (HTTPS/TLS), Zugriffsbeschränkungen,
-              Protokollierung sicherheitsrelevanter Ereignisse. Eine absolute Sicherheit
-              kann nicht garantiert werden.
+              Clentra verwendet technisch notwendige Cookies (Sitzungscookies). Keine Tracking-
+              oder Marketing-Cookies ohne Einwilligung.{" "}
+              <span className="rounded bg-amber-100 px-1 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
+                [zu prüfen]
+              </span>
             </p>
           </section>
 
           <section className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/50">
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              <strong>Empfehlung:</strong> Diese Datenschutzerklärung vor dem produktiven Einsatz durch
+              <strong>Empfehlung:</strong> Diese Datenschutzerklärung vor dem Produktivstart durch
               einen Datenschutzbeauftragten oder Rechtsanwalt prüfen lassen.
             </p>
           </section>
@@ -304,9 +207,8 @@ export function DatenschutzContent({
               {c.dsSection1}
             </h2>
             <div className="mt-2 space-y-1 leading-relaxed">
-              <p className="font-medium">Clentra</p>
-              <p>Brahim Ben Abla</p>
-              <p>Schlesier Str. 64, 76227 Karlsruhe, Germany</p>
+              <p>Clentra — operated by Brahim Ben Abla</p>
+              <p>Schlesier Straße 64, 76227 Karlsruhe, Germany</p>
               <p>
                 Email:{" "}
                 <a href="mailto:transl.delta@gmail.com" className="text-blue-600 hover:underline dark:text-blue-400">

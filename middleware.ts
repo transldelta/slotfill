@@ -13,7 +13,8 @@ const handleIntl = createIntlMiddleware(routing);
 const AUTH_PROTECTED = ["/admin", "/dashboard"];
 
 // ── Pfade, die komplett durchgeleitet werden (kein i18n, kein Auth) ───────────
-const PASSTHROUGH = ["/api", "/auth"];
+// /book: öffentliche Patientenseiten – kein Locale-Prefix nötig/gewünscht
+const PASSTHROUGH = ["/api", "/auth", "/book"];
 
 // ── Canonical-Domain-Schutz ───────────────────────────────────────────────────
 // Nur diese Hosts dürfen den Inhalt direkt ausliefern.

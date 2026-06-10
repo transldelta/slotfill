@@ -8,6 +8,9 @@ import {
   CalendarCheck,
   CalendarPlus,
   CheckCircle,
+  Copy,
+  ExternalLink,
+  Link as LinkIcon,
   ListOrdered,
   UserPlus,
   Users,
@@ -15,6 +18,7 @@ import {
   User as UserIcon,
   LayoutDashboard,
 } from "lucide-react";
+import toast from "react-hot-toast";
 import { useTranslations } from "@/lib/i18n";
 import { LoadingSkeleton } from "@/components/loading-skeleton";
 import { EmptyState } from "@/components/empty-state";
@@ -38,6 +42,11 @@ type Stats = {
   recentActivity: Activity[];
 };
 
+type BookingLink = {
+  slug: string | null;
+  booking_url: string | null;
+};
+
 const euro = new Intl.NumberFormat("de-DE", {
   style: "currency",
   currency: "EUR",
@@ -49,14 +58,17 @@ export default function DashboardPage() {
   const [notificationLimit, setNotificationLimit] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [bookingLink, setBookingLink] = useState<BookingLink | null>(null);
+  const [linkCopied, setLinkCopied] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
     setError(false);
     try {
-      const [statsRes, subRes] = await Promise.all([
+      const [statsRes, subRes, linkRes] = await Promise.all([
         fetch("/api/dashboard/stats", { cache: "no-store" }),
         fetch("/api/subscription", { cache: "no-store" }),
+        fetch("/api/dashboard/booking-link", { cache: "no-store" }),
       ]);
       if (!statsRes.ok) throw new Error("stats failed");
       const statsData = await statsRes.json();
@@ -65,12 +77,27 @@ export default function DashboardPage() {
         const subData = await subRes.json();
         setNotificationLimit(subData.plan?.max_notifications_per_month ?? null);
       }
+      if (linkRes.ok) {
+        setBookingLink(await linkRes.json());
+      }
     } catch {
       setError(true);
     } finally {
       setLoading(false);
     }
   }, []);
+
+  async function copyBookingLink() {
+    if (!bookingLink?.booking_url) return;
+    try {
+      await navigator.clipboard.writeText(bookingLink.booking_url);
+      setLinkCopied(true);
+      toast.success("Link kopiert!");
+      setTimeout(() => setLinkCopied(false), 3000);
+    } catch {
+      toast.error("Link konnte nicht kopiert werden.");
+    }
+  }
 
   useEffect(() => {
     load();
@@ -166,6 +193,48 @@ export default function DashboardPage() {
           {t("onboarding.start")}
         </Link>
       </div>
+
+      {/* ── Öffentlicher Buchungslink ────────────────────────────────────── */}
+      {bookingLink?.booking_url && (
+        <div className="rounded-2xl border border-green-200 bg-green-50 p-5 dark:border-green-900/40 dark:bg-green-900/10">
+          <div className="mb-3 flex items-center gap-2">
+            <LinkIcon className="h-5 w-5 text-green-600 dark:text-green-400" />
+            <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">
+              Ihr öffentlicher Buchungslink
+            </h2>
+          </div>
+          <p className="mb-3 text-sm text-slate-600 dark:text-slate-300">
+            Teilen Sie diesen Link mit Ihren Patienten – per E-Mail, Website, WhatsApp oder QR-Code.
+            Patienten können darüber direkt eine Terminanfrage stellen, ohne sich anzumelden.
+          </p>
+          <div className="flex flex-wrap items-center gap-2">
+            <code className="flex-1 min-w-0 truncate rounded-lg border border-green-200 bg-white px-3 py-2 text-sm font-mono text-slate-800 dark:border-green-900/40 dark:bg-slate-900 dark:text-slate-200">
+              {bookingLink.booking_url}
+            </code>
+            <button
+              onClick={copyBookingLink}
+              title="Link kopieren"
+              className="flex shrink-0 items-center gap-1.5 rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+            >
+              <Copy className="h-4 w-4" />
+              {linkCopied ? "Kopiert!" : "Kopieren"}
+            </button>
+            <a
+              href={bookingLink.booking_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Seite öffnen"
+              className="flex shrink-0 items-center gap-1.5 rounded-lg border border-green-300 px-3 py-2 text-sm font-medium text-green-700 transition hover:bg-green-100 dark:border-green-700 dark:text-green-400 dark:hover:bg-green-900/20"
+            >
+              <ExternalLink className="h-4 w-4" />
+              Vorschau
+            </a>
+          </div>
+          <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+            Ihre Praxis-Kennung: <span className="font-mono">{bookingLink.slug}</span>
+          </p>
+        </div>
+      )}
 
       {isEmpty ? (
         <EmptyState

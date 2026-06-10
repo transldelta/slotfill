@@ -5,6 +5,53 @@ import { welcomeEmail } from "@/lib/email/templates";
 
 export type OnboardedPractice = { id: string; name: string };
 
+// ── Slug-Generierung ──────────────────────────────────────────────────────────
+// Erzeugt einen URL-sicheren Slug aus dem Praxisnamen.
+// Wird beim Anlegen einer neuen Praxis aufgerufen und als Einzel-Check
+// gegen bestehende Slugs gesichert (Retry mit Zähler-Suffix bei Kollision).
+
+/** Wandelt einen String in einen URL-sicheren Slug um. */
+export function generateSlugBase(name: string): string {
+  const umlautMap: Record<string, string> = {
+    ä: "ae", ö: "oe", ü: "ue", ß: "ss",
+    Ä: "ae", Ö: "oe", Ü: "ue",
+  };
+  let s = name.toLowerCase();
+  s = s.replace(/[äöüßÄÖÜ]/g, (c) => umlautMap[c] ?? c);
+  s = s.replace(/[^a-z0-9]+/g, "-");
+  s = s.replace(/^-+|-+$/g, "");
+  return s.slice(0, 80) || "praxis";
+}
+
+/** Erzeugt einen eindeutigen Slug (prüft DB; fügt -2, -3 an bei Kollision). */
+async function resolveUniqueSlug(
+  admin: SupabaseClient,
+  name: string,
+  excludeId?: string,
+): Promise<string> {
+  const base = generateSlugBase(name);
+  let candidate = base;
+  let counter = 2;
+  for (;;) {
+    const q = admin
+      .from("practices")
+      .select("id")
+      .eq("slug", candidate)
+      .limit(1);
+    const { data } = await q;
+    const existing = (data ?? []) as { id: string }[];
+    if (
+      existing.length === 0 ||
+      (excludeId && existing.length === 1 && existing[0].id === excludeId)
+    ) {
+      return candidate;
+    }
+    candidate = `${base}-${counter}`;
+    counter++;
+    if (counter > 99) return `${base}-${Date.now()}`; // Sicherheits-Fallback
+  }
+}
+
 // Liest den Praxisnamen aus den Auth-Metadaten (practice_name), nie der
 // E-Mail-Prefix, solange ein echter Name vorhanden ist.
 function resolveName(user: User): string {
@@ -38,9 +85,12 @@ export async function ensureOnboarding(
 
   const name = resolveName(user);
 
+  // Slug vor dem INSERT generieren (eindeutig prüfen)
+  const slug = await resolveUniqueSlug(admin, name);
+
   const { data: created, error: insertError } = await admin
     .from("practices")
-    .insert({ auth_uid: user.id, name, email: user.email ?? null })
+    .insert({ auth_uid: user.id, name, email: user.email ?? null, slug })
     .select("id, name")
     .single();
 

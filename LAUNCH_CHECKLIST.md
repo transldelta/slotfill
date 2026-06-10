@@ -1,4 +1,4 @@
-# PraxisFlow – Launch-Checkliste Schritt 13
+# ClinicSlotHub – Launch-Checkliste Schritt 13
 
 Rein diagnostischer Launch-Check (Code-Audit + Verifikation). Keine neuen
 Produkt-Features. Externe Dienste wurden nur sicher (Code/Testmodus) geprüft –

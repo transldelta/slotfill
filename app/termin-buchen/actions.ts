@@ -8,6 +8,7 @@ import {
   isPlaceholderTime,
 } from "@/lib/booking-requests";
 import { evaluateAutoConfirm } from "@/lib/auto-confirm";
+import { sendBookingAdminNotification } from "@/lib/admin-notifications";
 
 const schema = z.object({
   patient_name: z.string().trim().min(1).max(100),
@@ -154,6 +155,23 @@ export async function submitBookingRequest(
     console.error("[booking] auto-confirm error:", err);
     // Buchung bleibt gespeichert – kein Fehler an den Patienten
   }
+
+  // ── Admin-Benachrichtigung (fire-and-forget) ───────────────────────────
+  // Fehler dürfen die Bestätigung an den Patienten nicht verhindern.
+  sendBookingAdminNotification({
+    id: saved.id,
+    patient_name,
+    patient_email,
+    preferred_time,
+    note: note ?? null,
+    requested_date: cleanRequestedDate,
+    requested_time: cleanRequestedTime,
+  }).catch((err) => {
+    console.warn(
+      "[booking] Admin-Notification fehlgeschlagen:",
+      err instanceof Error ? err.message : "unknown",
+    );
+  });
 
   return {
     code: "BOOKING_SAVED",

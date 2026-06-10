@@ -2,9 +2,12 @@
 
 import { z } from "zod";
 import { createClient } from "@/lib/supabase";
-import { escapeHtml, sendEmail } from "@/lib/email";
+import { sendEmail } from "@/lib/email";
 import { contactConfirmationEmail } from "@/lib/email/templates";
-import { BRAND_TEAM_NAME, CONTACT_EMAIL } from "@/lib/brand";
+import { sendContactAdminNotification } from "@/lib/admin-notifications";
+// CONTACT_EMAIL aus lib/brand.ts ist der Standard-Empfänger für Admin-Benachrichtigungen.
+// Der tatsächliche Versand läuft über ADMIN_NOTIFICATION_EMAIL ?? CONTACT_EMAIL (in admin-notifications.ts).
+import { CONTACT_EMAIL } from "@/lib/brand";
 
 const schema = z.object({
   name: z.string().trim().min(1),
@@ -15,15 +18,18 @@ const schema = z.object({
 
 // Verarbeitet das Kontaktformular.
 //
-// Wenn RESEND_API_KEY gesetzt ist:
-//   1. Weiterleitung an CONTACT_EMAIL (intern)
-//   2. Eingangsbestätigung an den Absender (Absendername: "ClinicSlotHub Team")
-// Wenn kein API-Key oder Fehler:
-//   - Nachricht in contact_messages speichern → CONTACT_STORED
-//   - UI zeigt ehrlich: "Anfrage wurde vorbereitet. E-Mail-Versand ist noch nicht konfiguriert."
-// Bei ungültigen Daten oder DB-Fehler: CONTACT_ERROR
+// Ablauf (immer in dieser Reihenfolge):
+//   1. Validierung
+//   2. DB-Insert in contact_messages (immer, unabhängig vom E-Mail-Status)
+//   3. Admin-Benachrichtigung an ADMIN_NOTIFICATION_EMAIL (fire-and-forget)
+//   4. Eingangsbestätigung an den Absender (fire-and-forget, optional)
 //
-// Kein persönlicher Name im Absender. Keine Kaltakquise. Keine privaten Adressen.
+// Regeln:
+// - DB-Insert immer. Anfrage geht nie verloren.
+// - E-Mail-Fehler crashen das Formular nicht.
+// - Kein persönlicher Name als Absender.
+// - Keine Kaltakquise. Keine privaten Adressen.
+// - Keine sensiblen Daten in Logs.
 export async function submitContact(
   formData: FormData,
 ): Promise<{ code: "CONTACT_SENT" | "CONTACT_STORED" | "CONTACT_ERROR" }> {
@@ -38,46 +44,46 @@ export async function submitContact(
   }
   const { name, email, message, locale } = parsed.data;
 
-  // Interne Weiterleitung – Absender ist CONTACT_EMAIL (kein persönlicher Name).
-  const to = CONTACT_EMAIL;
-  const internalHtml = `
-<p><strong>Name:</strong> ${escapeHtml(name)}</p>
-<p><strong>E-Mail:</strong> ${escapeHtml(email)}</p>
-<p style="white-space:pre-wrap;">${escapeHtml(message)}</p>
-<hr style="margin:16px 0;" />
-<p style="font-size:12px;color:#94a3b8;">
-  Eingang über das Kontaktformular – ${escapeHtml(BRAND_TEAM_NAME)}.
-  Keine automatische Kaltakquise. Antwort erfolgt manuell.
-</p>`;
-
-  const internalResult = await sendEmail(
-    to,
-    `Neue Kontaktanfrage: ${escapeHtml(name)}`,
-    internalHtml,
-  );
-
-  if (internalResult.success) {
-    // Eingangsbestätigung an den Absender
-    // Absender: "ClinicSlotHub Team" – kein persönlicher Name
-    await sendEmail(
-      email,
-      "Wir haben Ihre Anfrage erhalten – ClinicSlotHub",
-      contactConfirmationEmail(name),
-    ).catch((err) => {
-      // Darf das Onboarding nicht crashen – nur loggen
-      console.error("[submitContact] Eingangsbestätigung fehlgeschlagen:", err);
-    });
-    return { code: "CONTACT_SENT" };
-  }
-
-  // Kein Versand möglich (kein Key oder Fehler) -> Nachricht speichern.
+  // ── 1. Immer in DB speichern ─────────────────────────────────────────────
   const admin = createClient();
-  const { error } = await admin
+  const { data: saved, error: dbError } = await admin
     .from("contact_messages")
-    .insert({ name, email, message, locale });
-  if (error) {
-    console.error("[submitContact] Speichern fehlgeschlagen:", error);
+    .insert({ name, email, message, locale })
+    .select("id, created_at")
+    .single();
+
+  if (dbError || !saved) {
+    console.error("[submitContact] DB-Insert fehlgeschlagen:", dbError?.message);
     return { code: "CONTACT_ERROR" };
   }
-  return { code: "CONTACT_STORED" };
+
+  // ── 2. Admin-Benachrichtigung (fire-and-forget) ───────────────────────────
+  sendContactAdminNotification({
+    name,
+    email,
+    message,
+    locale,
+    createdAt: saved.created_at ?? undefined,
+  }).catch((err) => {
+    console.warn("[submitContact] Admin-Notification fehlgeschlagen:", err instanceof Error ? err.message : "unknown");
+  });
+
+  // ── 3. Eingangsbestätigung an den Absender (fire-and-forget) ─────────────
+  // Nur wenn RESEND_API_KEY gesetzt ist. Fehler dürfen das Formular nicht kaputt machen.
+  void sendEmail(
+    email,
+    "Wir haben Ihre Anfrage erhalten – ClinicSlotHub",
+    contactConfirmationEmail(name),
+  ).then((result) => {
+    if (!result.success) {
+      console.warn(
+        `[submitContact] Eingangsbestätigung nicht gesendet: ${result.code}`,
+      );
+    }
+  }).catch((err) => {
+    console.warn("[submitContact] Bestätigungs-E-Mail Fehler:", err instanceof Error ? err.message : "unknown");
+  });
+
+  // CONTACT_SENT = Anfrage gespeichert (unabhängig vom E-Mail-Status)
+  return { code: "CONTACT_SENT" };
 }

@@ -43,12 +43,19 @@ export const CONTACT_EMAIL: string =
   process.env.CONTACT_EMAIL ?? "transl.delta@gmail.com";
 
 /**
- * Öffentliche App-URL für Links in E-Mails und Metadata.
+ * Kanonische Produktions-URL – fest verdrahtet, KEIN Env-Override.
+ * Wird ausschließlich für SEO verwendet: sitemap, canonical, hreflang, og:url, Schema.org.
+ * Muss bei Domain-Wechsel hier manuell aktualisiert werden.
+ */
+export const CANONICAL_URL = "https://clinicslothub.com" as const;
+
+/**
+ * Öffentliche App-URL für Links in E-Mails, Auth-Callbacks und Metadata.
  * Produktion: NEXT_PUBLIC_APP_URL=https://clinicslothub.com setzen.
- * Kein Hardcode einer Custom-Domain erforderlich.
+ * Für SEO-kritische Zwecke (canonical, sitemap) CANONICAL_URL verwenden.
  */
 export const PUBLIC_APP_URL: string =
-  process.env.NEXT_PUBLIC_APP_URL ?? "https://clinicslothub.com";
+  process.env.NEXT_PUBLIC_APP_URL ?? CANONICAL_URL;
 
 /**
  * Sicherheits-Flag: persönliche Signaturen sind verboten.

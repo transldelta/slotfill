@@ -1,8 +1,9 @@
 import type { MetadataRoute } from "next";
 import { createClient } from "@/lib/supabase";
 import { locales } from "@/i18n/routing";
+import { CANONICAL_URL } from "@/lib/brand";
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://clinicslothub.com";
+const baseUrl = CANONICAL_URL;
 
 // Öffentliche Seiten, die für jede Locale generiert werden
 const PUBLIC_PATHS = ["/", "/pricing", "/blog", "/kontakt"];

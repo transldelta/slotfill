@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations } from "@/lib/i18n";
+import { CANONICAL_URL } from "@/lib/brand";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://clinicslothub.com";
+const APP_URL = CANONICAL_URL;
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations();

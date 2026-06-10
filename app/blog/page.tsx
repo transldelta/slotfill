@@ -5,9 +5,11 @@ import { createClient } from "@/lib/supabase";
 import { getTranslations } from "@/lib/i18n";
 import { STATIC_BLOG_POSTS, type StaticPost } from "@/lib/blog-data";
 
+import { CANONICAL_URL } from "@/lib/brand";
+
 export const dynamic = "force-dynamic";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://clinicslothub.com";
+const APP_URL = CANONICAL_URL;
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations();

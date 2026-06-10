@@ -7,10 +7,11 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { type StaticPost } from "@/lib/blog-data";
 import { getLocalizedBlogPosts } from "@/lib/blog-translations";
 import { locales, type Locale } from "@/i18n/routing";
+import { CANONICAL_URL } from "@/lib/brand";
 
 export const dynamic = "force-dynamic";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://clinicslothub.com";
+const APP_URL = CANONICAL_URL;
 
 export async function generateMetadata({
   params,

@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
 import { locales } from "@/i18n/routing";
+import { CANONICAL_URL } from "@/lib/brand";
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://clinicslothub.com";
+const baseUrl = CANONICAL_URL;
 
 export default function robots(): MetadataRoute.Robots {
   // Private Pfade blockieren – sowohl ohne als auch mit Locale-Präfix

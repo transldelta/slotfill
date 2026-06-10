@@ -11,8 +11,9 @@ import { getTranslations } from "next-intl/server";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { SlotFillLogo } from "@/components/ui/SlotFillLogo";
 import { locales, type Locale } from "@/i18n/routing";
+import { CANONICAL_URL } from "@/lib/brand";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://clinicslothub.com";
+const APP_URL = CANONICAL_URL;
 
 export async function generateMetadata({
   params,

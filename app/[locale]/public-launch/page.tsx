@@ -42,7 +42,7 @@ const HUB: Record<string, HubContent> = {
     title: "ClinicSlotHub – Launch-Zentrale",
     subtitle: "Alles, was du über ClinicSlotHub wissen musst – an einem Ort.",
     what: "Was ist ClinicSlotHub?",
-    whatDesc: "ClinicSlotHub ist eine browserbasierte SaaS-Plattform für Praxen, Kliniken, Therapiezentren und Healthcare Provider weltweit. Patienten tragen sich über einen teilbaren Link in die Warteliste ein. Wenn ein Termin frei wird, kann die Praxis passende Patienten per E-Mail oder SMS/WhatsApp benachrichtigen – ohne manuelle Telefonliste.",
+    whatDesc: "ClinicSlotHub ist eine browserbasierte SaaS-Plattform für Praxen, Kliniken, Therapiezentren und Healthcare Provider weltweit. Jede Praxis erhält einen eigenen öffentlichen Buchungslink – teilbar per Website, E-Mail oder QR-Code. Patienten stellen darüber eine Terminanfrage, ohne sich anzumelden. Die Praxis bestätigt oder lehnt Anfragen direkt im Dashboard ab.",
     forWhom: "Für wen?",
     forWhomItems: [
       "Arztpraxen (Allgemein- und Fachärzte)",
@@ -56,6 +56,7 @@ const HUB: Record<string, HubContent> = {
       "clinicslothub.com aufrufen",
       "Auf ‚Kostenlos testen' klicken",
       "E-Mail + Passwort eingeben, E-Mail bestätigen",
+      "Im Dashboard deinen eigenen öffentlichen Buchungslink kopieren",
       "14 Tage kostenlos alle Funktionen nutzen – keine Kreditkarte",
     ],
     screenshotsTitle: "So sieht die Plattform aus",
@@ -70,7 +71,7 @@ const HUB: Record<string, HubContent> = {
     title: "ClinicSlotHub – Launch Hub",
     subtitle: "Everything you need to know about ClinicSlotHub — in one place.",
     what: "What is ClinicSlotHub?",
-    whatDesc: "ClinicSlotHub is a browser-based SaaS platform for practices, clinics, therapy centers and healthcare providers worldwide. Patients register via a shareable link. When a slot opens up, the practice can notify matching patients by email or SMS/WhatsApp — no manual phone list needed.",
+    whatDesc: "ClinicSlotHub is a browser-based SaaS platform for practices, clinics, therapy centers and healthcare providers worldwide. Every practice gets its own public booking link — shareable via website, email or QR code. Patients submit an appointment request without creating an account. The practice confirms or rejects requests directly in the dashboard.",
     forWhom: "Who is it for?",
     forWhomItems: [
       "General practitioners and specialist practices",
@@ -84,6 +85,7 @@ const HUB: Record<string, HubContent> = {
       "Visit clinicslothub.com",
       "Click 'Try for Free'",
       "Enter email + password, confirm your email",
+      "Copy your own public booking link from the dashboard",
       "Use all features free for 14 days — no credit card",
     ],
     screenshotsTitle: "What the platform looks like",

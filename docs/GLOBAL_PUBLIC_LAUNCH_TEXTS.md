@@ -1,6 +1,6 @@
 # Global Public Launch Texts – ClinicSlotHub
 
-Stand: Juni 2026 | Phase 13 | Vorlagen – kein automatischer Versand
+Stand: Juni 2026 | Phase 15 | Vorlagen – kein automatischer Versand
 
 ---
 
@@ -12,17 +12,17 @@ Ich habe ClinicSlotHub öffentlich gestartet.
 ClinicSlotHub ist eine digitale Plattform für Praxen und Kliniken, um Terminanfragen,
 Wartelisten und freie Zeitfenster strukturierter zu verwalten.
 
-Viele Praxen verlieren Zeit, weil Terminanfragen, Wartelisten und kurzfristig frei
-gewordene Termine manuell organisiert werden. ClinicSlotHub soll dabei helfen, diese
-Abläufe übersichtlicher und schneller zu machen.
+Der Kern: Jede Praxis bekommt einen eigenen öffentlichen Buchungslink – teilbar per
+Website, E-Mail oder QR-Code. Patienten stellen darüber eine Terminanfrage, ohne sich
+anzumelden. Die Praxis bestätigt oder lehnt die Anfrage direkt im Dashboard ab.
 
 Die Plattform ist jetzt live: https://clinicslothub.com
 
 Aktueller Status: öffentlicher Soft Launch. Es geht mir vor allem um ehrliches Feedback
 von Praxen, Kliniken, medizinischen Dienstleistern oder Menschen, die solche Abläufe kennen.
 
-Wer direkt testen möchte: Auf clinicslothub.com kann eine Demo-Praxis kostenlos angelegt
-werden – keine Kreditkarte nötig.
+Wer direkt testen möchte: Auf clinicslothub.com registrieren, eigenen Buchungslink im
+Dashboard kopieren – keine Kreditkarte nötig, 14 Tage kostenlos.
 
 Keine großen Versprechen, keine Fake-Kunden, keine übertriebenen Zahlen – einfach ein
 funktionierendes Produkt, das jetzt verbessert und getestet werden soll.
@@ -38,17 +38,17 @@ I publicly launched ClinicSlotHub.
 ClinicSlotHub is a digital platform for practices and clinics to manage appointment
 requests, waitlists and open time slots more efficiently.
 
-Many practices lose time because appointment requests, waitlists and last-minute
-cancellations are still handled manually. ClinicSlotHub is built to make these workflows
-clearer and faster.
+The core feature: every practice gets its own public booking link — shareable via
+website, email or QR code. Patients submit an appointment request without creating an
+account. The practice confirms or rejects requests directly in the dashboard.
 
 The platform is now live: https://clinicslothub.com
 
 Current status: public soft launch. My focus right now is honest feedback from practices,
 clinics, healthcare providers, or people who know these workflows.
 
-Want to try it directly? You can set up a demo practice for free at clinicslothub.com
-— no credit card required.
+Want to try it directly? Register at clinicslothub.com, copy your own booking link from
+the dashboard — no credit card required, free for 14 days.
 
 No big promises, no fake customers, no exaggerated numbers — just a working product
 that now needs to be tested and improved.
@@ -59,7 +59,7 @@ that now needs to be tested and improved.
 ## Kurze Version DE
 
 ```
-ClinicSlotHub ist jetzt live – digitale Warteliste für Praxen und Kliniken.
+ClinicSlotHub ist jetzt live – eigener Buchungslink pro Praxis, Anfragen im Dashboard verwalten.
 14 Tage kostenlos, keine Kreditkarte.
 Feedback sehr willkommen.
 → clinicslothub.com
@@ -70,7 +70,7 @@ Feedback sehr willkommen.
 ## Kurze Version EN
 
 ```
-ClinicSlotHub is live — digital waitlist management for clinics and practices.
+ClinicSlotHub is live — each practice gets its own public booking link, manage requests in the dashboard.
 14-day free trial, no credit card.
 Feedback very welcome.
 → clinicslothub.com
@@ -88,12 +88,10 @@ Hallo,
 ich möchte dir kurz ClinicSlotHub vorstellen – eine neue SaaS-Plattform
 für Arzt- und Therapiepraxen, Kliniken und Healthcare Provider.
 
-Das Problem: Wenn ein Termin kurzfristig wegfällt, bleibt der Slot oft leer,
-weil die Praxis keine Zeit hat, die Warteliste manuell durchzugehen.
-
-ClinicSlotHub digitalisiert diesen Prozess: Patienten tragen sich über einen
-teilbaren Link ein, und bei einem freien Termin werden passende Patienten per
-E-Mail benachrichtigt.
+Der Kern: Jede Praxis erhält einen eigenen öffentlichen Buchungslink (z. B.
+clinicslothub.com/book/meine-praxis) – teilbar per Website, E-Mail oder QR-Code.
+Patienten stellen eine Anfrage, ohne sich anzumelden. Die Praxis bestätigt oder
+lehnt die Anfrage im Dashboard ab.
 
 Was es ist: Live-MVP, Soft Launch, 14 Tage kostenlos, keine Kreditkarte.
 Was es nicht ist: Keine Garantien, keine Fake-Kunden, keine übertriebenen Versprechen.
@@ -117,12 +115,10 @@ Hi,
 I'd like to introduce you to ClinicSlotHub — a new SaaS platform for
 medical practices, clinics and healthcare providers.
 
-The problem: when an appointment is cancelled at short notice, the slot
-often stays empty because the practice has no time to manually go through
-the waitlist.
-
-ClinicSlotHub digitalises this: patients register via a shareable link, and
-when a slot opens, matching patients are notified by email.
+The core: every practice gets its own public booking link (e.g.
+clinicslothub.com/book/my-practice) — shareable via website, email or QR code.
+Patients submit a request without creating an account. The practice confirms
+or rejects the request directly in the dashboard.
 
 What it is: live MVP, soft launch, 14-day free trial, no credit card.
 What it isn't: no guarantees, no fake customers, no exaggerated claims.
@@ -180,9 +176,9 @@ Happy to get technical and product feedback.
 
 ## Antwort auf „Was ist das?"
 
-**DE:** ClinicSlotHub ist eine browserbasierte SaaS-Plattform, mit der Praxen und Kliniken Wartelisten digital verwalten und freie Terminslots schneller besetzen können. Patienten tragen sich über einen teilbaren Link ein – bei einem freien Termin benachrichtigt die Praxis per E-Mail oder optional SMS/WhatsApp.
+**DE:** ClinicSlotHub ist eine browserbasierte SaaS-Plattform, mit der Praxen und Kliniken Wartelisten digital verwalten und Terminanfragen online empfangen können. Jede Praxis bekommt einen eigenen öffentlichen Buchungslink – Patienten stellen darüber eine Anfrage ohne Login, die Praxis bestätigt im Dashboard.
 
-**EN:** ClinicSlotHub is a browser-based SaaS that helps practices and clinics manage their waitlists digitally and fill open appointment slots faster. Patients register via a shareable link — when a slot opens, the practice notifies matching patients by email or optional SMS/WhatsApp.
+**EN:** ClinicSlotHub is a browser-based SaaS that helps practices and clinics manage waitlists digitally and receive appointment requests online. Every practice gets its own public booking link — patients submit a request without creating an account, the practice confirms in the dashboard.
 
 ---
 

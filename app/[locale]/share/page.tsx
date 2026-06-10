@@ -45,7 +45,7 @@ const SHARE: Record<string, ShareContent> = {
     subtitle: "Kopierfertige Texte für manuelles Teilen. Kein automatischer Versand. Nur für persönlichen Einsatz.",
     note: "Alle Texte: keine Fake-Kunden, kein Umsatz, keine Garantien, keine Kaltakquise.",
     shortPostLabel: "Kurzpost (Social Media, 1–2 Sätze)",
-    shortPost: `Ich habe ClinicSlotHub gestartet – eine digitale Wartelisten-Plattform für Praxen, Kliniken und Healthcare Provider. Mehrsprachig, datenschutzbewusst, 14 Tage kostenlos. → clinicslothub.com`,
+    shortPost: `Ich habe ClinicSlotHub gestartet – eine digitale Wartelisten-Plattform für Praxen, Kliniken und Healthcare Provider. Jede Praxis bekommt einen eigenen öffentlichen Buchungslink. Mehrsprachig, datenschutzbewusst, 14 Tage kostenlos. → clinicslothub.com`,
     longPostLabel: "Langer Post (LinkedIn / Community)",
     longPost: `Ich habe ClinicSlotHub öffentlich gestartet.
 
@@ -53,7 +53,7 @@ ClinicSlotHub ist eine mehrsprachige SaaS-Plattform, mit der Praxen, Kliniken, T
 
 Das Problem: Wenn ein Patient absagt, bleibt der Termin oft leer – weil die Praxis keine Zeit hat, die Warteliste manuell durchzugehen.
 
-Die Lösung: Patienten tragen sich über einen teilbaren Link ein. Bei einem freien Termin – wenige Klicks, E-Mail raus, Slot besetzt.
+Die Lösung: Jede Praxis bekommt einen eigenen öffentlichen Buchungslink – teilbar per Website, E-Mail oder QR-Code. Patienten stellen darüber eine Anfrage, ohne sich anzumelden. Die Praxis bestätigt oder lehnt direkt im Dashboard ab.
 
 Aktuell: Öffentlicher Soft Launch. Keine zahlenden Kunden. Keine übertriebenen Zahlen. Ein funktionierendes Produkt, das jetzt getestet werden soll.
 
@@ -104,7 +104,7 @@ Freue mich über technisches und produktbezogenes Feedback.`,
     subtitle: "Ready-to-copy launch texts for manual sharing. No automated sending. Personal use only.",
     note: "All texts: no fake customers, no revenue claims, no guarantees, no cold outreach.",
     shortPostLabel: "Short post (social media, 1–2 sentences)",
-    shortPost: `I launched ClinicSlotHub – a digital waitlist platform for clinics, medical practices and healthcare providers. Multilingual, privacy-conscious, 14-day free trial. → clinicslothub.com`,
+    shortPost: `I launched ClinicSlotHub – a digital waitlist platform for clinics, medical practices and healthcare providers. Each practice gets its own public booking link. Multilingual, privacy-conscious, 14-day free trial. → clinicslothub.com`,
     longPostLabel: "Long post (LinkedIn / community)",
     longPost: `I publicly launched ClinicSlotHub.
 
@@ -112,7 +112,7 @@ ClinicSlotHub is a multilingual SaaS platform that helps practices, clinics, the
 
 The problem: when a patient cancels, the slot often stays empty — because the practice has no time to manually go through the waitlist.
 
-The solution: patients register via a shareable link. When a slot opens up — a few clicks, email sent, slot filled.
+The solution: every practice gets its own public booking link — shareable via website, email or QR code. Patients submit a request without creating an account. The practice confirms or rejects directly in the dashboard.
 
 Current status: public soft launch. No paying customers. No exaggerated numbers. A working product that's now being tested.
 

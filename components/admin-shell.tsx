@@ -11,6 +11,7 @@ import {
   Bug,
   Building2,
   CalendarClock,
+  Inbox,
   LayoutDashboard,
   LineChart,
   Mail,
@@ -51,6 +52,16 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       href: "/admin/booking-settings",
       label: "Buchungs-Einstellungen",
       icon: CalendarClock,
+    },
+    {
+      href: "/admin/booking-requests",
+      label: "Terminanfragen",
+      icon: Inbox,
+    },
+    {
+      href: "/admin/contact-messages",
+      label: "Kontakt-Nachrichten",
+      icon: Mail,
     },
   ];
 

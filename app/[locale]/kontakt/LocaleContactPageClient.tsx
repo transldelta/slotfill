@@ -56,6 +56,8 @@ export default function LocaleContactPageClient() {
         </p>
       ) : (
         <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+          {/* Locale für serverseitige Speicherung */}
+          <input type="hidden" name="locale" value={locale} />
           <div className="space-y-1">
             <label htmlFor="name" className="text-sm font-medium text-slate-700 dark:text-slate-200">
               {t("nameLabel")}

@@ -10,6 +10,7 @@ const schema = z.object({
   name: z.string().trim().min(1),
   email: z.string().trim().email(),
   message: z.string().trim().min(1),
+  locale: z.string().trim().max(10).optional().default("de"),
 });
 
 // Verarbeitet das Kontaktformular.
@@ -30,11 +31,12 @@ export async function submitContact(
     name: formData.get("name"),
     email: formData.get("email"),
     message: formData.get("message"),
+    locale: formData.get("locale") ?? "de",
   });
   if (!parsed.success) {
     return { code: "CONTACT_ERROR" };
   }
-  const { name, email, message } = parsed.data;
+  const { name, email, message, locale } = parsed.data;
 
   // Interne Weiterleitung – Absender ist CONTACT_EMAIL (kein persönlicher Name).
   const to = CONTACT_EMAIL;
@@ -72,7 +74,7 @@ export async function submitContact(
   const admin = createClient();
   const { error } = await admin
     .from("contact_messages")
-    .insert({ name, email, message });
+    .insert({ name, email, message, locale });
   if (error) {
     console.error("[submitContact] Speichern fehlgeschlagen:", error);
     return { code: "CONTACT_ERROR" };

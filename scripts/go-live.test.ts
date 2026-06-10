@@ -385,8 +385,8 @@ test("Go-Live: FIRST_TEST_PRACTICE.md enthält keinen werblichen 'DSGVO-konform'
   const { readFileSync } = require("fs");
   const content: string = readFileSync(path, "utf8");
   // Erlaubt: "DSGVO-konform" als negativer Hinweis (in Verbots-Listen/Tabellen)
-  // Verboten: werbliche Behauptung wie "PraxisFlow ist DSGVO-konform"
-  const werblicheBehauptung = /praxisflow\s+ist\s+dsgvo-konform/i.test(content) ||
+  // Verboten: werbliche Behauptung wie "ClinicSlotHub ist DSGVO-konform"
+  const werblicheBehauptung = /clinicslothub\s+ist\s+dsgvo-konform/i.test(content) ||
     /wir\s+(sind|bieten)\s+.*dsgvo-konform/i.test(content);
   assert.ok(
     !werblicheBehauptung,
@@ -1464,14 +1464,14 @@ test("Legal: Automatische Kommunikation enthält keinen persönlichen Namen", ()
   }
 });
 
-test("Legal: Automatische Kommunikation verwendet 'PraxisFlow Team'", () => {
+test("Legal: Automatische Kommunikation verwendet 'ClinicSlotHub Team'", () => {
   const { readFileSync } = require("fs");
   const templatesPath = resolve(process.cwd(), "lib/email/templates.ts");
   assert.ok(existsSync(templatesPath), "lib/email/templates.ts fehlt");
   const src: string = readFileSync(templatesPath, "utf8");
   assert.ok(
-    src.includes("BRAND_TEAM_NAME") || src.includes("PraxisFlow Team"),
-    "lib/email/templates.ts muss 'PraxisFlow Team' oder BRAND_TEAM_NAME als Absender verwenden",
+    src.includes("BRAND_TEAM_NAME") || src.includes("ClinicSlotHub Team"),
+    "lib/email/templates.ts muss 'ClinicSlotHub Team' oder BRAND_TEAM_NAME als Absender verwenden",
   );
 });
 
@@ -1517,14 +1517,14 @@ test("Brand: lib/brand.ts existiert", () => {
   );
 });
 
-test("Brand: BRAND_NAME ist 'PraxisFlow'", () => {
+test("Brand: BRAND_NAME ist 'ClinicSlotHub'", () => {
   const { BRAND_NAME } = require("../lib/brand");
-  assert.equal(BRAND_NAME, "PraxisFlow", `BRAND_NAME soll 'PraxisFlow' sein, ist: ${BRAND_NAME}`);
+  assert.equal(BRAND_NAME, "ClinicSlotHub", `BRAND_NAME soll 'ClinicSlotHub' sein, ist: ${BRAND_NAME}`);
 });
 
-test("Brand: BRAND_TEAM_NAME ist 'PraxisFlow Team'", () => {
+test("Brand: BRAND_TEAM_NAME ist 'ClinicSlotHub Team'", () => {
   const { BRAND_TEAM_NAME } = require("../lib/brand");
-  assert.equal(BRAND_TEAM_NAME, "PraxisFlow Team", `BRAND_TEAM_NAME soll 'PraxisFlow Team' sein, ist: ${BRAND_TEAM_NAME}`);
+  assert.equal(BRAND_TEAM_NAME, "ClinicSlotHub Team", `BRAND_TEAM_NAME soll 'ClinicSlotHub Team' sein, ist: ${BRAND_TEAM_NAME}`);
 });
 
 test("Brand: PERSONAL_SIGNATURE_ALLOWED ist false", () => {
@@ -1628,8 +1628,8 @@ test("Brand: contactConfirmationEmail existiert und enthält keinen persönliche
     "contactConfirmationEmail darf 'Brahim' nicht enthalten",
   );
   assert.ok(
-    html.toLowerCase().includes("praxisflow"),
-    "contactConfirmationEmail muss 'PraxisFlow' enthalten",
+    html.toLowerCase().includes("clinicslothub"),
+    "contactConfirmationEmail muss 'ClinicSlotHub' enthalten",
   );
 });
 
@@ -1643,8 +1643,8 @@ test("Brand: trialWelcomeEmail existiert und enthält keinen persönlichen Namen
     "trialWelcomeEmail darf 'Brahim' nicht enthalten",
   );
   assert.ok(
-    html.toLowerCase().includes("praxisflow"),
-    "trialWelcomeEmail muss 'PraxisFlow' enthalten",
+    html.toLowerCase().includes("clinicslothub"),
+    "trialWelcomeEmail muss 'ClinicSlotHub' enthalten",
   );
   assert.ok(
     html.includes("14"),
@@ -1669,8 +1669,8 @@ test("Brand: testPracticeEmail enthält keinen persönlichen Namen", () => {
   const html: string = testPracticeEmail("Testpraxis");
   assert.ok(!html.includes("Brahim"), "testPracticeEmail darf 'Brahim' nicht enthalten");
   assert.ok(
-    html.toLowerCase().includes("praxisflow"),
-    "testPracticeEmail muss 'PraxisFlow' enthalten",
+    html.toLowerCase().includes("clinicslothub"),
+    "testPracticeEmail muss 'ClinicSlotHub' enthalten",
   );
 });
 

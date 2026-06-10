@@ -10,7 +10,7 @@ import { locales, type Locale } from "@/i18n/routing";
 
 export const dynamic = "force-dynamic";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://slotfill-pi.vercel.app";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://clinicslothub.com";
 
 export async function generateMetadata({
   params,
@@ -20,7 +20,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "blog" });
   const tNav = await getTranslations({ locale, namespace: "nav" });
-  const title = `${t("title")} – PraxisFlow`;
+  const title = `${t("title")} – ClinicSlotHub`;
   const description = t("subtitle");
 
   return {
@@ -37,7 +37,7 @@ export async function generateMetadata({
       title,
       description,
       url: `/${locale}/blog`,
-      siteName: "PraxisFlow",
+      siteName: "ClinicSlotHub",
       locale: locale === "de" ? "de_DE" : locale,
       type: "website",
     },

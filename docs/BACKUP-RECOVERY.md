@@ -1,6 +1,6 @@
-# Backup & Recovery – PraxisFlow
+# Backup & Recovery – ClinicSlotHub
 
-Diese Checkliste ist eine Empfehlung. PraxisFlow führt **keine** automatische
+Diese Checkliste ist eine Empfehlung. ClinicSlotHub führt **keine** automatische
 Backup-Wiederherstellung aus und erzeugt **keine** Datenbank-Dumps.
 
 ## Vor dem Produktivstart

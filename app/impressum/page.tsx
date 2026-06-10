@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ImpressumContent } from "@/components/legal/ImpressumContent";
 
 export const metadata: Metadata = {
-  title: "Impressum – PraxisFlow",
+  title: "Impressum – ClinicSlotHub",
   robots: { index: false, follow: false },
 };
 

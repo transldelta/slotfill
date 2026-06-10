@@ -6,7 +6,7 @@ import { getLegalContent, isRtlLocale, isLegalDraft } from "@/lib/legal-content"
  *
  * Persönliche Daten des Anbieters erscheinen ausschließlich auf dieser Seite
  * (gesetzliche Pflicht). In automatischer Kommunikation, Marketing und Trial-Mails
- * wird ausschließlich „PraxisFlow Team" als Absender verwendet.
+ * wird ausschließlich „ClinicSlotHub Team" als Absender verwendet.
  *
  * ENTWURF – vor Veröffentlichung durch einen Rechtsanwalt prüfen lassen.
  */
@@ -65,7 +65,7 @@ export function ImpressumContent({
             {c.impressumSection1}
           </h2>
           <div className="mt-2 space-y-1 leading-relaxed">
-            <p className="font-medium">PraxisFlow</p>
+            <p className="font-medium">ClinicSlotHub</p>
             <p>Brahim Ben Abla</p>
             <p>Schlesier Straße 64</p>
             <p>76227 Karlsruhe</p>
@@ -127,12 +127,12 @@ export function ImpressumContent({
             </h2>
             <div className="mt-2 space-y-1 leading-relaxed">
               <p>
-                PraxisFlow ist ein SaaS-Angebot für Termin-, Anfrage-, Feedback- und Praxisautomatisierung.
-                Die Plattform richtet sich ausschließlich an gewerbliche Nutzerinnen und Nutzer
-                (Arzt- und Therapiepraxen, Kliniken und Gesundheitsanbieter).
+                ClinicSlotHub ist eine internationale SaaS-Plattform für Termin-, Wartelisten- und Anfrageverwaltung.
+                Die Plattform richtet sich ausschließlich an gewerbliche Nutzerinnen und Nutzer –
+                Arztpraxen, Therapiepraxen, Kliniken, Gesundheitsanbieter und medizinische Einrichtungen weltweit.
               </p>
               <p>
-                PraxisFlow erbringt keine medizinischen Leistungen und ersetzt keine ärztliche Beratung,
+                ClinicSlotHub erbringt keine medizinischen Leistungen und ersetzt keine ärztliche Beratung,
                 Diagnose oder Behandlung.
               </p>
             </div>
@@ -170,8 +170,8 @@ export function ImpressumContent({
         <section className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/50">
           <p className="text-xs text-slate-500 dark:text-slate-400">
             {isDE
-              ? (<>Persönliche Anbieterangaben erscheinen gemäß § 5 DDG ausschließlich auf dieser Seite. In automatischer Kommunikation wird ausschließlich &bdquo;PraxisFlow Team&ldquo; als Absender verwendet.</>)
-              : (<>Personal operator information appears only on this legal notice page, as required by § 5 DDG. All automated communication uses &ldquo;PraxisFlow Team&rdquo; as the sender.</>)
+              ? (<>Persönliche Anbieterangaben erscheinen gemäß § 5 DDG ausschließlich auf dieser Seite. In automatischer Kommunikation wird ausschließlich &bdquo;ClinicSlotHub Team&ldquo; als Absender verwendet.</>)
+              : (<>Personal operator information appears only on this legal notice page, as required by § 5 DDG. All automated communication uses &ldquo;ClinicSlotHub Team&rdquo; as the sender.</>)
             }
           </p>
         </section>

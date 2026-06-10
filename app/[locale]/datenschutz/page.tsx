@@ -3,7 +3,7 @@ import { DatenschutzContent } from "@/components/legal/DatenschutzContent";
 import { locales, type Locale } from "@/i18n/routing";
 
 export const metadata: Metadata = {
-  title: "Datenschutzerklärung – PraxisFlow",
+  title: "Datenschutzerklärung – ClinicSlotHub",
   robots: { index: false, follow: false },
 };
 

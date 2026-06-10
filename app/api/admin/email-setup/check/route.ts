@@ -32,7 +32,7 @@ export async function POST() {
 
   const apiKey = process.env.RESEND_API_KEY;
   const fromEmail =
-    process.env.RESEND_FROM_EMAIL || "PraxisFlow <onboarding@resend.dev>";
+    process.env.RESEND_FROM_EMAIL || "ClinicSlotHub <onboarding@resend.dev>";
   const hasApiKey = Boolean(apiKey);
   const hasFromEmail = Boolean(process.env.RESEND_FROM_EMAIL);
   const domain = extractDomain(fromEmail);

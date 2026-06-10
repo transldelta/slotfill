@@ -56,7 +56,7 @@ export async function sendEmail(
   }
 
   const from =
-    process.env.RESEND_FROM_EMAIL || "PraxisFlow <onboarding@resend.dev>";
+    process.env.RESEND_FROM_EMAIL || "ClinicSlotHub <onboarding@resend.dev>";
 
   try {
     const { Resend } = await import("resend");

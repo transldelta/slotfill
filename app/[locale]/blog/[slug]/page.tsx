@@ -11,7 +11,7 @@ import { locales, type Locale } from "@/i18n/routing";
 
 export const dynamic = "force-dynamic";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://slotfill-pi.vercel.app";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://clinicslothub.com";
 
 type Post = {
   slug: string;
@@ -65,10 +65,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale, slug } = await params;
   const post = await loadPost(slug, locale);
-  if (!post) return { title: "PraxisFlow Blog" };
+  if (!post) return { title: "ClinicSlotHub Blog" };
 
-  const title = `${post.title} – PraxisFlow`;
-  const description = post.excerpt ?? "Praxistipps von PraxisFlow.";
+  const title = `${post.title} – ClinicSlotHub`;
+  const description = post.excerpt ?? "Praxistipps von ClinicSlotHub.";
 
   return {
     title,
@@ -84,7 +84,7 @@ export async function generateMetadata({
       title,
       description,
       url: `/${locale}/blog/${post.slug}`,
-      siteName: "PraxisFlow",
+      siteName: "ClinicSlotHub",
       locale: locale === "de" ? "de_DE" : locale,
       type: "article",
       publishedTime: post.published_at ?? undefined,
@@ -135,7 +135,7 @@ export default async function LocaleBlogPostPage({
       {/* CTA am Ende */}
       <div className="mt-10 rounded-xl border border-blue-100 bg-blue-50 p-6 text-center dark:border-blue-900/50 dark:bg-blue-950/30">
         <p className="font-semibold text-slate-900 dark:text-slate-100">
-          PraxisFlow kostenlos testen
+          ClinicSlotHub kostenlos testen
         </p>
         <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
           14 Tage kostenlos – keine Kreditkarte erforderlich.

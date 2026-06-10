@@ -4,7 +4,7 @@ import { getLegalContent, isRtlLocale, isLegalDraft } from "@/lib/legal-content"
 /**
  * AVV / DPA Informationsseite – lokalisiert
  *
- * Pflichtseite für Praxen, die Patientendaten in PraxisFlow eingeben.
+ * Pflichtseite für Praxen, die Patientendaten in ClinicSlotHub eingeben.
  * Ein unterzeichneter AVV ist gemäß Art. 28 DSGVO erforderlich.
  */
 export function AvvContent({
@@ -76,23 +76,23 @@ export function AvvContent({
             {isDE ? (
               <>
                 <p>
-                  Wenn Ihre Praxis Patientendaten (z. B. Namen, Telefonnummern) in PraxisFlow eingibt,
-                  verarbeitet PraxisFlow diese Daten in Ihrem Auftrag. In diesem Fall sind Sie als
+                  Wenn Ihre Praxis Patientendaten (z. B. Namen, Telefonnummern) in ClinicSlotHub eingibt,
+                  verarbeitet ClinicSlotHub diese Daten in Ihrem Auftrag. In diesem Fall sind Sie als
                   Praxis <strong>Verantwortliche/r</strong> im Sinne des Art. 4 Nr. 7 DSGVO und
-                  PraxisFlow ist <strong>Auftragsverarbeiter</strong> im Sinne des Art. 4 Nr. 8 DSGVO.
+                  ClinicSlotHub ist <strong>Auftragsverarbeiter</strong> im Sinne des Art. 4 Nr. 8 DSGVO.
                 </p>
                 <p>
                   Gemäß Art. 28 Abs. 3 DSGVO ist ein schriftlicher Auftragsverarbeitungsvertrag (AVV)
                   <strong> gesetzlich vorgeschrieben</strong>. Ohne abgeschlossenen AVV dürfen keine
-                  Patientendaten in PraxisFlow eingegeben werden.
+                  Patientendaten in ClinicSlotHub eingegeben werden.
                 </p>
               </>
             ) : (
               <>
                 <p>
-                  When your practice enters patient data (e.g. names, phone numbers) into PraxisFlow,
-                  PraxisFlow processes that data on your behalf. In this case, your practice is the
-                  <strong> data controller</strong> (Art. 4(7) GDPR) and PraxisFlow is the
+                  When your practice enters patient data (e.g. names, phone numbers) into ClinicSlotHub,
+                  ClinicSlotHub processes that data on your behalf. In this case, your practice is the
+                  <strong> data controller</strong> (Art. 4(7) GDPR) and ClinicSlotHub is the
                   <strong> data processor</strong> (Art. 4(8) GDPR).
                 </p>
                 <p>
@@ -152,7 +152,7 @@ export function AvvContent({
                   <li>Art und Zweck der Verarbeitung</li>
                   <li>Art der personenbezogenen Daten und Kategorien betroffener Personen</li>
                   <li>Pflichten und Rechte des Verantwortlichen (Praxis)</li>
-                  <li>Weisungsgebundenheit des Auftragsverarbeiters (PraxisFlow)</li>
+                  <li>Weisungsgebundenheit des Auftragsverarbeiters (ClinicSlotHub)</li>
                   <li>Technische und organisatorische Maßnahmen (TOM)</li>
                   <li>Regelung zur Unterauftragsverarbeitung (z. B. Supabase, Vercel)</li>
                   <li>Löschung oder Rückgabe von Daten nach Vertragsende</li>
@@ -163,7 +163,7 @@ export function AvvContent({
                   <li>Nature and purpose of the processing</li>
                   <li>Type of personal data and categories of data subjects</li>
                   <li>Obligations and rights of the controller (practice)</li>
-                  <li>Binding instructions to the processor (PraxisFlow)</li>
+                  <li>Binding instructions to the processor (ClinicSlotHub)</li>
                   <li>Technical and organisational measures (TOMs)</li>
                   <li>Sub-processing arrangements (e.g. Supabase, Vercel)</li>
                   <li>Data deletion or return upon contract termination</li>
@@ -187,7 +187,7 @@ export function AvvContent({
             <p>
               {isDE ? "Anfragen:" : "Contact:"}{" "}
               <a
-                href="mailto:transl.delta@gmail.com?subject=AVV%20PraxisFlow"
+                href="mailto:transl.delta@gmail.com?subject=AVV%20ClinicSlotHub"
                 className="text-blue-600 hover:underline dark:text-blue-400"
               >
                 transl.delta@gmail.com

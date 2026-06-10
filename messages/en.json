@@ -39,7 +39,7 @@
     "thisWeek": "This Week",
     "thisMonth": "This Month",
     "welcomeBack": "Welcome back",
-    "welcomeIntro": "Welcome to PraxisFlow! Add your first patients to get started.",
+    "welcomeIntro": "Welcome to ClinicSlotHub! Add your first patients to get started.",
     "totalPatients": "Total Patients",
     "waitlistCount": "On Waitlist",
     "appointmentsToday": "Appointments Today",
@@ -72,7 +72,7 @@
     "status": "Status"
   },
   "sidebar": {
-    "brand": "PraxisFlow",
+    "brand": "ClinicSlotHub",
     "toggle": "Toggle Menu"
   },
   "emptyState": {
@@ -228,7 +228,7 @@
       "dnsName": "Name",
       "dnsValue": "Value",
       "dnsStatus": "Status",
-      "testSubject": "PraxisFlow Test Email",
+      "testSubject": "ClinicSlotHub Test Email",
       "testBody": "This test email confirms that email sending via Resend is working.",
       "testSent": "Test email sent to {recipient}.",
       "testFailed": "Test email failed: {diagnosis}",
@@ -363,7 +363,7 @@
     "trialInfo": "Try free for 14 days – a paid plan is required after that.",
     "trialNoCreditCard": "No credit card required for the trial.",
     "trialNoSms": "No real SMS or WhatsApp are sent in the trial without deliberate provider configuration.",
-    "providerCostNote": "SMS and WhatsApp are processed via external providers (e.g. Twilio). These provider costs are not automatically included in the PraxisFlow price."
+    "providerCostNote": "SMS and WhatsApp are processed via external providers (e.g. Twilio). These provider costs are not automatically included in the ClinicSlotHub price."
   },
   "subscription": {
     "title": "Your Subscription",
@@ -399,7 +399,7 @@
     "LIMITS_RESET": "Limits reset"
   },
   "nav": {
-    "brand": "PraxisFlow",
+    "brand": "ClinicSlotHub",
     "features": "Features",
     "pricing": "Pricing",
     "blog": "Blog",
@@ -408,12 +408,12 @@
     "getStarted": "Try for Free"
   },
   "landing": {
-    "heroTitle": "Fill appointment slots automatically from the waitlist",
-    "heroSubtitle": "PraxisFlow prepares suitable patients from the waitlist when an appointment slot opens. SMS/WhatsApp can optionally be connected via Twilio.",
+    "heroTitle": "Fill appointment slots automatically – for clinics worldwide",
+    "heroSubtitle": "ClinicSlotHub helps clinics, medical offices, therapists and healthcare providers fill waitlist slots instantly when a cancellation occurs. SMS/WhatsApp optional via Twilio.",
     "ctaPrimary": "Try for Free",
     "ctaSecondary": "See Features",
     "comparePrices": "Compare Prices",
-    "featuresTitle": "What PraxisFlow does for your practice",
+    "featuresTitle": "What ClinicSlotHub does for your practice",
     "feature1Title": "Manage Waitlist",
     "feature1Desc": "Keep all waiting patients in one place.",
     "feature2Title": "Prepared Notifications",
@@ -427,7 +427,7 @@
     "footerNote": "Hosting and data protection must be finally reviewed before going live.",
     "rights": "All rights reserved.",
     "trustTitle": "The practice stays in control",
-    "trustSubtitle": "PraxisFlow supports – decisions are always made by the practice.",
+    "trustSubtitle": "ClinicSlotHub supports – decisions are always made by the practice.",
     "trustPoint1": "No automatic message without approval from the practice.",
     "trustPoint2": "SMS and WhatsApp are optional and require deliberate provider configuration.",
     "trustPoint3": "In standard mode, messages are prepared – not automatically sent.",
@@ -437,7 +437,7 @@
   },
   "blog": {
     "title": "Blog",
-    "subtitle": "Tips and news around PraxisFlow and practice organisation.",
+    "subtitle": "Tips and news around ClinicSlotHub and practice organisation.",
     "empty": "No posts published yet.",
     "readMore": "Read More",
     "back": "Back to Blog",
@@ -469,23 +469,23 @@
     "agbIntro": "These T&C are a draft and must be finally reviewed before going live."
   },
   "email": {
-    "welcomeSubject": "Welcome to PraxisFlow – Your trial starts now",
+    "welcomeSubject": "Welcome to ClinicSlotHub – Your trial starts now",
     "trialReminderSubject": "Your trial is ending soon – upgrade now",
-    "paymentSubject": "Payment confirmation for PraxisFlow",
+    "paymentSubject": "Payment confirmation for ClinicSlotHub",
     "welcomeSent": "Welcome email sent",
     "trialReminderSent": "Trial reminder sent",
     "paymentSent": "Payment confirmation sent",
     "emailError": "Email could not be sent",
     "emailDisabled": "Email sending disabled (RESEND_API_KEY missing)",
-    "fromName": "PraxisFlow Team",
-    "welcomeBody": "Welcome to PraxisFlow, {praxisName}! Your 14-day trial has begun.",
+    "fromName": "ClinicSlotHub Team",
+    "welcomeBody": "Welcome to ClinicSlotHub, {praxisName}! Your 14-day trial has begun.",
     "trialReminderBody": "Your trial ends in {daysLeft} days. Upgrade now to continue.",
     "paymentBody": "Thank you for your payment of {amount} €. Your subscription is active.",
     "viewInvoice": "View Payment Confirmation"
   },
   "onboarding": {
     "title": "Getting Started",
-    "subtitle": "Set up PraxisFlow step by step.",
+    "subtitle": "Set up ClinicSlotHub step by step.",
     "start": "Start Onboarding",
     "completed": "Completed",
     "open": "Open",
@@ -518,7 +518,7 @@
     "title": "Trust Center",
     "subtitle": "Data protection notes, notification status and security information.",
     "privacy": "Data Protection Notes",
-    "privacy1": "PraxisFlow stores practice data, patient data, appointments and notification status.",
+    "privacy1": "ClinicSlotHub stores practice data, patient data, appointments and notification status.",
     "privacy2": "No secrets are displayed in the browser.",
     "privacy3": "Patient data should only be entered with a legitimate purpose.",
     "privacy4": "Consent for notifications must be observed by the practice.",
@@ -542,7 +542,7 @@
   },
   "help": {
     "title": "Help",
-    "subtitle": "Answers to the most important questions about using PraxisFlow.",
+    "subtitle": "Answers to the most important questions about using ClinicSlotHub.",
     "quickstart": "Quick Start",
     "qs1": "Add patient",
     "qs2": "Add to waitlist",

@@ -39,7 +39,7 @@
     "thisWeek": "This Week",
     "thisMonth": "This Month",
     "welcomeBack": "Welcome back",
-    "welcomeIntro": "Welcome to PraxisFlow! Add your first patients to get started.",
+    "welcomeIntro": "Welcome to ClinicSlotHub! Add your first patients to get started.",
     "totalPatients": "Total Patients",
     "waitlistCount": "On Waitlist",
     "appointmentsToday": "Appointments Today",
@@ -72,7 +72,7 @@
     "status": "Status"
   },
   "sidebar": {
-    "brand": "PraxisFlow",
+    "brand": "ClinicSlotHub",
     "toggle": "Toggle Menu"
   },
   "emptyState": {
@@ -228,7 +228,7 @@
       "dnsName": "Name",
       "dnsValue": "Value",
       "dnsStatus": "Status",
-      "testSubject": "PraxisFlow Test Email",
+      "testSubject": "ClinicSlotHub Test Email",
       "testBody": "This test email confirms that email sending via Resend is working.",
       "testSent": "Test email sent to {recipient}.",
       "testFailed": "Test email failed: {diagnosis}",
@@ -363,7 +363,7 @@
     "trialInfo": "১৪ দিন বিনামূল্যে ব্যবহার করুন – তারপর একটি পেইড প্ল্যান প্রয়োজন।",
     "trialNoCreditCard": "ট্রায়ালের জন্য ক্রেডিট কার্ড প্রয়োজন নেই।",
     "trialNoSms": "ইচ্ছাকৃত প্রদানকারী কনফিগারেশন ছাড়া ট্রায়ালে কোনো বাস্তব SMS বা WhatsApp পাঠানো হয় না।",
-    "providerCostNote": "SMS এবং WhatsApp বাহ্যিক প্রদানকারীদের (যেমন Twilio) মাধ্যমে প্রক্রিয়া করা হয়। এই প্রদানকারী খরচ স্বয়ংক্রিয়ভাবে PraxisFlow মূল্যে অন্তর্ভুক্ত নয়।"
+    "providerCostNote": "SMS এবং WhatsApp বাহ্যিক প্রদানকারীদের (যেমন Twilio) মাধ্যমে প্রক্রিয়া করা হয়। এই প্রদানকারী খরচ স্বয়ংক্রিয়ভাবে ClinicSlotHub মূল্যে অন্তর্ভুক্ত নয়।"
   },
   "subscription": {
     "title": "Your Subscription",
@@ -399,7 +399,7 @@
     "LIMITS_RESET": "Limits reset"
   },
   "nav": {
-    "brand": "PraxisFlow",
+    "brand": "ClinicSlotHub",
     "features": "বৈশিষ্ট্য",
     "pricing": "মূল্য",
     "blog": "ব্লগ",
@@ -409,11 +409,11 @@
   },
   "landing": {
     "heroTitle": "অপেক্ষমাণ তালিকা থেকে স্বয়ংক্রিয়ভাবে অ্যাপয়েন্টমেন্ট পূরণ করুন",
-    "heroSubtitle": "যখন একটি অ্যাপয়েন্টমেন্ট স্লট খালি হয়, PraxisFlow অপেক্ষমাণ তালিকা থেকে উপযুক্ত রোগীদের প্রস্তুত করে। SMS/WhatsApp ঐচ্ছিকভাবে Twilio এর মাধ্যমে সংযুক্ত করা যায়।",
+    "heroSubtitle": "যখন একটি অ্যাপয়েন্টমেন্ট স্লট খালি হয়, ClinicSlotHub অপেক্ষমাণ তালিকা থেকে উপযুক্ত রোগীদের প্রস্তুত করে। SMS/WhatsApp ঐচ্ছিকভাবে Twilio এর মাধ্যমে সংযুক্ত করা যায়।",
     "ctaPrimary": "বিনামূল্যে চেষ্টা করুন",
     "ctaSecondary": "বৈশিষ্ট্য দেখুন",
     "comparePrices": "মূল্য তুলনা করুন",
-    "featuresTitle": "PraxisFlow আপনার ক্লিনিকের জন্য কী করে",
+    "featuresTitle": "ClinicSlotHub আপনার ক্লিনিকের জন্য কী করে",
     "feature1Title": "অপেক্ষমাণ তালিকা পরিচালনা করুন",
     "feature1Desc": "সমস্ত অপেক্ষারত রোগীদের এক জায়গায় ট্র্যাক করুন।",
     "feature2Title": "প্রস্তুত বিজ্ঞপ্তি",
@@ -427,7 +427,7 @@
     "footerNote": "লাইভ হওয়ার আগে হোস্টিং এবং ডেটা সুরক্ষা চূড়ান্তভাবে পর্যালোচনা করতে হবে।",
     "rights": "সর্বস্বত্ব সংরক্ষিত।",
     "trustTitle": "প্র্যাকটিস নিয়ন্ত্রণে থাকে",
-    "trustSubtitle": "PraxisFlow সহায়তা করে – সিদ্ধান্ত সবসময় প্র্যাকটিসের।",
+    "trustSubtitle": "ClinicSlotHub সহায়তা করে – সিদ্ধান্ত সবসময় প্র্যাকটিসের।",
     "trustPoint1": "প্র্যাকটিসের অনুমোদন ছাড়া কোনো স্বয়ংক্রিয় বার্তা নয়।",
     "trustPoint2": "SMS এবং WhatsApp ঐচ্ছিক এবং ইচ্ছাকৃত প্রদানকারী কনফিগারেশন প্রয়োজন।",
     "trustPoint3": "ডিফল্ট মোডে বার্তা প্রস্তুত করা হয়, স্বয়ংক্রিয়ভাবে পাঠানো হয় না।",
@@ -437,7 +437,7 @@
   },
   "blog": {
     "title": "ব্লগ",
-    "subtitle": "PraxisFlow এবং ক্লিনিক সংগঠন সম্পর্কে টিপস এবং খবর।",
+    "subtitle": "ClinicSlotHub এবং ক্লিনিক সংগঠন সম্পর্কে টিপস এবং খবর।",
     "empty": "এখনো কোনো পোস্ট প্রকাশিত হয়নি।",
     "readMore": "আরও পড়ুন",
     "back": "ব্লগে ফিরে যান",
@@ -469,23 +469,23 @@
     "agbIntro": "এই শর্তাবলী একটি খসড়া।"
   },
   "email": {
-    "welcomeSubject": "Welcome to PraxisFlow – Your trial starts now",
+    "welcomeSubject": "Welcome to ClinicSlotHub – Your trial starts now",
     "trialReminderSubject": "Your trial is ending soon – upgrade now",
-    "paymentSubject": "Payment confirmation for PraxisFlow",
+    "paymentSubject": "Payment confirmation for ClinicSlotHub",
     "welcomeSent": "Welcome email sent",
     "trialReminderSent": "Trial reminder sent",
     "paymentSent": "Payment confirmation sent",
     "emailError": "Email could not be sent",
     "emailDisabled": "Email sending disabled (RESEND_API_KEY missing)",
-    "fromName": "PraxisFlow Team",
-    "welcomeBody": "Welcome to PraxisFlow, {praxisName}! Your 14-day trial has begun.",
+    "fromName": "ClinicSlotHub Team",
+    "welcomeBody": "Welcome to ClinicSlotHub, {praxisName}! Your 14-day trial has begun.",
     "trialReminderBody": "Your trial ends in {daysLeft} days. Upgrade now to continue.",
     "paymentBody": "Thank you for your payment of {amount} €. Your subscription is active.",
     "viewInvoice": "View Payment Confirmation"
   },
   "onboarding": {
     "title": "Getting Started",
-    "subtitle": "Set up PraxisFlow step by step.",
+    "subtitle": "Set up ClinicSlotHub step by step.",
     "start": "Start Onboarding",
     "completed": "Completed",
     "open": "Open",
@@ -518,7 +518,7 @@
     "title": "Trust Center",
     "subtitle": "Data protection notes, notification status and security information.",
     "privacy": "Data Protection Notes",
-    "privacy1": "PraxisFlow stores practice data, patient data, appointments and notification status.",
+    "privacy1": "ClinicSlotHub stores practice data, patient data, appointments and notification status.",
     "privacy2": "No secrets are displayed in the browser.",
     "privacy3": "Patient data should only be entered with a legitimate purpose.",
     "privacy4": "Consent for notifications must be observed by the practice.",
@@ -542,7 +542,7 @@
   },
   "help": {
     "title": "Help",
-    "subtitle": "Answers to the most important questions about using PraxisFlow.",
+    "subtitle": "Answers to the most important questions about using ClinicSlotHub.",
     "quickstart": "Quick Start",
     "qs1": "Add patient",
     "qs2": "Add to waitlist",

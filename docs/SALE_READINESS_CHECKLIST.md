@@ -1,13 +1,13 @@
-# PraxisFlow – Sale Readiness Checklist
+# ClinicSlotHub – Sale Readiness Checklist
 
 > **Status: Verkaufsfähiger SaaS-Prototyp / MVP**  
 > Bewertung der Verkaufsreife des White-Label-SaaS.
 
 | | |
 |---|---|
-| **Produktname** | PraxisFlow |
+| **Produktname** | ClinicSlotHub |
 | **Technischer Projektname** | slotfill |
-| **Live-URL** | https://slotfill-pi.vercel.app |
+| **Live-URL** | https://clinicslothub.com |
 | **Rechtstexte** | Vorbereitet – finale Rechtsprüfung offen |
 | **E-Mail-Versand** | Resend vorbereitet – eigene Domain nötig |
 | **Zahlungsabwicklung** | Stripe vorbereitet – Produkte noch anzulegen |
@@ -27,7 +27,7 @@
 | Datenschutz | ✅ | DSGVO-bewusst umgesetzt |
 | Dokumentation | ✅ | Käufer-Übergabe dokumentiert |
 | Deployment | ✅ | Vercel, kostenfrei einsatzbereit |
-| Demo-Fähigkeit | ✅ | Live unter slotfill-pi.vercel.app |
+| Demo-Fähigkeit | ✅ | Live unter clinicslothub.com |
 | Käufer-Übergabe | ✅ | BUYER_HANDOVER.md vorhanden |
 
 ---
@@ -35,8 +35,8 @@
 ## 1. Branding ✅
 
 - [x] Zentrales Brand-Konfigurationsfile: `lib/brand.ts`
-- [x] Produktname: **PraxisFlow** (via `BRAND_NAME`)
-- [x] Team-Absender: **PraxisFlow Team** (via `BRAND_TEAM_NAME`)
+- [x] Produktname: **ClinicSlotHub** (via `BRAND_NAME`)
+- [x] Team-Absender: **ClinicSlotHub Team** (via `BRAND_TEAM_NAME`)
 - [x] Logo: Professionelles inline SVG – kein externes Bild, kein Emoji
 - [x] Keine alten Branding-Reste (SlotFill, Clentra) auf öffentlichen Seiten
 - [x] White-Label-fähig: 1 Datei ändern = gesamtes Produkt rebrandet
@@ -46,7 +46,7 @@
 **Risiko:** Niedrig  
 **Nächster Schritt:** Käufer aktualisiert `lib/brand.ts` nach Kauf
 
-> **Info:** Der technische Name im GitHub-Repository, im Vercel-Dashboard und als Ordnername lautet `slotfill` – das ist der ursprüngliche Entwicklungsname. Der öffentliche Produktname `PraxisFlow` ist davon unabhängig und kann jederzeit geändert werden. Das Projekt kann nach Kauf mit jeder eigenen Domain verbunden werden.
+> **Info:** Der technische Name im GitHub-Repository, im Vercel-Dashboard und als Ordnername lautet `slotfill` – das ist der ursprüngliche Entwicklungsname. Der öffentliche Produktname `ClinicSlotHub` ist davon unabhängig und kann jederzeit geändert werden. Das Projekt kann nach Kauf mit jeder eigenen Domain verbunden werden.
 
 ---
 
@@ -158,13 +158,13 @@
 - [x] `vercel.json` ohne Domain-Abhängigkeiten
 - [x] `NEXT_PUBLIC_APP_URL` env-getrieben
 
-**Nächster Schritt:** `NEXT_PUBLIC_APP_URL=https://slotfill-pi.vercel.app` in Vercel setzen
+**Nächster Schritt:** `NEXT_PUBLIC_APP_URL=https://clinicslothub.com` in Vercel setzen
 
 ---
 
 ## 10. Demo-Fähigkeit ✅
 
-- [x] Live-URL: **https://slotfill-pi.vercel.app**
+- [x] Live-URL: **https://clinicslothub.com**
 - [x] Öffentliche Seiten funktionieren ohne Auth
 - [x] Admin-Bereich mit eigenem Login erreichbar
 - [x] Buchungsformular öffentlich testbar
@@ -218,4 +218,4 @@
 
 ---
 
-*Stand: Feature-Branch `feature/finalize-praxisflow-branding` · PraxisFlow White-Label SaaS · Technischer Projektname: slotfill*
+*Stand: Feature-Branch `feature/finalize-clinicslothub-branding` · ClinicSlotHub White-Label SaaS · Technischer Projektname: slotfill*

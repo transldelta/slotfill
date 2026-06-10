@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { createClient } from "@/lib/supabase";
 import { locales } from "@/i18n/routing";
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://slotfill-pi.vercel.app";
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://clinicslothub.com";
 
 // Öffentliche Seiten, die für jede Locale generiert werden
 const PUBLIC_PATHS = ["/", "/pricing", "/blog", "/kontakt"];

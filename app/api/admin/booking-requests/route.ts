@@ -54,8 +54,19 @@ export async function GET(request: NextRequest) {
   else if (filter === "confirmed") query = query.eq("status", "confirmed");
   else if (filter === "declined") query = query.eq("status", "declined");
   else if (filter === "cancelled") query = query.eq("status", "cancelled");
+  // Nur echte Anfragen (is_test IS NULL oder IS FALSE)
+  else if (filter === "real")
+    query = query.or("is_test.is.null,is_test.eq.false");
+  // Nur Testdaten
+  else if (filter === "test") query = query.eq("is_test", true);
 
   const { data, error, count } = await query;
+
+  // Anzahl echter (nicht-Test) Anfragen – für korrekten Lead-Zähler
+  const { count: realTotal } = await ctx.admin
+    .from("booking_requests")
+    .select("*", { count: "exact", head: true })
+    .or("is_test.is.null,is_test.eq.false");
   if (error) {
     return NextResponse.json(
       { code: "DB_ERROR", message: error.message },
@@ -92,6 +103,7 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({
     requests: data,
     total: count ?? 0,
+    real_total: realTotal ?? 0,
     page,
     limit,
     auto_confirm_active: autoConfirmActive,

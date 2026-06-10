@@ -3,9 +3,18 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { format } from "date-fns";
-import { Bell, Building2, CheckCircle, Clock, Percent, Users } from "lucide-react";
+import { Bell, Building2, CheckCircle, Clock, Mail, Percent, Users } from "lucide-react";
 import { useTranslations } from "@/lib/i18n";
 import { LoadingSkeleton } from "@/components/loading-skeleton";
+
+type LeadStats = {
+  real_contacts: number;
+  test_contacts: number;
+  real_bookings: number;
+  test_bookings: number;
+  last_real_contact_at: string | null;
+  last_real_booking_at: string | null;
+};
 
 type Stats = {
   totalPractices: number;
@@ -32,6 +41,7 @@ const euro = new Intl.NumberFormat("de-DE", {
 export default function AdminOverviewPage() {
   const t = useTranslations();
   const [stats, setStats] = useState<Stats | null>(null);
+  const [leadStats, setLeadStats] = useState<LeadStats | null>(null);
   const [errors, setErrors] = useState<ErrorLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [failed, setFailed] = useState(false);
@@ -40,9 +50,10 @@ export default function AdminOverviewPage() {
     setLoading(true);
     setFailed(false);
     try {
-      const [statsRes, errRes] = await Promise.all([
+      const [statsRes, errRes, leadRes] = await Promise.all([
         fetch("/api/admin/stats", { cache: "no-store" }),
         fetch("/api/admin/errors?limit=5", { cache: "no-store" }),
+        fetch("/api/admin/lead-stats", { cache: "no-store" }),
       ]);
       if (!statsRes.ok) throw new Error("stats failed");
       const statsData = await statsRes.json();
@@ -50,6 +61,9 @@ export default function AdminOverviewPage() {
       if (errRes.ok) {
         const errData = await errRes.json();
         setErrors(errData.errors ?? []);
+      }
+      if (leadRes.ok) {
+        setLeadStats(await leadRes.json());
       }
     } catch {
       setFailed(true);
@@ -95,7 +109,97 @@ export default function AdminOverviewPage() {
         {t("admin.overview")}
       </h1>
 
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-6">
+      {/* ── Real Lead Status Box ────────────────────────────────────── */}
+      <div className="rounded-2xl border border-green-100 bg-green-50 p-5 shadow-sm dark:border-green-900/20 dark:bg-green-900/10">
+        <div className="mb-3 flex items-center gap-2">
+          <Mail className="h-4 w-4 text-green-700 dark:text-green-400" />
+          <span className="text-sm font-semibold text-green-800 dark:text-green-300">
+            Echte Anfragen (Lead-Status)
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {/* Echte Kontaktanfragen */}
+          <Link
+            href="/admin/contact-messages"
+            className="rounded-xl border border-green-100 bg-white px-4 py-3 transition hover:border-green-300 dark:border-green-900/30 dark:bg-slate-900"
+          >
+            <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+              {leadStats?.real_contacts ?? (loading ? "…" : "0")}
+            </div>
+            <div className="mt-0.5 text-xs text-green-700 dark:text-green-400">
+              Echte Kontaktanfragen
+            </div>
+          </Link>
+
+          {/* Echte Buchungsanfragen */}
+          <Link
+            href="/admin/booking-requests"
+            className="rounded-xl border border-green-100 bg-white px-4 py-3 transition hover:border-green-300 dark:border-green-900/30 dark:bg-slate-900"
+          >
+            <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+              {leadStats?.real_bookings ?? (loading ? "…" : "0")}
+            </div>
+            <div className="mt-0.5 text-xs text-green-700 dark:text-green-400">
+              Echte Buchungsanfragen
+            </div>
+          </Link>
+
+          {/* Testdaten Kontakt */}
+          <div className="rounded-xl border border-amber-100 bg-white px-4 py-3 dark:border-amber-900/20 dark:bg-slate-900">
+            <div className="text-2xl font-bold text-slate-400 dark:text-slate-500">
+              {leadStats?.test_contacts ?? (loading ? "…" : "0")}
+            </div>
+            <div className="mt-0.5 text-xs text-amber-600 dark:text-amber-400">
+              Test-Kontaktanfragen
+            </div>
+          </div>
+
+          {/* Testdaten Buchung */}
+          <div className="rounded-xl border border-amber-100 bg-white px-4 py-3 dark:border-amber-900/20 dark:bg-slate-900">
+            <div className="text-2xl font-bold text-slate-400 dark:text-slate-500">
+              {leadStats?.test_bookings ?? (loading ? "…" : "0")}
+            </div>
+            <div className="mt-0.5 text-xs text-amber-600 dark:text-amber-400">
+              Test-Buchungsanfragen
+            </div>
+          </div>
+        </div>
+
+        {/* Letzte echte Anfrage */}
+        <div className="mt-3 rounded-xl border border-green-100 bg-white px-4 py-2.5 dark:border-green-900/30 dark:bg-slate-900">
+          <span className="text-xs text-slate-500 dark:text-slate-400">
+            Letzte echte Anfrage:{" "}
+          </span>
+          <span className="text-xs font-medium text-slate-800 dark:text-slate-200">
+            {loading
+              ? "…"
+              : (() => {
+                  const dates = [
+                    leadStats?.last_real_contact_at,
+                    leadStats?.last_real_booking_at,
+                  ]
+                    .filter(Boolean)
+                    .map((d) => new Date(d!).getTime());
+                  if (dates.length === 0) return "Noch keine echten Anfragen";
+                  return new Date(Math.max(...dates)).toLocaleString("de-DE");
+                })()}
+          </span>
+        </div>
+
+        <p className="mt-2.5 text-xs text-slate-500 dark:text-slate-400">
+          Testdaten (is_test = true) werden getrennt und nicht als echte Leads
+          gezählt.
+        </p>
+      </div>
+
+      {/* ── System-Statistiken (Waitlist/Dashboard-System) ──────────── */}
+      <div>
+        <p className="mb-3 text-xs text-slate-400 dark:text-slate-500">
+          System-Kennzahlen (Praxis-Dashboard / Wartelisten-System) –
+          ausschließlich Demo- und Testdaten bis zum ersten echten Kunden.
+        </p>
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-6">
         {cards.map((card) => (
           <div
             key={card.label}
@@ -112,6 +216,7 @@ export default function AdminOverviewPage() {
             </div>
           </div>
         ))}
+        </div>
       </div>
 
       <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">

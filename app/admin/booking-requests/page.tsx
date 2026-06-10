@@ -31,6 +31,7 @@ type BookingEntry = {
   preferred_time: string;
   note: string | null;
   status: BookingStatus;
+  is_test: boolean;
   auto_confirmed: boolean;
   confirmation_mode: "manual" | "auto" | null;
   email_status: string | null;
@@ -44,11 +45,13 @@ type BookingEntry = {
 };
 
 const FILTER_OPTIONS = [
-  { value: "all", label: "Alle" },
   { value: "pending", label: "Ausstehend" },
+  { value: "real", label: "Alle echten" },
   { value: "confirmed", label: "Bestätigt" },
   { value: "declined", label: "Abgelehnt" },
   { value: "cancelled", label: "Abgesagt" },
+  { value: "test", label: "Testdaten" },
+  { value: "all", label: "Alle" },
 ];
 
 /** E-Mail-Status nach Admin-Aktion */
@@ -62,6 +65,7 @@ type EmailResult = {
 export default function AdminBookingRequestsPage() {
   const [items, setItems] = useState<BookingEntry[]>([]);
   const [total, setTotal] = useState(0);
+  const [realTotal, setRealTotal] = useState(0);
   const [filter, setFilter] = useState("pending");
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
@@ -88,6 +92,7 @@ export default function AdminBookingRequestsPage() {
       const data = await res.json();
       setItems(data.requests ?? []);
       setTotal(data.total ?? 0);
+      setRealTotal(data.real_total ?? 0);
       if (data.auto_confirm_active !== undefined) {
         setAutoConfirmActive(data.auto_confirm_active as boolean);
       }
@@ -162,7 +167,14 @@ export default function AdminBookingRequestsPage() {
             Buchungsanfragen
           </h1>
           <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
-            {total} Anfragen
+            <span className="font-medium text-slate-700 dark:text-slate-200">
+              {realTotal} echte Anfragen
+            </span>
+            {total !== realTotal && (
+              <span className="ml-1 text-amber-600 dark:text-amber-400">
+                · {total - realTotal} Testdaten
+              </span>
+            )}
             {autoConfirmActive
               ? " · Automatische Bestätigung aktiv"
               : " · Keine automatische Bestätigung ohne Konfiguration"}
@@ -252,8 +264,20 @@ export default function AdminBookingRequestsPage() {
       {loading ? (
         <div className="py-12 text-center text-sm text-slate-500">Lädt…</div>
       ) : items.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-slate-300 py-12 text-center text-sm text-slate-500 dark:border-slate-700">
-          Keine Anfragen gefunden.
+        <div className="rounded-xl border border-dashed border-slate-300 py-12 text-center dark:border-slate-700">
+          {filter === "pending" || filter === "real" ? (
+            <div className="space-y-1">
+              <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                Noch keine echten Buchungsanfragen
+              </p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Sobald ein Interessent das Buchungsformular ausfüllt, erscheint
+                die Anfrage hier.
+              </p>
+            </div>
+          ) : (
+            <p className="text-sm text-slate-500">Keine Anfragen gefunden.</p>
+          )}
         </div>
       ) : (
         <div className="space-y-3">
@@ -264,26 +288,41 @@ export default function AdminBookingRequestsPage() {
             return (
               <div
                 key={item.id}
-                className="rounded-xl border p-5"
-                style={{
-                  borderColor:
-                    item.status === "confirmed"
-                      ? "#86efac"
-                      : item.status === "declined"
-                        ? "#fca5a5"
-                        : "var(--color-border)",
-                  backgroundColor: "var(--color-surface)",
-                }}
+                className={`rounded-xl border p-5 ${
+                  item.is_test
+                    ? "border-amber-200 bg-amber-50 dark:border-amber-900/30 dark:bg-amber-900/10"
+                    : ""
+                }`}
+                style={
+                  !item.is_test
+                    ? {
+                        borderColor:
+                          item.status === "confirmed"
+                            ? "#86efac"
+                            : item.status === "declined"
+                              ? "#fca5a5"
+                              : "var(--color-border)",
+                        backgroundColor: "var(--color-surface)",
+                      }
+                    : undefined
+                }
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0 flex-1">
-                    {/* Status + Auto-Confirm-Badge + Zeitstempel */}
+                    {/* Status + Auto-Confirm-Badge + TEST-Badge + Zeitstempel */}
                     <div className="flex flex-wrap items-center gap-2">
                       <span
                         className={`text-sm font-semibold ${getBookingStatusColor(item.status)}`}
                       >
                         {getBookingStatusLabel(item.status)}
                       </span>
+
+                      {/* TEST Badge */}
+                      {item.is_test && (
+                        <span className="rounded-full bg-amber-200 px-2 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-900/40 dark:text-amber-400">
+                          TEST
+                        </span>
+                      )}
 
                       {/* Auto-Confirm Badge */}
                       {(item.auto_confirmed || item.confirmation_mode === "auto") && (

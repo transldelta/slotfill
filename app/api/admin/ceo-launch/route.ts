@@ -147,7 +147,7 @@ function buildDepartments(
       next_task:
         "Google & Bing Sitemap erfolgreich eingereicht (✓ erledigt) – periodisch Indexierungs-Status in Google Search Console prüfen",
       reason:
-        "Google hat ~160 Seiten erkannt. Bing Sitemap verarbeitet. Kein weiterer Setup-Schritt notwendig.",
+        "Google Sitemap erkannt: 160 URLs eingereicht. Bing Sitemap verarbeitet. Kein weiterer Setup-Schritt notwendig.",
       priority: "low",
       needs_approval: false,
     },

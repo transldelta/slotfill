@@ -132,7 +132,7 @@ const COMPLIANCE_ITEMS = [
 
 const SEO_ITEMS = [
   { id: "gsc_domain", label: "Google Search Console: Domain clinicslothub.com bestätigt ✓ (erledigt 10.06.2026)" },
-  { id: "gsc_sitemap", label: "Google Search Console: Sitemap eingetragen – ~160 Seiten erkannt ✓ (erledigt 10.06.2026)" },
+  { id: "gsc_sitemap", label: "Google Search Console: Sitemap eingetragen – 160 URLs erkannt ✓ (erledigt 10.06.2026)" },
   { id: "bing_webmaster", label: "Bing Webmaster Tools: Domain + Sitemap eingereicht ✓ (erledigt 10.06.2026)" },
   { id: "canonical_set", label: "Canonical-Tag auf allen Seiten: clinicslothub.com ✓ (automatisch, bereits aktiv)" },
   { id: "hreflang_set", label: "Hreflang auf allen Locale-Seiten vorhanden ✓ (automatisch, bereits aktiv)" },
@@ -144,7 +144,7 @@ const SEO_ITEMS = [
 // Standardwerte: bekannte erledigte Punkte – werden beim ersten Besuch vorausgefüllt
 const SEO_DEFAULTS: Record<string, boolean> = {
   gsc_domain: true,       // Google Domain bestätigt 10.06.2026
-  gsc_sitemap: true,      // Google Sitemap eingetragen, ~160 Seiten erkannt
+  gsc_sitemap: true,      // Google Sitemap eingetragen, 160 URLs erkannt
   bing_webmaster: true,   // Bing Sitemap eingereicht 10.06.2026
   canonical_set: true,    // automatisch aktiv
   hreflang_set: true,     // automatisch aktiv
@@ -367,7 +367,7 @@ function LaunchStatus({ data }: { data: LaunchOverview }) {
         <div className="space-y-1">
           {[
             "✅ Google Search Console: Sitemap https://clinicslothub.com/sitemap.xml erfolgreich eingereicht",
-            "✅ Google erkannte URLs: ~160 Seiten indexiert",
+            "✅ Google Sitemap erkannt: 160 URLs eingereicht (Indexierung läuft / kann noch dauern)",
             "✅ Bing Webmaster Tools: Sitemap eingereicht (Verarbeitung läuft / abgeschlossen)",
             "✅ Domain clinicslothub.com bestätigt – kein weiterer Setup-Schritt notwendig",
           ].map((item, i) => (

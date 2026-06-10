@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "seed-blog": "tsx scripts/seed-blog.ts",
-    "test": "tsx --test scripts/messaging.test.ts scripts/operations.test.ts scripts/hardening.test.ts scripts/ceo.test.ts scripts/marketing.test.ts scripts/seo.test.ts scripts/i18n.test.ts scripts/go-live.test.ts scripts/booking-flow.test.ts"
+    "test": "tsx --test scripts/messaging.test.ts scripts/operations.test.ts scripts/hardening.test.ts scripts/ceo.test.ts scripts/marketing.test.ts scripts/seo.test.ts scripts/i18n.test.ts scripts/go-live.test.ts scripts/booking-flow.test.ts scripts/ceo-launch.test.ts"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.5",

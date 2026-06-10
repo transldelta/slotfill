@@ -22,6 +22,7 @@ import {
   Rocket,
   ScrollText,
   ShieldCheck,
+  Target,
   Wrench,
   X,
 } from "lucide-react";
@@ -47,6 +48,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     { href: "/admin/ceo", label: t("ceo.title"), icon: Briefcase },
     { href: "/admin/marketing", label: t("marketing.title"), icon: LineChart },
     { href: "/admin/go-live", label: t("goLive.nav"), icon: Rocket },
+    { href: "/admin/ceo-launch", label: "CEO Launch Ops", icon: Target },
     { href: "/admin/communication", label: "Kommunikation", icon: Radio },
     {
       href: "/admin/booking-settings",

@@ -1,4 +1,4 @@
-# PraxisFlow – Käufer-Übergabe-Dokumentation
+# ClinicSlotHub – Käufer-Übergabe-Dokumentation
 
 > **Status: Verkaufsfähiger SaaS-Prototyp / MVP**  
 > White-Label-fähiges SaaS für Termin- und Wartelistenverwaltung in Arzt- und Facharztpraxen.  
@@ -6,9 +6,9 @@
 
 | | |
 |---|---|
-| **Öffentlicher Produktname** | PraxisFlow |
+| **Öffentlicher Produktname** | ClinicSlotHub |
 | **Technischer Projektname** | slotfill (GitHub, Vercel, Ordner) |
-| **Live-URL** | https://slotfill-pi.vercel.app |
+| **Live-URL** | https://clinicslothub.com |
 | **Marke** | White-Label – vollständig umbenennbar |
 | **Rechtstexte** | Vorbereitet, finale Rechtsprüfung offen |
 | **E-Mail** | Resend-Integration vorbereitet |
@@ -17,9 +17,9 @@
 
 ---
 
-## Was ist PraxisFlow?
+## Was ist ClinicSlotHub?
 
-PraxisFlow ist ein vollständiges B2B-SaaS-Produkt für die digitale Verwaltung von Patientenwartelisten und Terminbuchungen. Es hilft Arzt- und Facharztpraxen, kurzfristige Terminlücken effizient zu füllen: Fällt ein Termin aus, bereitet das System passende Patienten aus der Warteliste vor. Die Praxis entscheidet selbst, wer kontaktiert wird – ohne automatischen Massenversand.
+ClinicSlotHub ist ein vollständiges B2B-SaaS-Produkt für die digitale Verwaltung von Patientenwartelisten und Terminbuchungen. Es hilft Arzt- und Facharztpraxen, kurzfristige Terminlücken effizient zu füllen: Fällt ein Termin aus, bereitet das System passende Patienten aus der Warteliste vor. Die Praxis entscheidet selbst, wer kontaktiert wird – ohne automatischen Massenversand.
 
 **Zielgruppe:** Einzelpraxen, Gemeinschaftspraxen, MVZ, Zahnarztpraxen, Therapiepraxen, Fachpraxen (DE-Markt, multilingual erweiterbar).
 
@@ -65,7 +65,7 @@ PraxisFlow ist ein vollständiges B2B-SaaS-Produkt für die digitale Verwaltung 
 ## Live-URL
 
 ```
-https://slotfill-pi.vercel.app
+https://clinicslothub.com
 ```
 
 > Kostenlos über Vercel Hobby-Plan. Keine Domain-Kosten nötig für den Start.
@@ -77,13 +77,13 @@ https://slotfill-pi.vercel.app
 
 | Bereich | Name |
 |---|---|
-| Öffentlicher Produktname | **PraxisFlow** |
+| Öffentlicher Produktname | **ClinicSlotHub** |
 | GitHub-Repository | `slotfill` (technischer Ursprungsname) |
 | Vercel-Projektname | `slotfill` |
 | Lokaler Ordnername | `slotfill/` |
-| Live-URL (aktuell) | `https://slotfill-pi.vercel.app` |
+| Live-URL (aktuell) | `https://clinicslothub.com` |
 
-> **Hinweis für Käufer:** Der technische Projektname im GitHub-Repository, im Vercel-Dashboard und als Ordnername lautet `slotfill`. Das ist der ursprüngliche technische Name und hat keinen Einfluss auf den öffentlichen Produktnamen. Der öffentliche Markenname `PraxisFlow` kann nach Kauf jederzeit in eine neue Marke umbenannt werden (nur `lib/brand.ts` ändern). Das Projekt kann mit einer eigenen Domain verbunden werden, indem `NEXT_PUBLIC_APP_URL` in den Vercel-Einstellungen gesetzt wird.
+> **Hinweis für Käufer:** Der technische Projektname im GitHub-Repository, im Vercel-Dashboard und als Ordnername lautet `slotfill`. Das ist der ursprüngliche technische Name und hat keinen Einfluss auf den öffentlichen Produktnamen. Der öffentliche Markenname `ClinicSlotHub` kann nach Kauf jederzeit in eine neue Marke umbenannt werden (nur `lib/brand.ts` ändern). Das Projekt kann mit einer eigenen Domain verbunden werden, indem `NEXT_PUBLIC_APP_URL` in den Vercel-Einstellungen gesetzt wird.
 
 ---
 
@@ -127,7 +127,7 @@ https://slotfill-pi.vercel.app
 | Variable | Beschreibung |
 |---|---|
 | `RESEND_API_KEY` | Resend API Key |
-| `RESEND_FROM_EMAIL` | Absender, z. B. `PraxisFlow <noreply@yourdomain.com>` |
+| `RESEND_FROM_EMAIL` | Absender, z. B. `ClinicSlotHub <noreply@yourdomain.com>` |
 | `SUPPORT_EMAIL` | Fallback: Betreiber-E-Mail für Support-Antworten |
 | `CONTACT_EMAIL` | Empfänger für Kontaktformular-Eingänge |
 
@@ -177,7 +177,7 @@ SUPABASE_ANON_KEY=...
 SUPABASE_SERVICE_ROLE_KEY=...
 
 # App-URL (Vercel-Domain oder Custom Domain)
-NEXT_PUBLIC_APP_URL=https://slotfill-pi.vercel.app
+NEXT_PUBLIC_APP_URL=https://clinicslothub.com
 
 # Stripe
 STRIPE_SECRET_KEY=sk_live_...
@@ -188,7 +188,7 @@ STRIPE_PRICE_PRAXIS_PLUS=price_...
 
 # E-Mail (Resend)
 RESEND_API_KEY=re_...
-RESEND_FROM_EMAIL=PraxisFlow <noreply@yourdomain.com>
+RESEND_FROM_EMAIL=ClinicSlotHub <noreply@yourdomain.com>
 SUPPORT_EMAIL=support@yourdomain.com
 CONTACT_EMAIL=contact@yourdomain.com
 

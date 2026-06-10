@@ -114,7 +114,7 @@ function formatDateDE(date: string): string {
 /**
  * HTML-Template: Terminbestätigung
  *
- * Absender: PraxisFlow Team (kein persönlicher Name).
+ * Absender: ClinicSlotHub Team (kein persönlicher Name).
  * Patient entschied sich für eine Anfrage – Admin hat manuell bestätigt.
  *
  * Reihenfolge:

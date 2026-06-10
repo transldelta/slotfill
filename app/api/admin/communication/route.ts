@@ -2,7 +2,7 @@
  * GET /api/admin/communication
  *
  * Gibt den aktuellen Status der Markenkommunikation zurück:
- * - Brand-Absender (PraxisFlow Team)
+ * - Brand-Absender (ClinicSlotHub Team)
  * - E-Mail-Konfiguration
  * - Messaging-Konfiguration
  * - Sicherheits-Flags

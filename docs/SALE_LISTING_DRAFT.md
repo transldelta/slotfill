@@ -1,4 +1,4 @@
-# PraxisFlow – Verkaufslisting-Entwurf
+# ClinicSlotHub – Verkaufslisting-Entwurf
 
 > Dieser Text ist ein Entwurf für ein Verkaufsportal (z. B. Flippa, MicroAcquire/Acquire.com, Indie Hackers).  
 > Keine Umsatzgarantien. Keine erfundenen Kundenzahlen. Ehrliche Darstellung als SaaS-Prototyp / MVP.
@@ -7,7 +7,7 @@
 
 ## Titel (Kurzform für Listing-Portale)
 
-**PraxisFlow – White-Label SaaS für Terminmanagement in Arztpraxen | Vollständiger MVP | Next.js 14 + Supabase + Stripe**
+**ClinicSlotHub – White-Label SaaS für Terminmanagement in Arztpraxen | Vollständiger MVP | Next.js 14 + Supabase + Stripe**
 
 ---
 
@@ -19,9 +19,9 @@ Fertig entwickelter SaaS-Prototyp für die digitale Verwaltung von Patientenwart
 
 ## Ausführliche Beschreibung
 
-### Was ist PraxisFlow?
+### Was ist ClinicSlotHub?
 
-PraxisFlow ist ein vollständig entwickelter SaaS-Prototyp für die digitale Terminverwaltung in Arzt- und Therapiepraxen. Das System löst ein konkretes Problem: Fällt ein Termin kurzfristig aus, haben Praxen oft keine einfache Möglichkeit, einen passenden Patienten von der Warteliste zu benachrichtigen. PraxisFlow schließt diese Lücke.
+ClinicSlotHub ist ein vollständig entwickelter SaaS-Prototyp für die digitale Terminverwaltung in Arzt- und Therapiepraxen. Das System löst ein konkretes Problem: Fällt ein Termin kurzfristig aus, haben Praxen oft keine einfache Möglichkeit, einen passenden Patienten von der Warteliste zu benachrichtigen. ClinicSlotHub schließt diese Lücke.
 
 Patienten können sich über ein öffentliches Buchungsformular für einen Termin bewerben. Die Praxis kann Anfragen manuell bestätigen oder automatische Bestätigung aktivieren (wenn ein freier Slot verfügbar ist). Die gesamte Kommunikation läuft über E-Mail (Resend), optional auch per SMS/WhatsApp (Twilio).
 
@@ -100,7 +100,7 @@ Das Produkt ist ein fertig entwickelter, deploymentbereiter Codebase auf GitHub.
 - ✅ 347 automatisierte Tests
 - ✅ White-Label-Konfiguration (`lib/brand.ts`)
 - ✅ Vorbereitete Rechtstexte (DE) als Muster
-- ✅ Live-Demo unter `https://slotfill-pi.vercel.app`
+- ✅ Live-Demo unter `https://clinicslothub.com`
 - ✅ Admin-Panel mit Go-Live-Readiness-Agent
 
 **Nicht enthalten:**
@@ -180,8 +180,8 @@ Das Produkt ist ein fertig entwickelter, deploymentbereiter Codebase auf GitHub.
 
 **Betreiber:** Brahim Ben Abla  
 **E-Mail:** transl.delta@gmail.com  
-**Live-Demo:** https://slotfill-pi.vercel.app
+**Live-Demo:** https://clinicslothub.com
 
 ---
 
-*Erstellt mit Claude Code · PraxisFlow White-Label SaaS Prototyp*
+*Erstellt mit Claude Code · ClinicSlotHub White-Label SaaS Prototyp*

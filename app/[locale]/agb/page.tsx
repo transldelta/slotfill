@@ -3,7 +3,7 @@ import { AgbContent } from "@/components/legal/AgbContent";
 import { locales, type Locale } from "@/i18n/routing";
 
 export const metadata: Metadata = {
-  title: "AGB – PraxisFlow",
+  title: "AGB – ClinicSlotHub",
   robots: { index: false, follow: false },
 };
 

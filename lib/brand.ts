@@ -19,10 +19,10 @@
  *  Für White-Label-Anpassung: nur diesen Wert ändern.
  *  Wird in Header, Footer, Metadata, E-Mails und Legal-Seiten verwendet.
  */
-export const BRAND_NAME = "PraxisFlow" as const;
+export const BRAND_NAME = "ClinicSlotHub" as const;
 
 /** Team-Absendername für alle automatischen Mails und Signaturen. */
-export const BRAND_TEAM_NAME = "PraxisFlow Team" as const;
+export const BRAND_TEAM_NAME = "ClinicSlotHub Team" as const;
 
 /**
  * Support-E-Mail (Transactional-Rückmeldungen).
@@ -44,11 +44,11 @@ export const CONTACT_EMAIL: string =
 
 /**
  * Öffentliche App-URL für Links in E-Mails und Metadata.
- * Produktion: NEXT_PUBLIC_APP_URL=https://slotfill-pi.vercel.app setzen.
+ * Produktion: NEXT_PUBLIC_APP_URL=https://clinicslothub.com setzen.
  * Kein Hardcode einer Custom-Domain erforderlich.
  */
 export const PUBLIC_APP_URL: string =
-  process.env.NEXT_PUBLIC_APP_URL ?? "https://slotfill-pi.vercel.app";
+  process.env.NEXT_PUBLIC_APP_URL ?? "https://clinicslothub.com";
 
 /**
  * Sicherheits-Flag: persönliche Signaturen sind verboten.

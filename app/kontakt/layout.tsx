@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { getTranslations } from "@/lib/i18n";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://slotfill-pi.vercel.app";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://clinicslothub.com";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations();
-  const title = `${t("contact.title")} – PraxisFlow`;
+  const title = `${t("contact.title")} – ClinicSlotHub`;
   const description = t("contact.subtitle");
 
   return {
@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title,
       description,
       url: "/kontakt",
-      siteName: "PraxisFlow",
+      siteName: "ClinicSlotHub",
       locale: "de_DE",
       type: "website",
     },

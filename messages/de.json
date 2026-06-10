@@ -35,7 +35,7 @@
     "thisWeek": "Diese Woche",
     "thisMonth": "Dieser Monat",
     "welcomeBack": "Willkommen zurück",
-    "welcomeIntro": "Willkommen bei PraxisFlow! Legen Sie Ihre ersten Patienten an, um loszulegen.",
+    "welcomeIntro": "Willkommen bei ClinicSlotHub! Legen Sie Ihre ersten Patienten an, um loszulegen.",
     "totalPatients": "Patienten gesamt",
     "waitlistCount": "Auf Warteliste",
     "appointmentsToday": "Termine heute",
@@ -68,7 +68,7 @@
     "status": "Status"
   },
   "sidebar": {
-    "brand": "PraxisFlow",
+    "brand": "ClinicSlotHub",
     "toggle": "Menü umschalten"
   },
   "emptyState": {
@@ -224,7 +224,7 @@
       "dnsName": "Name",
       "dnsValue": "Wert",
       "dnsStatus": "Status",
-      "testSubject": "PraxisFlow Test-E-Mail",
+      "testSubject": "ClinicSlotHub Test-E-Mail",
       "testBody": "Diese Test-E-Mail bestätigt, dass der E-Mail-Versand über Resend funktioniert.",
       "testSent": "Test-E-Mail an {recipient} gesendet.",
       "testFailed": "Test-E-Mail fehlgeschlagen: {diagnosis}",
@@ -359,7 +359,7 @@
     "trialInfo": "14 Tage kostenlos testen – danach ist ein bezahlter Plan erforderlich.",
     "trialNoCreditCard": "Keine Kreditkarte für den Test erforderlich.",
     "trialNoSms": "Im Trial werden keine echten SMS oder WhatsApp ohne bewusste Anbieter-Konfiguration versendet.",
-    "providerCostNote": "SMS und WhatsApp werden über externe Anbieter (z. B. Twilio) abgewickelt. Diese Anbieterkosten sind nicht automatisch im PraxisFlow-Preis enthalten."
+    "providerCostNote": "SMS und WhatsApp werden über externe Anbieter (z. B. Twilio) abgewickelt. Diese Anbieterkosten sind nicht automatisch im ClinicSlotHub-Preis enthalten."
   },
   "subscription": {
     "title": "Ihr Abo",
@@ -395,7 +395,7 @@
     "LIMITS_RESET": "Limits wurden zurückgesetzt"
   },
   "nav": {
-    "brand": "PraxisFlow",
+    "brand": "ClinicSlotHub",
     "features": "Funktionen",
     "pricing": "Preise",
     "blog": "Blog",
@@ -404,12 +404,12 @@
     "getStarted": "Kostenlos testen"
   },
   "landing": {
-    "heroTitle": "Freie Termine automatisch aus der Warteliste füllen",
-    "heroSubtitle": "PraxisFlow bereitet bei einer Terminlücke passende Patienten aus der Warteliste vor. SMS/WhatsApp kann optional über Twilio angebunden werden.",
+    "heroTitle": "Terminlücken füllen – für Kliniken und Arztpraxen weltweit",
+    "heroSubtitle": "ClinicSlotHub bereitet bei einer Terminlücke passende Patienten aus der Warteliste vor. Für Arztpraxen, Therapiepraxen, Kliniken und Healthcare Provider. SMS/WhatsApp optional über Twilio.",
     "ctaPrimary": "Kostenlos testen",
     "ctaSecondary": "Funktionen ansehen",
     "comparePrices": "Preise vergleichen",
-    "featuresTitle": "Was PraxisFlow für Ihre Praxis tut",
+    "featuresTitle": "Was ClinicSlotHub für Ihre Praxis oder Klinik tut",
     "feature1Title": "Warteliste verwalten",
     "feature1Desc": "Behalten Sie alle wartenden Patienten an einem Ort im Blick.",
     "feature2Title": "Vorbereitete Benachrichtigungen",
@@ -423,7 +423,7 @@
     "footerNote": "Hosting und Datenschutz müssen vor Produktivstart final geprüft werden.",
     "rights": "Alle Rechte vorbehalten.",
     "trustTitle": "Die Praxis behält die Kontrolle",
-    "trustSubtitle": "PraxisFlow unterstützt – entschieden wird immer in der Praxis.",
+    "trustSubtitle": "ClinicSlotHub unterstützt – entschieden wird immer in der Praxis.",
     "trustPoint1": "Keine automatische Nachricht ohne Freigabe durch die Praxis.",
     "trustPoint2": "SMS und WhatsApp sind optional und erfordern eine bewusste Anbieter-Konfiguration.",
     "trustPoint3": "Im Standardmodus werden Nachrichten vorbereitet, nicht automatisch versendet.",
@@ -433,7 +433,7 @@
   },
   "blog": {
     "title": "Blog",
-    "subtitle": "Tipps und Neuigkeiten rund um PraxisFlow und die Praxisorganisation.",
+    "subtitle": "Tipps und Neuigkeiten rund um ClinicSlotHub und die Praxisorganisation.",
     "empty": "Es sind noch keine Beiträge veröffentlicht.",
     "readMore": "Weiterlesen",
     "back": "Zurück zum Blog",
@@ -465,23 +465,23 @@
     "agbIntro": "Diese AGB sind ein Entwurf und müssen vor dem Produktivstart final geprüft werden."
   },
   "email": {
-    "welcomeSubject": "Willkommen bei PraxisFlow – Ihre Testphase startet jetzt",
+    "welcomeSubject": "Willkommen bei ClinicSlotHub – Ihre Testphase startet jetzt",
     "trialReminderSubject": "Ihre Testphase endet bald – jetzt upgraden",
-    "paymentSubject": "Zahlungsbestätigung für PraxisFlow",
+    "paymentSubject": "Zahlungsbestätigung für ClinicSlotHub",
     "welcomeSent": "Willkommens-E-Mail gesendet",
     "trialReminderSent": "Trial-Erinnerung gesendet",
     "paymentSent": "Zahlungsbestätigung gesendet",
     "emailError": "E-Mail konnte nicht gesendet werden",
     "emailDisabled": "E-Mail-Versand ist deaktiviert (RESEND_API_KEY fehlt)",
-    "fromName": "PraxisFlow Team",
-    "welcomeBody": "Willkommen bei PraxisFlow, {praxisName}! Ihre 14-tägige Testphase hat begonnen.",
+    "fromName": "ClinicSlotHub Team",
+    "welcomeBody": "Willkommen bei ClinicSlotHub, {praxisName}! Ihre 14-tägige Testphase hat begonnen.",
     "trialReminderBody": "Ihre Testphase endet in {daysLeft} Tagen. Jetzt upgraden und weiternutzen.",
     "paymentBody": "Vielen Dank für Ihre Zahlung über {amount} €. Ihr Abo ist aktiv.",
     "viewInvoice": "Zahlungsbestätigung ansehen"
   },
   "onboarding": {
     "title": "Erste Schritte",
-    "subtitle": "Richten Sie PraxisFlow Schritt für Schritt ein.",
+    "subtitle": "Richten Sie ClinicSlotHub Schritt für Schritt ein.",
     "start": "Onboarding starten",
     "completed": "Erledigt",
     "open": "Offen",
@@ -514,7 +514,7 @@
     "title": "Trust-Center",
     "subtitle": "Datenschutz-Hinweise, Benachrichtigungsstatus und Sicherheitsinformationen.",
     "privacy": "Datenschutz-Hinweise",
-    "privacy1": "PraxisFlow speichert Praxisdaten, Patientendaten, Termine und Benachrichtigungsstatus.",
+    "privacy1": "ClinicSlotHub speichert Praxisdaten, Patientendaten, Termine und Benachrichtigungsstatus.",
     "privacy2": "Es werden keine Secrets im Browser angezeigt.",
     "privacy3": "Patientendaten sollten nur mit berechtigtem Zweck eingetragen werden.",
     "privacy4": "Die Einwilligung für Benachrichtigungen muss von der Praxis beachtet werden.",
@@ -538,7 +538,7 @@
   },
   "help": {
     "title": "Hilfe",
-    "subtitle": "Antworten auf die wichtigsten Fragen zur Nutzung von PraxisFlow.",
+    "subtitle": "Antworten auf die wichtigsten Fragen zur Nutzung von ClinicSlotHub.",
     "quickstart": "Schnellstart",
     "qs1": "Patient anlegen",
     "qs2": "Zur Warteliste hinzufügen",

@@ -12,7 +12,7 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { SlotFillLogo } from "@/components/ui/SlotFillLogo";
 import { locales, type Locale } from "@/i18n/routing";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://slotfill-pi.vercel.app";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://clinicslothub.com";
 
 export async function generateMetadata({
   params,
@@ -22,7 +22,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "landing" });
   const tNav = await getTranslations({ locale, namespace: "nav" });
-  const title = `PraxisFlow – ${t("heroTitle")}`;
+  const title = `ClinicSlotHub – ${t("heroTitle")}`;
   const description = t("heroSubtitle");
 
   return {
@@ -39,7 +39,7 @@ export async function generateMetadata({
       title,
       description,
       url: `/${locale}`,
-      siteName: "PraxisFlow",
+      siteName: "ClinicSlotHub",
       locale: locale === "de" ? "de_DE" : locale,
       type: "website",
     },
@@ -58,11 +58,11 @@ function buildSchemaOrg(locale: string) {
     "@graph": [
       {
         "@type": "SoftwareApplication",
-        name: "PraxisFlow",
+        name: "ClinicSlotHub",
         applicationCategory: "BusinessApplication",
         operatingSystem: "Web",
         description:
-          "PraxisFlow hilft Arzt- und Facharztpraxen, kurzfristige Terminlücken aus der Warteliste zu füllen.",
+          "ClinicSlotHub helps clinics, medical offices and healthcare providers worldwide fill appointment slots from the waitlist automatically.",
         url: APP_URL,
         inLanguage: locale,
         offers: {
@@ -74,9 +74,9 @@ function buildSchemaOrg(locale: string) {
       },
       {
         "@type": "Organization",
-        name: "PraxisFlow",
+        name: "ClinicSlotHub",
         url: APP_URL,
-        description: "PraxisFlow – Software für die Wartelisten-Verwaltung in Arztpraxen.",
+        description: "ClinicSlotHub – Appointment and waitlist management for clinics and healthcare providers worldwide.",
       },
     ],
   };

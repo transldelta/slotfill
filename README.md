@@ -1,6 +1,6 @@
-# PraxisFlow – Terminlücken automatisch füllen
+# ClinicSlotHub – Terminlücken automatisch füllen
 
-PraxisFlow hilft Arztpraxen, kurzfristige Terminausfälle automatisch zu füllen.
+ClinicSlotHub hilft Arztpraxen, kurzfristige Terminausfälle automatisch zu füllen.
 Patienten auf der Warteliste können per vorbereitetem Link benachrichtigt werden;
 SMS/WhatsApp kann optional über Twilio angebunden werden.
 Der erste Klick gewinnt den Termin.
@@ -82,7 +82,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 
 # Resend (E-Mail)
 RESEND_API_KEY=re_...
-RESEND_FROM_EMAIL=PraxisFlow <onboarding@resend.dev>
+RESEND_FROM_EMAIL=ClinicSlotHub <onboarding@resend.dev>
 
 # Nachrichten (optional, erstmal weglassen)
 MESSAGING_PROVIDER=none
@@ -173,4 +173,4 @@ Dieses Projekt ist privat. Alle Rechte vorbehalten.
 
 ---
 
-Erstellt von Brahim Ben Abla für PraxisFlow – weil Praxen keine leeren Termine haben sollten.
+Erstellt von Brahim Ben Abla für ClinicSlotHub – weil Praxen keine leeren Termine haben sollten.

@@ -70,7 +70,7 @@ function buildSchemaOrg(locale: string) {
           "@type": "Offer",
           price: "29",
           priceCurrency: "EUR",
-          description: "Starter-Plan ab 29 € pro Monat, 14-tägige Testphase inklusive",
+          description: "Starter plan from €29/month, 14-day free trial included",
         },
       },
       {
@@ -153,7 +153,7 @@ export default async function LocaleLandingPage({
               href={`/${locale}/termin-buchen`}
               className="hidden rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:inline"
             >
-              Termin buchen
+              {tNav("bookAppointment")}
             </Link>
             <Link
               href="/auth/login"
@@ -173,7 +173,7 @@ export default async function LocaleLandingPage({
       <section className="mx-auto max-w-3xl px-4 py-20 text-center">
         <div className="mb-4 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium" style={{ borderColor: "var(--color-border)", color: "var(--color-muted)", backgroundColor: "var(--color-surface)" }}>
           <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "var(--color-accent)" }} />
-          Terminmanagement für Arztpraxen
+          {t("heroBadge")}
         </div>
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
           {t("heroTitle")}
@@ -268,7 +268,7 @@ export default async function LocaleLandingPage({
         </ul>
       </section>
 
-      {/* Online-Terminbuchung Sektion */}
+      {/* Online-Booking Section */}
       <section className="mx-auto max-w-6xl px-4 py-16">
         <div
           className="rounded-2xl border p-8"
@@ -281,34 +281,32 @@ export default async function LocaleLandingPage({
             <div className="flex-1">
               <div className="mb-2 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium" style={{ backgroundColor: "var(--color-surface-2)", color: "var(--color-muted)" }}>
                 <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
-                Online-Terminbuchung vorbereitet
+                {t("onlineBookingBadge")}
               </div>
               <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
-                Terminanfragen online empfangen
+                {t("onlineBookingTitle")}
               </h2>
               <p className="mt-2 text-sm text-slate-600 dark:text-slate-400 max-w-lg">
-                Patienten können online eine Terminanfrage stellen. Die Praxis bestätigt
-                Termine manuell oder – falls ausdrücklich aktiviert – automatisch nach
-                sicheren Regeln.
+                {t("onlineBookingDesc")}
               </p>
               <ul className="mt-4 space-y-1.5 text-sm text-slate-600 dark:text-slate-400">
                 <li className="flex items-center gap-2">
                   <span style={{ color: "var(--color-accent)" }}>✓</span>
-                  Name, E-Mail, gewünschter Zeitraum und Anliegen
+                  {t("onlineBookingBullet1")}
                 </li>
                 <li className="flex items-center gap-2">
                   <span style={{ color: "var(--color-accent)" }}>✓</span>
-                  Datenschutzhinweis als Pflichtfeld
+                  {t("onlineBookingBullet2")}
                 </li>
                 <li className="flex items-center gap-2">
                   <span style={{ color: "var(--color-accent)" }}>✓</span>
-                  Keine automatische Bestätigung ohne Praxis-Freigabe
+                  {t("onlineBookingBullet3")}
                 </li>
               </ul>
             </div>
             <div className="shrink-0">
               <Link href={`/${locale}/termin-buchen`} className="btn-brand">
-                Termin buchen →
+                {t("onlineBookingButton")}
               </Link>
             </div>
           </div>
@@ -376,17 +374,14 @@ export default async function LocaleLandingPage({
               {tNav("contact")}
             </Link>
             <Link href={`/${locale}/termin-buchen`} className="transition hover:text-slate-900 dark:hover:text-slate-100">
-              Termin buchen
+              {tNav("bookAppointment")}
             </Link>
             <Link href={`/${locale}/feedback`} className="transition hover:text-slate-900 dark:hover:text-slate-100">
-              Feedback
+              {tNav("feedback")}
             </Link>
           </div>
           <div className="mt-6 border-t pt-6 text-xs" style={{ borderColor: "var(--color-border)", color: "var(--color-muted)" }}>
-            <p>{t("footerNote")}</p>
-            <p className="mt-1">
-              © {new Date().getFullYear()} {tNav("brand")}. {t("rights")}
-            </p>
+            <p>© {new Date().getFullYear()} {tNav("brand")}. {t("rights")}</p>
           </div>
         </div>
       </footer>

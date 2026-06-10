@@ -1,8 +1,4 @@
 {
-  "_meta": {
-    "translationReviewRequired": true,
-    "note": "Please have this reviewed by a qualified translator before going live."
-  },
   "auth": {
     "loginTitle": "Sign In",
     "registerTitle": "Register",
@@ -347,7 +343,7 @@
     "currentPlan": "Current Plan",
     "plansLoaded": "Plans loaded successfully",
     "plansError": "Error loading plans",
-    "checkoutUnavailable": "Checkout is not configured yet.",
+    "checkoutUnavailable": "Please contact us for access.",
     "stripePriceMissing": "No Stripe price has been set for this plan.",
     "featureKeys": {
       "whatsappNotifications": "Prepared Notifications",
@@ -405,7 +401,9 @@
     "blog": "Blog",
     "contact": "Contact",
     "login": "Sign In",
-    "getStarted": "Try for Free"
+    "getStarted": "Try for Free",
+    "bookAppointment": "Book Appointment",
+    "feedback": "Feedback"
   },
   "landing": {
     "heroTitle": "Fill appointment slots automatically – for clinics worldwide",
@@ -424,7 +422,6 @@
     "feature4Desc": "Data-minimising communication and data-protection-aware processes.",
     "ctaBlockTitle": "Ready to have fewer empty appointments?",
     "ctaBlockSubtitle": "Start with a 14-day free trial.",
-    "footerNote": "Hosting and data protection must be finally reviewed before going live.",
     "rights": "All rights reserved.",
     "trustTitle": "The practice stays in control",
     "trustSubtitle": "ClinicSlotHub supports – decisions are always made by the practice.",
@@ -433,7 +430,15 @@
     "trustPoint3": "In standard mode, messages are prepared – not automatically sent.",
     "trustPoint4": "No fake references. No invented user numbers.",
     "trialNote": "Try free for 14 days – no credit card required.",
-    "trialNoMessages": "No real messages are sent in trial mode."
+    "trialNoMessages": "No real messages are sent in trial mode.",
+    "heroBadge": "Appointment management for clinics worldwide",
+    "onlineBookingBadge": "Online booking available",
+    "onlineBookingTitle": "Receive appointment requests online",
+    "onlineBookingDesc": "Patients can submit an appointment request online. The practice confirms manually or – if explicitly enabled – automatically by secure rules.",
+    "onlineBookingBullet1": "Name, email, preferred time and reason",
+    "onlineBookingBullet2": "Privacy notice as required field",
+    "onlineBookingBullet3": "No automatic confirmation without practice approval",
+    "onlineBookingButton": "Request Appointment →"
   },
   "blog": {
     "title": "Blog",

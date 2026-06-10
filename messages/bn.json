@@ -1,8 +1,4 @@
 {
-  "_meta": {
-    "translationReviewRequired": true,
-    "note": "লাইভ হওয়ার আগে একজন যোগ্য অনুবাদক দ্বারা পর্যালোচনা করুন।"
-  },
   "auth": {
     "loginTitle": "সাইন ইন করুন",
     "registerTitle": "নিবন্ধন করুন",
@@ -405,7 +401,9 @@
     "blog": "ব্লগ",
     "contact": "যোগাযোগ",
     "login": "সাইন ইন",
-    "getStarted": "বিনামূল্যে চেষ্টা করুন"
+    "getStarted": "বিনামূল্যে চেষ্টা করুন",
+    "bookAppointment": "অ্যাপয়েন্টমেন্ট বুক করুন",
+    "feedback": "মতামত"
   },
   "landing": {
     "heroTitle": "অপেক্ষমাণ তালিকা থেকে স্বয়ংক্রিয়ভাবে অ্যাপয়েন্টমেন্ট পূরণ করুন",
@@ -424,7 +422,6 @@
     "feature4Desc": "ন্যূনতম ডেটা ব্যবহারে যোগাযোগ এবং তথ্য সুরক্ষা-সচেতন প্রক্রিয়া।",
     "ctaBlockTitle": "কম খালি অ্যাপয়েন্টমেন্টের জন্য প্রস্তুত?",
     "ctaBlockSubtitle": "১৪ দিনের বিনামূল্যে ট্রায়াল দিয়ে শুরু করুন।",
-    "footerNote": "লাইভ হওয়ার আগে হোস্টিং এবং ডেটা সুরক্ষা চূড়ান্তভাবে পর্যালোচনা করতে হবে।",
     "rights": "সর্বস্বত্ব সংরক্ষিত।",
     "trustTitle": "প্র্যাকটিস নিয়ন্ত্রণে থাকে",
     "trustSubtitle": "ClinicSlotHub সহায়তা করে – সিদ্ধান্ত সবসময় প্র্যাকটিসের।",
@@ -433,7 +430,15 @@
     "trustPoint3": "ডিফল্ট মোডে বার্তা প্রস্তুত করা হয়, স্বয়ংক্রিয়ভাবে পাঠানো হয় না।",
     "trustPoint4": "কোনো ভুয়া রেফারেন্স নেই। কোনো কল্পিত ব্যবহারকারী সংখ্যা নেই।",
     "trialNote": "১৪ দিন বিনামূল্যে ব্যবহার করুন – ক্রেডিট কার্ড প্রয়োজন নেই।",
-    "trialNoMessages": "ট্রায়াল মোডে কোনো বাস্তব বার্তা পাঠানো হয় না।"
+    "trialNoMessages": "ট্রায়াল মোডে কোনো বাস্তব বার্তা পাঠানো হয় না।",
+    "heroBadge": "বিশ্বজুড়ে ক্লিনিকের জন্য অ্যাপয়েন্টমেন্ট ব্যবস্থাপনা",
+    "onlineBookingBadge": "Online booking available",
+    "onlineBookingTitle": "Receive appointment requests online",
+    "onlineBookingDesc": "Patients can submit an appointment request online. The practice confirms manually or – if explicitly enabled – automatically by secure rules.",
+    "onlineBookingBullet1": "Name, email, preferred time and reason",
+    "onlineBookingBullet2": "Privacy notice as required field",
+    "onlineBookingBullet3": "No automatic confirmation without practice approval",
+    "onlineBookingButton": "Request Appointment →"
   },
   "blog": {
     "title": "ব্লগ",

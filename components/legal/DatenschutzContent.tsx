@@ -182,8 +182,8 @@ export function DatenschutzContent({
             <p className="mt-2 leading-relaxed">
               ClinicSlotHub verwendet technisch notwendige Cookies (Sitzungscookies). Keine Tracking-
               oder Marketing-Cookies ohne Einwilligung.{" "}
-              <span className="rounded bg-amber-100 px-1 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
-                [zu prüfen]
+              <span className="text-xs italic text-slate-400 dark:text-slate-500">
+                (Rechtliche Prüfung vor Produktiveinsatz ausstehend.)
               </span>
             </p>
           </section>

@@ -1,8 +1,4 @@
 {
-  "_meta": {
-    "translationReviewRequired": true,
-    "note": "上线前请由合格译员审校。"
-  },
   "auth": {
     "loginTitle": "登录",
     "registerTitle": "注册",
@@ -405,7 +401,9 @@
     "blog": "博客",
     "contact": "联系我们",
     "login": "登录",
-    "getStarted": "免费试用"
+    "getStarted": "免费试用",
+    "bookAppointment": "预约挂号",
+    "feedback": "反馈"
   },
   "landing": {
     "heroTitle": "自动从候诊名单填补预约空档",
@@ -424,7 +422,6 @@
     "feature4Desc": "数据最小化通信和注重数据保护的流程。",
     "ctaBlockTitle": "准备好减少空档预约了吗？",
     "ctaBlockSubtitle": "从14天免费试用开始。",
-    "footerNote": "上线前须最终审查托管和数据保护。",
     "rights": "保留所有权利。",
     "trustTitle": "诊所始终保持控制权",
     "trustSubtitle": "ClinicSlotHub 提供支持——决策权始终在诊所手中。",
@@ -433,7 +430,15 @@
     "trustPoint3": "在默认模式下，消息仅被准备好，不会自动发送。",
     "trustPoint4": "无虚假评价。无虚构用户数据。",
     "trialNote": "免费试用 14 天——无需信用卡。",
-    "trialNoMessages": "试用模式下不会发送任何真实消息。"
+    "trialNoMessages": "试用模式下不会发送任何真实消息。",
+    "heroBadge": "全球诊所预约管理",
+    "onlineBookingBadge": "Online booking available",
+    "onlineBookingTitle": "Receive appointment requests online",
+    "onlineBookingDesc": "Patients can submit an appointment request online. The practice confirms manually or – if explicitly enabled – automatically by secure rules.",
+    "onlineBookingBullet1": "Name, email, preferred time and reason",
+    "onlineBookingBullet2": "Privacy notice as required field",
+    "onlineBookingBullet3": "No automatic confirmation without practice approval",
+    "onlineBookingButton": "Request Appointment →"
   },
   "blog": {
     "title": "博客",

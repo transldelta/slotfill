@@ -134,9 +134,7 @@ export function AgbContent({
               </p>
               <p>
                 (4){" "}
-                <span className="rounded bg-amber-100 px-1 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
-                  [zu prüfen]
-                </span>{" "}
+                <span className="text-xs italic text-slate-400 dark:text-slate-500">(Rechtliche Prüfung vor Produktiveinsatz ausstehend.)</span>{" "}
                 Der Anbieter behält sich vor, die Testphase ohne Angabe von Gründen zu beenden
                 oder die Bedingungen anzupassen.
               </p>
@@ -197,9 +195,7 @@ export function AgbContent({
               </p>
               <p>
                 (4){" "}
-                <span className="rounded bg-amber-100 px-1 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
-                  [zu prüfen]
-                </span>{" "}
+                <span className="text-xs italic text-slate-400 dark:text-slate-500">(Rechtliche Prüfung vor Produktiveinsatz ausstehend.)</span>{" "}
                 Weitere Datenschutzdetails sind der{" "}
                 <Link href={`/${locale}/datenschutz`} className="text-blue-600 hover:underline dark:text-blue-400">
                   Datenschutzerklärung
@@ -216,18 +212,14 @@ export function AgbContent({
             <div className="mt-2 space-y-2 leading-relaxed">
               <p>
                 (1){" "}
-                <span className="rounded bg-amber-100 px-1 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
-                  [zu prüfen]
-                </span>{" "}
+                <span className="text-xs italic text-slate-400 dark:text-slate-500">(Rechtliche Prüfung vor Produktiveinsatz ausstehend.)</span>{" "}
                 Der Anbieter haftet unbeschränkt für Schäden aus der Verletzung des Lebens,
                 des Körpers oder der Gesundheit sowie für vorsätzliche oder grob fahrlässige
                 Pflichtverletzungen.
               </p>
               <p>
                 (2){" "}
-                <span className="rounded bg-amber-100 px-1 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
-                  [zu prüfen]
-                </span>{" "}
+                <span className="text-xs italic text-slate-400 dark:text-slate-500">(Rechtliche Prüfung vor Produktiveinsatz ausstehend.)</span>{" "}
                 Für leicht fahrlässige Verletzungen wesentlicher Vertragspflichten
                 haftet der Anbieter begrenzt auf den vorhersehbaren, vertragstypischen Schaden.
               </p>
@@ -249,9 +241,7 @@ export function AgbContent({
               </p>
               <p>
                 (2){" "}
-                <span className="rounded bg-amber-100 px-1 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
-                  [zu prüfen]
-                </span>{" "}
+                <span className="text-xs italic text-slate-400 dark:text-slate-500">(Rechtliche Prüfung vor Produktiveinsatz ausstehend.)</span>{" "}
                 Die Kündigung ist mit einer Frist von 14 Tagen zum Monatsende möglich.
               </p>
               <p>
@@ -279,9 +269,7 @@ export function AgbContent({
               </p>
               <p>
                 (4){" "}
-                <span className="rounded bg-amber-100 px-1 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
-                  [zu prüfen]
-                </span>{" "}
+                <span className="text-xs italic text-slate-400 dark:text-slate-500">(Rechtliche Prüfung vor Produktiveinsatz ausstehend.)</span>{" "}
                 Änderungen dieser AGB werden per E-Mail mitgeteilt und gelten als genehmigt,
                 wenn die Praxis nicht innerhalb von vier Wochen schriftlich widerspricht.
               </p>

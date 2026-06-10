@@ -1,8 +1,4 @@
 {
-  "_meta": {
-    "translationReviewRequired": true,
-    "note": "يرجى مراجعة هذا النص من قِبل مترجم مؤهل قبل النشر."
-  },
   "auth": {
     "loginTitle": "تسجيل الدخول",
     "registerTitle": "إنشاء حساب",
@@ -405,7 +401,9 @@
     "blog": "المدونة",
     "contact": "اتصل بنا",
     "login": "تسجيل الدخول",
-    "getStarted": "جرّب مجاناً"
+    "getStarted": "جرّب مجاناً",
+    "bookAppointment": "حجز موعد",
+    "feedback": "ملاحظات"
   },
   "landing": {
     "heroTitle": "ملء مواعيد تلقائياً من قائمة الانتظار",
@@ -424,7 +422,6 @@
     "feature4Desc": "تواصل بأقل قدر من البيانات وعمليات مدركة لحماية البيانات.",
     "ctaBlockTitle": "هل أنت مستعد لتقليل المواعيد الفارغة؟",
     "ctaBlockSubtitle": "ابدأ بفترة تجريبية مجانية لمدة 14 يوماً.",
-    "footerNote": "يجب مراجعة الاستضافة وحماية البيانات قبل الإطلاق.",
     "rights": "جميع الحقوق محفوظة.",
     "trustTitle": "العيادة تحتفظ بالتحكم",
     "trustSubtitle": "تدعم ClinicSlotHub – القرارات دائماً بيد العيادة.",
@@ -433,7 +430,15 @@
     "trustPoint3": "في الوضع الافتراضي، يتم إعداد الرسائل وليس إرسالها تلقائياً.",
     "trustPoint4": "لا مراجع مزيفة. لا أرقام مستخدمين مخترعة.",
     "trialNote": "جرّب مجاناً لمدة 14 يوماً – لا تحتاج إلى بطاقة ائتمان.",
-    "trialNoMessages": "في وضع التجربة لا يتم إرسال رسائل حقيقية."
+    "trialNoMessages": "في وضع التجربة لا يتم إرسال رسائل حقيقية.",
+    "heroBadge": "إدارة المواعيد للعيادات حول العالم",
+    "onlineBookingBadge": "Online booking available",
+    "onlineBookingTitle": "Receive appointment requests online",
+    "onlineBookingDesc": "Patients can submit an appointment request online. The practice confirms manually or – if explicitly enabled – automatically by secure rules.",
+    "onlineBookingBullet1": "Name, email, preferred time and reason",
+    "onlineBookingBullet2": "Privacy notice as required field",
+    "onlineBookingBullet3": "No automatic confirmation without practice approval",
+    "onlineBookingButton": "Request Appointment →"
   },
   "blog": {
     "title": "المدونة",

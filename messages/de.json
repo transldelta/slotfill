@@ -343,7 +343,7 @@
     "currentPlan": "Aktueller Plan",
     "plansLoaded": "Pläne erfolgreich geladen",
     "plansError": "Fehler beim Laden der Pläne",
-    "checkoutUnavailable": "Checkout ist aktuell noch nicht konfiguriert.",
+    "checkoutUnavailable": "Bitte kontaktieren Sie uns für Zugang.",
     "stripePriceMissing": "Für diesen Plan ist noch kein Stripe-Preis hinterlegt.",
     "featureKeys": {
       "whatsappNotifications": "Vorbereitete Benachrichtigungen",
@@ -401,7 +401,9 @@
     "blog": "Blog",
     "contact": "Kontakt",
     "login": "Anmelden",
-    "getStarted": "Kostenlos testen"
+    "getStarted": "Kostenlos testen",
+    "bookAppointment": "Termin buchen",
+    "feedback": "Feedback"
   },
   "landing": {
     "heroTitle": "Terminlücken füllen – für Kliniken und Arztpraxen weltweit",
@@ -420,7 +422,6 @@
     "feature4Desc": "Datensparsame Kommunikation und DSGVO-bewusste Prozesse.",
     "ctaBlockTitle": "Bereit, weniger leere Termine zu haben?",
     "ctaBlockSubtitle": "Starten Sie mit einer 14-tägigen kostenlosen Testphase.",
-    "footerNote": "Hosting und Datenschutz müssen vor Produktivstart final geprüft werden.",
     "rights": "Alle Rechte vorbehalten.",
     "trustTitle": "Die Praxis behält die Kontrolle",
     "trustSubtitle": "ClinicSlotHub unterstützt – entschieden wird immer in der Praxis.",
@@ -429,7 +430,15 @@
     "trustPoint3": "Im Standardmodus werden Nachrichten vorbereitet, nicht automatisch versendet.",
     "trustPoint4": "Keine Fake-Referenzen. Keine erfundenen Nutzerzahlen.",
     "trialNote": "14 Tage kostenlos testen – keine Kreditkarte erforderlich.",
-    "trialNoMessages": "Im Testmodus werden keine echten Nachrichten versendet."
+    "trialNoMessages": "Im Testmodus werden keine echten Nachrichten versendet.",
+    "heroBadge": "Terminmanagement für Arztpraxen und Kliniken weltweit",
+    "onlineBookingBadge": "Online-Terminbuchung verfügbar",
+    "onlineBookingTitle": "Terminanfragen online empfangen",
+    "onlineBookingDesc": "Patienten können online eine Terminanfrage stellen. Die Praxis bestätigt Termine manuell oder – falls ausdrücklich aktiviert – automatisch nach sicheren Regeln.",
+    "onlineBookingBullet1": "Name, E-Mail, gewünschter Zeitraum und Anliegen",
+    "onlineBookingBullet2": "Datenschutzhinweis als Pflichtfeld",
+    "onlineBookingBullet3": "Keine automatische Bestätigung ohne Praxis-Freigabe",
+    "onlineBookingButton": "Terminanfrage stellen →"
   },
   "blog": {
     "title": "Blog",

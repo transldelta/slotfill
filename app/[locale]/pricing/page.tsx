@@ -71,7 +71,7 @@ export default function LocalePricingPage() {
         return;
       }
       if (data?.code === "STRIPE_NOT_CONFIGURED") {
-        toast.error(t("checkoutUnavailable"));
+        router.push(`/${locale}/kontakt`);
         return;
       }
       toast.error(tSub("checkoutError"));

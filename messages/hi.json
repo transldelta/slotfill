@@ -1,8 +1,4 @@
 {
-  "_meta": {
-    "translationReviewRequired": true,
-    "note": "लाइव होने से पहले किसी योग्य अनुवादक से समीक्षा करवाएं।"
-  },
   "auth": {
     "loginTitle": "साइन इन करें",
     "registerTitle": "पंजीकरण करें",
@@ -405,7 +401,9 @@
     "blog": "ब्लॉग",
     "contact": "संपर्क",
     "login": "साइन इन",
-    "getStarted": "निःशुल्क आज़माएं"
+    "getStarted": "निःशुल्क आज़माएं",
+    "bookAppointment": "अपॉइंटमेंट बुक करें",
+    "feedback": "प्रतिक्रिया"
   },
   "landing": {
     "heroTitle": "प्रतीक्षा सूची से स्वचालित रूप से अपॉइंटमेंट स्लॉट भरें",
@@ -424,7 +422,6 @@
     "feature4Desc": "डेटा-न्यूनतम संचार और डेटा सुरक्षा-जागरूक प्रक्रियाएं।",
     "ctaBlockTitle": "कम खाली अपॉइंटमेंट के लिए तैयार हैं?",
     "ctaBlockSubtitle": "14 दिन की निःशुल्क परीक्षण अवधि से शुरू करें।",
-    "footerNote": "लाइव होने से पहले होस्टिंग और डेटा सुरक्षा की अंतिम समीक्षा आवश्यक है।",
     "rights": "सभी अधिकार सुरक्षित।",
     "trustTitle": "प्रैक्टिस का नियंत्रण बना रहता है",
     "trustSubtitle": "ClinicSlotHub सहायता करता है – निर्णय हमेशा प्रैक्टिस लेती है।",
@@ -433,7 +430,15 @@
     "trustPoint3": "डिफ़ॉल्ट मोड में संदेश तैयार किए जाते हैं, स्वचालित रूप से नहीं भेजे जाते।",
     "trustPoint4": "कोई नकली संदर्भ नहीं। कोई काल्पनिक उपयोगकर्ता संख्या नहीं।",
     "trialNote": "14 दिन मुफ़्त आज़माएं – क्रेडिट कार्ड की आवश्यकता नहीं।",
-    "trialNoMessages": "ट्रायल मोड में कोई वास्तविक संदेश नहीं भेजा जाता।"
+    "trialNoMessages": "ट्रायल मोड में कोई वास्तविक संदेश नहीं भेजा जाता।",
+    "heroBadge": "दुनिया भर के क्लीनिकों के लिए अपॉइंटमेंट प्रबंधन",
+    "onlineBookingBadge": "Online booking available",
+    "onlineBookingTitle": "Receive appointment requests online",
+    "onlineBookingDesc": "Patients can submit an appointment request online. The practice confirms manually or – if explicitly enabled – automatically by secure rules.",
+    "onlineBookingBullet1": "Name, email, preferred time and reason",
+    "onlineBookingBullet2": "Privacy notice as required field",
+    "onlineBookingBullet3": "No automatic confirmation without practice approval",
+    "onlineBookingButton": "Request Appointment →"
   },
   "blog": {
     "title": "ब्लॉग",

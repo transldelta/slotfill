@@ -1,8 +1,4 @@
 {
-  "_meta": {
-    "translationReviewRequired": true,
-    "note": "Revisar con un traductor calificado antes de publicar."
-  },
   "auth": {
     "loginTitle": "Iniciar sesión",
     "registerTitle": "Registrarse",
@@ -405,7 +401,9 @@
     "blog": "Blog",
     "contact": "Contacto",
     "login": "Iniciar sesión",
-    "getStarted": "Probar gratis"
+    "getStarted": "Probar gratis",
+    "bookAppointment": "Reservar cita",
+    "feedback": "Comentarios"
   },
   "landing": {
     "heroTitle": "Cubrir automáticamente las citas desde la lista de espera",
@@ -424,7 +422,6 @@
     "feature4Desc": "Comunicación con uso mínimo de datos y procesos conscientes de la protección de datos.",
     "ctaBlockTitle": "¿Listo/a para tener menos citas vacías?",
     "ctaBlockSubtitle": "Comienza con una prueba gratuita de 14 días.",
-    "footerNote": "El alojamiento y la protección de datos deben revisarse antes de publicar.",
     "rights": "Todos los derechos reservados.",
     "trustTitle": "La consulta mantiene el control",
     "trustSubtitle": "ClinicSlotHub apoya – las decisiones siempre las toma la consulta.",
@@ -433,7 +430,15 @@
     "trustPoint3": "En modo estándar, los mensajes se preparan, no se envían automáticamente.",
     "trustPoint4": "Sin referencias falsas. Sin cifras de usuarios inventadas.",
     "trialNote": "Prueba gratis 14 días – no se requiere tarjeta de crédito.",
-    "trialNoMessages": "En el modo de prueba no se envían mensajes reales."
+    "trialNoMessages": "En el modo de prueba no se envían mensajes reales.",
+    "heroBadge": "Gestión de citas para clínicas en todo el mundo",
+    "onlineBookingBadge": "Online booking available",
+    "onlineBookingTitle": "Receive appointment requests online",
+    "onlineBookingDesc": "Patients can submit an appointment request online. The practice confirms manually or – if explicitly enabled – automatically by secure rules.",
+    "onlineBookingBullet1": "Name, email, preferred time and reason",
+    "onlineBookingBullet2": "Privacy notice as required field",
+    "onlineBookingBullet3": "No automatic confirmation without practice approval",
+    "onlineBookingButton": "Request Appointment →"
   },
   "blog": {
     "title": "Blog",

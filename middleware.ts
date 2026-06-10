@@ -15,8 +15,39 @@ const AUTH_PROTECTED = ["/admin", "/dashboard"];
 // ── Pfade, die komplett durchgeleitet werden (kein i18n, kein Auth) ───────────
 const PASSTHROUGH = ["/api", "/auth"];
 
+// ── Canonical-Domain-Schutz ───────────────────────────────────────────────────
+// Nur diese Hosts dürfen den Inhalt direkt ausliefern.
+// Alles andere (z. B. slotfill-pi.vercel.app) wird per 301 auf die
+// kanonische Domain weitergeleitet – Pfad und Query bleiben erhalten.
+const CANONICAL_HOSTS = new Set(["clinicslothub.com", "www.clinicslothub.com"]);
+
+/** Gibt true zurück, wenn der Host eine lokale Entwicklungsumgebung ist. */
+function isDevHost(host: string): boolean {
+  const hostname = host.split(":")[0]; // Port entfernen
+  return (
+    hostname === "localhost" ||
+    hostname === "127.0.0.1" ||
+    hostname.endsWith(".local")
+  );
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // 0. Canonical-Domain-Redirect ─────────────────────────────────────────────
+  //    Läuft VOR Auth und i18n – kein API-/Auth-Pfad ist ausgenommen,
+  //    weil alte Aliases niemals API-Calls empfangen sollen.
+  //    Ausnahme: lokale Entwicklung (localhost, 127.0.0.1, *.local).
+  const host = request.headers.get("host") ?? "";
+  const hostname = host.split(":")[0];
+  if (!CANONICAL_HOSTS.has(hostname) && !isDevHost(host)) {
+    const target = request.nextUrl.clone();
+    target.protocol = "https:";
+    target.host = "clinicslothub.com";
+    target.port = "";
+    // Pfad und Suchparameter bleiben unverändert erhalten.
+    return NextResponse.redirect(target, { status: 301 });
+  }
 
   // 1. API- und Auth-Routen: direkt durchlassen, keine Änderung
   if (PASSTHROUGH.some((p) => pathname.startsWith(p))) {
@@ -24,6 +55,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // 2. /admin und /dashboard: Supabase-Auth-Check (Login-Pflicht)
+  //    Nur erreichbar von canonical hosts (oben bereits gesichert).
   //    /admin wird NICHT auf /de/admin umgeleitet.
   if (AUTH_PROTECTED.some((p) => pathname.startsWith(p))) {
     let response = NextResponse.next({ request });

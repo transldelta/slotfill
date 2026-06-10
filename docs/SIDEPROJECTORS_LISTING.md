@@ -1,8 +1,8 @@
-# ClinicSlotHub – SideProjectors Listing (Entwurf)
+# ClinicSlotHub – SideProjectors Listing (Final)
 
 **Zweck:** Fertiger Listing-Text für SideProjectors.com  
-**Status:** Entwurf – vor Veröffentlichung nochmals prüfen  
-**Erstellt:** 2026-06-10
+**Status:** Final – bereit als Entwurf einzustellen, noch nicht veröffentlichen  
+**Zuletzt aktualisiert:** 2026-06-10
 
 ---
 
@@ -10,146 +10,188 @@
 
 ---
 
-### Titel
+### Title
 
-**ClinicSlotHub – Appointment Request & Waitlist SaaS for Clinics (Live MVP, Multi-Language)**
-
----
-
-### Kurzbeschreibung (tagline / subtitle)
-
-> A live, white-label-ready SaaS for clinics and medical offices to manage online appointment requests and patient waitlists – built with Next.js 14, Supabase, and Resend. 10 languages. No paying customers yet. Full admin. Full email system. Ready to grow or sell.
+ClinicSlotHub – Live Healthcare Appointment & Lead Management SaaS
 
 ---
 
-### Ausführliche Beschreibung
+### Short tagline
 
-**What is ClinicSlotHub?**
-
-ClinicSlotHub is a fully deployed SaaS application that helps medical offices, clinics, and healthcare providers manage:
-
-- **Online appointment requests** – patients submit requests with preferred time, reason, and consent; the clinic confirms or declines manually
-- **Patient waitlists** – manage waiting patients and notify them when a slot opens up
-- **Booking administration** – a clean admin interface for accepting, declining, and annotating booking requests
-
-**What's working right now:**
-
-✅ Live at clinicslothub.com  
-✅ Appointment request form (with email notifications to admin + patient)  
-✅ Contact form (with admin + confirmation emails)  
-✅ Admin panel: confirm/decline bookings, add notes, view lead stats  
-✅ 5 email flows via Resend – all live-tested  
-✅ Real lead tracking: test data separated from real leads (is_test column)  
-✅ 8 SEO blog articles (German + English)  
-✅ 10 languages (DE, EN, FR, ES, PT, ZH, HI, AR, BN, RU) – all locales live  
-✅ Sitemap, robots.txt, canonical URLs, hreflang – SEO-complete  
-✅ Impressum, Datenschutz, AGB, AVV – legal pages present  
-✅ 347 automated tests passing  
-
-**Honest status:**
-
-- No paying customers yet (launched for organic soft launch)
-- No real patient data stored (test data only, properly separated)
-- Stripe infrastructure implemented but not activated (no Secret Key set)
-- Legal texts are qualified SaaS templates – recommend legal review before onboarding paying clients
-- Email sender currently onboarding@resend.dev – custom domain setup is the next step
-
-**Tech stack:**
-
-- Next.js 14 App Router + TypeScript (strict)
-- Supabase (PostgreSQL, Auth, Row-Level Security)
-- Resend (transactional email)
-- Vercel (deployment, serverless)
-- Tailwind CSS + shadcn/ui components
-- next-intl (10 locales)
-- Stripe SDK (integrated, not activated)
-- Twilio SDK (integrated, not activated)
-
-**Monthly running costs: ~€0**  
-(Vercel Free + Supabase Free + Resend Free – 100 emails/day)
+A live, multilingual SaaS for clinics and medical practices to manage appointment requests, contact leads, booking confirmations and admin workflows.
 
 ---
 
-### Tech-Stack (kurze Version für Listing-Felder)
+### Asking price / price note
 
-Next.js 14 · TypeScript · Supabase · Resend · Vercel · Tailwind CSS · next-intl · Stripe (not activated) · Twilio (not activated)
+Asking price: negotiable.
 
----
-
-### Was ist enthalten (Assets)
-
-- Vollständiger Quellcode (GitHub Repository, öffentlich: github.com/transldelta/slotfill)
-- Live Domain: clinicslothub.com (Übertragung nach Vereinbarung)
-- Vollständiges Admin-Interface
-- E-Mail-System mit 5 Live-Flows
-- 8 SEO-Blogartikel
-- 10 Sprachen vollständig übersetzt
-- Supabase-Datenbank-Schema + Migrations
-- Vollständige technische Dokumentation (docs/)
-- GO_LIVE_SAFETY_AUDIT.md, REAL_LEAD_OPERATIONS.md, ORGANIC_LAUNCH_CHECKLIST.md u.a.
-- Stripe + Twilio als Drop-in (nur Credentials nötig)
+This is an asset/code-based sale, not a revenue-multiple sale. The product currently has 0 paying customers and 0 € MRR. Suggested discussion range: €1,500–€5,000 depending on transfer scope, support, domain transfer and buyer requirements. No sale price is guaranteed.
 
 ---
 
-### Ehrlicher Status
+### Website
 
-| Merkmal | Status |
-|---------|--------|
-| Live und erreichbar | ✅ clinicslothub.com |
-| Zahlende Kunden | ❌ Noch keine |
-| Monatlicher Umsatz (MRR) | ❌ 0 € |
-| E-Mail-System getestet | ✅ Alle 5 Flows live bestätigt |
-| Stripe aktiviert | ❌ Infrastruktur vorhanden, Key nicht gesetzt |
-| Rechtliche Texte anwaltlich geprüft | ❌ Qualifizierte Muster, rechtliche Prüfung ausstehend |
-| SEO eingereicht | ✅ Google Search Console + Bing |
-| Tests | ✅ 347/347 grün |
+https://clinicslothub.com
 
 ---
 
-### Mögliche Käufer-Zielgruppe
+### One-paragraph summary
 
-1. **Entwickler / Indie Hacker** – möchten ein fertiges SaaS-Fundament kaufen und nicht von null beginnen
-2. **Healthcare-Agenturen** – suchen ein White-Label-Produkt für Klinik-Kunden
-3. **Praxis-Software-Anbieter** – möchten einen Terminbuchungs-Baustein integrieren
-4. **SaaS-Käufer auf Micro-Acquire / Flippa** – suchen ein Multi-Language-SaaS mit sauberem Code
+ClinicSlotHub is a live healthcare-oriented SaaS MVP for clinics, medical practices and healthcare service providers. It helps collect appointment requests, manage contact inquiries, separate real leads from test data, send transactional emails and operate a basic admin workflow. The product is already live, multilingual, documented and deployed, but it has not yet been commercially launched with paying customers.
 
 ---
 
-### Monetarisierungsidee
+### Full description
 
-Das Produkt ist für **SaaS-Subscription** ausgelegt:
+ClinicSlotHub was built as a complete live SaaS foundation for appointment request management in the healthcare sector. The product is designed for clinics, practices, medical offices or healthcare agencies that need a structured way to collect appointment requests, receive contact inquiries and manage incoming leads from one admin area.
 
-- Starter: ~29 €/Monat (Infrastruktur vorhanden)
-- Professional: ~79 €/Monat
-- Praxis Plus: ~149 €/Monat
+The system is live at clinicslothub.com and includes public landing pages, appointment request forms, contact forms, pricing pages, legal pages, SEO blog content and a working admin panel.
 
-Stripe-Checkout-Infrastruktur ist vollständig implementiert – nur Credentials müssen gesetzt werden.
+The admin area allows the operator to view booking requests, confirm or decline requests, add internal notes, track real leads separately from test data and receive email notifications. Transactional emails are implemented through Resend and have been live-tested.
 
-Alternativ: **White-Label-Lizenz** an Praxis-Software-Anbieter oder Agenturen.
+ClinicSlotHub is currently best described as a live MVP / soft-launch-ready SaaS asset. It is suitable for a buyer who wants a working SaaS base rather than starting from zero.
+
+**What is working right now:**
+
+- Live production website at clinicslothub.com
+- Appointment request form
+- Contact form
+- Admin panel for bookings, contact messages and lead overview
+- Email notifications for admin and user flows
+- Booking confirmation and decline emails
+- Test data separated from real leads
+- Multilingual setup with 10 locales
+- SEO foundation with sitemap, robots.txt, canonical URLs and hreflang
+- 8 SEO blog articles
+- Legal pages present as draft templates
+- Automated test suite passing
+- Documentation included
+
+**What is included:**
+
+- Full source code in GitHub repository
+- Repository access included
+- Live domain clinicslothub.com, transfer by agreement
+- Full admin interface
+- Email system with tested transactional flows
+- Appointment request workflow
+- Contact form workflow
+- Lead tracking and test-data separation
+- Supabase database schema and migrations
+- Technical documentation in docs/
+- Go-live, lead operations and safety audit documentation
+- Stripe integration prepared but not activated
+- Twilio integration prepared but not activated
+- SEO pages and blog content
+- Multilingual structure with 10 locales
 
 ---
 
-### Preisstrategie (Diskussionsbasis)
+### Tech stack
 
-Kein garantierter Verkaufspreis. Orientierung an:
+Next.js 14, TypeScript, Supabase, PostgreSQL, Supabase Auth, Row-Level Security, Resend, Vercel, Tailwind CSS, shadcn/ui, next-intl, Stripe SDK, Twilio SDK.
 
-- **Entwicklungsaufwand** – mehrere Monate professionelle Next.js/Supabase-Entwicklung
-- **Vergleichswerte** – ähnliche Live-MVPs auf SideProjectors / MicroAcquire ohne Umsatz: typisch €500–€5.000
-- **Wertkomponenten**: Domain clinicslothub.com, 10 Locales, E-Mail-System, Admin, SEO, 8 Blog-Artikel, Docs
+**Short tech stack:**
 
-> **Hinweis:** Kein Umsatz, keine zahlenden Kunden. Preis spiegelt Entwicklungsarbeit und technische Fertigstellung wider, nicht Umsatzmultiple.
+Next.js 14 · TypeScript · Supabase · Resend · Vercel · Tailwind CSS · next-intl · Stripe prepared · Twilio prepared
 
 ---
 
-### Sicherheits- und Ehrlichkeits-Hinweise für Käufer
+### Current honest status
 
-1. **Keine echten Patientendaten** vorhanden – alle bisherigen Einträge sind Testdaten (`is_test=true`)
-2. **Keine automatische Kaltakquise** – das Produkt ist inbound-only
-3. **Rechtliche Texte** sind SaaS-Muster – vor Produktiveinsatz anwaltlich prüfen lassen
-4. **Stripe** funktioniert sobald STRIPE_SECRET_KEY und Price IDs gesetzt sind – keine weitere Entwicklung nötig
-5. **E-Mail-Absender** sollte auf verifizierte Domain umgestellt werden (`no-reply@clinicslothub.com`)
-6. **White-Label-Ready** – nur `BRAND_NAME` in `lib/brand.ts` ändern, alle Seiten und Mails folgen
+ClinicSlotHub is live and reachable at https://clinicslothub.com.
+
+There are currently no paying customers and the project has 0 € MRR. This is an asset/code-based SaaS MVP sale, not a revenue-multiple sale.
+
+No real patient data is stored. The current database contains only test data, and test data is separated from real leads using an is_test flag.
+
+The email system is active and tested. Contact form emails, booking request notifications, booking confirmation emails and booking decline emails have been live-tested.
+
+Stripe checkout infrastructure is prepared, but Stripe is not activated with live keys yet. A buyer would need to set Stripe live keys, price IDs and webhooks before accepting payments.
+
+Twilio is integrated as optional infrastructure, but SMS/WhatsApp messaging is not activated.
+
+Legal pages are present as qualified SaaS drafts/templates, including Impressum, Datenschutz, AGB and AVV. Legal review is recommended before onboarding paying customers.
+
+SEO basics are prepared, including sitemap, robots.txt, canonical URLs and hreflang setup.
+
+The automated test suite is currently passing with 347 tests.
 
 ---
 
-*Dieses Listing ist ein Entwurf. Vor der Veröffentlichung bitte alle Angaben nochmals prüfen.*
+### Monetization potential
+
+ClinicSlotHub is designed for SaaS subscription pricing. A possible pricing model could be:
+
+- Starter: around €29/month
+- Professional: around €79/month
+- Practice Plus: around €149/month
+
+These are suggested positioning ideas only, not proven revenue. Stripe checkout infrastructure is prepared, but real Stripe live keys, price IDs and webhooks still need to be configured and tested before paid billing.
+
+**Alternative monetization options:**
+
+- White-label license for healthcare agencies
+- Integration partner offer for practice software providers
+- Niche SaaS for appointment-heavy clinics
+- Localized healthcare booking product for selected markets
+
+---
+
+### Ideal buyer
+
+This product may be interesting for:
+
+1. Indie hackers who want a live SaaS foundation instead of building from scratch.
+2. Healthcare agencies that want a white-label appointment request product for clinic clients.
+3. SaaS buyers looking for a live, documented, multilingual product asset.
+4. Developers who want to continue with SEO, paid billing and customer acquisition.
+5. Practice software providers looking for an appointment request module.
+
+---
+
+### What still needs to be done
+
+Before onboarding paying customers, the following work is recommended:
+
+- Configure Stripe live keys, price IDs and webhooks.
+- Verify a custom Resend sender domain, such as no-reply@clinicslothub.com.
+- Have legal pages reviewed by a qualified lawyer before paid production use.
+- Decide final pricing and onboarding workflow.
+- Replace or expand demo/test content where needed.
+- Continue organic SEO and outreach.
+- Optional: activate Twilio SMS/WhatsApp only if legally and operationally required.
+- Optional: move repository to private access depending on buyer preference.
+
+---
+
+### Why this is valuable
+
+ClinicSlotHub is not just an idea. It is already live, deployed and structured like a real SaaS product. The main value is in the prepared foundation:
+
+- Live domain and production deployment
+- Working public website
+- Admin workflow
+- Lead tracking
+- Transactional email system
+- SEO foundation
+- Multilingual architecture
+- Supabase database structure
+- Stripe and Twilio integration prepared
+- Documentation and go-live audit files
+- Test-data separation and honest launch status
+
+A buyer can continue from an already built base instead of spending weeks or months setting up the first version.
+
+---
+
+### Seller note / honesty note
+
+This is an honest MVP asset sale. There are currently no paying customers and no MRR. No revenue, customer numbers or testimonials are being claimed. The product is live and technically prepared for a soft launch, but it still requires sales, legal review and payment setup before full commercial operation.
+
+The sale is best suited for someone who can continue customer acquisition, legal finalization and payment activation.
+
+---
+
+*Final version – ready to use as draft on SideProjectors. Do not publish without final review.*

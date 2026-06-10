@@ -3,15 +3,19 @@ import { escapeHtml } from "@/lib/email";
 import {
   BRAND_NAME,
   BRAND_TEAM_NAME,
+  CANONICAL_URL,
   CONTACT_EMAIL,
-  PUBLIC_APP_URL,
 } from "@/lib/brand";
+
+// E-Mail-Templates verwenden CANONICAL_URL (hardcoded "https://clinicslothub.com"),
+// nicht PUBLIC_APP_URL – damit NEXT_PUBLIC_APP_URL-Env-Werte (z.B. alte Vercel-Preview-URLs)
+// nie in Kunden-Mails erscheinen.
 
 // Gemeinsames, schlichtes HTML-Layout für alle E-Mails.
 // Absender ist immer "ClinicSlotHub Team" – kein persönlicher Name.
 function layout(innerHtml: string): string {
   const safeContact = escapeHtml(CONTACT_EMAIL);
-  const safeUrl = escapeHtml(PUBLIC_APP_URL);
+  const safeUrl = escapeHtml(CANONICAL_URL);
   const safeTeam = escapeHtml(BRAND_TEAM_NAME);
   const safeBrand = escapeHtml(BRAND_NAME);
   return `<!doctype html><html lang="de"><body style="margin:0;background:#f1f5f9;padding:24px;font-family:Arial,Helvetica,sans-serif;color:#0f172a;">
@@ -104,7 +108,7 @@ export function trialWelcomeEmail(
   dashboardUrl?: string,
 ): string {
   const safeName = escapeHtml(praxisName);
-  const safeUrl = escapeHtml(dashboardUrl ?? `${PUBLIC_APP_URL}/dashboard`);
+  const safeUrl = escapeHtml(dashboardUrl ?? `${CANONICAL_URL}/dashboard`);
   return layout(`
     <p style="font-size:15px;line-height:1.6;">
       Willkommen bei <strong>${escapeHtml(BRAND_NAME)}</strong>, ${safeName}!

@@ -13,15 +13,23 @@ import { assertNoSecretsInResponse } from "../lib/security-agent";
 
 // ─── Blog-Daten Tests ─────────────────────────────────────────────────────────
 
-test("Blog: genau 3 statische Artikel vorhanden", () => {
-  assert.equal(STATIC_BLOG_POSTS.length, 3);
+test("Blog: genau 8 statische Artikel vorhanden", () => {
+  // 3 Original-Artikel + 5 neue SEO-Artikel (Phase 5)
+  assert.equal(STATIC_BLOG_POSTS.length, 8);
 });
 
-test("Blog: alle 3 erwarteten Slugs vorhanden", () => {
+test("Blog: alle 8 erwarteten Slugs vorhanden", () => {
   const slugs = STATIC_BLOG_POSTS.map((p) => p.slug);
+  // Original-Artikel (3)
   assert.ok(slugs.includes("warteliste-arztpraxis-terminluecken"));
   assert.ok(slugs.includes("terminausfaelle-reduzieren-benachrichtigungen"));
   assert.ok(slugs.includes("digitale-warteliste-datenschutz-einwilligung"));
+  // Phase-5-Artikel (5)
+  assert.ok(slugs.includes("terminluecken-reduzieren-arztpraxis-ansaetze"));
+  assert.ok(slugs.includes("wartelisten-digital-organisieren-prozesse"));
+  assert.ok(slugs.includes("online-terminanfragen-vorbereiten-produktivstart"));
+  assert.ok(slugs.includes("appointment-requests-clinic-management-clarity"));
+  assert.ok(slugs.includes("waitlist-management-small-healthcare-providers"));
 });
 
 test("Blog: getStaticPost findet bekannten Artikel", () => {
@@ -155,8 +163,8 @@ test("Marketing-Agent: SEO-Kanal erkennt structuredDataReady=true nach Schritt 1
   assert.ok(score >= 0 && score <= 100);
 });
 
-test("Marketing-Agent: Blog-Kanal mit 3 statischen Artikeln liefert score > 55", () => {
-  // Wenn static articles vorhanden (count = 3), sollte score höher als 55 sein
+test("Marketing-Agent: Blog-Kanal mit 8 statischen Artikeln liefert score > 55", () => {
+  // Wenn static articles vorhanden (count = 8), sollte score höher als 55 sein
   const blogScore = 78; // Erwarteter Score wenn Artikel vorhanden
   assert.ok(blogScore > 55);
 });

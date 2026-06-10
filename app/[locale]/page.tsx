@@ -8,6 +8,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import { headers } from "next/headers";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { SlotFillLogo } from "@/components/ui/SlotFillLogo";
 import { locales, type Locale } from "@/i18n/routing";
@@ -94,6 +95,11 @@ export default async function LocaleLandingPage({
 }: {
   params: Promise<{ locale: string }>;
 }) {
+  // headers() marks this route as dynamic → Router Cache TTL = 0.
+  // Without it, Next.js can serve a stale pre-rendered RSC payload to
+  // users who navigate via <Link>, even when force-dynamic is set.
+  void headers();
+
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "landing" });
   const tNav = await getTranslations({ locale, namespace: "nav" });

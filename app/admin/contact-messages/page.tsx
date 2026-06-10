@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Mail, Trash2 } from "lucide-react";
+import { Mail, Trash2, Send } from "lucide-react";
 import toast from "react-hot-toast";
 
 type ContactMessage = {
@@ -18,6 +18,7 @@ type ContactMessage = {
 export default function AdminContactMessagesPage() {
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [loading, setLoading] = useState(true);
+  const [testEmailSending, setTestEmailSending] = useState(false);
 
   async function load() {
     setLoading(true);
@@ -52,18 +53,46 @@ export default function AdminContactMessagesPage() {
     }
   }
 
+  async function sendTestEmail() {
+    setTestEmailSending(true);
+    try {
+      const res = await fetch("/api/admin/test-email", { method: "POST" });
+      const data = await res.json();
+      if (data.ok) {
+        toast.success(`Test-E-Mail gesendet an ${data.to}`);
+      } else {
+        toast.error(`E-Mail fehlgeschlagen: ${data.error ?? "Unbekannter Fehler"}`);
+      }
+    } catch {
+      toast.error("Netzwerkfehler beim Test-E-Mail-Versand.");
+    } finally {
+      setTestEmailSending(false);
+    }
+  }
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <Mail className="h-6 w-6 text-slate-500" />
-        <div>
-          <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">
-            Kontakt-Nachrichten
-          </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
-            Eingehende Anfragen über das Kontaktformular
-          </p>
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <Mail className="h-6 w-6 text-slate-500" />
+          <div>
+            <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+              Kontakt-Nachrichten
+            </h1>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              Eingehende Anfragen über das Kontaktformular
+            </p>
+          </div>
         </div>
+        <button
+          onClick={sendTestEmail}
+          disabled={testEmailSending}
+          className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:opacity-60 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+          title="Test-E-Mail an Admin senden"
+        >
+          <Send className="h-4 w-4" />
+          {testEmailSending ? "Wird gesendet…" : "Test admin email"}
+        </button>
       </div>
 
       {loading ? (

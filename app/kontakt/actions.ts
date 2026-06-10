@@ -21,15 +21,15 @@ const schema = z.object({
 // Ablauf (immer in dieser Reihenfolge):
 //   1. Validierung
 //   2. DB-Insert in contact_messages (immer, unabhängig vom E-Mail-Status)
-//   3. Admin-Benachrichtigung an ADMIN_NOTIFICATION_EMAIL (fire-and-forget)
-//   4. Eingangsbestätigung an den Absender (fire-and-forget, optional)
+//   3. Admin-Benachrichtigung – awaited in try/catch (kein fire-and-forget)
+//   4. Eingangsbestätigung an den Absender – awaited in try/catch
 //
 // Regeln:
 // - DB-Insert immer. Anfrage geht nie verloren.
-// - E-Mail-Fehler crashen das Formular nicht.
+// - E-Mail-Fehler crashen das Formular nicht – nur in DB gespeichert.
 // - Kein persönlicher Name als Absender.
 // - Keine Kaltakquise. Keine privaten Adressen.
-// - Keine sensiblen Daten in Logs.
+// - Keine sensiblen Daten in Logs. Kein API-Key in Logs.
 export async function submitContact(
   formData: FormData,
 ): Promise<{ code: "CONTACT_SENT" | "CONTACT_STORED" | "CONTACT_ERROR" }> {
@@ -57,32 +57,42 @@ export async function submitContact(
     return { code: "CONTACT_ERROR" };
   }
 
-  // ── 2. Admin-Benachrichtigung (fire-and-forget) ───────────────────────────
-  sendContactAdminNotification({
-    name,
-    email,
-    message,
-    locale,
-    createdAt: saved.created_at ?? undefined,
-  }).catch((err) => {
-    console.warn("[submitContact] Admin-Notification fehlgeschlagen:", err instanceof Error ? err.message : "unknown");
-  });
+  // ── 2. Admin-Benachrichtigung (awaited – kein fire-and-forget) ────────────
+  // Fehler werden geloggt, brechen aber den Erfolg nicht ab.
+  try {
+    await sendContactAdminNotification({
+      name,
+      email,
+      message,
+      locale,
+      createdAt: saved.created_at ?? undefined,
+    });
+  } catch (err) {
+    console.warn(
+      "[submitContact] Admin-Notification Fehler:",
+      err instanceof Error ? err.message : "unknown",
+    );
+  }
 
-  // ── 3. Eingangsbestätigung an den Absender (fire-and-forget) ─────────────
-  // Nur wenn RESEND_API_KEY gesetzt ist. Fehler dürfen das Formular nicht kaputt machen.
-  void sendEmail(
-    email,
-    "Wir haben Ihre Anfrage erhalten – ClinicSlotHub",
-    contactConfirmationEmail(name),
-  ).then((result) => {
-    if (!result.success) {
+  // ── 3. Eingangsbestätigung an den Absender (awaited) ─────────────────────
+  // Nur wenn RESEND_API_KEY gesetzt. Fehler dürfen den Erfolg nicht kaputt machen.
+  try {
+    const confirmResult = await sendEmail(
+      email,
+      "Wir haben Ihre Anfrage erhalten – ClinicSlotHub",
+      contactConfirmationEmail(name),
+    );
+    if (!confirmResult.success) {
       console.warn(
-        `[submitContact] Eingangsbestätigung nicht gesendet: ${result.code}`,
+        `[submitContact] Eingangsbestätigung nicht gesendet: ${confirmResult.code}`,
       );
     }
-  }).catch((err) => {
-    console.warn("[submitContact] Bestätigungs-E-Mail Fehler:", err instanceof Error ? err.message : "unknown");
-  });
+  } catch (err) {
+    console.warn(
+      "[submitContact] Bestätigungs-E-Mail Fehler:",
+      err instanceof Error ? err.message : "unknown",
+    );
+  }
 
   // CONTACT_SENT = Anfrage gespeichert (unabhängig vom E-Mail-Status)
   return { code: "CONTACT_SENT" };

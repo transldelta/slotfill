@@ -156,22 +156,24 @@ export async function submitBookingRequest(
     // Buchung bleibt gespeichert – kein Fehler an den Patienten
   }
 
-  // ── Admin-Benachrichtigung (fire-and-forget) ───────────────────────────
-  // Fehler dürfen die Bestätigung an den Patienten nicht verhindern.
-  sendBookingAdminNotification({
-    id: saved.id,
-    patient_name,
-    patient_email,
-    preferred_time,
-    note: note ?? null,
-    requested_date: cleanRequestedDate,
-    requested_time: cleanRequestedTime,
-  }).catch((err) => {
+  // ── Admin-Benachrichtigung (awaited – kein fire-and-forget) ──────────────
+  // Fehler werden geloggt, brechen aber die Erfolgsantwort nicht ab.
+  try {
+    await sendBookingAdminNotification({
+      id: saved.id,
+      patient_name,
+      patient_email,
+      preferred_time,
+      note: note ?? null,
+      requested_date: cleanRequestedDate,
+      requested_time: cleanRequestedTime,
+    });
+  } catch (err) {
     console.warn(
-      "[booking] Admin-Notification fehlgeschlagen:",
+      "[booking] Admin-Notification Fehler:",
       err instanceof Error ? err.message : "unknown",
     );
-  });
+  }
 
   return {
     code: "BOOKING_SAVED",

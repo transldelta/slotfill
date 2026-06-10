@@ -22,6 +22,19 @@ function getAdminEmail(): string {
   );
 }
 
+/**
+ * Loggt E-Mail-Konfiguration ohne Secrets.
+ * Nur key presence (true/false), nie den Key-Wert selbst.
+ */
+function logEmailConfig(context: string): void {
+  const hasApiKey = !!process.env.RESEND_API_KEY;
+  const fromEmail = process.env.RESEND_FROM_EMAIL ?? "onboarding@resend.dev (default)";
+  const adminEmail = getAdminEmail();
+  console.log(
+    `[${context}] config: RESEND_API_KEY=${hasApiKey} | from="${fromEmail}" | to="${adminEmail}"`,
+  );
+}
+
 // Minimal-Layout für Admin-E-Mails – klar, sachlich, kein Marketing
 function adminLayout(innerHtml: string): string {
   const safeBrand = escapeHtml(BRAND_NAME);
@@ -68,6 +81,7 @@ export interface ContactNotificationData {
 export async function sendContactAdminNotification(
   data: ContactNotificationData,
 ): Promise<void> {
+  logEmailConfig("sendContactAdminNotification");
   const adminEmail = getAdminEmail();
   const time = data.createdAt
     ? new Date(data.createdAt).toLocaleString("en-GB", { timeZone: "Europe/Berlin" })
@@ -105,10 +119,11 @@ export async function sendContactAdminNotification(
     html,
   );
 
-  if (!result.success) {
-    // Nur serverseitig loggen – kein Absenderdata im Log
+  if (result.success) {
+    console.log("[sendContactAdminNotification] E-Mail gesendet: success");
+  } else {
     console.warn(
-      `[admin-notifications] Contact notification not sent: ${result.code}`,
+      `[sendContactAdminNotification] E-Mail NICHT gesendet: ${result.code}`,
     );
   }
 }
@@ -134,6 +149,7 @@ export interface BookingNotificationData {
 export async function sendBookingAdminNotification(
   data: BookingNotificationData,
 ): Promise<void> {
+  logEmailConfig("sendBookingAdminNotification");
   const adminEmail = getAdminEmail();
   const time = data.createdAt
     ? new Date(data.createdAt).toLocaleString("en-GB", { timeZone: "Europe/Berlin" })
@@ -178,9 +194,11 @@ export async function sendBookingAdminNotification(
     html,
   );
 
-  if (!result.success) {
+  if (result.success) {
+    console.log("[sendBookingAdminNotification] E-Mail gesendet: success");
+  } else {
     console.warn(
-      `[admin-notifications] Booking notification not sent: ${result.code}`,
+      `[sendBookingAdminNotification] E-Mail NICHT gesendet: ${result.code}`,
     );
   }
 }

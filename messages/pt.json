@@ -359,7 +359,15 @@
     "trialInfo": "Teste grátis por 14 dias – depois é necessário um plano pago.",
     "trialNoCreditCard": "Sem cartão de crédito para o teste.",
     "trialNoSms": "No teste não são enviados SMS ou WhatsApp reais sem configuração deliberada do provedor.",
-    "providerCostNote": "SMS e WhatsApp são processados por provedores externos (ex. Twilio). Esses custos de provedor não estão automaticamente incluídos no preço do ClinicSlotHub."
+    "providerCostNote": "SMS e WhatsApp são processados por provedores externos (ex. Twilio). Esses custos de provedor não estão automaticamente incluídos no preço do ClinicSlotHub.",
+    "ctaClinicPro": "Experimentar Clinic Pro",
+    "ctaEnterprise": "Contactar-nos",
+    "enterpriseName": "Enterprise",
+    "enterprisePriceLabel": "Preço sob consulta",
+    "popularBadge": "Recomendado",
+    "valueProposition": "Uma única consulta preenchida pode justificar o custo mensal.",
+    "stripeNotLive": "O Stripe está integrado mas ainda não está ativo. As reservas são atualmente tratadas através da nossa página de contacto.",
+    "priceNote": "Os preços podem variar consoante o país ou mercado."
   },
   "subscription": {
     "title": "Your Subscription",

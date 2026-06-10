@@ -359,7 +359,15 @@
     "trialInfo": "14 Tage kostenlos testen – danach ist ein bezahlter Plan erforderlich.",
     "trialNoCreditCard": "Keine Kreditkarte für den Test erforderlich.",
     "trialNoSms": "Im Trial werden keine echten SMS oder WhatsApp ohne bewusste Anbieter-Konfiguration versendet.",
-    "providerCostNote": "SMS und WhatsApp werden über externe Anbieter (z. B. Twilio) abgewickelt. Diese Anbieterkosten sind nicht automatisch im ClinicSlotHub-Preis enthalten."
+    "providerCostNote": "SMS und WhatsApp werden über externe Anbieter (z. B. Twilio) abgewickelt. Diese Anbieterkosten sind nicht automatisch im ClinicSlotHub-Preis enthalten.",
+    "ctaClinicPro": "Clinic Pro testen",
+    "ctaEnterprise": "Anfragen",
+    "enterpriseName": "Enterprise",
+    "enterprisePriceLabel": "Preis auf Anfrage",
+    "popularBadge": "Empfohlen",
+    "valueProposition": "Schon ein einziger gefüllter Termin kann den Monatsbetrag rechtfertigen.",
+    "stripeNotLive": "Stripe ist integriert, wird aber noch nicht aktiv genutzt. Buchungsanfragen werden derzeit über unsere Kontaktseite bearbeitet.",
+    "priceNote": "Preise können je nach Land oder Markt angepasst werden."
   },
   "subscription": {
     "title": "Ihr Abo",

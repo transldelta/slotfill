@@ -359,7 +359,15 @@
     "trialInfo": "جرّب مجاناً لمدة 14 يوماً – بعد ذلك يلزم خطة مدفوعة.",
     "trialNoCreditCard": "لا تحتاج إلى بطاقة ائتمان للتجربة.",
     "trialNoSms": "في التجربة لا يتم إرسال رسائل SMS أو واتساب حقيقية دون تهيئة متعمدة من المزود.",
-    "providerCostNote": "تتم معالجة الرسائل القصيرة وواتساب عبر مزودين خارجيين (مثل Twilio). تكاليف المزود هذه ليست مشمولة تلقائياً في سعر ClinicSlotHub."
+    "providerCostNote": "تتم معالجة الرسائل القصيرة وواتساب عبر مزودين خارجيين (مثل Twilio). تكاليف المزود هذه ليست مشمولة تلقائياً في سعر ClinicSlotHub.",
+    "ctaClinicPro": "جرّب Clinic Pro",
+    "ctaEnterprise": "اتصل بنا",
+    "enterpriseName": "Enterprise",
+    "enterprisePriceLabel": "السعر عند الطلب",
+    "popularBadge": "موصى به",
+    "valueProposition": "حتى موعد واحد مملوء يمكن أن يبرر التكلفة الشهرية.",
+    "stripeNotLive": "Stripe مدمج لكنه غير نشط بعد. تتم معالجة الحجوزات حالياً عبر صفحة الاتصال.",
+    "priceNote": "قد تختلف الأسعار حسب البلد أو السوق."
   },
   "subscription": {
     "title": "اشتراكك",

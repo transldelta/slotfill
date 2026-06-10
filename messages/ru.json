@@ -359,7 +359,15 @@
     "trialInfo": "Бесплатно 14 дней – после этого требуется платный план.",
     "trialNoCreditCard": "Кредитная карта для пробного периода не нужна.",
     "trialNoSms": "В пробном периоде без осознанной настройки провайдера реальные SMS или WhatsApp не отправляются.",
-    "providerCostNote": "SMS и WhatsApp обрабатываются через внешних провайдеров (напр. Twilio). Эти расходы провайдера автоматически не включены в цену ClinicSlotHub."
+    "providerCostNote": "SMS и WhatsApp обрабатываются через внешних провайдеров (напр. Twilio). Эти расходы провайдера автоматически не включены в цену ClinicSlotHub.",
+    "ctaClinicPro": "Попробовать Clinic Pro",
+    "ctaEnterprise": "Связаться с нами",
+    "enterpriseName": "Enterprise",
+    "enterprisePriceLabel": "Цена по запросу",
+    "popularBadge": "Рекомендуется",
+    "valueProposition": "Даже одна заполненная запись может оправдать ежемесячную стоимость.",
+    "stripeNotLive": "Stripe интегрирован, но ещё не активен. Бронирования пока обрабатываются через страницу контактов.",
+    "priceNote": "Цены могут варьироваться в зависимости от страны или рынка."
   },
   "subscription": {
     "title": "Your Subscription",

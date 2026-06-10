@@ -359,7 +359,15 @@
     "trialInfo": "Try free for 14 days – a paid plan is required after that.",
     "trialNoCreditCard": "No credit card required for the trial.",
     "trialNoSms": "No real SMS or WhatsApp are sent in the trial without deliberate provider configuration.",
-    "providerCostNote": "SMS and WhatsApp are processed via external providers (e.g. Twilio). These provider costs are not automatically included in the ClinicSlotHub price."
+    "providerCostNote": "SMS and WhatsApp are processed via external providers (e.g. Twilio). These provider costs are not automatically included in the ClinicSlotHub price.",
+    "ctaClinicPro": "Try Clinic Pro",
+    "ctaEnterprise": "Contact Us",
+    "enterpriseName": "Enterprise",
+    "enterprisePriceLabel": "Price on Request",
+    "popularBadge": "Recommended",
+    "valueProposition": "Even a single filled appointment can justify the monthly fee.",
+    "stripeNotLive": "Stripe is integrated but not yet live. Bookings are currently handled via our contact page.",
+    "priceNote": "Prices may vary by country or market."
   },
   "subscription": {
     "title": "Your Subscription",

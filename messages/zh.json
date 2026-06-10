@@ -359,7 +359,15 @@
     "trialInfo": "免费试用 14 天——之后需要付费方案。",
     "trialNoCreditCard": "试用期间无需信用卡。",
     "trialNoSms": "未主动配置服务提供商的情况下，试用期间不会发送真实短信或 WhatsApp。",
-    "providerCostNote": "短信和 WhatsApp 通过第三方服务商（如 Twilio）处理。这些服务商费用不自动包含在 ClinicSlotHub 价格中。"
+    "providerCostNote": "短信和 WhatsApp 通过第三方服务商（如 Twilio）处理。这些服务商费用不自动包含在 ClinicSlotHub 价格中。",
+    "ctaClinicPro": "试用 Clinic Pro",
+    "ctaEnterprise": "联系我们",
+    "enterpriseName": "企业版",
+    "enterprisePriceLabel": "价格面议",
+    "popularBadge": "推荐",
+    "valueProposition": "仅一次填满的预约即可证明月费的价值。",
+    "stripeNotLive": "Stripe 已集成但尚未启用。预约目前通过联系页面处理。",
+    "priceNote": "价格可能因国家或市场而有所不同。"
   },
   "subscription": {
     "title": "您的订阅",

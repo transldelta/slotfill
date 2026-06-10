@@ -359,7 +359,15 @@
     "trialInfo": "Essai gratuit 14 jours – un plan payant est requis ensuite.",
     "trialNoCreditCard": "Aucune carte de crédit requise pour l'essai.",
     "trialNoSms": "Aucun SMS ou WhatsApp réel n'est envoyé lors de l'essai sans configuration délibérée du prestataire.",
-    "providerCostNote": "Les SMS et WhatsApp transitent par des prestataires externes (ex. Twilio). Ces coûts de prestataire ne sont pas automatiquement inclus dans le prix ClinicSlotHub."
+    "providerCostNote": "Les SMS et WhatsApp transitent par des prestataires externes (ex. Twilio). Ces coûts de prestataire ne sont pas automatiquement inclus dans le prix ClinicSlotHub.",
+    "ctaClinicPro": "Essayer Clinic Pro",
+    "ctaEnterprise": "Nous contacter",
+    "enterpriseName": "Enterprise",
+    "enterprisePriceLabel": "Prix sur demande",
+    "popularBadge": "Recommandé",
+    "valueProposition": "Un seul rendez-vous comblé peut justifier le coût mensuel.",
+    "stripeNotLive": "Stripe est intégré mais pas encore actif. Les réservations sont actuellement gérées via notre page de contact.",
+    "priceNote": "Les prix peuvent varier selon le pays ou le marché."
   },
   "subscription": {
     "title": "Your Subscription",

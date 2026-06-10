@@ -135,6 +135,341 @@ Digital waitlists can significantly relieve practices — if used in a data prot
 
 Contact us: For questions about ClinicSlotHub and how to use it in your practice, we look forward to hearing from you.`,
   },
+
+  // ─── Phase 5: New EN Articles (June 2026) ─────────────────────────────────
+
+  {
+    slug: "terminluecken-reduzieren-arztpraxis-ansaetze",
+    title:
+      "Reducing appointment gaps in medical practices: practical approaches without over-automation",
+    excerpt:
+      "Short-notice appointment gaps occur every day. This article outlines practical approaches for practice teams who want to reduce empty slots — without complex automation.",
+    published_at: "2026-06-03T08:00:00.000Z",
+    content: `Appointment gaps are part of daily life in medical practices. A patient cancels at short notice, another doesn't show up — and an hour goes unused. For many practices, this is not the exception but a daily reality.
+
+This article outlines how practices can take action with manageable means — without complex software or fully automated processes.
+
+Why appointment gaps occur so frequently
+
+The reasons for appointment no-shows are varied: illness, forgotten appointments, scheduling conflicts, or spontaneous improvement of the patient's condition. Practice management research estimates that between 5 and 15 percent of all appointments are not attended.
+
+The problem does not always lie with the patient. Practices often lack simple mechanisms to quickly fill freed-up slots.
+
+Approach 1: Maintain an active waitlist
+
+One of the most effective measures is also the simplest: a well-maintained waitlist. Not an endless, unstructured list, but a structured overview of patients who could step in at short notice — sorted by urgency and availability.
+
+Practical implementation:
+- Ask at initial contact whether the patient is also available at short notice
+- Note the desired appointment type (initial consultation, follow-up, specific examination)
+- Record preferred contact method (phone, email)
+
+Approach 2: Send reminders
+
+Many appointment cancellations can be avoided through timely reminders. A brief message by email or SMS two to three days before the appointment can noticeably reduce the no-show rate.
+
+Important: patients must have agreed in advance to this type of contact. The reminder should also be designed with data protection in mind — preferably without sensitive health data in the message text.
+
+Approach 3: Simplify the process when a cancellation occurs
+
+What happens when a patient cancels? If the practice then starts going through the waitlist and manually calling patients, valuable time is lost.
+
+Better: define a clear process before a cancellation occurs.
+- Who is responsible?
+- Which patients are contacted first?
+- How long to wait for a response before contacting the next person?
+
+This process can work manually — for small practices, that's often sufficient. With higher volume, digital tools can help structure the flow.
+
+Approach 4: Use digital support selectively
+
+Tools like ClinicSlotHub help to quickly identify suitable patients from the waitlist when a slot opens up. The practice then decides who to contact — the actual decision-making process remains human.
+
+This is not a substitute for a well-thought-out process, but a complement that saves time and reduces errors.
+
+What you can do without
+
+Not every gap needs to be filled with complex technology. A practice with two to three appointment cancellations per week does not need a sophisticated automation system. A well-maintained waitlist and a clear internal process are often enough.
+
+Over-automation can actually be counterproductive: if patients feel pressured by automated messages or communication feels impersonal, it harms the practice-patient relationship.
+
+Conclusion
+
+Appointment gaps can never be completely avoided — but they can be significantly reduced through clear processes and an active waitlist. The first step usually is not a tool, but a decision: who is responsible when an appointment falls through?
+
+If you would like to try ClinicSlotHub as a support tool, you can test the platform free for 14 days. We look forward to hearing from you with any questions.`,
+  },
+
+  {
+    slug: "wartelisten-digital-organisieren-prozesse",
+    title:
+      "Organising waitlists digitally: why clear processes ease the burden on practice teams",
+    excerpt:
+      "Digital waitlists help practices manage requests in a structured way. This article shows which processes make the difference — and what matters when getting started.",
+    published_at: "2026-06-06T08:00:00.000Z",
+    content: `Managing a waitlist on paper or in an Excel spreadsheet works — up to a point. But as soon as several staff members need to access it simultaneously, entries become outdated, or the list grows too long to search quickly, the system becomes a bottleneck rather than a help.
+
+Digital waitlist tools promise to solve this. But technology alone does not fix the problem. What actually makes the difference are the clear processes behind it.
+
+What "digital" means in this context
+
+Digital waitlist management can take many different forms:
+
+- A simple shared spreadsheet (Google Sheets, Excel Online)
+- Practice software with integrated waitlist functionality
+- Specialised tools for appointment management and waitlists
+
+What they all have in common: they allow multiple people to access current data simultaneously, edit entries and contact patients — without information loss through parallel working.
+
+Process 1: Clear intake criteria
+
+What is recorded when a patient is added to the waitlist? The more precise the data, the more useful the list when a specific slot opens up.
+
+Recommended fields:
+- Name and contact details
+- Desired appointment type
+- Urgency (can wait vs. should be seen soon)
+- Short-notice availability (yes/no)
+- Consent to digital contact
+
+Without this information, even a digital list has limited usefulness.
+
+Process 2: Regular maintenance
+
+Digital lists become outdated just as quickly as paper-based ones — if no one maintains them. Recommended:
+
+- Monthly check: who has since received an appointment? Who is no longer reachable?
+- Status markers: "was contacted", "appointment received", "no longer interested"
+- Respect deletion periods: data no longer needed should be removed in a data protection-conscious manner
+
+Process 3: Define responsibilities
+
+Who can add entries? Who contacts patients when a slot opens up? If this is unclear, nothing can function in a structured way — or worse, several people call the same patient.
+
+A simple protocol — even on paper — that answers these questions avoids duplication and misunderstandings.
+
+Process 4: Define response times
+
+How long to wait before contacting the next patient? With same-day gaps, time is short. It helps to establish in advance:
+
+- First contact attempt: immediately by email or message
+- No response after 30 minutes: contact next patient
+- Telephone confirmation or digital response as final step
+
+How digital tools support this process
+
+ClinicSlotHub is one example of a tool that maps exactly this process digitally: when a slot opens up, suitable candidates from the waitlist are prepared, and the practice can act in a targeted and timely way. The decision of who to contact remains with the practice team.
+
+Important for all practices using digital waitlist tools: a data processing agreement (DPA) with the provider is required when processing personal patient data. ClinicSlotHub provides a DPA.
+
+Conclusion
+
+Digital waitlists relieve practice teams most effectively when complemented by clear processes. The technology accelerates and structures — but the quality of the work depends on the people and workflows behind it.
+
+Do you have questions about introducing a digital waitlist in your practice? Get in touch — we are happy to help.`,
+  },
+
+  {
+    slug: "online-terminanfragen-vorbereiten-produktivstart",
+    title:
+      "Preparing online appointment requests safely: what practices should consider before going live",
+    excerpt:
+      "Before a practice activates online appointment requests, data protection, required fields and internal workflows should be clearly defined. This article provides a structured overview.",
+    published_at: "2026-06-09T08:00:00.000Z",
+    content: `Online appointment requests offer patients convenience and practices efficiency. But before such a system goes live, it is worth clarifying some fundamental questions — both technical and organisational.
+
+This article is aimed at practices looking to introduce or optimise online appointment requests, and provides a structured overview of relevant aspects.
+
+Step 1: What data is collected?
+
+The form should only ask for data that is actually needed. Typical required fields:
+
+- Patient's name
+- Email address (for response)
+- Desired time period or preferred appointment
+- Brief description of the concern (optional, depending on practice type)
+
+Sensitive medical details should be avoided in a public online form as much as possible. More detailed information is better suited to the initial consultation.
+
+Step 2: Privacy policy and consent
+
+Every online form collecting patient data requires:
+
+1. A reference to the practice's privacy policy
+2. A consent declaration that the patient must actively confirm (no pre-ticked boxes)
+3. Clear information about how the data will be used and how long it will be stored
+
+Note: This article does not constitute legal advice. For a binding review, we recommend consulting a lawyer specialising in data protection.
+
+Step 3: What happens after submission?
+
+Patients need to know what happens after submitting a request. Clear communication builds trust:
+
+- Automatic confirmation email: "Your request has been received. We will get back to you within X hours."
+- Practice's response time: Who processes incoming requests? How quickly?
+- If no appointment is available: what happens then?
+
+If the practice wants to send automatic confirmations, a configured email provider must be in place.
+
+Step 4: Automatic vs. manual confirmation
+
+Some systems offer automatic appointment confirmation — this presupposes that the practice:
+
+- Has defined clear availability rules
+- Is aware that this feature must be actively enabled
+- Has a process to detect conflicts (e.g. if multiple patients choose the same slot)
+
+The default should always be manual review. Automatic confirmation is an extension, not a default setting.
+
+ClinicSlotHub is built on this principle: automatic confirmation is disabled by default and must be deliberately activated by the practice. This way, the team retains control.
+
+Step 5: Testing before going live
+
+Before the form is made public, an internal test is recommended:
+
+- Fill in and submit the form yourself
+- Check that the confirmation email arrives
+- Check that the request appears in the admin area
+- Check that the internal workflow is clear (who handles what?)
+
+Only when all steps are working smoothly should the form be released to patients.
+
+Conclusion
+
+Online appointment requests are a useful tool — when set up carefully. The go-live should not be rushed. Taking the time to clarify data protection, required fields and internal processes in advance saves rework later.
+
+If you want to set up ClinicSlotHub for your practice, we are available for questions. Please feel free to contact us via the contact form.`,
+  },
+
+  {
+    slug: "appointment-requests-clinic-management-clarity",
+    title:
+      "How clinics can manage appointment requests more clearly",
+    excerpt:
+      "Unstructured appointment requests cost time. This article shows how clinics and practices can build clear processes for incoming requests — without complex systems.",
+    published_at: "2026-06-11T08:00:00.000Z",
+    content: `Incoming appointment requests arrive through many channels: phone, email, in person at reception — and increasingly via online forms. For many clinics and practices, managing these requests is a significant burden.
+
+This article describes how a structured approach can help reduce this burden while improving patient communication.
+
+The problem with unstructured requests
+
+When requests come in through different channels and are not systematically recorded, typical problems arise:
+
+- Duplicate requests processed multiple times
+- Requests that fall through the cracks and are answered too late
+- No overview of how many requests are open
+- Difficulty prioritising (urgent requests vs. routine appointments)
+
+A structured process does not solve these problems overnight — but it creates the foundation to reduce them.
+
+Step 1: Create a single point of entry
+
+The first step is to funnel all requests to one place. This can be a simple shared spreadsheet, a ticketing system, or a specialised tool for appointment requests.
+
+What matters is not the technology, but the principle: all requests land in one place that all responsible staff can see.
+
+Step 2: Define standard information
+
+What does the practice need to process a request? The earlier this information is captured, the fewer follow-up questions are needed.
+
+Typical minimum information:
+- Name and contact details of the patient
+- Type of appointment desired
+- Desired time period or urgency
+- Consent to contact by email
+
+When patients provide this information on first contact, it saves the team considerable time.
+
+Step 3: Clear responsibilities
+
+Who processes incoming requests? Who has the authority to confirm appointments? If this is unclear, nothing can function in a structured way.
+
+A simple protocol — even on paper — that answers these questions is a good starting point.
+
+Step 4: Set and communicate response times
+
+Patients appreciate clear statements: "We respond within 24 hours." This presupposes that the practice can actually meet this timeframe — and is organised internally accordingly.
+
+Unrealistic promises ("immediately") lead to disappointment. Realistically communicated response times ("within one business day") build trust.
+
+How ClinicSlotHub supports this process
+
+ClinicSlotHub offers a structured online form for appointment requests: patients enter their name, email, desired time period and concern — and actively consent to the privacy notice. The practice sees all requests in the admin area and can confirm manually or (if desired and activated) automatically.
+
+The system is not a substitute for a clearly defined internal process model — but it gives the practice a structured digital tool to work with.
+
+Conclusion
+
+Clear appointment request management starts not with software, but with a structured process. Knowing who is responsible, what information is needed and how quickly a response will come makes it possible to then selectively look for digital support.
+
+Interested in trying ClinicSlotHub for your clinic? Get in touch.`,
+  },
+
+  {
+    slug: "waitlist-management-small-healthcare-providers",
+    title:
+      "Waitlist management for small healthcare providers: practical first steps",
+    excerpt:
+      "Small practices and healthcare providers benefit from structured waitlists too. This article shows how to get started without a big investment.",
+    published_at: "2026-06-12T08:00:00.000Z",
+    content: `In large clinics, waitlist systems are often a built-in part of practice software. For small practices — general medicine, physiotherapy, psychotherapy — it often looks different: waitlists are frequently still managed on paper or in a simple spreadsheet.
+
+That does not necessarily have to be a problem. But there are some simple steps with which even small practices can noticeably improve their waitlist management.
+
+Why a structured waitlist helps
+
+When an appointment falls through at short notice, every minute counts. Practices with a structured waitlist can react more quickly — and the gap is more likely to be filled by end of day rather than left open.
+
+A structured waitlist also helps prioritise requests fairly: patients who have been waiting a long time or have urgent treatment needs should be given preference when the next opportunity arises.
+
+Step 1: Decide what to record
+
+For small practices, a simple spreadsheet with the following columns is often sufficient:
+
+- Name
+- Phone / email
+- Desired appointment type
+- Urgency (high / normal)
+- Date added to the waitlist
+- Status (waiting / was contacted / appointment received)
+
+In many cases, that is all that is needed.
+
+Step 2: Keep the list current
+
+A waitlist that is not maintained helps no one. Recommended:
+
+- After each appointment given: update the status in the list
+- Once a month: go through the list and remove outdated entries
+- For long waiting times: actively check whether the patient is still interested
+
+Step 3: Define a process for appointment gaps
+
+When an appointment falls through: who checks the waitlist first? Who calls? What happens if no one is reachable?
+
+Writing this process down once — and making it known to all staff — saves time in the moment and prevents the gap from simply being left open.
+
+When a digital tool makes sense
+
+Beyond a certain volume — for example when several staff members need to edit the list simultaneously, or when there are regularly many cancellations — a spreadsheet can reach its limits.
+
+Here, specialised tools like ClinicSlotHub offer advantages: requests come in via a structured online form, are stored centrally, and can be viewed simultaneously by multiple people.
+
+For very small practices with few appointments per week, this may not be necessary yet. But it is good to know that these options exist as practices grow.
+
+What to consider when starting with digital tools
+
+- Clarify whether a data processing agreement (DPA) is required (generally yes when processing patient data through external software)
+- Ensure patients have consented to digital contact
+- Start the go-live with an internal test
+
+Conclusion
+
+A structured waitlist is not a luxury for large clinics — it is a simple, effective tool for every practice. Getting started does not have to be complicated: a clear spreadsheet and a defined process can achieve a great deal.
+
+If you are curious how ClinicSlotHub can support your practice, try the platform for free — or contact us with your questions.`,
+  },
 ];
 
 // ─── Spanisch ─────────────────────────────────────────────────────────────────

@@ -1326,19 +1326,376 @@ ClinicSlotHub разработан с учётом требований защи
   },
 ];
 
+// ─── Global Soft Launch Article (alle Locales) ────────────────────────────────
+// Slug: clinicslothub-global-soft-launch
+// Hinzugefügt: Juni 2026
+
+const LAUNCH_SLUG = "clinicslothub-global-soft-launch";
+const LAUNCH_DATE = "2026-06-10T08:00:00.000Z";
+
+// DE-Version lebt in blog-data.ts (wird dort am Ende der STATIC_BLOG_POSTS ergänzt)
+
+const EN_LAUNCH: StaticPost = {
+  slug: LAUNCH_SLUG,
+  title: "ClinicSlotHub is now publicly available — global soft launch",
+  excerpt: "ClinicSlotHub, the multilingual appointment and waitlist management platform for clinics and healthcare providers, has entered public soft launch. Free to try, no credit card required.",
+  published_at: LAUNCH_DATE,
+  content: `ClinicSlotHub is now publicly available.
+
+After months of development and internal testing, the platform is entering its global public soft launch phase. The goal: to give practices, clinics, therapy centers, and healthcare providers worldwide access to a digital tool that makes appointment request and waitlist management easier — without expensive integrations, without complex setup, and without a paper-based process.
+
+What is ClinicSlotHub?
+
+ClinicSlotHub is a browser-based SaaS platform that helps medical and therapeutic practices manage their waiting lists digitally. When a cancellation occurs, the practice can quickly identify which patients on the waitlist are suitable and notify them — by email, and optionally via SMS or WhatsApp if a messaging provider is configured.
+
+The platform is available in 10 languages: German, English, French, Spanish, Portuguese, Chinese, Hindi, Arabic, Bengali, and Russian.
+
+What is working right now
+
+The following features are live and functional:
+– Digital waitlist management with structured patient profiles
+– Shareable booking links for patients (no patient account required)
+– Appointment management and confirmation flow
+– Email notifications for patients and the practice (via Resend)
+– Optional SMS/WhatsApp notifications (via Twilio, requires separate configuration)
+– Multilingual patient-facing interface in 10 languages
+– Privacy-conscious design: no tracking, no mass messaging without consent
+– Full legal pages: Imprint, Privacy Policy, T&Cs, DPA
+
+Current status: soft launch
+
+There are no paying customers yet. The platform is in public soft launch. Practices that register now are early adopters — and their feedback will directly shape the next development priorities.
+
+Stripe (payment processing) is technically integrated but not yet activated. During the soft launch period, the trial is free. No credit card is required.
+
+For whom is this platform?
+
+ClinicSlotHub is designed for:
+– General practitioners and specialist practices
+– Physiotherapy, speech therapy, occupational therapy, psychotherapy practices
+– Dental practices
+– Small clinics and healthcare providers
+
+The platform is designed for international use. Local legal and data protection requirements — including data processing agreements where required — should be reviewed before productive use with real patient data.
+
+Try it free
+
+Registration is fully self-service. No invitation, no approval process:
+– Visit clinicslothub.com
+– Click "Register"
+– Confirm your email
+– Start your 14-day trial
+
+Questions or feedback: transl.delta@gmail.com`,
+};
+
+const FR_LAUNCH: StaticPost = {
+  slug: LAUNCH_SLUG,
+  title: "ClinicSlotHub est maintenant disponible — lancement public mondial",
+  excerpt: "ClinicSlotHub, la plateforme multilingue de gestion des rendez-vous et des listes d'attente pour cliniques et professionnels de santé, entre en phase de lancement public. Essai gratuit, sans carte bancaire.",
+  published_at: LAUNCH_DATE,
+  content: `ClinicSlotHub est maintenant disponible publiquement.
+
+Après plusieurs mois de développement et de tests internes, la plateforme entre dans sa phase de lancement public mondial. L'objectif : donner aux cabinets médicaux, cliniques, centres de soins et professionnels de santé du monde entier accès à un outil numérique qui simplifie la gestion des demandes de rendez-vous et des listes d'attente.
+
+Qu'est-ce que ClinicSlotHub ?
+
+ClinicSlotHub est une plateforme SaaS basée sur navigateur qui aide les cabinets médicaux et thérapeutiques à gérer leurs listes d'attente de façon numérique. Lorsqu'une annulation survient, le cabinet peut rapidement identifier les patients appropriés sur la liste d'attente et les notifier — par e-mail, et optionnellement par SMS ou WhatsApp si un fournisseur de messagerie est configuré.
+
+La plateforme est disponible en 10 langues : allemand, anglais, français, espagnol, portugais, chinois, hindi, arabe, bengali et russe.
+
+Ce qui fonctionne dès maintenant
+
+Les fonctionnalités suivantes sont opérationnelles :
+– Gestion numérique des listes d'attente avec profils patients structurés
+– Liens de réservation partageables pour les patients
+– Gestion des rendez-vous et flux de confirmation
+– Notifications par e-mail pour les patients et le cabinet
+– Notifications SMS/WhatsApp optionnelles via Twilio
+– Interface patient multilingue en 10 langues
+– Conception respectueuse de la vie privée : pas de tracking, pas d'envoi en masse sans consentement
+
+Statut actuel : soft launch
+
+Il n'y a pas encore de clients payants. La plateforme est en lancement public. Les cabinets qui s'inscrivent maintenant sont des early adopters dont les retours orienteront les prochaines priorités de développement.
+
+Stripe est intégré techniquement mais pas encore activé. L'essai est gratuit, sans carte bancaire.
+
+Pour qui ?
+
+ClinicSlotHub est conçu pour : médecins généralistes et spécialistes, kinésithérapeutes, orthophonistes, psychothérapeutes, dentistes, petites cliniques et professionnels de santé.
+
+La plateforme est conçue pour un usage international. Les exigences légales et de protection des données locales doivent être vérifiées avant toute utilisation productive avec de vraies données patients.
+
+Essayez gratuitement
+
+Inscription en libre-service sur clinicslothub.com — 14 jours gratuits, sans carte bancaire.
+
+Questions ou retours : transl.delta@gmail.com`,
+};
+
+const ES_LAUNCH: StaticPost = {
+  slug: LAUNCH_SLUG,
+  title: "ClinicSlotHub ya está disponible — lanzamiento público global",
+  excerpt: "ClinicSlotHub, la plataforma multilingüe de gestión de citas y listas de espera para clínicas y proveedores de salud, entra en fase de lanzamiento público. Prueba gratuita, sin tarjeta de crédito.",
+  published_at: LAUNCH_DATE,
+  content: `ClinicSlotHub ya está disponible públicamente.
+
+Tras meses de desarrollo y pruebas internas, la plataforma entra en su fase de lanzamiento público global. El objetivo: dar a consultorios médicos, clínicas, centros de salud y proveedores de atención sanitaria de todo el mundo acceso a una herramienta digital que simplifica la gestión de solicitudes de citas y listas de espera.
+
+¿Qué es ClinicSlotHub?
+
+ClinicSlotHub es una plataforma SaaS basada en navegador que ayuda a consultorios médicos y terapéuticos a gestionar sus listas de espera de forma digital. Cuando ocurre una cancelación, el consultorio puede identificar rápidamente qué pacientes de la lista son adecuados y notificarlos por correo electrónico, y opcionalmente por SMS o WhatsApp.
+
+La plataforma está disponible en 10 idiomas: alemán, inglés, francés, español, portugués, chino, hindi, árabe, bengalí y ruso.
+
+Estado actual: soft launch
+
+Todavía no hay clientes de pago. La plataforma está en lanzamiento público. Los consultorios que se registren ahora son early adopters cuyos comentarios orientarán las próximas prioridades de desarrollo.
+
+Stripe está integrado técnicamente pero aún no activado. El período de prueba es gratuito, sin tarjeta de crédito.
+
+Para quién
+
+ClinicSlotHub está diseñado para: médicos generales y especialistas, fisioterapeutas, logopedas, psicoterapeutas, dentistas, clínicas pequeñas y proveedores de atención sanitaria.
+
+La plataforma está diseñada para uso internacional. Los requisitos legales y de protección de datos locales deben revisarse antes del uso productivo con datos reales de pacientes.
+
+Pruébalo gratis
+
+Registro de autoservicio en clinicslothub.com — 14 días gratis, sin tarjeta de crédito.
+
+Preguntas o comentarios: transl.delta@gmail.com`,
+};
+
+const PT_LAUNCH: StaticPost = {
+  slug: LAUNCH_SLUG,
+  title: "ClinicSlotHub já está disponível — lançamento público global",
+  excerpt: "ClinicSlotHub, a plataforma multilíngue de gestão de consultas e listas de espera para clínicas e prestadores de saúde, entra em fase de lançamento público. Teste gratuito, sem cartão de crédito.",
+  published_at: LAUNCH_DATE,
+  content: `ClinicSlotHub já está disponível publicamente.
+
+Após meses de desenvolvimento e testes internos, a plataforma entra na sua fase de lançamento público global. O objetivo: dar a consultórios médicos, clínicas, centros de saúde e prestadores de serviços de saúde de todo o mundo acesso a uma ferramenta digital que simplifica a gestão de pedidos de consultas e listas de espera.
+
+O que é o ClinicSlotHub?
+
+ClinicSlotHub é uma plataforma SaaS baseada em navegador que ajuda consultórios médicos e terapêuticos a gerir as suas listas de espera de forma digital. Quando ocorre um cancelamento, o consultório pode rapidamente identificar quais pacientes da lista são adequados e notificá-los por e-mail, e opcionalmente por SMS ou WhatsApp.
+
+A plataforma está disponível em 10 idiomas: alemão, inglês, francês, espanhol, português, chinês, hindi, árabe, bengali e russo.
+
+Estado atual: soft launch
+
+Ainda não há clientes pagantes. A plataforma está em lançamento público. Os consultórios que se registarem agora são early adopters cujo feedback orientará as próximas prioridades de desenvolvimento.
+
+Stripe está integrado tecnicamente mas ainda não ativado. O período de teste é gratuito, sem cartão de crédito.
+
+Para quem
+
+ClinicSlotHub é destinado a: clínicos gerais e especialistas, fisioterapeutas, terapeutas da fala, psicoterapeutas, dentistas, pequenas clínicas e prestadores de cuidados de saúde.
+
+A plataforma foi concebida para uso internacional. Os requisitos legais e de proteção de dados locais devem ser verificados antes da utilização produtiva com dados reais de pacientes.
+
+Experimente gratuitamente
+
+Registo self-service em clinicslothub.com — 14 dias gratuitos, sem cartão de crédito.
+
+Perguntas ou feedback: transl.delta@gmail.com`,
+};
+
+const ZH_LAUNCH: StaticPost = {
+  slug: LAUNCH_SLUG,
+  title: "ClinicSlotHub 正式全球公开软启动",
+  excerpt: "ClinicSlotHub——面向诊所和医疗机构的多语言预约与候补名单管理平台，现已进入全球公开软启动阶段。免费试用，无需信用卡。",
+  published_at: LAUNCH_DATE,
+  content: `ClinicSlotHub 现已公开上线。
+
+经过数月的开发与内部测试，平台正式进入全球公开软启动阶段。目标：为全球各地的诊所、医疗机构、治疗中心和医疗服务提供者提供一款数字化工具，简化预约请求和候补名单管理流程。
+
+什么是 ClinicSlotHub？
+
+ClinicSlotHub 是一款基于浏览器的 SaaS 平台，帮助医疗和治疗机构以数字化方式管理候补名单。当出现取消预约时，机构可快速识别候补名单中合适的患者并通过电子邮件进行通知，如配置了消息服务提供商，也可通过短信或 WhatsApp 发送通知。
+
+平台支持 10 种语言：德语、英语、法语、西班牙语、葡萄牙语、中文、印地语、阿拉伯语、孟加拉语和俄语。
+
+当前功能
+
+以下功能已上线并正常运行：
+– 带结构化患者档案的数字候补名单管理
+– 可分享的患者预约链接（患者无需注册账户）
+– 预约管理和确认流程
+– 电子邮件通知（面向患者和机构）
+– 可选短信/WhatsApp 通知（需配置 Twilio）
+– 10 种语言的患者界面
+– 隐私保护设计：无追踪，无未经同意的群发
+
+当前状态：软启动
+
+目前尚无付费用户。平台处于公开软启动阶段。现在注册的机构将成为早期用户，其反馈将直接影响后续开发优先级。
+
+Stripe 已在技术层面集成，但尚未激活。试用期间完全免费，无需信用卡。
+
+适用对象
+
+ClinicSlotHub 面向：全科医生及专科诊所、物理治疗机构、言语治疗机构、心理治疗机构、牙科诊所、小型医院及医疗服务提供者。
+
+平台专为国际使用设计。在正式投入使用并处理真实患者数据之前，请审查当地适用的法律和数据保护要求。
+
+免费试用
+
+在 clinicslothub.com 自助注册——14 天免费试用，无需信用卡。
+
+问题或反馈：transl.delta@gmail.com`,
+};
+
+const HI_LAUNCH: StaticPost = {
+  slug: LAUNCH_SLUG,
+  title: "ClinicSlotHub अब सार्वजनिक रूप से उपलब्ध है — वैश्विक सॉफ्ट लॉन्च",
+  excerpt: "ClinicSlotHub — क्लिनिक और स्वास्थ्य सेवा प्रदाताओं के लिए बहुभाषी अपॉइंटमेंट और वेटलिस्ट प्रबंधन प्लेटफ़ॉर्म — अब सार्वजनिक सॉफ्ट लॉन्च में प्रवेश कर चुका है। मुफ्त ट्रायल, कोई क्रेडिट कार्ड नहीं।",
+  published_at: LAUNCH_DATE,
+  content: `ClinicSlotHub अब सार्वजनिक रूप से उपलब्ध है।
+
+कई महीनों के विकास और आंतरिक परीक्षण के बाद, प्लेटफ़ॉर्म वैश्विक सार्वजनिक सॉफ्ट लॉन्च चरण में प्रवेश कर रहा है। लक्ष्य: दुनिया भर के क्लिनिक, मेडिकल प्रैक्टिस, थेरेपी सेंटर और स्वास्थ्य सेवा प्रदाताओं को एक डिजिटल उपकरण तक पहुंच देना जो अपॉइंटमेंट अनुरोध और वेटलिस्ट प्रबंधन को सरल बनाता है।
+
+ClinicSlotHub क्या है?
+
+ClinicSlotHub एक ब्राउज़र-आधारित SaaS प्लेटफ़ॉर्म है जो मेडिकल और थेरेप्यूटिक प्रैक्टिस को अपनी वेटलिस्ट डिजिटल रूप से प्रबंधित करने में मदद करता है। जब कोई अपॉइंटमेंट रद्द होता है, तो प्रैक्टिस जल्दी से वेटलिस्ट में उपयुक्त मरीजों की पहचान करके उन्हें ई-मेल द्वारा सूचित कर सकती है, और वैकल्पिक रूप से SMS या WhatsApp द्वारा भी।
+
+प्लेटफ़ॉर्म 10 भाषाओं में उपलब्ध है: जर्मन, अंग्रेजी, फ्रेंच, स्पेनिश, पुर्तगाली, चीनी, हिंदी, अरबी, बंगाली और रूसी।
+
+वर्तमान स्थिति: सॉफ्ट लॉन्च
+
+अभी तक कोई भुगतान करने वाले ग्राहक नहीं हैं। प्लेटफ़ॉर्म सार्वजनिक सॉफ्ट लॉन्च में है। जो प्रैक्टिस अभी पंजीकरण करती हैं, वे अर्ली एडॉप्टर हैं — उनकी प्रतिक्रिया अगली विकास प्राथमिकताओं को सीधे आकार देगी।
+
+Stripe तकनीकी रूप से एकीकृत है लेकिन अभी तक सक्रिय नहीं है। ट्रायल अवधि मुफ्त है, बिना क्रेडिट कार्ड के।
+
+किसके लिए?
+
+ClinicSlotHub के लिए डिज़ाइन किया गया है: सामान्य चिकित्सक और विशेषज्ञ प्रैक्टिस, फिजियोथेरेपी, स्पीच थेरेपी, मनोचिकित्सा प्रैक्टिस, दंत चिकित्सा क्लिनिक, छोटे अस्पताल और स्वास्थ्य सेवा प्रदाता।
+
+प्लेटफ़ॉर्म अंतर्राष्ट्रीय उपयोग के लिए डिज़ाइन किया गया है। वास्तविक रोगी डेटा के साथ उत्पादक उपयोग से पहले स्थानीय कानूनी और डेटा सुरक्षा आवश्यकताओं की समीक्षा करें।
+
+मुफ्त आज़माएँ
+
+clinicslothub.com पर सेल्फ-सर्विस पंजीकरण — 14 दिन मुफ्त, बिना क्रेडिट कार्ड के।
+
+प्रश्न या फ़ीडबैक: transl.delta@gmail.com`,
+};
+
+const AR_LAUNCH: StaticPost = {
+  slug: LAUNCH_SLUG,
+  title: "ClinicSlotHub متاح الآن — الإطلاق العالمي التجريبي العام",
+  excerpt: "ClinicSlotHub، منصة إدارة المواعيد وقوائم الانتظار متعددة اللغات للعيادات ومقدمي الرعاية الصحية، تدخل مرحلة الإطلاق العام. تجربة مجانية بدون بطاقة ائتمان.",
+  published_at: LAUNCH_DATE,
+  content: `ClinicSlotHub متاح الآن للعموم.
+
+بعد أشهر من التطوير والاختبار الداخلي، تدخل المنصة مرحلة الإطلاق العام العالمي. الهدف: منح العيادات والمراكز الطبية ومراكز العلاج ومقدمي الرعاية الصحية حول العالم أداة رقمية تُبسّط إدارة طلبات المواعيد وقوائم الانتظار.
+
+ما هو ClinicSlotHub؟
+
+ClinicSlotHub منصة SaaS مستندة إلى المتصفح تساعد العيادات والمراكز العلاجية على إدارة قوائم الانتظار رقمياً. عند حدوث إلغاء، يمكن للعيادة تحديد المرضى المناسبين في قائمة الانتظار وإخطارهم عبر البريد الإلكتروني، وبشكل اختياري عبر الرسائل القصيرة أو WhatsApp.
+
+المنصة متاحة بـ 10 لغات: الألمانية، الإنجليزية، الفرنسية، الإسبانية، البرتغالية، الصينية، الهندية، العربية، البنغالية والروسية.
+
+الحالة الراهنة: إطلاق تجريبي
+
+لا يوجد عملاء يدفعون حتى الآن. المنصة في مرحلة الإطلاق العام. العيادات التي تسجّل الآن هي مُعتمِدون مبكرون — وملاحظاتهم ستُشكّل أولويات التطوير القادمة مباشرة.
+
+Stripe مُدمج تقنياً لكنه لم يُفعَّل بعد. الفترة التجريبية مجانية تماماً بدون بطاقة ائتمان.
+
+لمن؟
+
+ClinicSlotHub مُصمَّم لـ: الأطباء العامين والمتخصصين، العلاج الطبيعي، علاج النطق، العلاج النفسي، طب الأسنان، العيادات الصغيرة ومقدمي الرعاية الصحية.
+
+المنصة مُصمَّمة للاستخدام الدولي. يجب مراجعة المتطلبات القانونية ومتطلبات حماية البيانات المحلية قبل الاستخدام الإنتاجي مع بيانات المرضى الحقيقية.
+
+جرّبها مجاناً
+
+تسجيل ذاتي في clinicslothub.com — 14 يوماً مجاناً بدون بطاقة ائتمان.
+
+أسئلة أو ملاحظات: transl.delta@gmail.com`,
+};
+
+const BN_LAUNCH: StaticPost = {
+  slug: LAUNCH_SLUG,
+  title: "ClinicSlotHub এখন পাবলিকলি উপলব্ধ — বৈশ্বিক সফট লঞ্চ",
+  excerpt: "ClinicSlotHub — ক্লিনিক এবং স্বাস্থ্যসেবা প্রদানকারীদের জন্য বহুভাষিক অ্যাপয়েন্টমেন্ট ও ওয়েটলিস্ট ব্যবস্থাপনা প্ল্যাটফর্ম — এখন পাবলিক সফট লঞ্চে প্রবেশ করেছে। বিনামূল্যে ট্রায়াল, কোনো ক্রেডিট কার্ড নেই।",
+  published_at: LAUNCH_DATE,
+  content: `ClinicSlotHub এখন পাবলিকলি উপলব্ধ।
+
+কয়েক মাসের উন্নয়ন ও অভ্যন্তরীণ পরীক্ষার পর, প্ল্যাটফর্মটি বৈশ্বিক পাবলিক সফট লঞ্চ পর্যায়ে প্রবেশ করছে। লক্ষ্য: বিশ্বব্যাপী ক্লিনিক, মেডিকেল প্র্যাকটিস, থেরাপি সেন্টার এবং স্বাস্থ্যসেবা প্রদানকারীদের একটি ডিজিটাল টুল ব্যবহারের সুযোগ দেওয়া যা অ্যাপয়েন্টমেন্ট অনুরোধ ও ওয়েটলিস্ট ব্যবস্থাপনা সহজ করে।
+
+ClinicSlotHub কী?
+
+ClinicSlotHub একটি ব্রাউজার-ভিত্তিক SaaS প্ল্যাটফর্ম যা মেডিকেল এবং থেরাপিউটিক প্র্যাকটিসকে ডিজিটালভাবে ওয়েটলিস্ট পরিচালনায় সহায়তা করে। বাতিলের ঘটনায়, প্র্যাকটিস দ্রুত ওয়েটলিস্টে উপযুক্ত রোগীদের চিহ্নিত করে ইমেইলে জানাতে পারে, এবং ঐচ্ছিকভাবে SMS বা WhatsApp এর মাধ্যমেও।
+
+প্ল্যাটফর্মটি ১০টি ভাষায় পাওয়া যায়: জার্মান, ইংরেজি, ফরাসি, স্প্যানিশ, পর্তুগিজ, চীনা, হিন্দি, আরবি, বাংলা এবং রাশিয়ান।
+
+বর্তমান অবস্থা: সফট লঞ্চ
+
+এখনও কোনো পেইং কাস্টমার নেই। প্ল্যাটফর্মটি পাবলিক সফট লঞ্চে আছে। এখন যারা নিবন্ধন করবেন তারা আর্লি অ্যাডপ্টার — তাদের ফিডব্যাক সরাসরি পরবর্তী উন্নয়নের অগ্রাধিকার নির্ধারণ করবে।
+
+Stripe প্রযুক্তিগতভাবে একীভূত কিন্তু এখনও সক্রিয় নয়। ট্রায়াল পিরিয়ড বিনামূল্যে, কোনো ক্রেডিট কার্ড ছাড়াই।
+
+কার জন্য?
+
+ClinicSlotHub ডিজাইন করা হয়েছে: সাধারণ চিকিৎসক ও বিশেষজ্ঞ প্র্যাকটিস, ফিজিওথেরাপি, স্পিচ থেরাপি, মনোচিকিৎসা প্র্যাকটিস, ডেন্টাল ক্লিনিক, ছোট হাসপাতাল এবং স্বাস্থ্যসেবা প্রদানকারীদের জন্য।
+
+প্ল্যাটফর্মটি আন্তর্জাতিক ব্যবহারের জন্য ডিজাইন করা হয়েছে। প্রকৃত রোগীর ডেটা দিয়ে উৎপাদনশীল ব্যবহারের আগে স্থানীয় আইনি ও ডেটা সুরক্ষা প্রয়োজনীয়তা পর্যালোচনা করুন।
+
+বিনামূল্যে চেষ্টা করুন
+
+clinicslothub.com-এ সেলফ-সার্ভিস রেজিস্ট্রেশন — ১৪ দিন বিনামূল্যে, কোনো ক্রেডিট কার্ড ছাড়া।
+
+প্রশ্ন বা ফিডব্যাক: transl.delta@gmail.com`,
+};
+
+const RU_LAUNCH: StaticPost = {
+  slug: LAUNCH_SLUG,
+  title: "ClinicSlotHub теперь доступен публично — глобальный мягкий запуск",
+  excerpt: "ClinicSlotHub — многоязычная платформа управления записями и листами ожидания для клиник и поставщиков медицинских услуг — входит в фазу публичного мягкого запуска. Бесплатный пробный период, без кредитной карты.",
+  published_at: LAUNCH_DATE,
+  content: `ClinicSlotHub теперь доступен публично.
+
+После нескольких месяцев разработки и внутреннего тестирования платформа входит в фазу глобального публичного мягкого запуска. Цель: предоставить клиникам, медицинским кабинетам, терапевтическим центрам и поставщикам медицинских услуг по всему миру доступ к цифровому инструменту, упрощающему управление запросами на приём и листами ожидания.
+
+Что такое ClinicSlotHub?
+
+ClinicSlotHub — браузерная SaaS-платформа, которая помогает медицинским и терапевтическим практикам вести листы ожидания в цифровом формате. При отмене записи практика может быстро определить подходящих пациентов из листа ожидания и уведомить их по электронной почте, а при наличии настроенного провайдера — также через SMS или WhatsApp.
+
+Платформа доступна на 10 языках: немецком, английском, французском, испанском, португальском, китайском, хинди, арабском, бенгальском и русском.
+
+Текущий статус: мягкий запуск
+
+Платных клиентов пока нет. Платформа находится в стадии публичного мягкого запуска. Практики, которые регистрируются сейчас, являются ранними пользователями — их отзывы будут непосредственно определять приоритеты дальнейшей разработки.
+
+Stripe технически интегрирован, но ещё не активирован. Пробный период полностью бесплатен, без кредитной карты.
+
+Для кого?
+
+ClinicSlotHub предназначен для: врачей общей практики и специалистов, физиотерапевтических, логопедических, психотерапевтических кабинетов, стоматологических клиник, небольших больниц и поставщиков медицинских услуг.
+
+Платформа разработана для международного использования. Перед продуктивным использованием с реальными данными пациентов необходимо ознакомиться с местными правовыми и требованиями по защите данных.
+
+Попробуйте бесплатно
+
+Самостоятельная регистрация на clinicslothub.com — 14 дней бесплатно, без кредитной карты.
+
+Вопросы или отзывы: transl.delta@gmail.com`,
+};
+
 // ─── Locale → Posts Mapping ───────────────────────────────────────────────────
 
 const LOCALIZED_POSTS: LocalizedPosts = {
-  de: STATIC_BLOG_POSTS,   // Deutsche Originale aus blog-data.ts
-  en: EN_POSTS,
-  es: ES_POSTS,
-  fr: FR_POSTS,
-  pt: PT_POSTS,
-  ar: AR_POSTS,
-  zh: ZH_POSTS,
-  hi: HI_POSTS,
-  bn: BN_POSTS,
-  ru: RU_POSTS,
+  de: STATIC_BLOG_POSTS,   // Deutsche Originale aus blog-data.ts (inkl. Launch-Artikel)
+  en: [...EN_POSTS, EN_LAUNCH],
+  es: [...ES_POSTS, ES_LAUNCH],
+  fr: [...FR_POSTS, FR_LAUNCH],
+  pt: [...PT_POSTS, PT_LAUNCH],
+  ar: [...AR_POSTS, AR_LAUNCH],
+  zh: [...ZH_POSTS, ZH_LAUNCH],
+  hi: [...HI_POSTS, HI_LAUNCH],
+  bn: [...BN_POSTS, BN_LAUNCH],
+  ru: [...RU_POSTS, RU_LAUNCH],
 };
 
 // ─── Hilfsfunktionen ──────────────────────────────────────────────────────────

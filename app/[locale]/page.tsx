@@ -177,6 +177,36 @@ export default async function LocaleLandingPage({
         </div>
       </header>
 
+      {/* Soft-Launch-Banner */}
+      {(() => {
+        const banners: Record<string, string> = {
+          de: "Neu: ClinicSlotHub ist im globalen öffentlichen Soft Launch – jetzt kostenlos testen.",
+          en: "New: ClinicSlotHub is in global public soft launch – try it for free.",
+          fr: "Nouveau : ClinicSlotHub est en lancement public mondial – essayez gratuitement.",
+          es: "Nuevo: ClinicSlotHub está en lanzamiento público global – pruébalo gratis.",
+          pt: "Novo: ClinicSlotHub está em lançamento público global – teste gratuitamente.",
+          zh: "ClinicSlotHub 已进入全球公开软启动阶段 — 可免费试用。",
+          hi: "ClinicSlotHub अब वैश्विक सार्वजनिक सॉफ्ट लॉन्च में है — मुफ्त में आज़माएँ।",
+          ar: "ClinicSlotHub الآن في إطلاق عالمي تجريبي عام — جرّبه مجاناً.",
+          bn: "ClinicSlotHub এখন বৈশ্বিক পাবলিক সফট লঞ্চে — বিনামূল্যে চেষ্টা করুন।",
+          ru: "ClinicSlotHub находится в глобальном публичном soft launch — попробуйте бесплатно.",
+        };
+        const bannerText = banners[locale] ?? banners["en"];
+        return (
+          <div className="w-full border-b border-blue-200 bg-blue-50 dark:border-blue-900/40 dark:bg-blue-900/20">
+            <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2">
+              <p className="text-xs text-blue-700 dark:text-blue-300">{bannerText}</p>
+              <Link
+                href={`/${locale}/launch`}
+                className="shrink-0 rounded-md bg-blue-600 px-3 py-1 text-xs font-medium text-white hover:bg-blue-700 transition"
+              >
+                {locale === "de" ? "Mehr erfahren" : locale === "fr" ? "En savoir plus" : locale === "es" ? "Saber más" : locale === "pt" ? "Saiba mais" : locale === "ar" ? "اعرف أكثر" : "Learn more"}
+              </Link>
+            </div>
+          </div>
+        );
+      })()}
+
       {/* Hero */}
       <section className="mx-auto max-w-3xl px-4 py-20 text-center">
         <div className="mb-4 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium" style={{ borderColor: "var(--color-border)", color: "var(--color-muted)", backgroundColor: "var(--color-surface)" }}>

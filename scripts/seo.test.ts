@@ -13,12 +13,12 @@ import { assertNoSecretsInResponse } from "../lib/security-agent";
 
 // ─── Blog-Daten Tests ─────────────────────────────────────────────────────────
 
-test("Blog: genau 8 statische Artikel vorhanden", () => {
-  // 3 Original-Artikel + 5 neue SEO-Artikel (Phase 5)
-  assert.equal(STATIC_BLOG_POSTS.length, 8);
+test("Blog: genau 9 statische Artikel vorhanden", () => {
+  // 3 Original-Artikel + 5 SEO-Artikel (Phase 5) + 1 Launch-Artikel (Phase 13)
+  assert.equal(STATIC_BLOG_POSTS.length, 9);
 });
 
-test("Blog: alle 8 erwarteten Slugs vorhanden", () => {
+test("Blog: alle 9 erwarteten Slugs vorhanden", () => {
   const slugs = STATIC_BLOG_POSTS.map((p) => p.slug);
   // Original-Artikel (3)
   assert.ok(slugs.includes("warteliste-arztpraxis-terminluecken"));
@@ -30,6 +30,8 @@ test("Blog: alle 8 erwarteten Slugs vorhanden", () => {
   assert.ok(slugs.includes("online-terminanfragen-vorbereiten-produktivstart"));
   assert.ok(slugs.includes("appointment-requests-clinic-management-clarity"));
   assert.ok(slugs.includes("waitlist-management-small-healthcare-providers"));
+  // Phase-13-Artikel (1): Global Soft Launch
+  assert.ok(slugs.includes("clinicslothub-global-soft-launch"));
 });
 
 test("Blog: getStaticPost findet bekannten Artikel", () => {

@@ -131,15 +131,27 @@ const COMPLIANCE_ITEMS = [
 // ─── SEO-Checkliste (statisch, manuell markierbar via localStorage) ───────────
 
 const SEO_ITEMS = [
-  { id: "gsc_domain", label: "Google Search Console: Domain clinicslothub.com bestätigt" },
-  { id: "gsc_sitemap", label: "Google Search Console: Sitemap eingetragen (https://clinicslothub.com/sitemap.xml)" },
-  { id: "bing_webmaster", label: "Bing Webmaster Tools: Domain eingetragen" },
+  { id: "gsc_domain", label: "Google Search Console: Domain clinicslothub.com bestätigt ✓ (erledigt 10.06.2026)" },
+  { id: "gsc_sitemap", label: "Google Search Console: Sitemap eingetragen – ~160 Seiten erkannt ✓ (erledigt 10.06.2026)" },
+  { id: "bing_webmaster", label: "Bing Webmaster Tools: Domain + Sitemap eingereicht ✓ (erledigt 10.06.2026)" },
   { id: "canonical_set", label: "Canonical-Tag auf allen Seiten: clinicslothub.com ✓ (automatisch, bereits aktiv)" },
   { id: "hreflang_set", label: "Hreflang auf allen Locale-Seiten vorhanden ✓ (automatisch, bereits aktiv)" },
   { id: "robots_accessible", label: "robots.txt erreichbar ✓ (prüfbar über QA-Check)" },
   { id: "sitemap_accessible", label: "Sitemap erreichbar ✓ (prüfbar über QA-Check)" },
   { id: "og_tags", label: "OG-Tags (Title, Description, Image) auf Launch-Seiten vorhanden ✓ (bereits aktiv)" },
 ];
+
+// Standardwerte: bekannte erledigte Punkte – werden beim ersten Besuch vorausgefüllt
+const SEO_DEFAULTS: Record<string, boolean> = {
+  gsc_domain: true,       // Google Domain bestätigt 10.06.2026
+  gsc_sitemap: true,      // Google Sitemap eingetragen, ~160 Seiten erkannt
+  bing_webmaster: true,   // Bing Sitemap eingereicht 10.06.2026
+  canonical_set: true,    // automatisch aktiv
+  hreflang_set: true,     // automatisch aktiv
+  robots_accessible: true, // via QA-Check bestätigt
+  sitemap_accessible: true, // via QA-Check bestätigt
+  og_tags: true,          // automatisch aktiv
+};
 
 // ─── Antwort-Vorlage für Leads ────────────────────────────────────────────────
 
@@ -345,6 +357,23 @@ function LaunchStatus({ data }: { data: LaunchOverview }) {
         <span>
           Letzte Buchungsanfrage: <strong>{fmtDate(data.last_real_booking_at)}</strong>
         </span>
+      </div>
+
+      {/* SEO-Status (manuell gepflegt, Stand 10.06.2026) */}
+      <div className="mb-4 rounded-lg border border-teal-200 bg-teal-50 px-3 py-2.5 dark:border-teal-800 dark:bg-teal-950/20">
+        <p className="mb-1.5 text-xs font-semibold text-teal-700 dark:text-teal-400">
+          🔍 SEO &amp; Indexing – Stand 10.06.2026
+        </p>
+        <div className="space-y-1">
+          {[
+            "✅ Google Search Console: Sitemap https://clinicslothub.com/sitemap.xml erfolgreich eingereicht",
+            "✅ Google erkannte URLs: ~160 Seiten indexiert",
+            "✅ Bing Webmaster Tools: Sitemap eingereicht (Verarbeitung läuft / abgeschlossen)",
+            "✅ Domain clinicslothub.com bestätigt – kein weiterer Setup-Schritt notwendig",
+          ].map((item, i) => (
+            <p key={i} className="text-xs text-teal-700 dark:text-teal-400">{item}</p>
+          ))}
+        </div>
       </div>
 
       {/* Link-Tabelle */}
@@ -556,11 +585,17 @@ function DepartmentCards({ departments }: { departments: Department[] }) {
 function SeoChecklist() {
   const [checked, setChecked] = useState<Record<string, boolean>>({});
 
-  // localStorage laden
+  // localStorage laden – beim ersten Besuch bekannte erledigte Punkte vorausfüllen
   useEffect(() => {
     try {
       const saved = localStorage.getItem("ceo_launch_seo_checks");
-      if (saved) setChecked(JSON.parse(saved));
+      if (saved) {
+        setChecked(JSON.parse(saved));
+      } else {
+        // Erster Besuch: alle bekannten erledigten Punkte als erledigt markieren
+        setChecked(SEO_DEFAULTS);
+        localStorage.setItem("ceo_launch_seo_checks", JSON.stringify(SEO_DEFAULTS));
+      }
     } catch {}
   }, []);
 

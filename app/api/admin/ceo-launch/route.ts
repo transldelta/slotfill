@@ -143,13 +143,13 @@ function buildDepartments(
     {
       id: "seo_indexing",
       name: "SEO & Indexing",
-      status: "needs_review",
+      status: "ready",
       next_task:
-        "Google Search Console öffnen → Domain clinicslothub.com bestätigen → Sitemap eintragen",
+        "Google & Bing Sitemap erfolgreich eingereicht (✓ erledigt) – periodisch Indexierungs-Status in Google Search Console prüfen",
       reason:
-        "Ohne Search Console-Eintrag dauert Indexierung länger. Einmaliger manueller Schritt.",
-      priority: "medium",
-      needs_approval: true,
+        "Google hat ~160 Seiten erkannt. Bing Sitemap verarbeitet. Kein weiterer Setup-Schritt notwendig.",
+      priority: "low",
+      needs_approval: false,
     },
     {
       id: "website_launch",
@@ -167,9 +167,9 @@ function buildDepartments(
       name: "Outreach Preparation",
       status: "ready",
       next_task:
-        "Einen vorbereiteten Kurztext kopieren und manuell an 1 passenden persönlichen Kontakt senden",
+        "Vorbereiteten Kurztext prüfen und nur bei passendem persönlichen Kontakt manuell freigeben",
       reason:
-        "Kein Auto-Versand. Jeder Text wird vom Betreiber selbst weitergeleitet.",
+        "Kein Auto-Versand. Kein Pflicht-Versand. Jeder Text wird nur weitergeleitet, wenn der Betreiber es für sinnvoll hält.",
       priority: "medium",
       needs_approval: true,
     },
@@ -333,31 +333,29 @@ function buildDailyTasks(
     section: "website_launch",
   });
 
-  // Aufgabe 2: Leads oder Outreach
+  // Aufgabe 2: Leads prüfen ODER Outreach-Text prüfen (kein Pflicht-Versand)
   if (totalLeads > 0) {
     tasks.push({
       order: 2,
-      task: `${totalLeads} echte Anfrage(n) eingegangen – jetzt prüfen und antworten`,
+      task: `${totalLeads} echte Anfrage(n) eingegangen – jetzt prüfen und Antwortvorlage kopieren`,
       link: "/admin/ceo-launch#lead-handling",
       section: "lead_handling",
     });
   } else {
     tasks.push({
       order: 2,
-      task: "Einen vorbereiteten Kurztext kopieren und manuell an 1 passenden Kontakt senden",
+      task: "Vorbereiteten Outreach-Text prüfen – nur bei passendem persönlichen Kontakt manuell freigeben",
       link: "/admin/ceo-launch#outreach",
       section: "outreach_prep",
     });
   }
 
-  // Aufgabe 3: SEO (wenn noch nicht erledigt) oder Product QA
+  // Aufgabe 3: Immer Product QA-Check (Google/Bing-Setup ist erledigt)
   tasks.push({
     order: 3,
-    task: totalLeads > 0
-      ? "Product QA-Check ausführen (Button auf dieser Seite)"
-      : "Google Search Console: Domain bestätigen + Sitemap eintragen (einmalig, 10 Min.)",
-    link: totalLeads > 0 ? "/admin/ceo-launch#qa" : "https://search.google.com/search-console",
-    section: totalLeads > 0 ? "product_qa" : "seo_indexing",
+    task: "Product QA-Check ausführen: alle Launch-Seiten live prüfen (Button auf dieser Seite)",
+    link: "/admin/ceo-launch#qa",
+    section: "product_qa",
   });
 
   return tasks.slice(0, 3); // Niemals mehr als 3

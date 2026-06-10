@@ -244,6 +244,52 @@ test("CEO Launch: Dokumentation beschreibt Abteilungen", () => {
   }
 });
 
+// ─── Phase 16b: Erledigte Aufgaben, SEO-Defaults, Wording ────────────────────
+
+test("CEO Launch (16b): Daily Tasks enthalten keine erledigte Google-SEO-Pflichtaufgabe mehr", () => {
+  const route = read("app/api/admin/ceo-launch/route.ts");
+  assert.ok(
+    !route.includes("Domain bestätigen + Sitemap eintragen"),
+    "Daily Tasks enthalten noch 'Domain bestätigen + Sitemap eintragen' – diese Aufgabe ist bereits erledigt",
+  );
+  assert.ok(
+    !route.includes("https://search.google.com/search-console"),
+    "Daily Tasks verlinken noch auf Google Search Console als Pflichtaufgabe",
+  );
+});
+
+test("CEO Launch (16b): SEO-Checkliste hat Standardwerte für bekannte erledigte Punkte", () => {
+  const page = read("app/admin/ceo-launch/page.tsx");
+  assert.ok(
+    page.includes("SEO_DEFAULTS"),
+    "SEO_DEFAULTS fehlt in page.tsx – erledigte Punkte werden nicht vorausgefüllt",
+  );
+  assert.ok(
+    page.includes("gsc_domain: true"),
+    "Google Domain ist nicht als erledigt vormarkiert (gsc_domain: true fehlt)",
+  );
+  assert.ok(
+    page.includes("gsc_sitemap: true"),
+    "Google Sitemap ist nicht als erledigt vormarkiert (gsc_sitemap: true fehlt)",
+  );
+  assert.ok(
+    page.includes("bing_webmaster: true"),
+    "Bing Webmaster ist nicht als erledigt vormarkiert",
+  );
+});
+
+test("CEO Launch (16b): Outreach-Wording verwendet 'freigeben' statt Pflicht-'senden'", () => {
+  const route = read("app/api/admin/ceo-launch/route.ts");
+  assert.ok(
+    !route.includes("manuell an 1 passenden Kontakt senden"),
+    "Outreach-Text enthält noch Pflicht-'senden'-Formulierung – ersetzen durch 'freigeben'",
+  );
+  assert.ok(
+    route.includes("manuell freigeben"),
+    "Outreach-Wording verwendet nicht 'manuell freigeben'",
+  );
+});
+
 // ─── Compliance-Text ──────────────────────────────────────────────────────────
 
 test("CEO Launch: Seite enthält Compliance-Hinweis (kein Auto-Versand)", () => {

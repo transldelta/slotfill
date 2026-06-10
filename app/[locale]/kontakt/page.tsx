@@ -107,7 +107,7 @@ export default function LocaleContactPage() {
         <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-200">
           {t("whatHappensTitle")}
         </h2>
-        <ol className="mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-400 list-none">
+        <ol className="mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-400 list-none" style={{ listStyleType: "none" }}>
           <li className="flex items-start gap-2">
             <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">1</span>
             {t("whatHappens1")}

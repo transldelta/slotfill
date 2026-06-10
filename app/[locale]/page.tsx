@@ -83,6 +83,8 @@ function buildSchemaOrg(locale: string) {
   };
 }
 
+export const dynamic = "force-dynamic";
+
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
@@ -380,7 +382,8 @@ export default async function LocaleLandingPage({
               {tNav("feedback")}
             </Link>
           </div>
-          <div className="mt-6 border-t pt-6 text-xs" style={{ borderColor: "var(--color-border)", color: "var(--color-muted)" }}>
+          <div className="mt-6 border-t pt-6 text-xs" style={{ borderColor: "var(--color-border)", color: "var(--color-muted)" }}
+            aria-label="Copyright">
             <p>© {new Date().getFullYear()} {tNav("brand")}. {t("rights")}</p>
           </div>
         </div>

@@ -610,18 +610,23 @@ test("Go-Live: C4 – Kontaktklarheit: messages/de.json enthält whatHappensTitl
 });
 
 test("Go-Live: C4 – Kontaktseite verwendet whatHappensTitle", () => {
-  const { readFileSync } = require("fs");
-  const content: string = readFileSync(
+  const { readFileSync, existsSync } = require("fs");
+  // The whatHappens section may live in page.tsx directly OR in a split-out
+  // client component (LocaleContactPageClient.tsx) next to it. Check both.
+  const pageContent: string = readFileSync(
     resolve(process.cwd(), "app/[locale]/kontakt/page.tsx"),
     "utf8",
   );
+  const clientPath = resolve(process.cwd(), "app/[locale]/kontakt/LocaleContactPageClient.tsx");
+  const clientContent: string = existsSync(clientPath) ? readFileSync(clientPath, "utf8") : "";
+  const combined = pageContent + clientContent;
   assert.ok(
-    content.includes("whatHappensTitle"),
-    'app/[locale]/kontakt/page.tsx: whatHappensTitle fehlt – "Was passiert danach?"-Sektion nicht eingebaut',
+    combined.includes("whatHappensTitle"),
+    'app/[locale]/kontakt/: whatHappensTitle fehlt – "Was passiert danach?"-Sektion nicht eingebaut',
   );
   assert.ok(
-    content.includes("whatHappens1"),
-    'app/[locale]/kontakt/page.tsx: whatHappens1 fehlt',
+    combined.includes("whatHappens1"),
+    'app/[locale]/kontakt/: whatHappens1 fehlt',
   );
 });
 

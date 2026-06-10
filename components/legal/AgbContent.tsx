@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getLegalContent, isRtlLocale, isLegalDraft } from "@/lib/legal-content";
+import { getLegalContent, isRtlLocale } from "@/lib/legal-content";
 
 /**
  * AGB-Inhalt – lokalisiert
@@ -21,7 +21,6 @@ export function AgbContent({
 }) {
   const c = getLegalContent(locale);
   const isRtl = isRtlLocale(locale);
-  const isDraft = isLegalDraft();
   const isDE = locale === "de";
 
   return (
@@ -37,13 +36,6 @@ export function AgbContent({
         {c.agbTitle}
       </h1>
       <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{c.standDate}</p>
-
-      {/* Draft-Hinweis */}
-      {isDraft && (
-        <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-900/50 dark:bg-amber-900/20 dark:text-amber-300">
-          <strong>{isDE ? "Hinweis:" : "Note:"}</strong>{" "}{c.draftNotice.replace(/^(ENTWURF|DRAFT|Hinweis:|Note:)\s*[–-]?\s*/i, "")}
-        </div>
-      )}
 
       {/* Maßgeblichkeits-Banner für Nicht-DE */}
       {!isDE && c.authorityNotice && (
@@ -134,7 +126,6 @@ export function AgbContent({
               </p>
               <p>
                 (4){" "}
-                <span className="text-xs italic text-slate-400 dark:text-slate-500">(Rechtliche Prüfung vor Produktiveinsatz ausstehend.)</span>{" "}
                 Der Anbieter behält sich vor, die Testphase ohne Angabe von Gründen zu beenden
                 oder die Bedingungen anzupassen.
               </p>
@@ -195,7 +186,6 @@ export function AgbContent({
               </p>
               <p>
                 (4){" "}
-                <span className="text-xs italic text-slate-400 dark:text-slate-500">(Rechtliche Prüfung vor Produktiveinsatz ausstehend.)</span>{" "}
                 Weitere Datenschutzdetails sind der{" "}
                 <Link href={`/${locale}/datenschutz`} className="text-blue-600 hover:underline dark:text-blue-400">
                   Datenschutzerklärung
@@ -212,14 +202,12 @@ export function AgbContent({
             <div className="mt-2 space-y-2 leading-relaxed">
               <p>
                 (1){" "}
-                <span className="text-xs italic text-slate-400 dark:text-slate-500">(Rechtliche Prüfung vor Produktiveinsatz ausstehend.)</span>{" "}
                 Der Anbieter haftet unbeschränkt für Schäden aus der Verletzung des Lebens,
                 des Körpers oder der Gesundheit sowie für vorsätzliche oder grob fahrlässige
                 Pflichtverletzungen.
               </p>
               <p>
                 (2){" "}
-                <span className="text-xs italic text-slate-400 dark:text-slate-500">(Rechtliche Prüfung vor Produktiveinsatz ausstehend.)</span>{" "}
                 Für leicht fahrlässige Verletzungen wesentlicher Vertragspflichten
                 haftet der Anbieter begrenzt auf den vorhersehbaren, vertragstypischen Schaden.
               </p>
@@ -241,7 +229,6 @@ export function AgbContent({
               </p>
               <p>
                 (2){" "}
-                <span className="text-xs italic text-slate-400 dark:text-slate-500">(Rechtliche Prüfung vor Produktiveinsatz ausstehend.)</span>{" "}
                 Die Kündigung ist mit einer Frist von 14 Tagen zum Monatsende möglich.
               </p>
               <p>
@@ -269,7 +256,6 @@ export function AgbContent({
               </p>
               <p>
                 (4){" "}
-                <span className="text-xs italic text-slate-400 dark:text-slate-500">(Rechtliche Prüfung vor Produktiveinsatz ausstehend.)</span>{" "}
                 Änderungen dieser AGB werden per E-Mail mitgeteilt und gelten als genehmigt,
                 wenn die Praxis nicht innerhalb von vier Wochen schriftlich widerspricht.
               </p>

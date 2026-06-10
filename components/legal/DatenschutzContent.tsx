@@ -1,13 +1,11 @@
 import Link from "next/link";
-import { getLegalContent, isRtlLocale, isLegalDraft } from "@/lib/legal-content";
+import { getLegalContent, isRtlLocale } from "@/lib/legal-content";
 
 /**
- * Datenschutzerklärung-Inhalt – lokalisiert, datenschutzbewusst
+ * Datenschutzerklärung-Inhalt – lokalisiert
  *
  * DE: Vollständige deutsche Datenschutzerklärung (rechtlich maßgeblich).
  * Non-DE: Lokalisierter Titel + Zusammenfassung + Verweis auf dt. Originalfassung.
- *
- * KEINE Garantie "DSGVO-konform" – stattdessen "datenschutzbewusst vorbereitet".
  */
 export function DatenschutzContent({
   backHref = "/",
@@ -18,7 +16,6 @@ export function DatenschutzContent({
 }) {
   const c = getLegalContent(locale);
   const isRtl = isRtlLocale(locale);
-  const isDraft = isLegalDraft();
   const isDE = locale === "de";
 
   return (
@@ -34,22 +31,6 @@ export function DatenschutzContent({
         {c.datenschutzTitle}
       </h1>
       <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{c.standDate}</p>
-
-      {/* Draft-Hinweis */}
-      {isDraft && (
-        <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-900/50 dark:bg-amber-900/20 dark:text-amber-300">
-          {isDE ? (
-            <><strong>Hinweis:</strong>{" "}
-            Diese Datenschutzerklärung ist als vorbereitetes Muster für den SaaS-Prototyp hinterlegt und datenschutzbewusst gestaltet.
-            Sie ersetzt keine Rechtsberatung. Vor dem produktiven Einsatz mit echten Kunden ist eine Prüfung
-            durch einen Datenschutzbeauftragten oder Rechtsanwalt erforderlich.</>
-          ) : (
-            <><strong>Note:</strong>{" "}
-            This privacy policy is a prepared template for the SaaS prototype. It does not constitute legal advice.
-            A review by a qualified privacy lawyer is required before going live with real customers.</>
-          )}
-        </div>
-      )}
 
       {/* Maßgeblichkeits-Banner für Nicht-DE */}
       {!isDE && c.authorityNotice && (
@@ -82,10 +63,6 @@ export function DatenschutzContent({
                   transl.delta@gmail.com
                 </a>
               </p>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                (Hinweis: E-Mail-Adresse ist vorläufig. Vor Produktivstart wird eine geschäftliche
-                E-Mail-Adresse eingerichtet.)
-              </p>
             </div>
           </section>
 
@@ -102,11 +79,6 @@ export function DatenschutzContent({
                 <li>Persönliche Namen des Betreibers erscheinen nicht in automatischer Kommunikation.</li>
                 <li>Für die Verarbeitung von Patientendaten ist ein AVV (Art. 28 DSGVO) erforderlich.</li>
               </ul>
-              <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
-                &bdquo;Datenschutzbewusst vorbereitet&ldquo; bedeutet: technische und organisatorische
-                Maßnahmen wurden geplant und teilweise umgesetzt – nicht: vollständige DSGVO-Konformität
-                ist garantiert.
-              </p>
             </div>
           </section>
 
@@ -137,6 +109,8 @@ export function DatenschutzContent({
             <ul className="mt-2 ml-4 list-disc space-y-1 leading-relaxed">
               <li><strong>Supabase</strong> (Datenbank, Authentifizierung) – gemäß Supabase-DPA.</li>
               <li><strong>Vercel</strong> (Hosting) – gemäß Vercel-DPA.</li>
+              <li><strong>Resend</strong> (transaktionale E-Mails: Kontaktbestätigungen, Buchungsbestätigungen) – gemäß Resend-DPA.</li>
+              <li><strong>Stripe</strong> (Zahlungsabwicklung) – nur wenn von der Praxis aktiviert; aktuell nicht im Produktivbetrieb.</li>
               <li><strong>Twilio</strong> (optional, SMS/WhatsApp) – nur wenn von der Praxis bewusst konfiguriert. Separate DPA erforderlich.</li>
             </ul>
           </section>
@@ -181,17 +155,7 @@ export function DatenschutzContent({
             </h2>
             <p className="mt-2 leading-relaxed">
               ClinicSlotHub verwendet technisch notwendige Cookies (Sitzungscookies). Keine Tracking-
-              oder Marketing-Cookies ohne Einwilligung.{" "}
-              <span className="text-xs italic text-slate-400 dark:text-slate-500">
-                (Rechtliche Prüfung vor Produktiveinsatz ausstehend.)
-              </span>
-            </p>
-          </section>
-
-          <section className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/50">
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              <strong>Empfehlung:</strong> Diese Datenschutzerklärung vor dem Produktivstart durch
-              einen Datenschutzbeauftragten oder Rechtsanwalt prüfen lassen.
+              oder Marketing-Cookies ohne Einwilligung.
             </p>
           </section>
 

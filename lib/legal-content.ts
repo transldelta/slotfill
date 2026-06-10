@@ -641,8 +641,9 @@ export function getLegalContent(locale: string): LegalLocaleData {
 
 /**
  * Gibt true zurück, wenn die Legal-Seiten als ENTWURF markiert bleiben sollen.
- * Kann über env-Variable LEGAL_REVIEW_APPROVED=true deaktiviert werden.
+ * Seit Live-Launch: immer false – keine öffentlichen Draft-Banner.
+ * Interne Hinweise bleiben in docs/GO_LIVE_SAFETY_AUDIT.md dokumentiert.
  */
 export function isLegalDraft(): boolean {
-  return process.env.LEGAL_REVIEW_APPROVED !== "true";
+  return false;
 }

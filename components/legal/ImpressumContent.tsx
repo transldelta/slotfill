@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getLegalContent, isRtlLocale, isLegalDraft } from "@/lib/legal-content";
+import { getLegalContent, isRtlLocale } from "@/lib/legal-content";
 
 /**
  * Impressum-Inhalt – § 5 DDG (Digitale-Dienste-Gesetz)
@@ -7,8 +7,6 @@ import { getLegalContent, isRtlLocale, isLegalDraft } from "@/lib/legal-content"
  * Persönliche Daten des Anbieters erscheinen ausschließlich auf dieser Seite
  * (gesetzliche Pflicht). In automatischer Kommunikation, Marketing und Trial-Mails
  * wird ausschließlich „ClinicSlotHub Team" als Absender verwendet.
- *
- * ENTWURF – vor Veröffentlichung durch einen Rechtsanwalt prüfen lassen.
  */
 export function ImpressumContent({
   backHref = "/",
@@ -19,7 +17,6 @@ export function ImpressumContent({
 }) {
   const c = getLegalContent(locale);
   const isRtl = isRtlLocale(locale);
-  const isDraft = isLegalDraft();
   const isDE = locale === "de";
 
   return (
@@ -34,16 +31,6 @@ export function ImpressumContent({
       <h1 className="mt-2 text-3xl font-bold text-slate-900 dark:text-slate-100">
         {c.impressumTitle}
       </h1>
-
-      {/* Draft-Hinweis */}
-      {isDraft && (
-        <p className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-900/50 dark:bg-amber-900/20 dark:text-amber-300">
-          <strong>{isDE ? "Hinweis:" : "Note:"}</strong>{" "}
-          {isDE
-            ? "Dieser Rechtstext ist als vorbereitetes Muster für den SaaS-Prototyp hinterlegt. Vor dem produktiven Einsatz mit echten Kunden ist eine finale rechtliche Prüfung durch einen Fachanwalt erforderlich. Er ersetzt keine Rechtsberatung."
-            : "This legal notice is a prepared template for the SaaS prototype. A final legal review is required before going live with real customers. It does not constitute legal advice."}
-        </p>
-      )}
 
       {/* Maßgeblichkeits-Banner für Nicht-DE */}
       {!isDE && c.authorityNotice && (

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getLegalContent, isRtlLocale, isLegalDraft } from "@/lib/legal-content";
+import { getLegalContent, isRtlLocale } from "@/lib/legal-content";
 
 /**
  * AVV / DPA Informationsseite – lokalisiert
@@ -16,7 +16,6 @@ export function AvvContent({
 }) {
   const c = getLegalContent(locale);
   const isRtl = isRtlLocale(locale);
-  const isDraft = isLegalDraft();
   const isDE = locale === "de";
 
   return (
@@ -34,24 +33,6 @@ export function AvvContent({
       <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
         {c.avvSubtitle}
       </p>
-
-      {/* Draft-Hinweis */}
-      {isDraft && (
-        <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-900/50 dark:bg-amber-900/20 dark:text-amber-300">
-          <strong>{isDE ? "Hinweis:" : "Note:"}</strong>{" "}
-          {c.avvDraftNotice.replace(/^(ENTWURF|DRAFT|BROUILLON|BORRADOR|مسودة|ЧЕРНОВИК|草稿|RASCUNHO|मसौदा|খসড়া|Hinweis:|Note:)\s*[–-]?\s*/i, "")}{" "}
-          {isDE
-            ? <>Bitte wenden Sie sich bei Fragen an{" "}
-              <a href="mailto:transl.delta@gmail.com" className="underline hover:no-underline">
-                transl.delta@gmail.com
-              </a>.</>
-            : <>For questions, please contact{" "}
-              <a href="mailto:transl.delta@gmail.com" className="underline hover:no-underline">
-                transl.delta@gmail.com
-              </a>.</>
-          }
-        </div>
-      )}
 
       {/* Maßgeblichkeits-Banner für Nicht-DE */}
       {!isDE && c.authorityNotice && (
@@ -181,8 +162,8 @@ export function AvvContent({
           <div className="mt-2 space-y-2 leading-relaxed">
             <p>
               {isDE
-                ? "Das AVV-Dokument wird vor dem Produktivstart als PDF oder elektronisch unterzeichenbares Dokument bereitgestellt."
-                : "The DPA document will be provided as a PDF or electronically signable document before go-live."}
+                ? "Das AVV-Dokument wird Geschäftskunden auf Anfrage als PDF oder elektronisch unterzeichenbares Dokument bereitgestellt."
+                : "The DPA document is available to business customers upon request as a PDF or electronically signable document."}
             </p>
             <p>
               {isDE ? "Anfragen:" : "Contact:"}{" "}

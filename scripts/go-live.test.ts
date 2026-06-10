@@ -1398,16 +1398,17 @@ test("Legal i18n: ES-AGB enthält 'Términos y condiciones', nicht 'Allgemeine G
   );
 });
 
-test("Legal i18n: noindex bleibt gesetzt, solange LEGAL_REVIEW_APPROVED nicht 'true' ist", () => {
+test("Legal: isLegalDraft() gibt seit Live-Launch immer false zurück (keine öffentlichen Draft-Banner)", () => {
   const { isLegalDraft } = require("../lib/legal-content");
-  // Im Testmodus ist LEGAL_REVIEW_APPROVED nicht gesetzt → isDraft = true
+  // Seit Live-Launch ist isLegalDraft() hardcoded false – Draft-Banner sind entfernt.
+  // LEGAL_REVIEW_APPROVED-Env-Variable hat keine Wirkung mehr auf die öffentliche Anzeige.
   const originalEnv = process.env.LEGAL_REVIEW_APPROVED;
   delete process.env.LEGAL_REVIEW_APPROVED;
-  assert.ok(isLegalDraft(), "isLegalDraft() muss true sein wenn LEGAL_REVIEW_APPROVED nicht gesetzt");
+  assert.ok(!isLegalDraft(), "isLegalDraft() muss false sein (Live-Launch: keine Draft-Banner)");
   process.env.LEGAL_REVIEW_APPROVED = "false";
-  assert.ok(isLegalDraft(), "isLegalDraft() muss true sein wenn LEGAL_REVIEW_APPROVED='false'");
+  assert.ok(!isLegalDraft(), "isLegalDraft() muss false sein (immer, unabhängig von Env-Variable)");
   process.env.LEGAL_REVIEW_APPROVED = "true";
-  assert.ok(!isLegalDraft(), "isLegalDraft() muss false sein wenn LEGAL_REVIEW_APPROVED='true'");
+  assert.ok(!isLegalDraft(), "isLegalDraft() muss false sein (immer, unabhängig von Env-Variable)");
   // Restore
   if (originalEnv === undefined) {
     delete process.env.LEGAL_REVIEW_APPROVED;

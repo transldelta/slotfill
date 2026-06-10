@@ -38,7 +38,7 @@
 - [x] Produktname: **ClinicSlotHub** (via `BRAND_NAME`)
 - [x] Team-Absender: **ClinicSlotHub Team** (via `BRAND_TEAM_NAME`)
 - [x] Logo: Professionelles inline SVG – kein externes Bild, kein Emoji
-- [x] Keine alten Branding-Reste (SlotFill, Clentra) auf öffentlichen Seiten
+- [x] Keine alten Branding-Reste (PraxisFlow, Clentra, SlotFill – alle entfernt) auf öffentlichen Seiten
 - [x] White-Label-fähig: 1 Datei ändern = gesamtes Produkt rebrandet
 - [x] Impressum mit echten Betreiberdaten (Brahim Ben Abla)
 - [x] Technischer Projektname dokumentiert: `slotfill` (GitHub/Vercel/Ordner)

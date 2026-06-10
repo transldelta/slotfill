@@ -170,7 +170,7 @@ export function DatenschutzContent({
               Praxen, die Patientendaten eingeben, schließen einen AVV gemäß Art. 28 DSGVO ab.
               Informationen unter{" "}
               <Link href={`/${locale}/avv`} className="text-blue-600 hover:underline dark:text-blue-400">
-                slotfill-pi.vercel.app/avv
+                clinicslothub.com/avv
               </Link>.
             </p>
           </section>

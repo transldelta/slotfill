@@ -11,6 +11,7 @@
 import { useCallback, useEffect, useState } from "react";
 import {
   AlertTriangle,
+  Briefcase,
   CheckCircle2,
   ClipboardList,
   Copy,
@@ -70,6 +71,7 @@ type RecentLead = {
 type LaunchOverview = {
   code: string;
   generated_at: string;
+  secretary_briefing: SecretaryBriefing;
   launch_live: boolean;
   canonical_url: string;
   launch_de: string;
@@ -111,6 +113,24 @@ type QaResult = {
   total: number;
   checks: QaCheck[];
   checked_at: string;
+};
+
+// ─── CEO Secretary Briefing – Typ ────────────────────────────────────────────
+
+type OverallSignal = "green" | "yellow" | "red";
+
+type SecretaryBriefing = {
+  generated_at: string;
+  overall_signal: OverallSignal;
+  today_highlight: string;
+  new_real_leads: number;
+  new_real_bookings: number;
+  qa_summary: string;
+  recommended_action: string;
+  stripe_status: "not_live" | "test" | "live";
+  env_status: "ok" | "partial" | "missing";
+  legal_status: "draft" | "approved";
+  daily_brief_email_enabled: false;
 };
 
 // ─── Compliance-Checkliste (statisch) ────────────────────────────────────────
@@ -256,6 +276,171 @@ function QaIcon({ status }: { status: CheckStatus }) {
   if (status === "ok") return <CheckCircle2 className="h-4 w-4 text-green-500" />;
   if (status === "warn") return <AlertTriangle className="h-4 w-4 text-amber-500" />;
   return <XCircle className="h-4 w-4 text-red-500" />;
+}
+
+// ─── Sektion: CEO Secretary Briefing ─────────────────────────────────────────
+
+const SIGNAL_CONFIG: Record<
+  OverallSignal,
+  { label: string; bg: string; border: string; badge: string; icon: React.ReactNode }
+> = {
+  green: {
+    label: "Grün – Kein Handlungsbedarf",
+    bg: "bg-green-50 dark:bg-green-950/20",
+    border: "border-green-300 dark:border-green-700",
+    badge: "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300",
+    icon: <CheckCircle2 className="h-5 w-5 text-green-500" />,
+  },
+  yellow: {
+    label: "Gelb – Bitte prüfen",
+    bg: "bg-amber-50 dark:bg-amber-950/20",
+    border: "border-amber-300 dark:border-amber-700",
+    badge: "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
+    icon: <AlertTriangle className="h-5 w-5 text-amber-500" />,
+  },
+  red: {
+    label: "Rot – Sofortige Aufmerksamkeit nötig",
+    bg: "bg-red-50 dark:bg-red-950/20",
+    border: "border-red-300 dark:border-red-700",
+    badge: "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300",
+    icon: <XCircle className="h-5 w-5 text-red-500" />,
+  },
+};
+
+const STRIPE_STATUS_LABEL: Record<SecretaryBriefing["stripe_status"], string> = {
+  not_live: "Nicht live (Testmodus)",
+  test:     "Test-Modus aktiv",
+  live:     "Live",
+};
+
+const ENV_STATUS_LABEL: Record<SecretaryBriefing["env_status"], string> = {
+  ok:      "OK – alle kritischen Keys gesetzt",
+  partial: "Teilweise – einige Keys fehlen",
+  missing: "Kritisch – Keys fehlen",
+};
+
+const ENV_STATUS_COLOR: Record<SecretaryBriefing["env_status"], string> = {
+  ok:      "text-green-600 dark:text-green-400",
+  partial: "text-amber-600 dark:text-amber-400",
+  missing: "text-red-600 dark:text-red-400",
+};
+
+function SecretaryBriefingPanel({ briefing }: { briefing: SecretaryBriefing }) {
+  const cfg = SIGNAL_CONFIG[briefing.overall_signal];
+
+  return (
+    <div
+      className={`rounded-2xl border-2 p-5 ${cfg.bg} ${cfg.border}`}
+      id="secretary-briefing"
+    >
+      {/* Header */}
+      <div className="mb-4 flex flex-wrap items-center gap-2">
+        <Briefcase className="h-5 w-5 text-slate-700 dark:text-slate-300" />
+        <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">
+          CEO Secretary Briefing
+        </h2>
+        <span className="text-xs text-slate-500 dark:text-slate-400">
+          · Internes Tages-Briefing · Kein Auto-Versand
+        </span>
+        <span className={`ml-auto flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold ${cfg.badge}`}>
+          {cfg.icon}
+          {cfg.label}
+        </span>
+      </div>
+
+      {/* 5-Zeilen Summary */}
+      <div className="mb-4 space-y-2 rounded-xl border border-slate-200 bg-white px-4 py-3 dark:border-slate-700 dark:bg-slate-900">
+        <div className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-2 text-sm">
+          <span className="font-medium text-slate-500 dark:text-slate-400 whitespace-nowrap">📌 Heute wichtig</span>
+          <span className="text-slate-800 dark:text-slate-200">{briefing.today_highlight}</span>
+
+          <span className="font-medium text-slate-500 dark:text-slate-400 whitespace-nowrap">📧 Echte Leads</span>
+          <span className="text-slate-800 dark:text-slate-200">
+            {briefing.new_real_leads} Kontakte · {briefing.new_real_bookings} Buchungen
+          </span>
+
+          <span className="font-medium text-slate-500 dark:text-slate-400 whitespace-nowrap">🔍 QA-Status</span>
+          <span className="text-slate-800 dark:text-slate-200">{briefing.qa_summary}</span>
+
+          <span className="font-medium text-slate-500 dark:text-slate-400 whitespace-nowrap">💳 Stripe</span>
+          <span className={`font-medium ${
+            briefing.stripe_status === "live"
+              ? "text-green-600 dark:text-green-400"
+              : briefing.stripe_status === "test"
+                ? "text-amber-600 dark:text-amber-400"
+                : "text-slate-500 dark:text-slate-400"
+          }`}>
+            {STRIPE_STATUS_LABEL[briefing.stripe_status]}
+          </span>
+
+          <span className="font-medium text-slate-500 dark:text-slate-400 whitespace-nowrap">⚖️ Rechtstexte</span>
+          <span className={briefing.legal_status === "approved"
+            ? "text-green-600 dark:text-green-400"
+            : "text-amber-600 dark:text-amber-400"
+          }>
+            {briefing.legal_status === "approved" ? "Rechtlich freigegeben" : "Entwurf – Anwaltsprüfung ausstehend"}
+          </span>
+        </div>
+      </div>
+
+      {/* Empfohlene Aktion */}
+      <div className={`mb-4 flex items-start gap-2 rounded-xl border px-4 py-3 ${cfg.border} ${cfg.bg}`}>
+        <span className="text-lg leading-none">🎯</span>
+        <div>
+          <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-0.5">
+            Empfohlene Aktion
+          </p>
+          <p className="text-sm font-bold text-slate-900 dark:text-slate-100">
+            {briefing.recommended_action}
+          </p>
+        </div>
+      </div>
+
+      {/* Technischer Status */}
+      <div className="mb-4 grid grid-cols-1 gap-2 sm:grid-cols-3">
+        {/* Stripe */}
+        <div className="rounded-lg border border-slate-100 bg-white px-3 py-2 dark:border-slate-800 dark:bg-slate-900">
+          <p className="text-xs text-slate-400 dark:text-slate-500">Stripe-Status</p>
+          <p className={`text-sm font-semibold ${
+            briefing.stripe_status === "live"
+              ? "text-green-600 dark:text-green-400"
+              : briefing.stripe_status === "test"
+                ? "text-amber-600 dark:text-amber-400"
+                : "text-slate-500 dark:text-slate-400"
+          }`}>
+            {STRIPE_STATUS_LABEL[briefing.stripe_status]}
+          </p>
+          <p className="text-xs text-slate-400 dark:text-slate-500">Kein Secret angezeigt</p>
+        </div>
+
+        {/* ENV */}
+        <div className="rounded-lg border border-slate-100 bg-white px-3 py-2 dark:border-slate-800 dark:bg-slate-900">
+          <p className="text-xs text-slate-400 dark:text-slate-500">ENV-Status</p>
+          <p className={`text-sm font-semibold ${ENV_STATUS_COLOR[briefing.env_status]}`}>
+            {ENV_STATUS_LABEL[briefing.env_status]}
+          </p>
+          <p className="text-xs text-slate-400 dark:text-slate-500">Nur Präsenz geprüft</p>
+        </div>
+
+        {/* E-Mail-Briefing */}
+        <div className="rounded-lg border border-slate-100 bg-white px-3 py-2 dark:border-slate-800 dark:bg-slate-900">
+          <p className="text-xs text-slate-400 dark:text-slate-500">Tages-E-Mail-Briefing</p>
+          <p className="text-sm font-semibold text-slate-400 dark:text-slate-500">
+            Deaktiviert
+          </p>
+          <p className="text-xs text-slate-400 dark:text-slate-500">
+            CEO_DAILY_BRIEF_EMAIL_ENABLED=false
+          </p>
+        </div>
+      </div>
+
+      {/* Footer-Hinweis */}
+      <p className="text-xs text-slate-400 dark:text-slate-500">
+        Generiert: {fmtDate(briefing.generated_at)} · Kein Auto-Versand ·
+        Alle Aktionen erfordern Betreiber-Freigabe
+      </p>
+    </div>
+  );
 }
 
 // ─── Sektion: Tägliches CEO Briefing ─────────────────────────────────────────
@@ -1052,7 +1237,10 @@ export default function CeoLaunchPage() {
 
       {!loading && !error && data && (
         <>
-          {/* H. Tägliches CEO Briefing (immer oben) */}
+          {/* CEO Secretary Briefing (ganz oben – Tages-Ampel) */}
+          <SecretaryBriefingPanel briefing={data.secretary_briefing} />
+
+          {/* Tägliches CEO Briefing */}
           <DailyBriefing tasks={data.daily_tasks} />
 
           {/* A. Launch-Status */}

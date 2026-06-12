@@ -303,3 +303,162 @@ test("CEO Launch: Seite enthält Compliance-Hinweis (kein Auto-Versand)", () => 
     "Seite enthält keinen Betreiber-Freigabe-Hinweis",
   );
 });
+
+// ─── CEO Secretary Briefing ───────────────────────────────────────────────────
+
+test("CEO Secretary: SecretaryBriefing-Typ ist in page.tsx definiert", () => {
+  const page = read("app/admin/ceo-launch/page.tsx");
+  assert.ok(
+    page.includes("SecretaryBriefing"),
+    "SecretaryBriefing-Typ fehlt in page.tsx",
+  );
+  assert.ok(
+    page.includes("overall_signal"),
+    "overall_signal fehlt im SecretaryBriefing-Typ",
+  );
+  assert.ok(
+    page.includes("recommended_action"),
+    "recommended_action fehlt im SecretaryBriefing-Typ",
+  );
+});
+
+test("CEO Secretary: secretary_briefing ist in LaunchOverview (page.tsx) enthalten", () => {
+  const page = read("app/admin/ceo-launch/page.tsx");
+  assert.ok(
+    page.includes("secretary_briefing"),
+    "secretary_briefing fehlt in LaunchOverview (page.tsx)",
+  );
+});
+
+test("CEO Secretary: API-Route hat buildSecretaryBriefing-Funktion", () => {
+  const route = read("app/api/admin/ceo-launch/route.ts");
+  assert.ok(
+    route.includes("buildSecretaryBriefing"),
+    "buildSecretaryBriefing fehlt in der API-Route",
+  );
+});
+
+test("CEO Secretary: Ampel-Logik – alle drei Signale (green/yellow/red) definiert", () => {
+  const route = read("app/api/admin/ceo-launch/route.ts");
+  assert.ok(route.includes('"green"'), 'Ampel-Signal "green" fehlt');
+  assert.ok(route.includes('"yellow"'), 'Ampel-Signal "yellow" fehlt');
+  assert.ok(route.includes('"red"'), 'Ampel-Signal "red" fehlt');
+});
+
+test("CEO Secretary: Empfohlene-Aktion-Logik – alle drei Fälle abgedeckt", () => {
+  const route = read("app/api/admin/ceo-launch/route.ts");
+  assert.ok(
+    route.includes("Nichts tun – weiter beobachten"),
+    "Fall 'Nichts tun' fehlt",
+  );
+  assert.ok(
+    route.includes("Antwort vorbereiten – Freigabe erforderlich"),
+    "Fall 'Antwort vorbereiten' fehlt",
+  );
+  assert.ok(
+    route.includes("Technik prüfen – keine externe Kommunikation"),
+    "Fall 'Technik prüfen' fehlt",
+  );
+});
+
+test("CEO Secretary: Stripe-Status gibt niemals Secret-Wert zurück (nur Klassifikation)", () => {
+  const route = read("app/api/admin/ceo-launch/route.ts");
+  // Stripe-Key wird nur über Präfix klassifiziert – Wert darf nicht in Response
+  assert.ok(
+    route.includes("stripe_status"),
+    "stripe_status fehlt in buildSecretaryBriefing",
+  );
+  assert.ok(
+    route.includes("sk_live_"),
+    "Stripe-Key-Klassifikation via Präfix fehlt",
+  );
+  // Der Wert selbst darf nicht im Payload landen
+  assert.ok(
+    !route.includes("stripeKey:"),
+    "stripeKey wird direkt in der Response gesendet",
+  );
+});
+
+test("CEO Secretary: ENV-Status gibt niemals Werte zurück (nur Präsenz)", () => {
+  const route = read("app/api/admin/ceo-launch/route.ts");
+  assert.ok(
+    route.includes("env_status"),
+    "env_status fehlt in buildSecretaryBriefing",
+  );
+  assert.ok(
+    route.includes("criticalEnvKeys"),
+    "criticalEnvKeys-Prüfung fehlt",
+  );
+  // Werte dürfen nicht zurückgegeben werden
+  assert.ok(
+    !route.includes("process.env[k]:"),
+    "ENV-Werte werden direkt in der Response gesendet",
+  );
+});
+
+test("CEO Secretary: daily_brief_email_enabled ist immer false", () => {
+  const route = read("app/api/admin/ceo-launch/route.ts");
+  assert.ok(
+    route.includes("daily_brief_email_enabled: false"),
+    "daily_brief_email_enabled ist nicht auf false gesetzt",
+  );
+  // Kein tatsächlicher E-Mail-Versand – process.env darf nicht ausgewertet werden
+  assert.ok(
+    !route.includes("process.env.CEO_DAILY_BRIEF_EMAIL_ENABLED"),
+    "CEO_DAILY_BRIEF_EMAIL_ENABLED wird per process.env ausgewertet – Feature noch nicht aktiviert",
+  );
+});
+
+test("CEO Secretary: Kein Auto-Versand in buildSecretaryBriefing", () => {
+  const route = read("app/api/admin/ceo-launch/route.ts");
+  // Die Secretary-Funktion darf keine E-Mail/SMS/Webhook auslösen
+  assert.ok(
+    !route.includes("sendEmail("),
+    "buildSecretaryBriefing ruft sendEmail() auf",
+  );
+  assert.ok(
+    !route.includes("resend.emails"),
+    "buildSecretaryBriefing nutzt Resend direkt",
+  );
+  assert.ok(
+    !route.includes("twilio"),
+    "buildSecretaryBriefing nutzt Twilio",
+  );
+});
+
+test("CEO Secretary: SecretaryBriefingPanel-Komponente in page.tsx vorhanden", () => {
+  const page = read("app/admin/ceo-launch/page.tsx");
+  assert.ok(
+    page.includes("SecretaryBriefingPanel"),
+    "SecretaryBriefingPanel-Komponente fehlt in page.tsx",
+  );
+  assert.ok(
+    page.includes("secretary-briefing"),
+    "secretary-briefing id-Anker fehlt (benötigt für Navigation)",
+  );
+});
+
+test("CEO Secretary: CEO-Secretary-Abteilung in buildDepartments vorhanden", () => {
+  const route = read("app/api/admin/ceo-launch/route.ts");
+  assert.ok(
+    route.includes('"ceo_secretary"'),
+    "CEO-Secretary-Abteilung fehlt in buildDepartments",
+  );
+  assert.ok(
+    route.includes('"CEO Secretary"'),
+    "CEO-Secretary-Name fehlt in buildDepartments",
+  );
+});
+
+test("CEO Secretary: Stripe bleibt unangetastet (kein Checkout, kein Webhook)", () => {
+  const route = read("app/api/admin/ceo-launch/route.ts");
+  // Secretary-Briefing darf keine Stripe-Aktionen auslösen
+  assert.ok(
+    !route.includes("stripe.checkout"),
+    "CEO-Launch-Route löst Stripe-Checkout aus",
+  );
+  assert.ok(
+    !route.includes("stripe.subscriptions"),
+    "CEO-Launch-Route manipuliert Stripe-Subscriptions",
+  );
+});

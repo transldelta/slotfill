@@ -59,9 +59,33 @@ type RecentLead = {
   note: string | null;
 };
 
+// ─── CEO Secretary Briefing ───────────────────────────────────────────────────
+
+type SecretaryBriefing = {
+  generated_at: string;
+  // Ampel
+  overall_signal: "green" | "yellow" | "red";
+  // 5 Zeilen Summary
+  today_highlight: string;
+  new_real_leads: number;
+  new_real_bookings: number;
+  qa_summary: string;
+  recommended_action: string;
+  // Betriebsstatus (keine Secrets – nur Klassifikation)
+  stripe_status: "not_live" | "test" | "live";
+  env_status: "ok" | "partial" | "missing";
+  legal_status: "draft" | "approved";
+  // E-Mail-Briefing: standardmäßig deaktiviert
+  // Aktivierung via CEO_DAILY_BRIEF_EMAIL_ENABLED=true (noch nicht gebaut)
+  daily_brief_email_enabled: false;
+};
+
 type LaunchOverview = {
   code: "CEO_LAUNCH_READY";
   generated_at: string;
+
+  // CEO Secretary Briefing (immer oben)
+  secretary_briefing: SecretaryBriefing;
 
   // A. Launch-Status
   launch_live: boolean;
@@ -96,6 +120,101 @@ type LaunchOverview = {
   daily_tasks: DailyTask[];
 };
 
+// ─── CEO Secretary: Betriebs-Briefing ────────────────────────────────────────
+// Läuft server-seitig. Keine Secrets in der Antwort – nur Klassifikationen.
+// E-Mail-Briefing: CEO_DAILY_BRIEF_EMAIL_ENABLED – aktuell immer false.
+
+function buildSecretaryBriefing(
+  realContacts: number,
+  realBookings: number,
+): SecretaryBriefing {
+  const totalLeads = realContacts + realBookings;
+  const hasLeads = totalLeads > 0;
+
+  // Stripe-Status: Key-Präfix lesen, Wert NICHT zurückgeben
+  const stripeKey = process.env.STRIPE_SECRET_KEY ?? "";
+  const stripeStatus: SecretaryBriefing["stripe_status"] = stripeKey.startsWith(
+    "sk_live_",
+  )
+    ? "live"
+    : stripeKey.startsWith("sk_test_")
+      ? "test"
+      : "not_live";
+
+  // ENV-Status: nur Präsenz kritischer Keys prüfen, keine Werte zurückgeben
+  const criticalEnvKeys = [
+    "SUPABASE_URL",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "NEXT_PUBLIC_APP_URL",
+  ] as const;
+  const presentCount = criticalEnvKeys.filter((k) =>
+    Boolean(process.env[k]),
+  ).length;
+  const envStatus: SecretaryBriefing["env_status"] =
+    presentCount === criticalEnvKeys.length
+      ? "ok"
+      : presentCount > 0
+        ? "partial"
+        : "missing";
+
+  // Legal-Status: LEGAL_REVIEW_APPROVED env-Var
+  const legalStatus: SecretaryBriefing["legal_status"] =
+    process.env.LEGAL_REVIEW_APPROVED === "true" ? "approved" : "draft";
+
+  // ── Ampel ────────────────────────────────────────────────────────────────
+  let overallSignal: SecretaryBriefing["overall_signal"] = "green";
+  if (envStatus === "missing") {
+    overallSignal = "red";
+  } else if (
+    hasLeads ||
+    envStatus === "partial" ||
+    legalStatus === "draft" ||
+    stripeStatus === "not_live"
+  ) {
+    overallSignal = "yellow";
+  }
+
+  // ── Empfohlene Aktion ─────────────────────────────────────────────────────
+  let recommendedAction: string;
+  if (envStatus === "missing") {
+    recommendedAction = "Technik prüfen – keine externe Kommunikation.";
+  } else if (hasLeads) {
+    recommendedAction = "Antwort vorbereiten – Freigabe erforderlich.";
+  } else {
+    recommendedAction = "Nichts tun – weiter beobachten.";
+  }
+
+  // ── Heutiger Highlight ────────────────────────────────────────────────────
+  let todayHighlight: string;
+  if (hasLeads) {
+    todayHighlight = `${totalLeads} neue echte Anfrage(n) eingegangen.`;
+  } else if (stripeStatus === "not_live") {
+    todayHighlight = "Stripe noch nicht live – Testmodus aktiv.";
+  } else if (legalStatus === "draft") {
+    todayHighlight = "Rechtstexte im Entwurf-Modus – Anwaltsprüfung ausstehend.";
+  } else {
+    todayHighlight = "Keine besonderen Vorkommnisse. System läuft stabil.";
+  }
+
+  // ── QA-Zusammenfassung (Echtzeit-QA läuft nur auf Knopfdruck) ─────────────
+  const qaSummary =
+    "QA-Check on demand – Button in Abschnitt B verfügbar. Letzter Stand unbekannt.";
+
+  return {
+    generated_at: new Date().toISOString(),
+    overall_signal: overallSignal,
+    today_highlight: todayHighlight,
+    new_real_leads: realContacts,
+    new_real_bookings: realBookings,
+    qa_summary: qaSummary,
+    recommended_action: recommendedAction,
+    stripe_status: stripeStatus,
+    env_status: envStatus,
+    legal_status: legalStatus,
+    daily_brief_email_enabled: false,
+  };
+}
+
 // ─── Statische Konfiguration ──────────────────────────────────────────────────
 
 const LAUNCH_LINKS = {
@@ -119,6 +238,18 @@ function buildDepartments(
   const hasRealLeads = realContacts + realBookings > 0;
 
   return [
+    {
+      id: "ceo_secretary",
+      name: "CEO Secretary",
+      status: hasRealLeads ? "needs_review" : "ready",
+      next_task: hasRealLeads
+        ? "Briefing lesen – echte Anfragen eingegangen, Antwort vorbereiten"
+        : "Tägliches Briefing prüfen – kein Handlungsbedarf heute",
+      reason:
+        "Fasst den gesamten Betriebsstatus zusammen. Zeigt täglich die wichtigste Aktion. Kein Auto-Versand.",
+      priority: hasRealLeads ? "high" : "low",
+      needs_approval: false,
+    },
     {
       id: "ceo_control",
       name: "CEO Control",
@@ -469,6 +600,8 @@ export async function GET() {
   const payload: LaunchOverview = {
     code: "CEO_LAUNCH_READY",
     generated_at: new Date().toISOString(),
+
+    secretary_briefing: buildSecretaryBriefing(realContacts, realBookings),
 
     launch_live: true,
     ...LAUNCH_LINKS,

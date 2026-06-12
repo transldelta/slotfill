@@ -105,4 +105,18 @@
   .btn-outline-brand:hover {
     background-color: var(--color-surface-2);
   }
+
+  /* ── Consistent form input across all public pages ── */
+  .input-brand {
+    @apply w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-900 outline-none
+      transition placeholder:text-slate-400
+      focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20
+      dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500;
+  }
+
+  /* ── Premium surface card ── */
+  .surface-card {
+    @apply rounded-2xl border border-slate-100 bg-white shadow-sm
+      dark:border-slate-800 dark:bg-slate-900;
+  }
 }

@@ -472,33 +472,30 @@ export default async function LaunchPage({
       </div>
 
       {/* Badge */}
-      <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700 dark:border-blue-800 dark:bg-blue-900/20 dark:text-blue-300">
+      <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-1.5 text-xs font-semibold text-blue-700 shadow-sm dark:border-blue-800 dark:bg-blue-900/20 dark:text-blue-300">
         <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-blue-500" />
         {c.badge}
       </div>
 
       {/* Headline */}
-      <h1 className="mt-2 text-3xl font-bold text-slate-900 dark:text-slate-100 sm:text-4xl lg:text-5xl">
+      <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl lg:text-5xl">
         {c.headline}
       </h1>
-      <p className="mt-4 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+      <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-300">
         {c.subline}
       </p>
 
       {/* CTA buttons — above fold */}
       <div className="mt-8 flex flex-wrap gap-3">
-        <Link
-          href="/auth/register"
-          className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
-        >
+        <Link href="/auth/register" className="btn-brand">
           {c.ctaTrial}
-          <ArrowRight className="h-4 w-4" />
+          <ArrowRight className="ml-1.5 h-4 w-4" />
         </Link>
         <Link
           href={`/${locale}/kontakt`}
-          className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+          className="btn-outline-brand"
         >
-          <Mail className="h-4 w-4" />
+          <Mail className="mr-1.5 h-4 w-4" />
           {c.ctaContact}
         </Link>
       </div>
@@ -515,24 +512,31 @@ export default async function LaunchPage({
         />
       </div>
 
-      {/* 3-step "how it works" — immediately after hero, before text */}
-      <section className="mt-12">
+      {/* 3-step "how it works" */}
+      <section className="mt-14">
+        <p className="mb-4 text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+          Wie es funktioniert
+        </p>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           {hiw.steps.map((step, i) => {
             const Icon = stepIcons[i];
             return (
               <div
                 key={i}
-                className="flex flex-col gap-3 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900"
+                className="relative flex flex-col gap-4 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition hover:shadow-md dark:border-slate-800 dark:bg-slate-900"
               >
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400">
-                  <Icon className="h-5 w-5" />
+                {/* Step number */}
+                <span className="absolute right-4 top-4 text-xs font-bold text-slate-300 dark:text-slate-700">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl shadow-sm" style={{ background: "var(--gradient-brand)" }}>
+                  <Icon className="h-5 w-5 text-white" />
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                     {step.title}
                   </p>
-                  <p className="mt-1 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                  <p className="mt-1.5 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
                     {step.desc}
                   </p>
                 </div>
@@ -542,32 +546,32 @@ export default async function LaunchPage({
         </div>
       </section>
 
-      {/* Problem */}
-      <section className="mt-12">
-        <p className="text-base leading-relaxed text-slate-700 dark:text-slate-300">
-          {c.problem}
-        </p>
-      </section>
-
-      {/* Solution */}
-      <section className="mt-5">
-        <p className="text-base leading-relaxed text-slate-700 dark:text-slate-300">
-          {c.solution}
-        </p>
+      {/* Problem / Solution */}
+      <section className="mt-14 space-y-5">
+        <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <p className="text-base leading-relaxed text-slate-700 dark:text-slate-300">
+            {c.problem}
+          </p>
+        </div>
+        <div className="rounded-2xl border border-blue-100 bg-blue-50/60 p-6 dark:border-blue-900/30 dark:bg-blue-950/10">
+          <p className="text-base leading-relaxed text-slate-700 dark:text-slate-300">
+            {c.solution}
+          </p>
+        </div>
       </section>
 
       {/* What works now */}
       <section className="mt-10 rounded-2xl border border-slate-100 bg-slate-50 p-6 dark:border-slate-800 dark:bg-slate-800/30">
-        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+        <h2 className="mb-5 text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
           {c.whatWorks}
         </h2>
-        <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+        <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           {c.features.map((f, i) => (
             <li
               key={i}
               className="flex items-start gap-2.5 text-sm text-slate-700 dark:text-slate-300"
             >
-              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
               {f}
             </li>
           ))}
@@ -576,7 +580,7 @@ export default async function LaunchPage({
 
       {/* Screenshot pair */}
       <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="overflow-hidden rounded-xl border border-slate-200 shadow-sm dark:border-slate-700">
+        <div className="overflow-hidden rounded-2xl border border-slate-200 shadow-md dark:border-slate-700">
           <Image
             src="/images/launch/02-booking-form-de.png"
             alt="Booking form"
@@ -585,7 +589,7 @@ export default async function LaunchPage({
             className="w-full"
           />
         </div>
-        <div className="overflow-hidden rounded-xl border border-slate-200 shadow-sm dark:border-slate-700">
+        <div className="overflow-hidden rounded-2xl border border-slate-200 shadow-md dark:border-slate-700">
           <Image
             src="/images/launch/06-mobile-home-de.png"
             alt="Mobile view"
@@ -597,14 +601,14 @@ export default async function LaunchPage({
       </div>
 
       {/* Status */}
-      <section className="mt-10 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+      <section className="mt-10 surface-card p-6">
+        <p className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
           {c.statusTitle}
-        </h2>
-        <p className="mt-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+        </p>
+        <p className="mt-3 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
           {c.status}
         </p>
-        <p className="mt-3 text-xs text-slate-500 dark:text-slate-500">{c.trialNote}</p>
+        <p className="mt-3 text-xs text-slate-400 dark:text-slate-500">{c.trialNote}</p>
       </section>
 
       {/* Languages */}

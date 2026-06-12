@@ -265,38 +265,39 @@ export default function BookSlugPage() {
       </header>
 
       <main className="mx-auto w-full max-w-lg flex-1 px-4 py-12">
-        <div className="mt-4 flex items-center gap-3">
-          <CalendarClock className="h-8 w-8 shrink-0" style={{ color: "var(--color-primary)" }} />
-          <div>
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-              Termin anfragen
-            </h1>
-            <p className="text-sm font-medium text-blue-600 dark:text-blue-400">
-              {practice.name}
-            </p>
+        {/* Practice header */}
+        <div className="mt-4 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm">
+              <CalendarClock className="h-5 w-5" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+                Termin anfragen
+              </h1>
+              <p className="text-sm font-medium text-blue-600 dark:text-blue-400">
+                {practice.name}
+              </p>
+            </div>
+          </div>
+
+          {/* Kein-Login-Badge */}
+          <div className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 dark:border-emerald-800/60 dark:bg-emerald-950/20 dark:text-emerald-400">
+            <CheckCircle2 className="h-3.5 w-3.5" />
+            Kein Login nötig – Anfrage direkt senden
           </div>
         </div>
 
-        {/* Kein-Login-Badge */}
-        <div className="mt-5 inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 dark:border-emerald-800/60 dark:bg-emerald-950/20 dark:text-emerald-400">
-          <CheckCircle2 className="h-3.5 w-3.5" />
-          Kein Login nötig – Anfrage direkt senden
-        </div>
-
         {/* Hinweis-Banner */}
-        <div className="mt-4 rounded-xl border p-4 text-sm"
-          style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}>
-          <p className="font-medium text-slate-700 dark:text-slate-300">
+        <div className="mt-4 rounded-xl border border-slate-100 bg-slate-50 p-4 text-sm dark:border-slate-800 dark:bg-slate-800/30">
+          <p className="font-semibold text-slate-700 dark:text-slate-200">
             Wie funktioniert es?
           </p>
-          <p className="mt-1 text-slate-600 dark:text-slate-400">
-            1. Füllen Sie das Formular aus und senden Sie Ihre Anfrage ab.<br />
-            2. Die Praxis prüft Ihre Anfrage und meldet sich per E-Mail.<br />
-            3. Erst nach Bestätigung durch die Praxis ist der Termin verbindlich.
-          </p>
-          <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
-            Diese Anfrage ist noch keine verbindliche Terminbestätigung.
-          </p>
+          <ol className="mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+            <li>1. Füllen Sie das Formular aus und senden Sie Ihre Anfrage ab.</li>
+            <li>2. Die Praxis prüft Ihre Anfrage und meldet sich per E-Mail.</li>
+            <li>3. Erst nach Bestätigung durch die Praxis ist der Termin verbindlich.</li>
+          </ol>
         </div>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-5">
@@ -311,8 +312,7 @@ export default function BookSlugPage() {
             <input
               id="patient_name" name="patient_name" type="text"
               required maxLength={100} placeholder="Vorname Nachname"
-              className="mt-1 w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2"
-              style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)", color: "var(--color-text)" }}
+              className="mt-1 input-brand"
             />
           </div>
 
@@ -324,8 +324,7 @@ export default function BookSlugPage() {
             <input
               id="patient_email" name="patient_email" type="email"
               required placeholder="ihre@email.de"
-              className="mt-1 w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2"
-              style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)", color: "var(--color-text)" }}
+              className="mt-1 input-brand"
             />
           </div>
 
@@ -337,8 +336,7 @@ export default function BookSlugPage() {
             <input
               id="patient_phone" name="patient_phone" type="tel"
               maxLength={30} placeholder="+49 000 000 0000"
-              className="mt-1 w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2"
-              style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)", color: "var(--color-text)" }}
+              className="mt-1 input-brand"
             />
           </div>
 
@@ -352,8 +350,7 @@ export default function BookSlugPage() {
             </label>
 
             {slotsLoading ? (
-              <div className="mt-1 flex items-center gap-2 rounded-lg border px-3 py-2 text-sm text-slate-400"
-                style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}>
+              <div className="mt-1 flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-400 dark:border-slate-700 dark:bg-slate-800">
                 <span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-slate-300 border-t-slate-500" />
                 Verfügbare Zeitfenster werden geladen…
               </div>
@@ -363,12 +360,7 @@ export default function BookSlugPage() {
                   data-testid="slot-selector"
                   value={selectedSlotKey}
                   onChange={(e) => setSelectedSlotKey(e.target.value)}
-                  className="mt-1 w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2"
-                  style={{
-                    borderColor: "var(--color-border)",
-                    backgroundColor: "var(--color-surface)",
-                    color: selectedSlotKey === PLACEHOLDER_SLOT ? "var(--color-text-muted, #94a3b8)" : "var(--color-text)",
-                  }}
+                  className="mt-1 input-brand"
                   aria-label="Zeitfenster auswählen"
                 >
                   <option value={PLACEHOLDER_SLOT} disabled>
@@ -396,8 +388,7 @@ export default function BookSlugPage() {
                   id="preferred_time" name="preferred_time" type="text"
                   required maxLength={200}
                   placeholder="z. B. Mo–Fr morgens, oder: KW 25 nachmittags"
-                  className="mt-1 w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2"
-                  style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)", color: "var(--color-text)" }}
+                  className="mt-1 input-brand"
                 />
                 <input type="hidden" name="requested_date" value="" />
                 <input type="hidden" name="requested_time" value="" />
@@ -413,14 +404,12 @@ export default function BookSlugPage() {
             <textarea
               id="note" name="note" rows={3} maxLength={1000}
               placeholder="Kurze Beschreibung des Anliegens"
-              className="mt-1 w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2"
-              style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)", color: "var(--color-text)" }}
+              className="mt-1 input-brand resize-none"
             />
           </div>
 
           {/* Datenschutz (Pflicht) */}
-          <div className="flex items-start gap-3 rounded-xl border p-4"
-            style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}>
+          <div className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/40">
             <input
               id="privacy_accepted" name="privacy_accepted"
               type="checkbox" value="true" required

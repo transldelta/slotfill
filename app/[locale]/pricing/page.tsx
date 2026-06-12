@@ -250,12 +250,12 @@ export default function LocalePricingPage() {
             return (
               <div
                 key={plan.id}
-                className={`relative flex flex-col rounded-2xl border p-7 shadow-sm transition ${
+                className={`relative flex flex-col rounded-2xl border p-7 shadow-sm transition-all duration-200 ${
                   isHighlight
-                    ? "border-blue-500 bg-blue-50 ring-1 ring-blue-500/30 dark:bg-blue-950/20"
+                    ? "border-blue-500 bg-blue-50 ring-2 ring-blue-500/20 hover:shadow-lg dark:bg-blue-950/20"
                     : isClinicPro
-                    ? "border-emerald-200 bg-white dark:border-emerald-800/40 dark:bg-slate-900"
-                    : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900"
+                    ? "border-emerald-200 bg-white hover:border-emerald-300 hover:shadow-md dark:border-emerald-800/40 dark:bg-slate-900"
+                    : "border-slate-200 bg-white hover:border-slate-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-900"
                 }`}
               >
                 {/* Badge */}
@@ -295,17 +295,26 @@ export default function LocalePricingPage() {
                 </div>
 
                 {/* Price */}
-                <div className="flex items-baseline gap-1 mb-6">
-                  <span className="text-4xl font-bold text-slate-900 dark:text-slate-100">
+                <div className="flex items-baseline gap-1 mb-5">
+                  <span className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
                     {plan.price_monthly} €
                   </span>
-                  <span className="text-sm text-slate-500 dark:text-slate-400">
+                  <span className="text-sm text-slate-400 dark:text-slate-500">
                     {t("monthly")}
                   </span>
                 </div>
 
+                {/* Divider */}
+                <div className={`mb-5 border-t ${
+                  isHighlight
+                    ? "border-blue-200/70 dark:border-blue-800/40"
+                    : isClinicPro
+                    ? "border-emerald-100/80 dark:border-emerald-900/30"
+                    : "border-slate-100 dark:border-slate-800"
+                }`} />
+
                 {/* Features — hardcoded, never from DB */}
-                <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+                <p className="mb-3 text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
                   {t("features")}
                 </p>
                 <ul className="flex-1 space-y-2.5 text-sm">

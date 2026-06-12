@@ -5,6 +5,7 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
+import { CheckCircle2, MessageSquare } from "lucide-react";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { submitContact } from "@/app/kontakt/actions";
 import type { Locale } from "@/i18n/routing";
@@ -27,48 +28,65 @@ export default function LocaleContactPageClient() {
       toast.error(t("error"));
       return;
     }
-    // CONTACT_SENT und CONTACT_STORED gelten beide als Erfolg.
     toast.success(t("success"));
     setDone(true);
   }
 
   return (
-    <main className="mx-auto max-w-lg px-4 py-12">
-      <div className="mb-4 flex justify-end">
+    <main className="mx-auto max-w-xl px-4 py-14">
+      {/* Language switcher */}
+      <div className="mb-6 flex justify-end">
         <LanguageSwitcher currentLocale={locale as Locale} currentPath="/kontakt" />
       </div>
+
+      {/* Breadcrumb */}
       <Link
         href={`/${locale}`}
-        className="text-sm text-blue-600 hover:underline dark:text-blue-400"
+        className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
       >
-        {tNav("brand")}
+        ← {tNav("brand")}
       </Link>
-      <h1 className="mt-2 text-3xl font-bold text-slate-900 dark:text-slate-100">
-        {t("title")}
-      </h1>
-      <p className="mt-2 text-slate-600 dark:text-slate-300">
-        {t("subtitle")}
-      </p>
+
+      {/* Header */}
+      <div className="mt-4 flex items-start gap-3">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm">
+          <MessageSquare className="h-5 w-5" />
+        </div>
+        <div>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
+            {t("title")}
+          </h1>
+          <p className="mt-1 text-slate-500 dark:text-slate-400">
+            {t("subtitle")}
+          </p>
+        </div>
+      </div>
 
       {/* B2B context note */}
-      <div className="mt-4 rounded-xl border border-blue-100 bg-blue-50 px-4 py-4 text-sm text-blue-900 dark:border-blue-900/40 dark:bg-blue-900/10 dark:text-blue-200">
-        <p className="font-semibold">Diese Kontaktseite richtet sich an Praxen und Kliniken.</p>
-        <p className="mt-1 text-blue-700 dark:text-blue-300">
-          Fragen zur Einrichtung, zu Datenschutz, Preisen oder einer individuellen Demo? Wir antworten persönlich.
-          Kein automatischer Versand, kein Vertriebsdruck.
+      <div className="mt-6 rounded-2xl border border-blue-100 bg-blue-50/80 px-5 py-4 dark:border-blue-900/40 dark:bg-blue-900/10">
+        <p className="text-sm font-semibold text-blue-900 dark:text-blue-200">
+          Diese Kontaktseite richtet sich an Praxen und Kliniken.
+        </p>
+        <p className="mt-1 text-sm text-blue-700 dark:text-blue-300 leading-relaxed">
+          Fragen zur Einrichtung, zu Datenschutz, Preisen oder einer individuellen Demo?
+          Wir antworten persönlich. Kein automatischer Versand, kein Vertriebsdruck.
         </p>
       </div>
 
+      {/* Success state */}
       {done ? (
-        <p className="mt-8 rounded-2xl border border-green-200 bg-green-50 p-5 text-sm text-green-800 dark:border-green-900/50 dark:bg-green-900/20 dark:text-green-300">
-          {t("success")}
-        </p>
+        <div className="mt-8 flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 dark:border-emerald-900/50 dark:bg-emerald-900/10">
+          <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600 dark:text-emerald-400" />
+          <p className="text-sm text-emerald-800 dark:text-emerald-300">
+            {t("success")}
+          </p>
+        </div>
       ) : (
-        <form onSubmit={handleSubmit} className="mt-8 space-y-4">
-          {/* Locale für serverseitige Speicherung */}
+        <form onSubmit={handleSubmit} className="mt-8 space-y-5">
           <input type="hidden" name="locale" value={locale} />
-          <div className="space-y-1">
-            <label htmlFor="name" className="text-sm font-medium text-slate-700 dark:text-slate-200">
+
+          <div className="space-y-1.5">
+            <label htmlFor="name" className="text-sm font-semibold text-slate-700 dark:text-slate-200">
               {t("nameLabel")}
             </label>
             <input
@@ -76,11 +94,12 @@ export default function LocaleContactPageClient() {
               name="name"
               type="text"
               required
-              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+              className="input-brand"
             />
           </div>
-          <div className="space-y-1">
-            <label htmlFor="email" className="text-sm font-medium text-slate-700 dark:text-slate-200">
+
+          <div className="space-y-1.5">
+            <label htmlFor="email" className="text-sm font-semibold text-slate-700 dark:text-slate-200">
               {t("emailLabel")}
             </label>
             <input
@@ -88,11 +107,12 @@ export default function LocaleContactPageClient() {
               name="email"
               type="email"
               required
-              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+              className="input-brand"
             />
           </div>
-          <div className="space-y-1">
-            <label htmlFor="message" className="text-sm font-medium text-slate-700 dark:text-slate-200">
+
+          <div className="space-y-1.5">
+            <label htmlFor="message" className="text-sm font-semibold text-slate-700 dark:text-slate-200">
               {t("messageLabel")}
             </label>
             <textarea
@@ -100,13 +120,14 @@ export default function LocaleContactPageClient() {
               name="message"
               rows={5}
               required
-              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+              className="input-brand resize-none"
             />
           </div>
+
           <button
             type="submit"
             disabled={loading}
-            className="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-blue-700 disabled:opacity-50"
+            className="btn-brand disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? t("sending") : t("send")}
           </button>
@@ -114,24 +135,23 @@ export default function LocaleContactPageClient() {
       )}
 
       {/* What happens after submit */}
-      {/* Kein <ol>/<li> – <div> verhindert browser-native Zähler-Marker in allen Browsern */}
-      <div className="mt-10 rounded-xl border border-slate-200 bg-slate-50 px-5 py-5 dark:border-slate-800 dark:bg-slate-900">
-        <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+      <div className="mt-10 surface-card px-5 py-5">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
           {t("whatHappensTitle")}
         </h2>
-        <div className="mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-400">
-          <div className="flex items-start gap-2">
-            <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">1</span>
-            {t("whatHappens1")}
-          </div>
-          <div className="flex items-start gap-2">
-            <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">2</span>
-            {t("whatHappens2")}
-          </div>
-          <div className="flex items-start gap-2">
-            <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">3</span>
-            {t("whatHappens3")}
-          </div>
+        <div className="mt-4 space-y-3 text-sm">
+          {[t("whatHappens1"), t("whatHappens2"), t("whatHappens3")].map(
+            (step, i) => (
+              <div key={i} className="flex items-start gap-3">
+                <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">
+                  {i + 1}
+                </span>
+                <span className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                  {step}
+                </span>
+              </div>
+            ),
+          )}
         </div>
       </div>
     </main>

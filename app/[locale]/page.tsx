@@ -208,59 +208,62 @@ export default async function LocaleLandingPage({
       })()}
 
       {/* Hero */}
-      <section className="mx-auto max-w-3xl px-4 py-20 text-center">
-        <div className="mb-4 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium" style={{ borderColor: "var(--color-border)", color: "var(--color-muted)", backgroundColor: "var(--color-surface)" }}>
-          <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "var(--color-accent)" }} />
+      <section className="relative mx-auto max-w-3xl px-4 py-24 text-center">
+        {/* Subtle radial glow */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 -z-10 mx-auto h-full max-w-lg rounded-full opacity-[0.06] blur-3xl dark:opacity-[0.04]"
+          style={{ background: "var(--gradient-brand)" }}
+        />
+        <div className="mb-5 inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-semibold shadow-sm" style={{ borderColor: "var(--color-border)", color: "var(--color-muted)", backgroundColor: "var(--color-surface)" }}>
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full" style={{ backgroundColor: "var(--color-accent)" }} />
           {t("heroBadge")}
         </div>
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+        <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100 sm:text-5xl lg:text-6xl">
           {t("heroTitle")}
         </h1>
-        <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-600 dark:text-slate-300">
+        <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-300">
           {t("heroSubtitle")}
         </p>
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Link href={`/${locale}/pricing`} className="btn-brand">
+        <div className="mt-10 flex flex-wrap justify-center gap-3">
+          <Link href={`/${locale}/pricing`} className="btn-brand px-7 py-3.5 text-base">
             {t("ctaPrimary")}
           </Link>
-          <a
-            href="#features"
-            className="btn-outline-brand"
-          >
+          <a href="#features" className="btn-outline-brand px-7 py-3.5 text-base">
             {t("ctaSecondary")}
           </a>
         </div>
-        <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
-          {t("trialNote")}
-        </p>
-        <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-          {t("trialNoMessages")}
+        <p className="mt-4 text-xs text-slate-400 dark:text-slate-500">
+          {t("trialNote")} &nbsp;·&nbsp; {t("trialNoMessages")}
         </p>
       </section>
 
       {/* Features */}
       <section id="features" className="mx-auto max-w-6xl px-4 py-16">
-        <h2 className="mb-10 text-center text-2xl font-bold">
+        <h2 className="mb-2 text-center text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">
           {t("featuresTitle")}
         </h2>
+        <p className="mb-10 text-center text-sm text-slate-500 dark:text-slate-400">
+          {t("trustSubtitle")}
+        </p>
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {features.map((f) => (
             <div
               key={f.title}
-              className="group rounded-2xl border p-6 shadow-sm transition-all duration-200 hover:shadow-brand"
+              className="group rounded-2xl border p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
               style={{
                 backgroundColor: "var(--color-surface)",
                 borderColor: "var(--color-border)",
               }}
             >
               <div
-                className="mb-3 inline-flex rounded-xl p-2.5"
+                className="mb-4 inline-flex rounded-xl p-2.5 shadow-sm"
                 style={{ background: "var(--gradient-brand)" }}
               >
                 <f.icon className="h-5 w-5 text-white" />
               </div>
-              <h3 className="font-semibold">{f.title}</h3>
-              <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+              <h3 className="font-semibold text-slate-900 dark:text-slate-100">{f.title}</h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                 {f.desc}
               </p>
             </div>

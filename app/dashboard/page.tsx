@@ -290,6 +290,9 @@ export default function DashboardPage() {
               <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-slate-100">
                 {euro.format(stats.revenueSaved)}
               </p>
+              <p className="mt-1.5 text-xs text-slate-400 dark:text-slate-500">
+                {t("dashboard.revenueSavedNote")}
+              </p>
             </div>
           </div>
 

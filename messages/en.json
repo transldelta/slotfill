@@ -41,7 +41,7 @@
     "appointmentsToday": "Appointments Today",
     "filledToday": "Slots Filled Today",
     "notificationsThisMonth": "Notifications This Month",
-    "revenueSaved": "Revenue Saved",
+    "revenueSaved": "Estimated Appointment Potential",
     "recentActivity": "Recent Activity",
     "noRecentActivity": "No activity in the last 7 days.",
     "quickActions": "Quick Actions",
@@ -65,7 +65,8 @@
     "planned": "Planned",
     "filled": "Filled",
     "cancelled": "Cancelled",
-    "status": "Status"
+    "status": "Status",
+    "revenueSavedNote": "Estimate based on filled slots × avg. practice value. Not actual revenue."
   },
   "sidebar": {
     "brand": "ClinicSlotHub",

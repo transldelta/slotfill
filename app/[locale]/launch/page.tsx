@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { CheckCircle2, Mail, Globe, ArrowRight, Info } from "lucide-react";
+import { CheckCircle2, Mail, Globe, ArrowRight, Info, UserCheck, LayoutDashboard, Link as LinkIcon } from "lucide-react";
 import { locales, type Locale } from "@/i18n/routing";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { CANONICAL_URL } from "@/lib/brand";
@@ -407,6 +407,51 @@ export async function generateMetadata({
   };
 }
 
+// ─── Lokalisierte 3-Schritt-Erklärung ────────────────────────────────────────
+
+type HowItWorks = {
+  steps: Array<{ title: string; desc: string }>;
+};
+
+const HOW_IT_WORKS: Record<string, HowItWorks> = {
+  de: {
+    steps: [
+      {
+        title: "Praxis erhält eigenen Buchungslink",
+        desc: "Nach der Registrierung bekommt jede Praxis einen einzigartigen Link, den sie auf ihrer Website, per E-Mail oder als QR-Code teilen kann.",
+      },
+      {
+        title: "Patienten stellen Anfragen – ohne Login",
+        desc: "Patienten öffnen den Link, füllen das Formular aus und senden ihre Anfrage. Kein Konto, kein Passwort – null Aufwand.",
+      },
+      {
+        title: "Praxis verwaltet alles im Dashboard",
+        desc: "Anfragen, Warteliste und Benachrichtigungen – alles an einem Ort. Die Praxis bestätigt oder lehnt Termine manuell ab.",
+      },
+    ],
+  },
+  en: {
+    steps: [
+      {
+        title: "Practice gets a booking link",
+        desc: "After registration each practice gets a unique booking link to share on their website, by email or as a QR code.",
+      },
+      {
+        title: "Patients submit requests — no login",
+        desc: "Patients open the link, fill in the form and submit. No account, no password — zero friction.",
+      },
+      {
+        title: "Practice manages everything in the dashboard",
+        desc: "Requests, waitlist and notifications — all in one place. The practice confirms or declines appointments manually.",
+      },
+    ],
+  },
+};
+
+function getHowItWorks(locale: string): HowItWorks {
+  return HOW_IT_WORKS[locale] ?? HOW_IT_WORKS["en"];
+}
+
 // ─── Page Component ───────────────────────────────────────────────────────────
 
 export default async function LaunchPage({
@@ -416,6 +461,8 @@ export default async function LaunchPage({
 }) {
   const { locale } = await params;
   const c = getContent(locale);
+  const hiw = getHowItWorks(locale);
+  const stepIcons = [LinkIcon, UserCheck, LayoutDashboard];
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-12" dir={c.dir}>
@@ -426,7 +473,7 @@ export default async function LaunchPage({
 
       {/* Badge */}
       <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700 dark:border-blue-800 dark:bg-blue-900/20 dark:text-blue-300">
-        <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
+        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-blue-500" />
         {c.badge}
       </div>
 
@@ -442,7 +489,7 @@ export default async function LaunchPage({
       <div className="mt-8 flex flex-wrap gap-3">
         <Link
           href="/auth/register"
-          className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
+          className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
         >
           {c.ctaTrial}
           <ArrowRight className="h-4 w-4" />
@@ -468,6 +515,33 @@ export default async function LaunchPage({
         />
       </div>
 
+      {/* 3-step "how it works" — immediately after hero, before text */}
+      <section className="mt-12">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {hiw.steps.map((step, i) => {
+            const Icon = stepIcons[i];
+            return (
+              <div
+                key={i}
+                className="flex flex-col gap-3 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900"
+              >
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                    {step.title}
+                  </p>
+                  <p className="mt-1 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                    {step.desc}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
       {/* Problem */}
       <section className="mt-12">
         <p className="text-base leading-relaxed text-slate-700 dark:text-slate-300">
@@ -476,7 +550,7 @@ export default async function LaunchPage({
       </section>
 
       {/* Solution */}
-      <section className="mt-6">
+      <section className="mt-5">
         <p className="text-base leading-relaxed text-slate-700 dark:text-slate-300">
           {c.solution}
         </p>
@@ -484,10 +558,10 @@ export default async function LaunchPage({
 
       {/* What works now */}
       <section className="mt-10 rounded-2xl border border-slate-100 bg-slate-50 p-6 dark:border-slate-800 dark:bg-slate-800/30">
-        <h2 className="mb-4 text-base font-semibold text-slate-900 dark:text-slate-100">
+        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
           {c.whatWorks}
         </h2>
-        <ul className="space-y-2.5">
+        <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           {c.features.map((f, i) => (
             <li
               key={i}

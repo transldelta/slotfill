@@ -41,7 +41,7 @@
     "appointmentsToday": "Termine heute",
     "filledToday": "Lücken gefüllt heute",
     "notificationsThisMonth": "Benachrichtigungen diesen Monat",
-    "revenueSaved": "Umsatz gerettet",
+    "revenueSaved": "Geschätztes Terminpotenzial",
     "recentActivity": "Letzte Aktivitäten",
     "noRecentActivity": "Keine Aktivitäten in den letzten 7 Tagen.",
     "quickActions": "Schnellzugriff",
@@ -65,7 +65,8 @@
     "planned": "Geplant",
     "filled": "Gefüllt",
     "cancelled": "Ausgefallen",
-    "status": "Status"
+    "status": "Status",
+    "revenueSavedNote": "Schätzung basierend auf gefüllten Terminen × durchschnittlichem Praxiswert. Kein echter Umsatz."
   },
   "sidebar": {
     "brand": "ClinicSlotHub",

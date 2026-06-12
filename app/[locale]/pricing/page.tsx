@@ -8,12 +8,13 @@ import { useTranslations } from "next-intl";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import type { Locale } from "@/i18n/routing";
 
+// ─── DB plan shape (name + price come from the API; features are hardcoded below) ─
+
 type Plan = {
   id: string;
   plan_key: string;
   name: string;
   price_monthly: number;
-  feature_keys: string[];
 };
 
 const CTA_BY_KEY: Record<string, string> = {
@@ -22,33 +23,121 @@ const CTA_BY_KEY: Record<string, string> = {
   praxis_plus: "ctaClinicPro",
 };
 
+// ─── Hardcoded feature lists per plan + locale ────────────────────────────────
+// Bypasses DB feature_keys to avoid inaccurate labels (e.g. "unlimitedPatients").
+// Only concrete, verifiable features are listed.
+
 type PlanMeta = {
   subtitle: string;
   badge?: string;
   badgeColor?: "blue" | "emerald";
   icon: React.ElementType;
   highlight?: boolean;
+  features: string[];
 };
 
-const PLAN_META: Record<string, PlanMeta> = {
-  starter: {
-    subtitle: "Ideal für einzelne Praxen, die digitale Anfragen einführen möchten.",
-    icon: Zap,
+const PLAN_CONTENT: Record<string, Record<string, PlanMeta>> = {
+  de: {
+    starter: {
+      subtitle:
+        "Für einzelne Praxen oder kleine Teams, die digitale Terminanfragen strukturiert starten möchten.",
+      icon: Zap,
+      features: [
+        "Öffentlicher Buchungslink für Ihre Praxis",
+        "Patientenanfragen ohne Login",
+        "Einfache Warteliste",
+        "Basis-Patientenverwaltung",
+        "Vorbereitete E-Mail-Benachrichtigungen",
+        "14 Tage kostenlos testen",
+        "Keine Kreditkarte erforderlich",
+      ],
+    },
+    professional: {
+      subtitle:
+        "Für Praxisteams mit mehreren Mitarbeitenden und regelmäßigem Anfragevolumen.",
+      badge: "Empfohlen",
+      badgeColor: "blue",
+      icon: TrendingUp,
+      highlight: true,
+      features: [
+        "Alles aus Starter",
+        "Team-Workflow für mehrere Mitarbeitende",
+        "Erweiterte Statistiken",
+        "Strukturierte Anfrage- und Statusverwaltung",
+        "Bessere Übersicht über Warteliste und freie Zeitfenster",
+        "Geeignet für aktive Praxisteams",
+      ],
+    },
+    praxis_plus: {
+      subtitle:
+        "Für größere Praxen, MVZ, Kliniken oder Einrichtungen mit mehreren Behandlern und höherem Anfragevolumen.",
+      badge: "Premium",
+      badgeColor: "emerald",
+      icon: Building2,
+      features: [
+        "Alles aus Professional",
+        "Geeignet für größere Wartelisten und höheres Anfragevolumen",
+        "Für mehrere Behandler und größere Organisationen",
+        "Erweiterte Organisationsübersicht",
+        "Vorrang bei Einrichtung und Support",
+        "Premium-Betriebsmodus für intensivere Nutzung",
+      ],
+    },
   },
-  professional: {
-    subtitle: "Für wachsende Praxisteams mit höherem Anfragevolumen.",
-    badge: "Empfohlen",
-    badgeColor: "blue",
-    icon: TrendingUp,
-    highlight: true,
-  },
-  praxis_plus: {
-    subtitle: "Für größere Praxen, MVZ und Einrichtungen mit mehreren Behandlern.",
-    badge: "Premium",
-    badgeColor: "emerald",
-    icon: Building2,
+  en: {
+    starter: {
+      subtitle:
+        "For individual practices or small teams ready to start managing appointment requests digitally.",
+      icon: Zap,
+      features: [
+        "Public booking link for your practice",
+        "Patient requests without login",
+        "Basic waitlist management",
+        "Patient management",
+        "Prepared email notifications",
+        "14-day free trial",
+        "No credit card required",
+      ],
+    },
+    professional: {
+      subtitle:
+        "For practice teams with multiple staff and regular appointment request volume.",
+      badge: "Recommended",
+      badgeColor: "blue",
+      icon: TrendingUp,
+      highlight: true,
+      features: [
+        "Everything in Starter",
+        "Team workflow for multiple staff members",
+        "Advanced statistics",
+        "Structured request and status management",
+        "Better overview of waitlist and open slots",
+        "Designed for active practice teams",
+      ],
+    },
+    praxis_plus: {
+      subtitle:
+        "For larger practices, MVZ, clinics or organizations with multiple practitioners and higher request volumes.",
+      badge: "Premium",
+      badgeColor: "emerald",
+      icon: Building2,
+      features: [
+        "Everything in Professional",
+        "Suited for larger waitlists and higher request volumes",
+        "For multiple practitioners and larger organizations",
+        "Extended organizational overview",
+        "Priority setup and support",
+        "Premium operating mode for intensive use",
+      ],
+    },
   },
 };
+
+// Fallback to "en" for locales without dedicated content
+function getPlanContent(locale: string, planKey: string): PlanMeta | null {
+  const loc = PLAN_CONTENT[locale] ?? PLAN_CONTENT["en"];
+  return loc[planKey] ?? null;
+}
 
 export default function LocalePricingPage() {
   const t = useTranslations("pricing");
@@ -121,7 +210,9 @@ export default function LocalePricingPage() {
           {t("title")}
         </h1>
         <p className="mt-2 text-slate-500 dark:text-slate-400">{t("subtitle")}</p>
-        <p className="mt-1 text-sm font-medium text-blue-600 dark:text-blue-400">{t("trial")}</p>
+        <p className="mt-1 text-sm font-medium text-blue-600 dark:text-blue-400">
+          {t("trial")}
+        </p>
       </div>
 
       {/* Value proposition */}
@@ -135,7 +226,7 @@ export default function LocalePricingPage() {
           {Array.from({ length: 3 }).map((_, i) => (
             <div
               key={i}
-              className="h-96 animate-pulse rounded-2xl bg-slate-100 dark:bg-slate-800"
+              className="h-[420px] animate-pulse rounded-2xl bg-slate-100 dark:bg-slate-800"
             />
           ))}
         </div>
@@ -145,16 +236,16 @@ export default function LocalePricingPage() {
         <p className="py-4 text-center text-slate-500">{t("plansError")}</p>
       )}
 
-      {/* Plan cards — 3 columns */}
+      {/* Plan cards — 3 columns, features hardcoded per plan */}
       {!loading && !error && (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {plans.map((plan) => {
-            const meta = PLAN_META[plan.plan_key] ?? {
-              subtitle: "",
-              icon: Zap,
-            };
+            const meta = getPlanContent(locale, plan.plan_key);
+            if (!meta) return null;
+
             const Icon = meta.icon;
             const isHighlight = meta.highlight ?? false;
+            const isClinicPro = plan.plan_key === "praxis_plus";
 
             return (
               <div
@@ -162,8 +253,8 @@ export default function LocalePricingPage() {
                 className={`relative flex flex-col rounded-2xl border p-7 shadow-sm transition ${
                   isHighlight
                     ? "border-blue-500 bg-blue-50 ring-1 ring-blue-500/30 dark:bg-blue-950/20"
-                    : plan.plan_key === "praxis_plus"
-                    ? "border-emerald-300 bg-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/10"
+                    : isClinicPro
+                    ? "border-emerald-200 bg-white dark:border-emerald-800/40 dark:bg-slate-900"
                     : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900"
                 }`}
               >
@@ -186,7 +277,7 @@ export default function LocalePricingPage() {
                     className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
                       isHighlight
                         ? "bg-blue-600 text-white"
-                        : plan.plan_key === "praxis_plus"
+                        : isClinicPro
                         ? "bg-emerald-600 text-white"
                         : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300"
                     }`}
@@ -197,7 +288,7 @@ export default function LocalePricingPage() {
                     <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
                       {plan.name}
                     </h2>
-                    <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400 leading-snug">
+                    <p className="mt-0.5 text-xs leading-snug text-slate-500 dark:text-slate-400">
                       {meta.subtitle}
                     </p>
                   </div>
@@ -213,16 +304,24 @@ export default function LocalePricingPage() {
                   </span>
                 </div>
 
-                {/* Features */}
-                <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                {/* Features — hardcoded, never from DB */}
+                <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
                   {t("features")}
                 </p>
-                <ul className="flex-1 space-y-2 text-sm">
-                  {(plan.feature_keys ?? []).map((key) => (
-                    <li key={key} className="flex items-center gap-2.5">
-                      <Check className="h-4 w-4 shrink-0 text-emerald-600" />
+                <ul className="flex-1 space-y-2.5 text-sm">
+                  {meta.features.map((feature, i) => (
+                    <li key={i} className="flex items-start gap-2.5">
+                      <Check
+                        className={`mt-0.5 h-4 w-4 shrink-0 ${
+                          isHighlight
+                            ? "text-blue-600"
+                            : isClinicPro
+                            ? "text-emerald-600"
+                            : "text-emerald-600"
+                        }`}
+                      />
                       <span className="text-slate-700 dark:text-slate-300">
-                        {t(`featureKeys.${key}`)}
+                        {feature}
                       </span>
                     </li>
                   ))}
@@ -235,7 +334,7 @@ export default function LocalePricingPage() {
                   className={`mt-7 w-full rounded-xl px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
                     isHighlight
                       ? "bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500"
-                      : plan.plan_key === "praxis_plus"
+                      : isClinicPro
                       ? "bg-emerald-600 text-white hover:bg-emerald-700 focus:ring-emerald-500"
                       : "bg-slate-900 text-white hover:bg-slate-800 focus:ring-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600"
                   }`}

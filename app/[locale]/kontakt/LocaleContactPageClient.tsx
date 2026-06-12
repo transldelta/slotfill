@@ -51,10 +51,12 @@ export default function LocaleContactPageClient() {
       </p>
 
       {/* B2B context note */}
-      <div className="mt-4 rounded-lg border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-blue-800 dark:border-blue-900/40 dark:bg-blue-900/10 dark:text-blue-300">
-        <span className="font-semibold">Für Praxen und Kliniken:</span>{" "}
-        Fragen zu ClinicSlotHub, zur Einrichtung, Datenschutz oder Preisen? Schreiben Sie uns direkt.{" "}
-        Kein Vertriebsdruck. Keine automatischen Folgenachrichten.
+      <div className="mt-4 rounded-xl border border-blue-100 bg-blue-50 px-4 py-4 text-sm text-blue-900 dark:border-blue-900/40 dark:bg-blue-900/10 dark:text-blue-200">
+        <p className="font-semibold">Diese Kontaktseite richtet sich an Praxen und Kliniken.</p>
+        <p className="mt-1 text-blue-700 dark:text-blue-300">
+          Fragen zur Einrichtung, zu Datenschutz, Preisen oder einer individuellen Demo? Wir antworten persönlich.
+          Kein automatischer Versand, kein Vertriebsdruck.
+        </p>
       </div>
 
       {done ? (

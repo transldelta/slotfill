@@ -199,6 +199,7 @@ export default function LocalePricingPage() {
   }
 
   return (
+    <div className="min-h-screen bg-gradient-to-b from-indigo-50/30 to-white dark:from-indigo-950/10 dark:to-transparent">
     <main className="mx-auto max-w-6xl px-4 py-12">
       <div className="mb-4 flex justify-end">
         <LanguageSwitcher currentLocale={locale as Locale} currentPath="/pricing" />
@@ -206,13 +207,14 @@ export default function LocalePricingPage() {
 
       {/* Header */}
       <div className="mb-10 text-center">
+        <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-1.5 text-xs font-semibold text-blue-700 dark:border-blue-800 dark:bg-blue-900/20 dark:text-blue-300">
+          <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
+          {t("trial")}
+        </div>
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 sm:text-4xl">
           {t("title")}
         </h1>
         <p className="mt-2 text-slate-500 dark:text-slate-400">{t("subtitle")}</p>
-        <p className="mt-1 text-sm font-medium text-blue-600 dark:text-blue-400">
-          {t("trial")}
-        </p>
       </div>
 
       {/* Value proposition */}
@@ -222,7 +224,7 @@ export default function LocalePricingPage() {
 
       {/* Loading skeleton — 3 cards */}
       {loading && (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {Array.from({ length: 3 }).map((_, i) => (
             <div
               key={i}
@@ -238,7 +240,7 @@ export default function LocalePricingPage() {
 
       {/* Plan cards — 3 columns, features hardcoded per plan */}
       {!loading && !error && (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {plans.map((plan) => {
             const meta = getPlanContent(locale, plan.plan_key);
             if (!meta) return null;
@@ -382,5 +384,6 @@ export default function LocalePricingPage() {
         <p>{t("priceNote")}</p>
       </div>
     </main>
+    </div>
   );
 }

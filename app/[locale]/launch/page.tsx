@@ -465,6 +465,7 @@ export default async function LaunchPage({
   const stepIcons = [LinkIcon, UserCheck, LayoutDashboard];
 
   return (
+    <div className="min-h-screen bg-gradient-to-b from-blue-50/35 to-white dark:from-blue-950/10 dark:to-transparent">
     <main className="mx-auto max-w-4xl px-4 py-12" dir={c.dir}>
       {/* Language switcher */}
       <div className="mb-6 flex justify-end">
@@ -478,7 +479,7 @@ export default async function LaunchPage({
       </div>
 
       {/* Headline */}
-      <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl lg:text-5xl">
+      <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl lg:text-5xl">
         {c.headline}
       </h1>
       <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-300">
@@ -486,7 +487,7 @@ export default async function LaunchPage({
       </p>
 
       {/* CTA buttons — above fold */}
-      <div className="mt-8 flex flex-wrap gap-3">
+      <div className="mt-8 flex flex-col gap-3 sm:flex-row">
         <Link href="/auth/register" className="btn-brand">
           {c.ctaTrial}
           <ArrowRight className="ml-1.5 h-4 w-4" />
@@ -517,7 +518,7 @@ export default async function LaunchPage({
         <p className="mb-4 text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
           Wie es funktioniert
         </p>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {hiw.steps.map((step, i) => {
             const Icon = stepIcons[i];
             return (
@@ -647,5 +648,6 @@ export default async function LaunchPage({
         </Link>
       </div>
     </main>
+    </div>
   );
 }

@@ -259,7 +259,7 @@ export default function BookSlugPage() {
 
   // ── Formular ──────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--color-bg)" }}>
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50/30 to-white dark:from-blue-950/10 dark:to-transparent">
       <header className="border-b px-4 py-3" style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}>
         <SlotFillLogo href="/" size={30} />
       </header>
@@ -289,8 +289,8 @@ export default function BookSlugPage() {
         </div>
 
         {/* Hinweis-Banner */}
-        <div className="mt-4 rounded-xl border border-slate-100 bg-slate-50 p-4 text-sm dark:border-slate-800 dark:bg-slate-800/30">
-          <p className="font-semibold text-slate-700 dark:text-slate-200">
+        <div className="mt-4 rounded-xl border border-blue-100 bg-blue-50/50 p-4 text-sm dark:border-blue-900/30 dark:bg-blue-950/10">
+          <p className="font-semibold text-blue-800 dark:text-blue-200">
             Wie funktioniert es?
           </p>
           <ol className="mt-2 space-y-1 text-slate-600 dark:text-slate-400">
@@ -306,7 +306,7 @@ export default function BookSlugPage() {
 
           {/* Name */}
           <div>
-            <label htmlFor="patient_name" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+            <label htmlFor="patient_name" className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
               Ihr Name <span className="text-red-500">*</span>
             </label>
             <input
@@ -318,7 +318,7 @@ export default function BookSlugPage() {
 
           {/* E-Mail */}
           <div>
-            <label htmlFor="patient_email" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+            <label htmlFor="patient_email" className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
               E-Mail <span className="text-red-500">*</span>
             </label>
             <input
@@ -330,7 +330,7 @@ export default function BookSlugPage() {
 
           {/* Telefon */}
           <div>
-            <label htmlFor="patient_phone" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+            <label htmlFor="patient_phone" className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
               Telefon (optional)
             </label>
             <input
@@ -342,7 +342,7 @@ export default function BookSlugPage() {
 
           {/* Zeitfenster / Slot */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
               {showSlotSelector
                 ? <> Zeitfenster auswählen <span className="text-red-500">*</span> </>
                 : <> Gewünschter Zeitraum <span className="text-red-500">*</span> </>
@@ -398,7 +398,7 @@ export default function BookSlugPage() {
 
           {/* Anliegen */}
           <div>
-            <label htmlFor="note" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+            <label htmlFor="note" className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
               Anliegen / Notiz (optional)
             </label>
             <textarea

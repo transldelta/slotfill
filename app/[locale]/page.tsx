@@ -207,8 +207,9 @@ export default async function LocaleLandingPage({
         );
       })()}
 
-      {/* Hero */}
-      <section className="relative mx-auto max-w-3xl px-4 py-24 text-center">
+      {/* Hero — full-bleed blue-tint section */}
+      <div className="w-full bg-gradient-to-b from-blue-50/70 to-white dark:from-blue-950/20 dark:to-transparent">
+      <section className="relative mx-auto max-w-3xl px-4 py-16 text-center sm:py-24">
         {/* Subtle radial glow */}
         <div
           aria-hidden
@@ -219,17 +220,17 @@ export default async function LocaleLandingPage({
           <span className="h-1.5 w-1.5 animate-pulse rounded-full" style={{ backgroundColor: "var(--color-accent)" }} />
           {t("heroBadge")}
         </div>
-        <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100 sm:text-5xl lg:text-6xl">
+        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100 sm:text-5xl lg:text-6xl">
           {t("heroTitle")}
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-300">
           {t("heroSubtitle")}
         </p>
-        <div className="mt-10 flex flex-wrap justify-center gap-3">
-          <Link href={`/${locale}/pricing`} className="btn-brand px-7 py-3.5 text-base">
+        <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+          <Link href={`/${locale}/pricing`} className="btn-brand w-full px-7 py-3.5 text-base sm:w-auto">
             {t("ctaPrimary")}
           </Link>
-          <a href="#features" className="btn-outline-brand px-7 py-3.5 text-base">
+          <a href="#features" className="btn-outline-brand w-full px-7 py-3.5 text-base sm:w-auto">
             {t("ctaSecondary")}
           </a>
         </div>
@@ -237,8 +238,10 @@ export default async function LocaleLandingPage({
           {t("trialNote")} &nbsp;·&nbsp; {t("trialNoMessages")}
         </p>
       </section>
+      </div>
 
-      {/* Features */}
+      {/* Features — subtle slate-tinted section */}
+      <div className="w-full bg-slate-50/60 dark:bg-transparent">
       <section id="features" className="mx-auto max-w-6xl px-4 py-16">
         <h2 className="mb-2 text-center text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">
           {t("featuresTitle")}
@@ -270,8 +273,10 @@ export default async function LocaleLandingPage({
           ))}
         </div>
       </section>
+      </div>
 
-      {/* Trust */}
+      {/* Trust — subtle teal-tint section */}
+      <div className="w-full bg-gradient-to-b from-teal-50/25 to-white dark:from-teal-950/10 dark:to-transparent">
       <section
         id="trust"
         className="mx-auto max-w-4xl px-4 py-16 text-center"
@@ -291,11 +296,7 @@ export default async function LocaleLandingPage({
           ).map((point) => (
             <li
               key={point}
-              className="flex items-start gap-3 rounded-xl border px-5 py-4 text-left shadow-sm"
-              style={{
-                backgroundColor: "var(--color-surface)",
-                borderColor: "var(--color-border)",
-              }}
+              className="flex items-start gap-3 rounded-xl border border-teal-100 bg-white px-5 py-4 text-left shadow-sm dark:border-teal-900/30 dark:bg-slate-900"
             >
               <CheckCircle2
                 className="mt-0.5 h-5 w-5 shrink-0"
@@ -308,6 +309,7 @@ export default async function LocaleLandingPage({
           ))}
         </ul>
       </section>
+      </div>
 
       {/* Online-Booking Section */}
       <section className="mx-auto max-w-6xl px-4 py-16">
@@ -367,16 +369,16 @@ export default async function LocaleLandingPage({
         <p className="mt-2 text-white/80">
           {t("ctaBlockSubtitle")}
         </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-3">
+        <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
           <Link
             href={`/${locale}/pricing`}
-            className="inline-flex items-center justify-center rounded-lg bg-white px-6 py-3 text-sm font-semibold text-slate-900 shadow-lg transition hover:bg-slate-50"
+            className="inline-flex w-full items-center justify-center rounded-lg bg-white px-6 py-3 text-sm font-semibold text-slate-900 shadow-lg transition hover:bg-slate-50 sm:w-auto"
           >
             {t("ctaPrimary")}
           </Link>
           <Link
             href={`/${locale}/pricing`}
-            className="inline-flex items-center justify-center rounded-lg border border-white/40 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+            className="inline-flex w-full items-center justify-center rounded-lg border border-white/40 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10 sm:w-auto"
           >
             {t("comparePrices")}
           </Link>

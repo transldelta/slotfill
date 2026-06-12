@@ -33,6 +33,7 @@ export default function LocaleContactPageClient() {
   }
 
   return (
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-transparent">
     <main className="mx-auto max-w-xl px-4 py-14">
       {/* Language switcher */}
       <div className="mb-6 flex justify-end">
@@ -155,5 +156,6 @@ export default function LocaleContactPageClient() {
         </div>
       </div>
     </main>
+    </div>
   );
 }

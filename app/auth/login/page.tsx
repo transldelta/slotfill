@@ -32,12 +32,12 @@ export default function LoginPage() {
       {/* Decorative background rings — pure CSS, no images */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-32 left-1/2 h-[500px] w-[500px] -translate-x-1/2 rounded-full opacity-[0.06] dark:opacity-[0.04]"
+        className="pointer-events-none absolute -top-32 left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full opacity-[0.09] blur-3xl dark:opacity-[0.06]"
         style={{ background: "var(--gradient-brand)" }}
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -bottom-20 right-0 h-72 w-72 rounded-full opacity-[0.04] dark:opacity-[0.03]"
+        className="pointer-events-none absolute -bottom-20 right-0 h-80 w-80 rounded-full opacity-[0.06] blur-2xl dark:opacity-[0.04]"
         style={{ background: "var(--gradient-brand)" }}
       />
 

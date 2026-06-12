@@ -69,9 +69,9 @@ function buildSchemaOrg(locale: string) {
         inLanguage: locale,
         offers: {
           "@type": "Offer",
-          price: "29",
+          price: "49",
           priceCurrency: "EUR",
-          description: "Starter plan from €29/month, 14-day free trial included",
+          description: "Starter plan from €49/month, 14-day free trial included",
         },
       },
       {

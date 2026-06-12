@@ -277,8 +277,14 @@ export default function BookSlugPage() {
           </div>
         </div>
 
+        {/* Kein-Login-Badge */}
+        <div className="mt-5 inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 dark:border-emerald-800/60 dark:bg-emerald-950/20 dark:text-emerald-400">
+          <CheckCircle2 className="h-3.5 w-3.5" />
+          Kein Login nötig – Anfrage direkt senden
+        </div>
+
         {/* Hinweis-Banner */}
-        <div className="mt-6 rounded-xl border p-4 text-sm"
+        <div className="mt-4 rounded-xl border p-4 text-sm"
           style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}>
           <p className="font-medium text-slate-700 dark:text-slate-300">
             Wie funktioniert es?

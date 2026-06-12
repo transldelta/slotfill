@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { CheckCircle2, Mail, Globe, ArrowRight } from "lucide-react";
+import { CheckCircle2, Mail, Globe, ArrowRight, Info } from "lucide-react";
 import { locales, type Locale } from "@/i18n/routing";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { CANONICAL_URL } from "@/lib/brand";
@@ -30,7 +30,6 @@ type LaunchContent = {
   ctaTrial: string;
   ctaContact: string;
   ctaBook: string;
-  feedbackLabel: string;
   ogTitle: string;
   ogDesc: string;
 };
@@ -40,9 +39,12 @@ const CONTENT: Record<string, LaunchContent> = {
     dir: "ltr",
     badge: "Globaler öffentlicher Soft Launch · Juni 2026",
     headline: "ClinicSlotHub – jetzt weltweit verfügbar",
-    subline: "Eine internationale Plattform für Praxen, Kliniken, Therapiezentren und Healthcare Provider, die Terminanfragen, Wartelisten und freie Zeitfenster strukturierter verwalten möchten.",
-    problem: "Viele Praxen verlieren täglich Zeit, weil Terminabsagen manuell koordiniert werden: Warteliste durchgehen, Patienten anrufen, hoffen, dass jemand kurzfristig kommt. Das kostet Personal und führt zu unnötigen Leerterminkosten.",
-    solution: "ClinicSlotHub digitalisiert diesen Prozess: Jede Praxis erhält einen eigenen öffentlichen Buchungslink, den sie auf ihrer Webseite, per E-Mail oder als QR-Code teilen kann. Patienten senden ohne Login eine Anfrage; die Praxis sieht diese Anfrage im Dashboard und kann sie bestätigen oder ablehnen. Bei einem freien Termin benachrichtigt die Praxis passende Patienten per E-Mail – in wenigen Klicks, ohne Telefonliste.",
+    subline:
+      "Eine internationale Plattform für Praxen, Kliniken, Therapiezentren und Healthcare Provider, die Terminanfragen, Wartelisten und freie Zeitfenster strukturierter verwalten möchten.",
+    problem:
+      "Viele Praxen verlieren täglich Zeit, weil Terminabsagen manuell koordiniert werden: Warteliste durchgehen, Patienten anrufen, hoffen, dass jemand kurzfristig kommt. Das kostet Personal und führt zu unnötigen Leerterminkosten.",
+    solution:
+      "ClinicSlotHub digitalisiert diesen Prozess: Jede Praxis erhält einen eigenen öffentlichen Buchungslink, den sie auf ihrer Webseite, per E-Mail oder als QR-Code teilen kann. Patienten senden ohne Login eine Anfrage; die Praxis sieht diese Anfrage im Dashboard und kann sie bestätigen oder ablehnen. Bei einem freien Termin benachrichtigt die Praxis passende Patienten per E-Mail – in wenigen Klicks, ohne Telefonliste.",
     whatWorks: "Was aktuell funktioniert:",
     features: [
       "Eigener öffentlicher Buchungslink pro Praxis – teilbar via Website, E-Mail oder QR-Code",
@@ -54,23 +56,28 @@ const CONTENT: Record<string, LaunchContent> = {
       "14 Tage kostenlos testen, keine Kreditkarte",
     ],
     statusTitle: "Aktueller Status",
-    status: "Öffentlicher Soft Launch. Keine zahlenden Kunden bisher. Kein Versprechen auf schnelle Erfolge. Ein funktionierendes Live-Produkt, das jetzt von echten Praxen getestet und verbessert werden soll.",
+    status:
+      "Öffentlicher Soft Launch. Keine zahlenden Kunden bisher. Kein Versprechen auf schnelle Erfolge. Ein funktionierendes Live-Produkt, das jetzt von echten Praxen getestet und verbessert werden soll.",
     trialNote: "Registrierung ist vollständig selbstservice – keine Einladung nötig.",
-    legalNote: "Hinweis: Lokale rechtliche und datenschutzrechtliche Anforderungen (z. B. AVV gemäß Art. 28 DSGVO) sollten vor dem produktiven Einsatz mit echten Patientendaten geprüft werden.",
+    legalNote:
+      "Hinweis: Lokale rechtliche und datenschutzrechtliche Anforderungen (z. B. AVV gemäß Art. 28 DSGVO) sollten vor dem produktiven Einsatz mit echten Patientendaten geprüft werden.",
     ctaTrial: "Kostenlos testen",
     ctaContact: "Kontakt aufnehmen",
     ctaBook: "Terminanfrage testen",
-    feedbackLabel: "Feedback willkommen: transl.delta@gmail.com",
     ogTitle: "ClinicSlotHub – Globaler Soft Launch",
-    ogDesc: "Mehrsprachige Plattform für Terminanfragen und Wartelisten – jetzt öffentlich verfügbar. 14 Tage kostenlos.",
+    ogDesc:
+      "Mehrsprachige Plattform für Terminanfragen und Wartelisten – jetzt öffentlich verfügbar. 14 Tage kostenlos.",
   },
   en: {
     dir: "ltr",
     badge: "Global Public Soft Launch · June 2026",
     headline: "ClinicSlotHub – now available worldwide",
-    subline: "An international appointment and waitlist management SaaS for clinics, medical practices, therapy centers and healthcare providers worldwide.",
-    problem: "Many practices lose time every day because cancellations are coordinated manually: go through the waitlist, call patients, hope someone is available at short notice. This costs staff time and leads to avoidable empty slots.",
-    solution: "ClinicSlotHub digitalizes this process: each practice gets its own public booking link that can be shared on a website, by email or as a QR code. Patients submit a request without logging in; the practice sees the request in the dashboard and can confirm or decline it. When a slot opens, the practice notifies matching patients by email — in a few clicks, no phone list needed.",
+    subline:
+      "An international appointment and waitlist management SaaS for clinics, medical practices, therapy centers and healthcare providers worldwide.",
+    problem:
+      "Many practices lose time every day because cancellations are coordinated manually: go through the waitlist, call patients, hope someone is available at short notice. This costs staff time and leads to avoidable empty slots.",
+    solution:
+      "ClinicSlotHub digitalizes this process: each practice gets its own public booking link that can be shared on a website, by email or as a QR code. Patients submit a request without logging in; the practice sees the request in the dashboard and can confirm or decline it. When a slot opens, the practice notifies matching patients by email — in a few clicks, no phone list needed.",
     whatWorks: "What is working right now:",
     features: [
       "Own public booking link per practice – shareable via website, email or QR code",
@@ -82,23 +89,28 @@ const CONTENT: Record<string, LaunchContent> = {
       "14-day free trial, no credit card required",
     ],
     statusTitle: "Current status",
-    status: "Public soft launch. No paying customers yet. No promises of quick wins. A working live product that is now being tested and improved by real practices.",
+    status:
+      "Public soft launch. No paying customers yet. No promises of quick wins. A working live product that is now being tested and improved by real practices.",
     trialNote: "Registration is fully self-service — no invitation needed.",
-    legalNote: "Note: Local legal and data protection requirements (e.g. a Data Processing Agreement under GDPR Art. 28) should be reviewed before productive use with real patient data.",
+    legalNote:
+      "Note: Local legal and data protection requirements (e.g. a Data Processing Agreement under GDPR Art. 28) should be reviewed before productive use with real patient data.",
     ctaTrial: "Try for free",
     ctaContact: "Get in touch",
     ctaBook: "Test the booking form",
-    feedbackLabel: "Feedback welcome: transl.delta@gmail.com",
     ogTitle: "ClinicSlotHub – Global Soft Launch",
-    ogDesc: "Multilingual appointment and waitlist SaaS for clinics – now publicly available. 14-day free trial.",
+    ogDesc:
+      "Multilingual appointment and waitlist SaaS for clinics – now publicly available. 14-day free trial.",
   },
   fr: {
     dir: "ltr",
     badge: "Lancement public mondial · Juin 2026",
     headline: "ClinicSlotHub – maintenant disponible dans le monde entier",
-    subline: "Une plateforme internationale pour les cliniques, cabinets médicaux, centres de soins et professionnels de santé souhaitant gérer plus efficacement les demandes de rendez-vous et les listes d'attente.",
-    problem: "De nombreux cabinets perdent du temps chaque jour parce que les annulations sont gérées manuellement : parcourir la liste d'attente, appeler les patients, espérer qu'un créneau se remplisse. Cela coûte du temps et génère des créneaux vides évitables.",
-    solution: "ClinicSlotHub digitalise ce processus : les patients s'inscrivent eux-mêmes via un lien de réservation partageable. Quand un créneau se libère, le cabinet notifie les patients correspondants par e-mail ou SMS/WhatsApp optionnel — en quelques clics.",
+    subline:
+      "Une plateforme internationale pour les cliniques, cabinets médicaux, centres de soins et professionnels de santé souhaitant gérer plus efficacement les demandes de rendez-vous et les listes d'attente.",
+    problem:
+      "De nombreux cabinets perdent du temps chaque jour parce que les annulations sont gérées manuellement : parcourir la liste d'attente, appeler les patients, espérer qu'un créneau se remplisse. Cela coûte du temps et génère des créneaux vides évitables.",
+    solution:
+      "ClinicSlotHub digitalise ce processus : les patients s'inscrivent eux-mêmes via un lien de réservation partageable. Quand un créneau se libère, le cabinet notifie les patients correspondants par e-mail ou SMS/WhatsApp optionnel — en quelques clics.",
     whatWorks: "Ce qui fonctionne dès maintenant :",
     features: [
       "Liste d'attente numérique avec profils patients structurés",
@@ -110,23 +122,28 @@ const CONTENT: Record<string, LaunchContent> = {
       "14 jours d'essai gratuit, sans carte bancaire",
     ],
     statusTitle: "Statut actuel",
-    status: "Lancement public. Pas encore de clients payants. Un produit fonctionnel maintenant testé et amélioré par de vraies pratiques.",
+    status:
+      "Lancement public. Pas encore de clients payants. Un produit fonctionnel maintenant testé et amélioré par de vraies pratiques.",
     trialNote: "L'inscription est entièrement en libre-service — aucune invitation requise.",
-    legalNote: "Note : Les exigences légales et de protection des données locales (p. ex. un accord de traitement des données selon le RGPD Art. 28) doivent être vérifiées avant toute utilisation productive avec de vraies données patients.",
+    legalNote:
+      "Note : Les exigences légales et de protection des données locales (p. ex. un accord de traitement des données selon le RGPD Art. 28) doivent être vérifiées avant toute utilisation productive avec de vraies données patients.",
     ctaTrial: "Essayer gratuitement",
     ctaContact: "Nous contacter",
     ctaBook: "Tester le formulaire de réservation",
-    feedbackLabel: "Retours bienvenus : transl.delta@gmail.com",
     ogTitle: "ClinicSlotHub – Lancement mondial",
-    ogDesc: "Plateforme multilingue de gestion des rendez-vous et listes d'attente – maintenant disponible. Essai gratuit 14 jours.",
+    ogDesc:
+      "Plateforme multilingue de gestion des rendez-vous et listes d'attente – maintenant disponible. Essai gratuit 14 jours.",
   },
   es: {
     dir: "ltr",
     badge: "Lanzamiento público global · Junio 2026",
     headline: "ClinicSlotHub – ya disponible en todo el mundo",
-    subline: "Una plataforma internacional para clínicas, consultorios médicos, centros de salud y proveedores de servicios sanitarios que desean gestionar solicitudes de citas y listas de espera de forma más eficiente.",
-    problem: "Muchos consultorios pierden tiempo cada día porque las cancelaciones se coordinan manualmente: revisar la lista de espera, llamar a los pacientes, esperar que alguien esté disponible con poca anticipación.",
-    solution: "ClinicSlotHub digitaliza este proceso: los pacientes se añaden a la lista de espera a través de un enlace de reserva compartible. Cuando se libera un espacio, el consultorio notifica a los pacientes adecuados por correo electrónico o SMS/WhatsApp opcional.",
+    subline:
+      "Una plataforma internacional para clínicas, consultorios médicos, centros de salud y proveedores de servicios sanitarios que desean gestionar solicitudes de citas y listas de espera de forma más eficiente.",
+    problem:
+      "Muchos consultorios pierden tiempo cada día porque las cancelaciones se coordinan manualmente: revisar la lista de espera, llamar a los pacientes, esperar que alguien esté disponible con poca anticipación.",
+    solution:
+      "ClinicSlotHub digitaliza este proceso: los pacientes se añaden a la lista de espera a través de un enlace de reserva compartible. Cuando se libera un espacio, el consultorio notifica a los pacientes adecuados por correo electrónico o SMS/WhatsApp opcional.",
     whatWorks: "Qué funciona ahora mismo:",
     features: [
       "Lista de espera digital con perfiles de pacientes estructurados",
@@ -138,23 +155,28 @@ const CONTENT: Record<string, LaunchContent> = {
       "14 días de prueba gratuita, sin tarjeta de crédito",
     ],
     statusTitle: "Estado actual",
-    status: "Lanzamiento público. Sin clientes de pago todavía. Un producto funcional en vivo, siendo probado y mejorado por consultorios reales.",
+    status:
+      "Lanzamiento público. Sin clientes de pago todavía. Un producto funcional en vivo, siendo probado y mejorado por consultorios reales.",
     trialNote: "El registro es completamente de autoservicio — no se necesita invitación.",
-    legalNote: "Nota: Los requisitos legales y de protección de datos locales deben revisarse antes del uso productivo con datos reales de pacientes.",
+    legalNote:
+      "Nota: Los requisitos legales y de protección de datos locales deben revisarse antes del uso productivo con datos reales de pacientes.",
     ctaTrial: "Probar gratis",
     ctaContact: "Contactar",
     ctaBook: "Probar el formulario de reserva",
-    feedbackLabel: "Comentarios bienvenidos: transl.delta@gmail.com",
     ogTitle: "ClinicSlotHub – Lanzamiento global",
-    ogDesc: "Plataforma SaaS multilingüe para clínicas – ya disponible. 14 días de prueba gratuita.",
+    ogDesc:
+      "Plataforma SaaS multilingüe para clínicas – ya disponible. 14 días de prueba gratuita.",
   },
   pt: {
     dir: "ltr",
     badge: "Lançamento público global · Junho 2026",
     headline: "ClinicSlotHub – agora disponível em todo o mundo",
-    subline: "Uma plataforma internacional para clínicas, consultórios médicos, centros de saúde e prestadores de serviços de saúde que desejam gerir pedidos de consultas e listas de espera de forma mais eficiente.",
-    problem: "Muitos consultórios perdem tempo todos os dias porque os cancelamentos são coordenados manualmente: rever a lista de espera, ligar aos pacientes, esperar que alguém esteja disponível com pouca antecedência.",
-    solution: "ClinicSlotHub digitaliza este processo: os pacientes inscrevem-se através de um link de reserva partilhável. Quando um slot fica livre, o consultório notifica os pacientes adequados por e-mail ou SMS/WhatsApp opcional.",
+    subline:
+      "Uma plataforma internacional para clínicas, consultórios médicos, centros de saúde e prestadores de serviços de saúde que desejam gerir pedidos de consultas e listas de espera de forma mais eficiente.",
+    problem:
+      "Muitos consultórios perdem tempo todos os dias porque os cancelamentos são coordenados manualmente: rever a lista de espera, ligar aos pacientes, esperar que alguém esteja disponível com pouca antecedência.",
+    solution:
+      "ClinicSlotHub digitaliza este processo: os pacientes inscrevem-se através de um link de reserva partilhável. Quando um slot fica livre, o consultório notifica os pacientes adequados por e-mail ou SMS/WhatsApp opcional.",
     whatWorks: "O que funciona agora:",
     features: [
       "Lista de espera digital com perfis de pacientes estruturados",
@@ -166,23 +188,27 @@ const CONTENT: Record<string, LaunchContent> = {
       "14 dias de teste gratuito, sem cartão de crédito",
     ],
     statusTitle: "Estado atual",
-    status: "Lançamento público. Sem clientes pagantes ainda. Um produto funcional a ser testado e melhorado por consultórios reais.",
+    status:
+      "Lançamento público. Sem clientes pagantes ainda. Um produto funcional a ser testado e melhorado por consultórios reais.",
     trialNote: "O registo é totalmente self-service — não é necessário convite.",
-    legalNote: "Nota: Os requisitos legais e de proteção de dados locais devem ser verificados antes da utilização produtiva com dados reais de pacientes.",
+    legalNote:
+      "Nota: Os requisitos legais e de proteção de dados locais devem ser verificados antes da utilização produtiva com dados reais de pacientes.",
     ctaTrial: "Experimentar gratuitamente",
     ctaContact: "Entrar em contacto",
     ctaBook: "Testar o formulário de reserva",
-    feedbackLabel: "Feedback bem-vindo: transl.delta@gmail.com",
     ogTitle: "ClinicSlotHub – Lançamento global",
-    ogDesc: "Plataforma SaaS multilingue para clínicas – agora disponível. 14 dias de teste gratuito.",
+    ogDesc:
+      "Plataforma SaaS multilingue para clínicas – agora disponível. 14 dias de teste gratuito.",
   },
   zh: {
     dir: "ltr",
     badge: "全球公开软启动 · 2026年6月",
     headline: "ClinicSlotHub – 现已面向全球开放",
     subline: "面向诊所、医疗机构、治疗中心和医疗服务提供者的国际化预约与候补名单管理平台。",
-    problem: "许多诊所每天因手动协调取消预约而损失时间：逐一查看候补名单、给患者打电话、希望有人能临时前来。这耗费了员工时间，并导致不必要的空档损失。",
-    solution: "ClinicSlotHub 将此流程数字化：患者通过可分享的预约链接加入候补名单。当有空档时，诊所只需几次点击即可通过电子邮件（或可选的短信/WhatsApp）通知合适的患者。",
+    problem:
+      "许多诊所每天因手动协调取消预约而损失时间：逐一查看候补名单、给患者打电话、希望有人能临时前来。这耗费了员工时间，并导致不必要的空档损失。",
+    solution:
+      "ClinicSlotHub 将此流程数字化：患者通过可分享的预约链接加入候补名单。当有空档时，诊所只需几次点击即可通过电子邮件（或可选的短信/WhatsApp）通知合适的患者。",
     whatWorks: "当前可用功能：",
     features: [
       "带结构化患者档案的数字候补名单",
@@ -194,13 +220,13 @@ const CONTENT: Record<string, LaunchContent> = {
       "14 天免费试用，无需信用卡",
     ],
     statusTitle: "当前状态",
-    status: "公开软启动阶段。目前无付费用户。这是一个功能完整的在线产品，正由真实诊所进行测试和改进。",
+    status:
+      "公开软启动阶段。目前无付费用户。这是一个功能完整的在线产品，正由真实诊所进行测试和改进。",
     trialNote: "注册完全自助服务 — 无需邀请。",
     legalNote: "注意：在正式使用真实患者数据之前，请审查当地适用的法律和数据保护要求。",
     ctaTrial: "免费试用",
     ctaContact: "联系我们",
     ctaBook: "测试预约表单",
-    feedbackLabel: "欢迎反馈：transl.delta@gmail.com",
     ogTitle: "ClinicSlotHub – 全球软启动",
     ogDesc: "面向诊所的多语言预约与候补名单 SaaS — 现已上线。14 天免费试用。",
   },
@@ -208,9 +234,12 @@ const CONTENT: Record<string, LaunchContent> = {
     dir: "ltr",
     badge: "वैश्विक सार्वजनिक सॉफ्ट लॉन्च · जून 2026",
     headline: "ClinicSlotHub – अब दुनिया भर में उपलब्ध",
-    subline: "क्लिनिक, मेडिकल प्रैक्टिस, थेरेपी सेंटर और हेल्थकेयर प्रोवाइडर के लिए एक अंतरराष्ट्रीय अपॉइंटमेंट और वेटलिस्ट प्रबंधन प्लेटफ़ॉर्म।",
-    problem: "कई प्रैक्टिस रोज़ाना समय खोती हैं क्योंकि रद्दीकरण मैन्युअल रूप से समन्वित किया जाता है: वेटलिस्ट देखना, मरीजों को फ़ोन करना, उम्मीद करना कि कोई जल्दी आ सके।",
-    solution: "ClinicSlotHub इस प्रक्रिया को डिजिटल बनाता है: मरीज़ एक शेयर करने योग्य बुकिंग लिंक के माध्यम से वेटलिस्ट में जुड़ते हैं। जब कोई स्लॉट खुलता है, तो प्रैक्टिस कुछ क्लिक में ई-मेल या वैकल्पिक SMS/WhatsApp से उपयुक्त मरीजों को सूचित करती है।",
+    subline:
+      "क्लिनिक, मेडिकल प्रैक्टिस, थेरेपी सेंटर और हेल्थकेयर प्रोवाइडर के लिए एक अंतरराष्ट्रीय अपॉइंटमेंट और वेटलिस्ट प्रबंधन प्लेटफ़ॉर्म।",
+    problem:
+      "कई प्रैक्टिस रोज़ाना समय खोती हैं क्योंकि रद्दीकरण मैन्युअल रूप से समन्वित किया जाता है: वेटलिस्ट देखना, मरीजों को फ़ोन करना, उम्मीद करना कि कोई जल्दी आ सके।",
+    solution:
+      "ClinicSlotHub इस प्रक्रिया को डिजिटल बनाता है: मरीज़ एक शेयर करने योग्य बुकिंग लिंक के माध्यम से वेटलिस्ट में जुड़ते हैं। जब कोई स्लॉट खुलता है, तो प्रैक्टिस कुछ क्लिक में ई-मेल या वैकल्पिक SMS/WhatsApp से उपयुक्त मरीजों को सूचित करती है।",
     whatWorks: "अभी क्या काम करता है:",
     features: [
       "संरचित पेशेंट प्रोफाइल के साथ डिजिटल वेटलिस्ट",
@@ -222,13 +251,14 @@ const CONTENT: Record<string, LaunchContent> = {
       "14 दिन का मुफ्त ट्रायल, कोई क्रेडिट कार्ड नहीं",
     ],
     statusTitle: "वर्तमान स्थिति",
-    status: "सार्वजनिक सॉफ्ट लॉन्च। अभी तक कोई भुगतान करने वाला ग्राहक नहीं। एक काम करने वाला लाइव प्रोडक्ट जिसे अब असली प्रैक्टिस टेस्ट और बेहतर कर रही हैं।",
+    status:
+      "सार्वजनिक सॉफ्ट लॉन्च। अभी तक कोई भुगतान करने वाला ग्राहक नहीं। एक काम करने वाला लाइव प्रोडक्ट जिसे अब असली प्रैक्टिस टेस्ट और बेहतर कर रही हैं।",
     trialNote: "रजिस्ट्रेशन पूरी तरह से सेल्फ-सर्विस है — कोई आमंत्रण नहीं चाहिए।",
-    legalNote: "नोट: वास्तविक पेशेंट डेटा के साथ उत्पादक उपयोग से पहले स्थानीय कानूनी और डेटा सुरक्षा आवश्यकताओं की समीक्षा करें।",
+    legalNote:
+      "नोट: वास्तविक पेशेंट डेटा के साथ उत्पादक उपयोग से पहले स्थानीय कानूनी और डेटा सुरक्षा आवश्यकताओं की समीक्षा करें।",
     ctaTrial: "मुफ्त आज़माएँ",
     ctaContact: "संपर्क करें",
     ctaBook: "बुकिंग फ़ॉर्म टेस्ट करें",
-    feedbackLabel: "फ़ीडबैक स्वागत है: transl.delta@gmail.com",
     ogTitle: "ClinicSlotHub – वैश्विक सॉफ्ट लॉन्च",
     ogDesc: "क्लिनिक के लिए बहुभाषी अपॉइंटमेंट और वेटलिस्ट SaaS – अब उपलब्ध। 14 दिन मुफ्त।",
   },
@@ -236,9 +266,12 @@ const CONTENT: Record<string, LaunchContent> = {
     dir: "rtl",
     badge: "الإطلاق العالمي التجريبي العام · يونيو 2026",
     headline: "ClinicSlotHub – متاح الآن في جميع أنحاء العالم",
-    subline: "منصة دولية لإدارة طلبات المواعيد وقوائم الانتظار للعيادات والمراكز الطبية ومراكز العلاج ومقدمي خدمات الرعاية الصحية.",
-    problem: "كثير من العيادات تفقد وقتاً يومياً لأن الإلغاءات تُنسَّق يدوياً: مراجعة قائمة الانتظار، الاتصال بالمرضى، الأمل في أن يكون أحدهم متاحاً بإشعار قصير.",
-    solution: "ClinicSlotHub يُرقمن هذه العملية: يُسجّل المرضى أنفسهم عبر رابط حجز قابل للمشاركة. عند توفر موعد، تُخطر العيادة المرضى المناسبين عبر البريد الإلكتروني أو SMS/WhatsApp الاختياري.",
+    subline:
+      "منصة دولية لإدارة طلبات المواعيد وقوائم الانتظار للعيادات والمراكز الطبية ومراكز العلاج ومقدمي خدمات الرعاية الصحية.",
+    problem:
+      "كثير من العيادات تفقد وقتاً يومياً لأن الإلغاءات تُنسَّق يدوياً: مراجعة قائمة الانتظار، الاتصال بالمرضى، الأمل في أن يكون أحدهم متاحاً بإشعار قصير.",
+    solution:
+      "ClinicSlotHub يُرقمن هذه العملية: يُسجّل المرضى أنفسهم عبر رابط حجز قابل للمشاركة. عند توفر موعد، تُخطر العيادة المرضى المناسبين عبر البريد الإلكتروني أو SMS/WhatsApp الاختياري.",
     whatWorks: "ما يعمل الآن:",
     features: [
       "قائمة انتظار رقمية مع ملفات تعريف مرضى منظمة",
@@ -250,13 +283,14 @@ const CONTENT: Record<string, LaunchContent> = {
       "تجربة مجانية 14 يوماً، بدون بطاقة ائتمان",
     ],
     statusTitle: "الحالة الراهنة",
-    status: "إطلاق عام تجريبي. لا عملاء يدفعون حتى الآن. منتج حي يعمل، يتم اختباره وتحسينه من قِبل عيادات حقيقية.",
+    status:
+      "إطلاق عام تجريبي. لا عملاء يدفعون حتى الآن. منتج حي يعمل، يتم اختباره وتحسينه من قِبل عيادات حقيقية.",
     trialNote: "التسجيل ذاتي تماماً — لا تتطلب دعوة.",
-    legalNote: "ملاحظة: يجب مراجعة المتطلبات القانونية ومتطلبات حماية البيانات المحلية قبل الاستخدام الإنتاجي مع بيانات المرضى الحقيقية.",
+    legalNote:
+      "ملاحظة: يجب مراجعة المتطلبات القانونية ومتطلبات حماية البيانات المحلية قبل الاستخدام الإنتاجي مع بيانات المرضى الحقيقية.",
     ctaTrial: "جرّب مجاناً",
     ctaContact: "تواصل معنا",
     ctaBook: "اختبر نموذج الحجز",
-    feedbackLabel: "ملاحظاتك مرحب بها: transl.delta@gmail.com",
     ogTitle: "ClinicSlotHub – الإطلاق العالمي",
     ogDesc: "منصة SaaS متعددة اللغات لإدارة المواعيد والانتظار في العيادات – متاحة الآن. تجربة مجانية 14 يوماً.",
   },
@@ -264,9 +298,12 @@ const CONTENT: Record<string, LaunchContent> = {
     dir: "ltr",
     badge: "বৈশ্বিক পাবলিক সফট লঞ্চ · জুন ২০২৬",
     headline: "ClinicSlotHub – এখন বিশ্বব্যাপী উপলব্ধ",
-    subline: "ক্লিনিক, মেডিকেল প্র্যাকটিস, থেরাপি সেন্টার এবং স্বাস্থ্যসেবা প্রদানকারীদের জন্য একটি আন্তর্জাতিক অ্যাপয়েন্টমেন্ট ও ওয়েটলিস্ট ম্যানেজমেন্ট প্ল্যাটফর্ম।",
-    problem: "অনেক প্র্যাকটিস প্রতিদিন সময় হারায় কারণ বাতিল অ্যাপয়েন্টমেন্ট ম্যানুয়ালি সমন্বয় করা হয়: ওয়েটলিস্ট দেখা, রোগীদের ফোন করা, আশা করা যে কেউ শীঘ্রই আসতে পারবেন।",
-    solution: "ClinicSlotHub এই প্রক্রিয়াটি ডিজিটালাইজ করে: রোগীরা একটি শেয়ারযোগ্য বুকিং লিংকের মাধ্যমে ওয়েটলিস্টে যোগ দেন। স্লট খালি হলে, প্র্যাকটিস কয়েক ক্লিকে ইমেইল বা ঐচ্ছিক SMS/WhatsApp-এর মাধ্যমে উপযুক্ত রোগীদের জানাতে পারে।",
+    subline:
+      "ক্লিনিক, মেডিকেল প্র্যাকটিস, থেরাপি সেন্টার এবং স্বাস্থ্যসেবা প্রদানকারীদের জন্য একটি আন্তর্জাতিক অ্যাপয়েন্টমেন্ট ও ওয়েটলিস্ট ম্যানেজমেন্ট প্ল্যাটফর্ম।",
+    problem:
+      "অনেক প্র্যাকটিস প্রতিদিন সময় হারায় কারণ বাতিল অ্যাপয়েন্টমেন্ট ম্যানুয়ালি সমন্বয় করা হয়: ওয়েটলিস্ট দেখা, রোগীদের ফোন করা, আশা করা যে কেউ শীঘ্রই আসতে পারবেন।",
+    solution:
+      "ClinicSlotHub এই প্রক্রিয়াটি ডিজিটালাইজ করে: রোগীরা একটি শেয়ারযোগ্য বুকিং লিংকের মাধ্যমে ওয়েটলিস্টে যোগ দেন। স্লট খালি হলে, প্র্যাকটিস কয়েক ক্লিকে ইমেইল বা ঐচ্ছিক SMS/WhatsApp-এর মাধ্যমে উপযুক্ত রোগীদের জানাতে পারে।",
     whatWorks: "এখন যা কাজ করছে:",
     features: [
       "গঠনমূলক পেশেন্ট প্রোফাইল সহ ডিজিটাল ওয়েটলিস্ট",
@@ -278,13 +315,14 @@ const CONTENT: Record<string, LaunchContent> = {
       "১৪ দিনের বিনামূল্যে ট্রায়াল, কোনো ক্রেডিট কার্ড নেই",
     ],
     statusTitle: "বর্তমান অবস্থা",
-    status: "পাবলিক সফট লঞ্চ। এখনও কোনো পেইং কাস্টমার নেই। একটি কার্যকর লাইভ পণ্য যা এখন বাস্তব প্র্যাকটিস দ্বারা পরীক্ষা এবং উন্নত করা হচ্ছে।",
+    status:
+      "পাবলিক সফট লঞ্চ। এখনও কোনো পেইং কাস্টমার নেই। একটি কার্যকর লাইভ পণ্য যা এখন বাস্তব প্র্যাকটিস দ্বারা পরীক্ষা এবং উন্নত করা হচ্ছে।",
     trialNote: "রেজিস্ট্রেশন সম্পূর্ণ সেলফ-সার্ভিস — কোনো আমন্ত্রণ প্রয়োজন নেই।",
-    legalNote: "নোট: প্রকৃত রোগীর ডেটা দিয়ে উৎপাদনশীল ব্যবহারের আগে স্থানীয় আইনি ও ডেটা সুরক্ষা প্রয়োজনীয়তা পর্যালোচনা করুন।",
+    legalNote:
+      "নোট: প্রকৃত রোগীর ডেটা দিয়ে উৎপাদনশীল ব্যবহারের আগে স্থানীয় আইনি ও ডেটা সুরক্ষা প্রয়োজনীয়তা পর্যালোচনা করুন।",
     ctaTrial: "বিনামূল্যে চেষ্টা করুন",
     ctaContact: "যোগাযোগ করুন",
     ctaBook: "বুকিং ফর্ম পরীক্ষা করুন",
-    feedbackLabel: "ফিডব্যাক স্বাগত: transl.delta@gmail.com",
     ogTitle: "ClinicSlotHub – বৈশ্বিক সফট লঞ্চ",
     ogDesc: "ক্লিনিকের জন্য বহুভাষিক অ্যাপয়েন্টমেন্ট ও ওয়েটলিস্ট SaaS – এখন উপলব্ধ। ১৪ দিন বিনামূল্যে।",
   },
@@ -292,9 +330,12 @@ const CONTENT: Record<string, LaunchContent> = {
     dir: "ltr",
     badge: "Глобальный публичный мягкий запуск · Июнь 2026",
     headline: "ClinicSlotHub – теперь доступен по всему миру",
-    subline: "Международная платформа для управления запросами на приём и листами ожидания для клиник, медицинских кабинетов, терапевтических центров и поставщиков медицинских услуг.",
-    problem: "Многие практики ежедневно теряют время, потому что отмены координируются вручную: просматривать лист ожидания, звонить пациентам, надеяться, что кто-то придёт в короткие сроки.",
-    solution: "ClinicSlotHub оцифровывает этот процесс: пациенты записываются сами через ссылку для бронирования. Когда появляется свободный слот, практика уведомляет подходящих пациентов по электронной почте или через SMS/WhatsApp — за несколько кликов.",
+    subline:
+      "Международная платформа для управления запросами на приём и листами ожидания для клиник, медицинских кабинетов, терапевтических центров и поставщиков медицинских услуг.",
+    problem:
+      "Многие практики ежедневно теряют время, потому что отмены координируются вручную: просматривать лист ожидания, звонить пациентам, надеяться, что кто-то придёт в короткие сроки.",
+    solution:
+      "ClinicSlotHub оцифровывает этот процесс: пациенты записываются сами через ссылку для бронирования. Когда появляется свободный слот, практика уведомляет подходящих пациентов по электронной почте или через SMS/WhatsApp — за несколько кликов.",
     whatWorks: "Что работает прямо сейчас:",
     features: [
       "Цифровой лист ожидания со структурированными профилями пациентов",
@@ -306,15 +347,17 @@ const CONTENT: Record<string, LaunchContent> = {
       "14-дневный бесплатный пробный период, без кредитной карты",
     ],
     statusTitle: "Текущий статус",
-    status: "Публичный мягкий запуск. Платных клиентов пока нет. Работающий живой продукт, который тестируется и улучшается реальными практиками.",
+    status:
+      "Публичный мягкий запуск. Платных клиентов пока нет. Работающий живой продукт, который тестируется и улучшается реальными практиками.",
     trialNote: "Регистрация полностью самостоятельная — приглашение не требуется.",
-    legalNote: "Примечание: местные правовые требования и требования по защите данных необходимо проверить перед продуктивным использованием с реальными данными пациентов.",
+    legalNote:
+      "Примечание: местные правовые требования и требования по защите данных необходимо проверить перед продуктивным использованием с реальными данными пациентов.",
     ctaTrial: "Попробовать бесплатно",
     ctaContact: "Связаться с нами",
     ctaBook: "Протестировать форму записи",
-    feedbackLabel: "Отзывы приветствуются: transl.delta@gmail.com",
     ogTitle: "ClinicSlotHub – Глобальный мягкий запуск",
-    ogDesc: "Многоязычный SaaS для управления записями и листами ожидания — теперь доступен. 14 дней бесплатно.",
+    ogDesc:
+      "Многоязычный SaaS для управления записями и листами ожидания — теперь доступен. 14 дней бесплатно.",
   },
 };
 
@@ -337,7 +380,9 @@ export async function generateMetadata({
     metadataBase: new URL(CANONICAL_URL),
     alternates: {
       canonical: `/${locale}/launch`,
-      languages: Object.fromEntries(locales.map((l) => [l, `/${l}/launch`])) as Record<string, string>,
+      languages: Object.fromEntries(
+        locales.map((l) => [l, `/${l}/launch`]),
+      ) as Record<string, string>,
     },
     openGraph: {
       title: c.ogTitle,
@@ -350,11 +395,15 @@ export async function generateMetadata({
           url: `${CANONICAL_URL}/images/launch/01-home-de-hero.png`,
           width: 1440,
           height: 1000,
-          alt: "ClinicSlotHub",
+          alt: "ClinicSlotHub Dashboard",
         },
       ],
     },
-    twitter: { card: "summary_large_image", title: c.ogTitle, description: c.ogDesc },
+    twitter: {
+      card: "summary_large_image",
+      title: c.ogTitle,
+      description: c.ogDesc,
+    },
   };
 }
 
@@ -369,10 +418,7 @@ export default async function LaunchPage({
   const c = getContent(locale);
 
   return (
-    <main
-      className="mx-auto max-w-3xl px-4 py-12"
-      dir={c.dir}
-    >
+    <main className="mx-auto max-w-4xl px-4 py-12" dir={c.dir}>
       {/* Language switcher */}
       <div className="mb-6 flex justify-end">
         <LanguageSwitcher currentLocale={locale as Locale} currentPath="/launch" />
@@ -385,18 +431,36 @@ export default async function LaunchPage({
       </div>
 
       {/* Headline */}
-      <h1 className="mt-2 text-3xl font-bold text-slate-900 dark:text-slate-100 sm:text-4xl">
+      <h1 className="mt-2 text-3xl font-bold text-slate-900 dark:text-slate-100 sm:text-4xl lg:text-5xl">
         {c.headline}
       </h1>
-      <p className="mt-4 text-lg text-slate-600 dark:text-slate-300">
+      <p className="mt-4 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-300">
         {c.subline}
       </p>
 
-      {/* Hero image */}
-      <div className="mt-8 overflow-hidden rounded-xl border border-slate-200 shadow-sm dark:border-slate-700">
+      {/* CTA buttons — above fold */}
+      <div className="mt-8 flex flex-wrap gap-3">
+        <Link
+          href="/auth/register"
+          className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
+        >
+          {c.ctaTrial}
+          <ArrowRight className="h-4 w-4" />
+        </Link>
+        <Link
+          href={`/${locale}/kontakt`}
+          className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+        >
+          <Mail className="h-4 w-4" />
+          {c.ctaContact}
+        </Link>
+      </div>
+
+      {/* Hero screenshot */}
+      <div className="mt-10 overflow-hidden rounded-2xl border border-slate-200 shadow-lg dark:border-slate-700">
         <Image
           src="/images/launch/01-home-de-hero.png"
-          alt="ClinicSlotHub Screenshot"
+          alt="ClinicSlotHub Dashboard"
           width={1440}
           height={1000}
           className="w-full"
@@ -405,60 +469,40 @@ export default async function LaunchPage({
       </div>
 
       {/* Problem */}
-      <section className="mt-10">
-        <p className="text-slate-700 leading-relaxed dark:text-slate-300">{c.problem}</p>
+      <section className="mt-12">
+        <p className="text-base leading-relaxed text-slate-700 dark:text-slate-300">
+          {c.problem}
+        </p>
       </section>
 
       {/* Solution */}
       <section className="mt-6">
-        <p className="text-slate-700 leading-relaxed dark:text-slate-300">{c.solution}</p>
+        <p className="text-base leading-relaxed text-slate-700 dark:text-slate-300">
+          {c.solution}
+        </p>
       </section>
 
-      {/* What works */}
-      <section className="mt-8">
-        <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">{c.whatWorks}</h2>
-        <ul className="mt-3 space-y-2">
+      {/* What works now */}
+      <section className="mt-10 rounded-2xl border border-slate-100 bg-slate-50 p-6 dark:border-slate-800 dark:bg-slate-800/30">
+        <h2 className="mb-4 text-base font-semibold text-slate-900 dark:text-slate-100">
+          {c.whatWorks}
+        </h2>
+        <ul className="space-y-2.5">
           {c.features.map((f, i) => (
-            <li key={i} className="flex items-start gap-2 text-sm text-slate-700 dark:text-slate-300">
-              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-600" />
+            <li
+              key={i}
+              className="flex items-start gap-2.5 text-sm text-slate-700 dark:text-slate-300"
+            >
+              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
               {f}
             </li>
           ))}
         </ul>
       </section>
 
-      {/* Status */}
-      <section className="mt-8 rounded-xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-800/50">
-        <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">{c.statusTitle}</h2>
-        <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">{c.status}</p>
-        <p className="mt-2 text-xs text-slate-500 dark:text-slate-500">{c.trialNote}</p>
-      </section>
-
-      {/* CTA buttons */}
-      <div className="mt-8 flex flex-wrap gap-3">
-        <Link
-          href={`/auth/register`}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition"
-        >
-          {c.ctaTrial} <ArrowRight className="h-4 w-4" />
-        </Link>
-        <Link
-          href={`/${locale}/kontakt`}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200"
-        >
-          <Mail className="h-4 w-4" /> {c.ctaContact}
-        </Link>
-        <Link
-          href={`/${locale}/termin-buchen`}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200"
-        >
-          {c.ctaBook}
-        </Link>
-      </div>
-
-      {/* Booking form screenshot */}
+      {/* Screenshot pair */}
       <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="overflow-hidden rounded-lg border border-slate-200 shadow-sm dark:border-slate-700">
+        <div className="overflow-hidden rounded-xl border border-slate-200 shadow-sm dark:border-slate-700">
           <Image
             src="/images/launch/02-booking-form-de.png"
             alt="Booking form"
@@ -467,7 +511,7 @@ export default async function LaunchPage({
             className="w-full"
           />
         </div>
-        <div className="overflow-hidden rounded-lg border border-slate-200 shadow-sm dark:border-slate-700">
+        <div className="overflow-hidden rounded-xl border border-slate-200 shadow-sm dark:border-slate-700">
           <Image
             src="/images/launch/06-mobile-home-de.png"
             alt="Mobile view"
@@ -478,43 +522,50 @@ export default async function LaunchPage({
         </div>
       </div>
 
+      {/* Status */}
+      <section className="mt-10 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+          {c.statusTitle}
+        </h2>
+        <p className="mt-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+          {c.status}
+        </p>
+        <p className="mt-3 text-xs text-slate-500 dark:text-slate-500">{c.trialNote}</p>
+      </section>
+
       {/* Languages */}
-      <section className="mt-8 flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
-        <Globe className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" />
+      <section className="mt-8 flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+        <Globe className="h-4 w-4 shrink-0 text-blue-500" />
         <span>DE · EN · FR · ES · PT · ZH · HI · AR · BN · RU</span>
       </section>
 
       {/* Legal note */}
-      <p className="mt-6 text-xs text-slate-500 dark:text-slate-500 leading-relaxed">
-        {c.legalNote}
-      </p>
+      <div className="mt-6 flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-900/40 dark:bg-amber-900/10">
+        <Info className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
+        <p className="text-xs leading-relaxed text-amber-800 dark:text-amber-300">
+          {c.legalNote}
+        </p>
+      </div>
 
-      {/* Feedback */}
-      <p className="mt-4 text-xs text-slate-500 dark:text-slate-500">
-        {c.feedbackLabel}
-      </p>
-
-      {/* Blog link */}
-      <div className="mt-8 border-t border-slate-200 pt-6 dark:border-slate-700">
+      {/* Bottom links */}
+      <div className="mt-8 flex flex-wrap items-center gap-4 border-t border-slate-200 pt-6 dark:border-slate-700">
         <Link
           href={`/${locale}/blog`}
           className="text-sm text-blue-600 hover:underline dark:text-blue-400"
         >
           → Blog
         </Link>
-        <span className="mx-3 text-slate-300 dark:text-slate-600">·</span>
         <Link
           href={`/${locale}/pricing`}
           className="text-sm text-blue-600 hover:underline dark:text-blue-400"
         >
           → Pricing
         </Link>
-        <span className="mx-3 text-slate-300 dark:text-slate-600">·</span>
         <Link
-          href={`/${locale}/share`}
+          href={`/${locale}/termin-buchen`}
           className="text-sm text-blue-600 hover:underline dark:text-blue-400"
         >
-          → Share Kit
+          → {c.ctaBook}
         </Link>
       </div>
     </main>

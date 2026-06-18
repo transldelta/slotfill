@@ -198,7 +198,7 @@ export default async function LocaleLandingPage({
       {/* Hero */}
       <div className="w-full bg-gradient-to-b from-blue-50/70 to-white dark:from-blue-950/20 dark:to-transparent">
       <section className="relative mx-auto max-w-3xl px-4 py-20 text-center sm:py-28">
-        <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100 sm:text-5xl lg:text-[3.5rem] lg:leading-[1.05]">
+        <h1 className="mx-auto max-w-2xl text-3xl font-extrabold leading-tight tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl lg:text-5xl lg:leading-[1.12]">
           {t("heroTitle")}
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-300">

@@ -22,7 +22,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { getContinuousControlOffice, classifyCountry } from "../lib/emerging-markets-agent";
 import { assertNoSecretsInResponse } from "../lib/security-agent";
-import { LOCALE_QUALITY, verifiedLocales, localesNeedingReview } from "../lib/locale-quality";
+import { LOCALE_QUALITY, verifiedLocales, localesNeedingReview, localesNeedingNativeReview } from "../lib/locale-quality";
 import { getPricingContent, PRICING_LOCALES, type PlanKey } from "../lib/pricing-content";
 
 const MESSAGE_LOCALES = ["en", "de", "ar", "hi", "bn", "pt", "es", "fr", "ru", "zh"];
@@ -443,6 +443,54 @@ test("Nur en/de gelten als verified; die 8 anderen brauchen Review", () => {
   assert.deepEqual(verifiedLocales().sort(), ["de", "en"]);
   const review = localesNeedingReview().sort();
   assert.deepEqual(review, ["ar", "bn", "es", "fr", "hi", "pt", "ru", "zh"]);
+});
+
+test("Quality-Registry: vollständige Felder, nur en/de ohne Native-Review", () => {
+  assert.equal(LOCALE_QUALITY.length, 10);
+  for (const l of LOCALE_QUALITY) {
+    assert.ok(l.publicCopyStatus && l.pricingStatus && l.metadataStatus && l.publicRisk, `${l.locale}: Felder unvollständig`);
+    assert.equal(typeof l.needsNativeReview, "boolean");
+  }
+  assert.deepEqual(localesNeedingNativeReview().sort(), ["ar", "bn", "es", "fr", "hi", "pt", "ru", "zh"]);
+  for (const v of ["en", "de"]) assert.equal(LOCALE_QUALITY.find((l) => l.locale === v)!.needsNativeReview, false, `${v} darf keinen Native-Review brauchen`);
+});
+
+// ─── Pricing-Content: harte Forbidden-Words über alle 10 Locales ──────────────
+
+test("pricing-content.ts: keine verbotenen öffentlichen Begriffe in irgendeiner Locale", () => {
+  const bad = ["api", "twilio", "resend", "stripe", "supabase", "soft launch", "trial", "free trial", "kostenlos", "14 day", "14-day", "no credit card", "book appointment", "appointment booking", "without api"];
+  for (const loc of MESSAGE_LOCALES) {
+    const blob = JSON.stringify(getPricingContent(loc)).toLowerCase();
+    for (const b of bad) {
+      // "api" nur als ganzes Wort (vermeidet z. B. nichts in diesem Datensatz)
+      const re = b === "api" ? /\bapi\b/ : new RegExp(b.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+      assert.equal(re.test(blob), false, `${loc}: pricing-content enthält "${b}"`);
+    }
+  }
+});
+
+// ─── Arabisch-Qualitäts-Guards ────────────────────────────────────────────────
+
+test("Arabisch: kürzere H1 (kein erschlagender Titel)", () => {
+  const ar = JSON.parse(read("messages/ar.json")) as { landing: { heroTitle: string } };
+  assert.ok(ar.landing.heroTitle.length <= 70, `ar H1 zu lang (${ar.landing.heroTitle.length})`);
+});
+
+test("Arabisch: alte steife Phrasen verboten", () => {
+  const ar = read("messages/ar.json");
+  for (const stiff of ["العيادة تبقى المتحكمة", "ويبقى المتحكم"]) {
+    assert.equal(ar.includes(stiff), false, `ar enthält steife Phrase "${stiff}"`);
+  }
+});
+
+test("Arabisch: Metadata, Plan-Namen und Preisnotiz sind arabisch", () => {
+  const arMeta = (JSON.parse(read("messages/ar.json")) as { meta: { title: string } }).meta.title;
+  assert.ok(/[؀-ۿ]/.test(arMeta), "ar meta.title nicht arabisch");
+  const p = getPricingContent("ar");
+  for (const v of [p.header, p.planName.starter, p.planName.professional, p.planName.praxis_plus, p.requestAccess, p.priceLogicNote]) {
+    assert.ok(/[؀-ۿ]/.test(v), `ar pricing nicht arabisch: "${v}"`);
+    assert.equal(/[A-Za-z]/.test(v), false, `ar pricing enthält Latein: "${v}"`);
+  }
 });
 
 // ─── Homepage-Banner (app/[locale]/page.tsx) ──────────────────────────────────

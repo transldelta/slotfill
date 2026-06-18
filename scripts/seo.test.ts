@@ -13,14 +13,12 @@ import { assertNoSecretsInResponse } from "../lib/security-agent";
 
 // ─── Blog-Daten Tests ─────────────────────────────────────────────────────────
 
-test("Blog: genau 8 statische Artikel vorhanden", () => {
-  // 3 Original-Artikel + 5 SEO-Artikel (Phase 5).
-  // Der Soft-Launch-Launch-Artikel wurde im Premium-/SEO-Relaunch entfernt
-  // (verbotene öffentliche Begriffe: Soft Launch, Twilio, Stripe, kostenlos testen).
-  assert.equal(STATIC_BLOG_POSTS.length, 8);
+test("Blog: genau 9 statische Artikel vorhanden", () => {
+  // 3 Original-Artikel + 5 SEO-Artikel (Phase 5) + 1 Launch-Artikel (Phase 13)
+  assert.equal(STATIC_BLOG_POSTS.length, 9);
 });
 
-test("Blog: alle 8 erwarteten Slugs vorhanden", () => {
+test("Blog: alle 9 erwarteten Slugs vorhanden", () => {
   const slugs = STATIC_BLOG_POSTS.map((p) => p.slug);
   // Original-Artikel (3)
   assert.ok(slugs.includes("warteliste-arztpraxis-terminluecken"));
@@ -32,8 +30,8 @@ test("Blog: alle 8 erwarteten Slugs vorhanden", () => {
   assert.ok(slugs.includes("online-terminanfragen-vorbereiten-produktivstart"));
   assert.ok(slugs.includes("appointment-requests-clinic-management-clarity"));
   assert.ok(slugs.includes("waitlist-management-small-healthcare-providers"));
-  // Soft-Launch-Artikel bewusst entfernt
-  assert.ok(!slugs.includes("clinicslothub-global-soft-launch"));
+  // Phase-13-Artikel (1): Global Soft Launch
+  assert.ok(slugs.includes("clinicslothub-global-soft-launch"));
 });
 
 test("Blog: getStaticPost findet bekannten Artikel", () => {
@@ -103,11 +101,10 @@ test("Blog: keine Heilversprechen in Artikeln", () => {
   }
 });
 
-test("Blog: CTA am Ende vorhanden (Prüfwort: 'Zugang anfragen' / 'Demo' / 'Kontakt')", () => {
+test("Blog: CTA am Ende vorhanden (Prüfwort: 'testen' oder 'Kontakt')", () => {
   for (const post of STATIC_BLOG_POSTS) {
-    const c = post.content.toLowerCase();
     const hasCta =
-      c.includes("anfragen") || c.includes("kontakt") || c.includes("demo") || c.includes("ausprobieren");
+      post.content.toLowerCase().includes("testen") || post.content.includes("Kontakt") || post.content.includes("ausprobieren");
     assert.ok(hasCta, `Kein CTA in ${post.slug}`);
   }
 });

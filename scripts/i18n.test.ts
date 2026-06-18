@@ -39,12 +39,12 @@ test('i18n: ru-RU,ru;q=0.8 → ru', () => {
   assert.equal(detectLocaleFromAcceptLanguage('ru-RU,ru;q=0.8'), 'ru');
 });
 
-test('i18n: unbekannter Header → en (defaultLocale)', () => {
-  assert.equal(detectLocaleFromAcceptLanguage('xx-XX,xx;q=0.9'), 'en');
+test('i18n: unbekannter Header → de (defaultLocale)', () => {
+  assert.equal(detectLocaleFromAcceptLanguage('xx-XX,xx;q=0.9'), 'de');
 });
 
-test('i18n: null → en (defaultLocale)', () => {
-  assert.equal(detectLocaleFromAcceptLanguage(null), 'en');
+test('i18n: null → de (defaultLocale)', () => {
+  assert.equal(detectLocaleFromAcceptLanguage(null), 'de');
 });
 
 // ── Locale-Konfiguration ────────────────────────────────────────────────────
@@ -53,8 +53,8 @@ test('i18n: genau 10 Locales', () => {
   assert.equal(locales.length, 10);
 });
 
-test('i18n: en ist defaultLocale (EN-first nach Scheduling-OS-Pivot)', () => {
-  assert.equal(defaultLocale, 'en');
+test('i18n: de ist defaultLocale', () => {
+  assert.equal(defaultLocale, 'de');
 });
 
 test('i18n: alle erwarteten Locales vorhanden', () => {

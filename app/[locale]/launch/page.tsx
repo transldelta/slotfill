@@ -1,22 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { redirect } from "next/navigation";
 import { CheckCircle2, Mail, Globe, ArrowRight, Info, UserCheck, LayoutDashboard, Link as LinkIcon } from "lucide-react";
 import { locales, type Locale } from "@/i18n/routing";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { CANONICAL_URL } from "@/lib/brand";
-import { localesNeedingNativeReview } from "@/lib/locale-quality";
 
 export const dynamic = "force-static";
-
-// Public Language Gate: nur en/de haben eine geprüfte Detail-Launch-Seite.
-// needs_review-Locales (fr/es/pt/ar/hi/bn/ru/zh) werden auf ihre saubere,
-// vollständig lokalisierte Startseite geleitet — keine veraltete Launch-Copy.
-const LAUNCH_DETAIL_LOCALES = ["en", "de"] as const;
-function shouldRedirectLaunch(locale: string): boolean {
-  return localesNeedingNativeReview().includes(locale) || !LAUNCH_DETAIL_LOCALES.includes(locale as "en" | "de");
-}
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -47,69 +37,327 @@ type LaunchContent = {
 const CONTENT: Record<string, LaunchContent> = {
   de: {
     dir: "ltr",
-    badge: "Early Access · Juni 2026",
-    headline: "ClinicSlotHub – der mobile Anfrage- und Warteliste-Desk für Kliniken in wachstumsstarken Gesundheitsmärkten",
+    badge: "Globaler öffentlicher Soft Launch · Juni 2026",
+    headline: "ClinicSlotHub – jetzt weltweit verfügbar",
     subline:
-      "Für Kliniken in wachstumsstarken Gesundheitsmärkten, die WhatsApp-, Telefon-, Rezeptions- und mobile Patientenanfragen in einer einfachen Warteliste organisieren möchten.",
+      "Eine internationale Plattform für Praxen, Kliniken, Therapiezentren und Healthcare Provider, die Terminanfragen, Wartelisten und freie Zeitfenster strukturierter verwalten möchten.",
     problem:
-      "Viele Kliniken verlieren täglich Zeit, weil Anfragen über WhatsApp, Telefon und Rezeption verstreut ankommen und manuell koordiniert werden. Das kostet Personal und führt zu unnötigen Leerterminen.",
+      "Viele Praxen verlieren täglich Zeit, weil Terminabsagen manuell koordiniert werden: Warteliste durchgehen, Patienten anrufen, hoffen, dass jemand kurzfristig kommt. Das kostet Personal und führt zu unnötigen Leerterminkosten.",
     solution:
-      "ClinicSlotHub bündelt diesen Prozess: Jede Klinik erhält einen eigenen öffentlichen Anfrage-Link, teilbar via WhatsApp, Website, E-Mail oder QR-Code. Patienten senden ohne Login eine Anfrage; die Klinik sieht diese im Dashboard und prüft sie. WhatsApp-, Telefon- und Rezeptions-Fallback bleiben in der Hand der Klinik – kein automatischer Versand, keine automatische Terminbestätigung.",
+      "ClinicSlotHub digitalisiert diesen Prozess: Jede Praxis erhält einen eigenen öffentlichen Buchungslink, den sie auf ihrer Webseite, per E-Mail oder als QR-Code teilen kann. Patienten senden ohne Login eine Anfrage; die Praxis sieht diese Anfrage im Dashboard und kann sie bestätigen oder ablehnen. Bei einem freien Termin benachrichtigt die Praxis passende Patienten per E-Mail – in wenigen Klicks, ohne Telefonliste.",
     whatWorks: "Was aktuell funktioniert:",
     features: [
-      "Eigener öffentlicher Anfrage-Link pro Klinik – teilbar via WhatsApp, Website, E-Mail oder QR-Code",
+      "Eigener öffentlicher Buchungslink pro Praxis – teilbar via Website, E-Mail oder QR-Code",
       "Patienten senden Anfrage ohne Login – kein Konto, kein Aufwand",
-      "Anfragen im Dashboard prüfen und beantworten",
-      "Einfache digitale Warteliste mit strukturierten Patientenprofilen",
-      "Funktioniert mit WhatsApp, Telefon und Rezeption · kein zusätzliches Tool nötig",
+      "Anfragen im Dashboard bestätigen oder ablehnen",
+      "Digitale Warteliste mit strukturierten Patientenprofilen",
+      "E-Mail-Benachrichtigungen live (via Resend)",
       "Mehrsprachige Oberfläche in 10 Sprachen",
-      "Early Access – Zugang auf Anfrage",
+      "14 Tage kostenlos testen, keine Kreditkarte",
     ],
     statusTitle: "Aktueller Status",
     status:
-      "Early Access für Kliniken in wachstumsstarken Gesundheitsmärkten. Ein funktionierendes Live-Produkt, das jetzt mit echten Kliniken getestet und verbessert wird. Keine Erfolgsversprechen, keine erfundenen Zahlen.",
-    trialNote: "Zugang auf Anfrage – wir begleiten die Einrichtung der ersten Test-Klinik.",
+      "Öffentlicher Soft Launch. Keine zahlenden Kunden bisher. Kein Versprechen auf schnelle Erfolge. Ein funktionierendes Live-Produkt, das jetzt von echten Praxen getestet und verbessert werden soll.",
+    trialNote: "Registrierung ist vollständig selbstservice – keine Einladung nötig.",
     legalNote:
-      "Hinweis: Lokale rechtliche und datenschutzrechtliche Anforderungen sollten vor dem produktiven Einsatz mit echten Patientendaten geprüft werden.",
-    ctaTrial: "Zugang anfragen",
+      "Hinweis: Lokale rechtliche und datenschutzrechtliche Anforderungen (z. B. AVV gemäß Art. 28 DSGVO) sollten vor dem produktiven Einsatz mit echten Patientendaten geprüft werden.",
+    ctaTrial: "Kostenlos testen",
     ctaContact: "Kontakt aufnehmen",
-    ctaBook: "Demo-Anfrage testen",
-    ogTitle: "ClinicSlotHub – Early Access",
+    ctaBook: "Terminanfrage testen",
+    ogTitle: "ClinicSlotHub – Globaler Soft Launch",
     ogDesc:
-      "Mobiler Anfrage- und Warteliste-Desk für Kliniken in wachstumsstarken Gesundheitsmärkten.",
+      "Mehrsprachige Plattform für Terminanfragen und Wartelisten – jetzt öffentlich verfügbar. 14 Tage kostenlos.",
   },
   en: {
     dir: "ltr",
-    badge: "Early Access · June 2026",
-    headline: "ClinicSlotHub – the mobile request and waitlist desk for clinics in emerging healthcare markets",
+    badge: "Global Public Soft Launch · June 2026",
+    headline: "ClinicSlotHub – now available worldwide",
     subline:
-      "For clinics in emerging healthcare markets that want to organize WhatsApp, phone, reception and mobile patient requests in one simple waitlist.",
+      "An international appointment and waitlist management SaaS for clinics, medical practices, therapy centers and healthcare providers worldwide.",
     problem:
-      "Many clinics lose time every day because requests arrive scattered across WhatsApp, phone and reception and are coordinated manually. This costs staff time and leads to avoidable empty slots.",
+      "Many practices lose time every day because cancellations are coordinated manually: go through the waitlist, call patients, hope someone is available at short notice. This costs staff time and leads to avoidable empty slots.",
     solution:
-      "ClinicSlotHub brings this together: each clinic gets its own public request link that can be shared via WhatsApp, a website, by email or as a QR code. Patients submit a request without logging in; the clinic sees the request in the dashboard and reviews it. WhatsApp, phone and reception fallback stay in the clinic's hands — no automatic sending and no automatic appointment confirmation.",
+      "ClinicSlotHub digitalizes this process: each practice gets its own public booking link that can be shared on a website, by email or as a QR code. Patients submit a request without logging in; the practice sees the request in the dashboard and can confirm or decline it. When a slot opens, the practice notifies matching patients by email — in a few clicks, no phone list needed.",
     whatWorks: "What is working right now:",
     features: [
-      "Own public request link per clinic – shareable via WhatsApp, website, email or QR code",
+      "Own public booking link per practice – shareable via website, email or QR code",
       "Patients submit requests without logging in – no account, no friction",
-      "Review and respond to requests directly in the dashboard",
-      "Simple digital waitlist with structured patient profiles",
-      "Works with WhatsApp, phone and reception · no extra tool needed",
+      "Confirm or decline requests directly in the dashboard",
+      "Digital waitlist with structured patient profiles",
+      "Live email notifications (via Resend)",
       "Multilingual interface in 10 languages",
-      "Early access – request access to get started",
+      "14-day free trial, no credit card required",
     ],
     statusTitle: "Current status",
     status:
-      "Early access for clinics in emerging healthcare markets. A working live product that is now being tested and improved with real clinics. No promises of results and no invented numbers.",
-    trialNote: "Access on request — we help you set up the first test clinic.",
+      "Public soft launch. No paying customers yet. No promises of quick wins. A working live product that is now being tested and improved by real practices.",
+    trialNote: "Registration is fully self-service — no invitation needed.",
     legalNote:
-      "Note: Local legal and data protection requirements should be reviewed before productive use with real patient data.",
-    ctaTrial: "Request access",
+      "Note: Local legal and data protection requirements (e.g. a Data Processing Agreement under GDPR Art. 28) should be reviewed before productive use with real patient data.",
+    ctaTrial: "Try for free",
     ctaContact: "Get in touch",
-    ctaBook: "Try the demo request",
-    ogTitle: "ClinicSlotHub – Early Access",
+    ctaBook: "Test the booking form",
+    ogTitle: "ClinicSlotHub – Global Soft Launch",
     ogDesc:
-      "Mobile request and waitlist desk for clinics in emerging healthcare markets.",
+      "Multilingual appointment and waitlist SaaS for clinics – now publicly available. 14-day free trial.",
+  },
+  fr: {
+    dir: "ltr",
+    badge: "Lancement public mondial · Juin 2026",
+    headline: "ClinicSlotHub – maintenant disponible dans le monde entier",
+    subline:
+      "Une plateforme internationale pour les cliniques, cabinets médicaux, centres de soins et professionnels de santé souhaitant gérer plus efficacement les demandes de rendez-vous et les listes d'attente.",
+    problem:
+      "De nombreux cabinets perdent du temps chaque jour parce que les annulations sont gérées manuellement : parcourir la liste d'attente, appeler les patients, espérer qu'un créneau se remplisse. Cela coûte du temps et génère des créneaux vides évitables.",
+    solution:
+      "ClinicSlotHub digitalise ce processus : les patients s'inscrivent eux-mêmes via un lien de réservation partageable. Quand un créneau se libère, le cabinet notifie les patients correspondants par e-mail ou SMS/WhatsApp optionnel — en quelques clics.",
+    whatWorks: "Ce qui fonctionne dès maintenant :",
+    features: [
+      "Liste d'attente numérique avec profils patients structurés",
+      "Lien de réservation propre par cabinet – partageable par site web, e-mail ou QR code (sans compte patient)",
+      "Notifications e-mail en temps réel (via Resend)",
+      "Notifications SMS/WhatsApp optionnelles (via Twilio)",
+      "Interface multilingue en 10 langues",
+      "Conception respectueuse de la vie privée – pas de tracking, DPA sur demande",
+      "14 jours d'essai gratuit, sans carte bancaire",
+    ],
+    statusTitle: "Statut actuel",
+    status:
+      "Lancement public. Pas encore de clients payants. Un produit fonctionnel maintenant testé et amélioré par de vraies pratiques.",
+    trialNote: "L'inscription est entièrement en libre-service — aucune invitation requise.",
+    legalNote:
+      "Note : Les exigences légales et de protection des données locales (p. ex. un accord de traitement des données selon le RGPD Art. 28) doivent être vérifiées avant toute utilisation productive avec de vraies données patients.",
+    ctaTrial: "Essayer gratuitement",
+    ctaContact: "Nous contacter",
+    ctaBook: "Tester le formulaire de réservation",
+    ogTitle: "ClinicSlotHub – Lancement mondial",
+    ogDesc:
+      "Plateforme multilingue de gestion des rendez-vous et listes d'attente – maintenant disponible. Essai gratuit 14 jours.",
+  },
+  es: {
+    dir: "ltr",
+    badge: "Lanzamiento público global · Junio 2026",
+    headline: "ClinicSlotHub – ya disponible en todo el mundo",
+    subline:
+      "Una plataforma internacional para clínicas, consultorios médicos, centros de salud y proveedores de servicios sanitarios que desean gestionar solicitudes de citas y listas de espera de forma más eficiente.",
+    problem:
+      "Muchos consultorios pierden tiempo cada día porque las cancelaciones se coordinan manualmente: revisar la lista de espera, llamar a los pacientes, esperar que alguien esté disponible con poca anticipación.",
+    solution:
+      "ClinicSlotHub digitaliza este proceso: los pacientes se añaden a la lista de espera a través de un enlace de reserva compartible. Cuando se libera un espacio, el consultorio notifica a los pacientes adecuados por correo electrónico o SMS/WhatsApp opcional.",
+    whatWorks: "Qué funciona ahora mismo:",
+    features: [
+      "Lista de espera digital con perfiles de pacientes estructurados",
+      "Enlace de reserva propio por consultorio – compartible por web, e-mail o código QR (sin cuenta de paciente)",
+      "Notificaciones por correo en tiempo real (via Resend)",
+      "Notificaciones SMS/WhatsApp opcionales (via Twilio)",
+      "Interfaz multilingüe en 10 idiomas",
+      "Diseño respetuoso con la privacidad – sin seguimiento, DPA disponible",
+      "14 días de prueba gratuita, sin tarjeta de crédito",
+    ],
+    statusTitle: "Estado actual",
+    status:
+      "Lanzamiento público. Sin clientes de pago todavía. Un producto funcional en vivo, siendo probado y mejorado por consultorios reales.",
+    trialNote: "El registro es completamente de autoservicio — no se necesita invitación.",
+    legalNote:
+      "Nota: Los requisitos legales y de protección de datos locales deben revisarse antes del uso productivo con datos reales de pacientes.",
+    ctaTrial: "Probar gratis",
+    ctaContact: "Contactar",
+    ctaBook: "Probar el formulario de reserva",
+    ogTitle: "ClinicSlotHub – Lanzamiento global",
+    ogDesc:
+      "Plataforma SaaS multilingüe para clínicas – ya disponible. 14 días de prueba gratuita.",
+  },
+  pt: {
+    dir: "ltr",
+    badge: "Lançamento público global · Junho 2026",
+    headline: "ClinicSlotHub – agora disponível em todo o mundo",
+    subline:
+      "Uma plataforma internacional para clínicas, consultórios médicos, centros de saúde e prestadores de serviços de saúde que desejam gerir pedidos de consultas e listas de espera de forma mais eficiente.",
+    problem:
+      "Muitos consultórios perdem tempo todos os dias porque os cancelamentos são coordenados manualmente: rever a lista de espera, ligar aos pacientes, esperar que alguém esteja disponível com pouca antecedência.",
+    solution:
+      "ClinicSlotHub digitaliza este processo: os pacientes inscrevem-se através de um link de reserva partilhável. Quando um slot fica livre, o consultório notifica os pacientes adequados por e-mail ou SMS/WhatsApp opcional.",
+    whatWorks: "O que funciona agora:",
+    features: [
+      "Lista de espera digital com perfis de pacientes estruturados",
+      "Link de reserva próprio por consultório – partilhável por site, e-mail ou código QR (sem conta de paciente)",
+      "Notificações por e-mail em tempo real (via Resend)",
+      "Notificações SMS/WhatsApp opcionais (via Twilio)",
+      "Interface multilingue em 10 idiomas",
+      "Design respeitador da privacidade – sem rastreamento, DPA disponível",
+      "14 dias de teste gratuito, sem cartão de crédito",
+    ],
+    statusTitle: "Estado atual",
+    status:
+      "Lançamento público. Sem clientes pagantes ainda. Um produto funcional a ser testado e melhorado por consultórios reais.",
+    trialNote: "O registo é totalmente self-service — não é necessário convite.",
+    legalNote:
+      "Nota: Os requisitos legais e de proteção de dados locais devem ser verificados antes da utilização produtiva com dados reais de pacientes.",
+    ctaTrial: "Experimentar gratuitamente",
+    ctaContact: "Entrar em contacto",
+    ctaBook: "Testar o formulário de reserva",
+    ogTitle: "ClinicSlotHub – Lançamento global",
+    ogDesc:
+      "Plataforma SaaS multilingue para clínicas – agora disponível. 14 dias de teste gratuito.",
+  },
+  zh: {
+    dir: "ltr",
+    badge: "全球公开软启动 · 2026年6月",
+    headline: "ClinicSlotHub – 现已面向全球开放",
+    subline: "面向诊所、医疗机构、治疗中心和医疗服务提供者的国际化预约与候补名单管理平台。",
+    problem:
+      "许多诊所每天因手动协调取消预约而损失时间：逐一查看候补名单、给患者打电话、希望有人能临时前来。这耗费了员工时间，并导致不必要的空档损失。",
+    solution:
+      "ClinicSlotHub 将此流程数字化：患者通过可分享的预约链接加入候补名单。当有空档时，诊所只需几次点击即可通过电子邮件（或可选的短信/WhatsApp）通知合适的患者。",
+    whatWorks: "当前可用功能：",
+    features: [
+      "带结构化患者档案的数字候补名单",
+      "每家诊所拥有独立的公开预约链接 – 可通过网站、邮件或二维码分享（患者无需注册）",
+      "实时电子邮件通知（通过 Resend）",
+      "可选短信/WhatsApp 通知（通过 Twilio）",
+      "支持 10 种语言的多语言界面",
+      "隐私保护设计 — 无追踪，可按需提供数据处理协议",
+      "14 天免费试用，无需信用卡",
+    ],
+    statusTitle: "当前状态",
+    status:
+      "公开软启动阶段。目前无付费用户。这是一个功能完整的在线产品，正由真实诊所进行测试和改进。",
+    trialNote: "注册完全自助服务 — 无需邀请。",
+    legalNote: "注意：在正式使用真实患者数据之前，请审查当地适用的法律和数据保护要求。",
+    ctaTrial: "免费试用",
+    ctaContact: "联系我们",
+    ctaBook: "测试预约表单",
+    ogTitle: "ClinicSlotHub – 全球软启动",
+    ogDesc: "面向诊所的多语言预约与候补名单 SaaS — 现已上线。14 天免费试用。",
+  },
+  hi: {
+    dir: "ltr",
+    badge: "वैश्विक सार्वजनिक सॉफ्ट लॉन्च · जून 2026",
+    headline: "ClinicSlotHub – अब दुनिया भर में उपलब्ध",
+    subline:
+      "क्लिनिक, मेडिकल प्रैक्टिस, थेरेपी सेंटर और हेल्थकेयर प्रोवाइडर के लिए एक अंतरराष्ट्रीय अपॉइंटमेंट और वेटलिस्ट प्रबंधन प्लेटफ़ॉर्म।",
+    problem:
+      "कई प्रैक्टिस रोज़ाना समय खोती हैं क्योंकि रद्दीकरण मैन्युअल रूप से समन्वित किया जाता है: वेटलिस्ट देखना, मरीजों को फ़ोन करना, उम्मीद करना कि कोई जल्दी आ सके।",
+    solution:
+      "ClinicSlotHub इस प्रक्रिया को डिजिटल बनाता है: मरीज़ एक शेयर करने योग्य बुकिंग लिंक के माध्यम से वेटलिस्ट में जुड़ते हैं। जब कोई स्लॉट खुलता है, तो प्रैक्टिस कुछ क्लिक में ई-मेल या वैकल्पिक SMS/WhatsApp से उपयुक्त मरीजों को सूचित करती है।",
+    whatWorks: "अभी क्या काम करता है:",
+    features: [
+      "संरचित पेशेंट प्रोफाइल के साथ डिजिटल वेटलिस्ट",
+      "प्रत्येक प्रैक्टिस को अपना सार्वजनिक बुकिंग लिंक – वेबसाइट, ई-मेल या QR कोड से शेयर करें (पेशेंट को अकाउंट की जरूरत नहीं)",
+      "लाइव ई-मेल नोटिफिकेशन (Resend के माध्यम से)",
+      "वैकल्पिक SMS/WhatsApp नोटिफिकेशन (Twilio के माध्यम से)",
+      "10 भाषाओं में बहुभाषी इंटरफेस",
+      "गोपनीयता-सचेत डिज़ाइन – ट्रैकिंग नहीं, DPA अनुरोध पर",
+      "14 दिन का मुफ्त ट्रायल, कोई क्रेडिट कार्ड नहीं",
+    ],
+    statusTitle: "वर्तमान स्थिति",
+    status:
+      "सार्वजनिक सॉफ्ट लॉन्च। अभी तक कोई भुगतान करने वाला ग्राहक नहीं। एक काम करने वाला लाइव प्रोडक्ट जिसे अब असली प्रैक्टिस टेस्ट और बेहतर कर रही हैं।",
+    trialNote: "रजिस्ट्रेशन पूरी तरह से सेल्फ-सर्विस है — कोई आमंत्रण नहीं चाहिए।",
+    legalNote:
+      "नोट: वास्तविक पेशेंट डेटा के साथ उत्पादक उपयोग से पहले स्थानीय कानूनी और डेटा सुरक्षा आवश्यकताओं की समीक्षा करें।",
+    ctaTrial: "मुफ्त आज़माएँ",
+    ctaContact: "संपर्क करें",
+    ctaBook: "बुकिंग फ़ॉर्म टेस्ट करें",
+    ogTitle: "ClinicSlotHub – वैश्विक सॉफ्ट लॉन्च",
+    ogDesc: "क्लिनिक के लिए बहुभाषी अपॉइंटमेंट और वेटलिस्ट SaaS – अब उपलब्ध। 14 दिन मुफ्त।",
+  },
+  ar: {
+    dir: "rtl",
+    badge: "الإطلاق العالمي التجريبي العام · يونيو 2026",
+    headline: "ClinicSlotHub – متاح الآن في جميع أنحاء العالم",
+    subline:
+      "منصة دولية لإدارة طلبات المواعيد وقوائم الانتظار للعيادات والمراكز الطبية ومراكز العلاج ومقدمي خدمات الرعاية الصحية.",
+    problem:
+      "كثير من العيادات تفقد وقتاً يومياً لأن الإلغاءات تُنسَّق يدوياً: مراجعة قائمة الانتظار، الاتصال بالمرضى، الأمل في أن يكون أحدهم متاحاً بإشعار قصير.",
+    solution:
+      "ClinicSlotHub يُرقمن هذه العملية: يُسجّل المرضى أنفسهم عبر رابط حجز قابل للمشاركة. عند توفر موعد، تُخطر العيادة المرضى المناسبين عبر البريد الإلكتروني أو SMS/WhatsApp الاختياري.",
+    whatWorks: "ما يعمل الآن:",
+    features: [
+      "قائمة انتظار رقمية مع ملفات تعريف مرضى منظمة",
+      "رابط حجز خاص لكل عيادة – قابل للمشاركة عبر الموقع أو البريد الإلكتروني أو رمز QR (بدون حساب للمريض)",
+      "إشعارات بريد إلكتروني فورية (عبر Resend)",
+      "إشعارات SMS/WhatsApp اختيارية (عبر Twilio)",
+      "واجهة متعددة اللغات بـ 10 لغات",
+      "تصميم يراعي الخصوصية – بدون تتبع، DPA عند الطلب",
+      "تجربة مجانية 14 يوماً، بدون بطاقة ائتمان",
+    ],
+    statusTitle: "الحالة الراهنة",
+    status:
+      "إطلاق عام تجريبي. لا عملاء يدفعون حتى الآن. منتج حي يعمل، يتم اختباره وتحسينه من قِبل عيادات حقيقية.",
+    trialNote: "التسجيل ذاتي تماماً — لا تتطلب دعوة.",
+    legalNote:
+      "ملاحظة: يجب مراجعة المتطلبات القانونية ومتطلبات حماية البيانات المحلية قبل الاستخدام الإنتاجي مع بيانات المرضى الحقيقية.",
+    ctaTrial: "جرّب مجاناً",
+    ctaContact: "تواصل معنا",
+    ctaBook: "اختبر نموذج الحجز",
+    ogTitle: "ClinicSlotHub – الإطلاق العالمي",
+    ogDesc: "منصة SaaS متعددة اللغات لإدارة المواعيد والانتظار في العيادات – متاحة الآن. تجربة مجانية 14 يوماً.",
+  },
+  bn: {
+    dir: "ltr",
+    badge: "বৈশ্বিক পাবলিক সফট লঞ্চ · জুন ২০২৬",
+    headline: "ClinicSlotHub – এখন বিশ্বব্যাপী উপলব্ধ",
+    subline:
+      "ক্লিনিক, মেডিকেল প্র্যাকটিস, থেরাপি সেন্টার এবং স্বাস্থ্যসেবা প্রদানকারীদের জন্য একটি আন্তর্জাতিক অ্যাপয়েন্টমেন্ট ও ওয়েটলিস্ট ম্যানেজমেন্ট প্ল্যাটফর্ম।",
+    problem:
+      "অনেক প্র্যাকটিস প্রতিদিন সময় হারায় কারণ বাতিল অ্যাপয়েন্টমেন্ট ম্যানুয়ালি সমন্বয় করা হয়: ওয়েটলিস্ট দেখা, রোগীদের ফোন করা, আশা করা যে কেউ শীঘ্রই আসতে পারবেন।",
+    solution:
+      "ClinicSlotHub এই প্রক্রিয়াটি ডিজিটালাইজ করে: রোগীরা একটি শেয়ারযোগ্য বুকিং লিংকের মাধ্যমে ওয়েটলিস্টে যোগ দেন। স্লট খালি হলে, প্র্যাকটিস কয়েক ক্লিকে ইমেইল বা ঐচ্ছিক SMS/WhatsApp-এর মাধ্যমে উপযুক্ত রোগীদের জানাতে পারে।",
+    whatWorks: "এখন যা কাজ করছে:",
+    features: [
+      "গঠনমূলক পেশেন্ট প্রোফাইল সহ ডিজিটাল ওয়েটলিস্ট",
+      "প্রতিটি প্র্যাকটিসের নিজস্ব পাবলিক বুকিং লিংক – ওয়েবসাইট, ইমেইল বা QR কোডে শেয়ার করুন (কোনো অ্যাকাউন্ট দরকার নেই)",
+      "লাইভ ইমেইল নোটিফিকেশন (Resend-এর মাধ্যমে)",
+      "ঐচ্ছিক SMS/WhatsApp নোটিফিকেশন (Twilio-র মাধ্যমে)",
+      "১০টি ভাষায় বহুভাষিক ইন্টারফেস",
+      "গোপনীয়তা-সচেতন ডিজাইন – ট্র্যাকিং নেই, DPA অনুরোধে",
+      "১৪ দিনের বিনামূল্যে ট্রায়াল, কোনো ক্রেডিট কার্ড নেই",
+    ],
+    statusTitle: "বর্তমান অবস্থা",
+    status:
+      "পাবলিক সফট লঞ্চ। এখনও কোনো পেইং কাস্টমার নেই। একটি কার্যকর লাইভ পণ্য যা এখন বাস্তব প্র্যাকটিস দ্বারা পরীক্ষা এবং উন্নত করা হচ্ছে।",
+    trialNote: "রেজিস্ট্রেশন সম্পূর্ণ সেলফ-সার্ভিস — কোনো আমন্ত্রণ প্রয়োজন নেই।",
+    legalNote:
+      "নোট: প্রকৃত রোগীর ডেটা দিয়ে উৎপাদনশীল ব্যবহারের আগে স্থানীয় আইনি ও ডেটা সুরক্ষা প্রয়োজনীয়তা পর্যালোচনা করুন।",
+    ctaTrial: "বিনামূল্যে চেষ্টা করুন",
+    ctaContact: "যোগাযোগ করুন",
+    ctaBook: "বুকিং ফর্ম পরীক্ষা করুন",
+    ogTitle: "ClinicSlotHub – বৈশ্বিক সফট লঞ্চ",
+    ogDesc: "ক্লিনিকের জন্য বহুভাষিক অ্যাপয়েন্টমেন্ট ও ওয়েটলিস্ট SaaS – এখন উপলব্ধ। ১৪ দিন বিনামূল্যে।",
+  },
+  ru: {
+    dir: "ltr",
+    badge: "Глобальный публичный мягкий запуск · Июнь 2026",
+    headline: "ClinicSlotHub – теперь доступен по всему миру",
+    subline:
+      "Международная платформа для управления запросами на приём и листами ожидания для клиник, медицинских кабинетов, терапевтических центров и поставщиков медицинских услуг.",
+    problem:
+      "Многие практики ежедневно теряют время, потому что отмены координируются вручную: просматривать лист ожидания, звонить пациентам, надеяться, что кто-то придёт в короткие сроки.",
+    solution:
+      "ClinicSlotHub оцифровывает этот процесс: пациенты записываются сами через ссылку для бронирования. Когда появляется свободный слот, практика уведомляет подходящих пациентов по электронной почте или через SMS/WhatsApp — за несколько кликов.",
+    whatWorks: "Что работает прямо сейчас:",
+    features: [
+      "Цифровой лист ожидания со структурированными профилями пациентов",
+      "Собственная публичная ссылка для записи на каждую практику – делитесь через сайт, e-mail или QR-код (без аккаунта пациента)",
+      "Уведомления по электронной почте в реальном времени (через Resend)",
+      "Опциональные SMS/WhatsApp уведомления (через Twilio)",
+      "Многоязычный интерфейс на 10 языках",
+      "Дизайн с соблюдением конфиденциальности – без отслеживания, DPA по запросу",
+      "14-дневный бесплатный пробный период, без кредитной карты",
+    ],
+    statusTitle: "Текущий статус",
+    status:
+      "Публичный мягкий запуск. Платных клиентов пока нет. Работающий живой продукт, который тестируется и улучшается реальными практиками.",
+    trialNote: "Регистрация полностью самостоятельная — приглашение не требуется.",
+    legalNote:
+      "Примечание: местные правовые требования и требования по защите данных необходимо проверить перед продуктивным использованием с реальными данными пациентов.",
+    ctaTrial: "Попробовать бесплатно",
+    ctaContact: "Связаться с нами",
+    ctaBook: "Протестировать форму записи",
+    ogTitle: "ClinicSlotHub – Глобальный мягкий запуск",
+    ogDesc:
+      "Многоязычный SaaS для управления записями и листами ожидания — теперь доступен. 14 дней бесплатно.",
   },
 };
 
@@ -212,12 +460,6 @@ export default async function LaunchPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-
-  // Language Gate: needs_review-Locales sehen keine veraltete Launch-Copy.
-  if (shouldRedirectLaunch(locale)) {
-    redirect(`/${locale}`);
-  }
-
   const c = getContent(locale);
   const hiw = getHowItWorks(locale);
   const stepIcons = [LinkIcon, UserCheck, LayoutDashboard];

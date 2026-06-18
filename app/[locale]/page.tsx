@@ -1,129 +1,434 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { PRODUCT_LOCALES, getPivot, PIVOT_COLORS } from "@/lib/pivot-content";
-import { PivotShell } from "@/components/pivot/PivotShell";
-import { InteractiveDemo } from "@/components/pivot/InteractiveDemo";
-import { PricingPlans } from "@/components/pivot/PricingPlans";
-import { RequestAccess } from "@/components/pivot/RequestAccess";
-import { CANONICAL_URL, CONTACT_EMAIL } from "@/lib/brand";
+import {
+  Bell,
+  CalendarClock,
+  ListOrdered,
+  ShieldCheck,
+  CheckCircle2,
+} from "lucide-react";
+import { getTranslations } from "next-intl/server";
+import { headers } from "next/headers";
+import { LanguageSwitcher } from "@/components/language-switcher";
+import { SlotFillLogo } from "@/components/ui/SlotFillLogo";
+import { locales, type Locale } from "@/i18n/routing";
+import { CANONICAL_URL } from "@/lib/brand";
 
-export function generateStaticParams() {
-  return PRODUCT_LOCALES.map((locale) => ({ locale }));
-}
+const APP_URL = CANONICAL_URL;
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
   const { locale } = await params;
-  const d = getPivot(locale);
-  const title = `${d.hero.h1} — ${d.brand}`;
+  const t = await getTranslations({ locale, namespace: "landing" });
+  const tNav = await getTranslations({ locale, namespace: "nav" });
+  const title = `ClinicSlotHub – ${t("heroTitle")}`;
+  const description = t("heroSubtitle");
+
   return {
     title,
-    description: d.hero.subline,
-    metadataBase: new URL(CANONICAL_URL),
-    alternates: { canonical: `/${locale}`, languages: { en: "/en", fr: "/fr", es: "/es" } },
-    openGraph: { title, description: d.hero.subline, url: `${CANONICAL_URL}/${locale}`, siteName: d.brand, type: "website", locale },
+    description,
+    metadataBase: new URL(APP_URL),
+    alternates: {
+      canonical: `/${locale}`,
+      languages: Object.fromEntries(
+        locales.map((l) => [l, `/${l}`]),
+      ) as Record<string, string>,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `/${locale}`,
+      siteName: "ClinicSlotHub",
+      locale: locale === "de" ? "de_DE" : locale,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
   };
 }
 
-function Section({ children, className = "", id }: { children: React.ReactNode; className?: string; id?: string }) {
-  return <section id={id} className={`mx-auto max-w-6xl px-4 ${className}`}>{children}</section>;
+// Schema.org JSON-LD – SoftwareApplication + Organization.
+function buildSchemaOrg(locale: string) {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        name: "ClinicSlotHub",
+        applicationCategory: "BusinessApplication",
+        operatingSystem: "Web",
+        description:
+          "ClinicSlotHub helps clinics, medical offices and healthcare providers worldwide fill appointment slots from the waitlist automatically.",
+        url: APP_URL,
+        inLanguage: locale,
+        offers: {
+          "@type": "Offer",
+          price: "49",
+          priceCurrency: "EUR",
+          description: "Starter plan from €49/month, 14-day free trial included",
+        },
+      },
+      {
+        "@type": "Organization",
+        name: "ClinicSlotHub",
+        url: APP_URL,
+        description: "ClinicSlotHub – Appointment and waitlist management for clinics and healthcare providers worldwide.",
+      },
+    ],
+  };
 }
 
-export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
+export const dynamic = "force-dynamic";
+
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
+
+export default async function LocaleLandingPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  // headers() marks this route as dynamic → Router Cache TTL = 0.
+  // Without it, Next.js can serve a stale pre-rendered RSC payload to
+  // users who navigate via <Link>, even when force-dynamic is set.
+  void headers();
+
   const { locale } = await params;
-  const d = getPivot(locale);
-  const L = (p: string) => `/${locale}${p}`;
-  const mailto = `mailto:${CONTACT_EMAIL}?subject=ClinicSlotHub%20pilot%20access`;
+  const t = await getTranslations({ locale, namespace: "landing" });
+  const tNav = await getTranslations({ locale, namespace: "nav" });
+  const tLegal = await getTranslations({ locale, namespace: "legal" });
+
+  const features = [
+    { icon: ListOrdered, title: t("feature1Title"), desc: t("feature1Desc") },
+    { icon: Bell, title: t("feature2Title"), desc: t("feature2Desc") },
+    { icon: CalendarClock, title: t("feature3Title"), desc: t("feature3Desc") },
+    { icon: ShieldCheck, title: t("feature4Title"), desc: t("feature4Desc") },
+  ];
+
+  const schemaOrg = buildSchemaOrg(locale);
 
   return (
-    <PivotShell locale={locale}>
-      {/* ── 1. Hero + large interactive board ─────────────────────────────── */}
-      <div style={{ background: `linear-gradient(180deg, ${PIVOT_COLORS.tealTint}66, ${PIVOT_COLORS.bg})` }}>
-        <Section className="grid grid-cols-1 items-center gap-12 py-14 lg:grid-cols-[1fr_1.2fr] lg:py-20">
-          <div>
-            {/* Product name reduced to a small label above the plain promise */}
-            <span className="inline-flex items-center gap-2 rounded-full border bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em]" style={{ borderColor: PIVOT_COLORS.line, color: PIVOT_COLORS.tealDark }}>
-              <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: PIVOT_COLORS.teal }} /> {d.tagline}
-            </span>
-            <h1 className="mt-5 text-4xl font-extrabold leading-[1.07] tracking-tight sm:text-5xl" style={{ color: PIVOT_COLORS.ink }}>
-              {d.hero.h1}
-            </h1>
-            <p className="mt-5 max-w-xl text-lg leading-relaxed" style={{ color: PIVOT_COLORS.ink }}>{d.hero.subline}</p>
-            <p className="mt-3 max-w-xl text-[15px] leading-relaxed" style={{ color: PIVOT_COLORS.slate }}>{d.hero.supporting}</p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <a href="#demo" className="rounded-xl px-7 py-3.5 text-center text-[15px] font-semibold text-white transition" style={{ backgroundColor: PIVOT_COLORS.teal }}>
-                {d.cta.viewDemo}
-              </a>
-              <a href={mailto} className="rounded-xl border bg-white px-7 py-3.5 text-center text-[15px] font-semibold transition" style={{ borderColor: PIVOT_COLORS.line, color: PIVOT_COLORS.ink }}>
-                {d.cta.requestAccess}
-              </a>
+    <div className="min-h-screen text-slate-900 dark:text-slate-100" style={{ backgroundColor: "var(--color-bg)" }}>
+      {/* Schema.org JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaOrg) }}
+      />
+
+      {/* Header */}
+      <header
+        className="sticky top-0 z-40 border-b backdrop-blur-md"
+        style={{
+          backgroundColor: "color-mix(in srgb, var(--color-bg) 85%, transparent)",
+          borderColor: "var(--color-border)",
+        }}
+      >
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+          <SlotFillLogo href={`/${locale}`} size={34} />
+          <nav className="flex items-center gap-1 text-sm">
+            <a
+              href="#features"
+              className="hidden rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:inline"
+            >
+              {tNav("features")}
+            </a>
+            <Link
+              href={`/${locale}/pricing`}
+              className="rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
+            >
+              {tNav("pricing")}
+            </Link>
+            <Link
+              href={`/${locale}/blog`}
+              className="hidden rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:inline"
+            >
+              {tNav("blog")}
+            </Link>
+            <Link
+              href={`/${locale}/kontakt`}
+              className="hidden rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:inline"
+            >
+              {tNav("contact")}
+            </Link>
+            <Link
+              href={`/${locale}/termin-buchen`}
+              className="hidden rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:inline"
+            >
+              {tNav("bookAppointment")}
+            </Link>
+            <Link
+              href="/auth/login"
+              className="rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
+            >
+              {tNav("login")}
+            </Link>
+            <Link href={`/${locale}/pricing`} className="btn-brand ml-1 px-4 py-2 text-xs">
+              {tNav("getStarted")}
+            </Link>
+            <LanguageSwitcher currentLocale={locale as Locale} currentPath="/" />
+          </nav>
+        </div>
+      </header>
+
+      {/* Soft-Launch-Banner */}
+      {(() => {
+        const banners: Record<string, string> = {
+          de: "Neu: ClinicSlotHub ist im globalen öffentlichen Soft Launch – jetzt kostenlos testen.",
+          en: "New: ClinicSlotHub is in global public soft launch – try it for free.",
+          fr: "Nouveau : ClinicSlotHub est en lancement public mondial – essayez gratuitement.",
+          es: "Nuevo: ClinicSlotHub está en lanzamiento público global – pruébalo gratis.",
+          pt: "Novo: ClinicSlotHub está em lançamento público global – teste gratuitamente.",
+          zh: "ClinicSlotHub 已进入全球公开软启动阶段 — 可免费试用。",
+          hi: "ClinicSlotHub अब वैश्विक सार्वजनिक सॉफ्ट लॉन्च में है — मुफ्त में आज़माएँ।",
+          ar: "ClinicSlotHub الآن في إطلاق عالمي تجريبي عام — جرّبه مجاناً.",
+          bn: "ClinicSlotHub এখন বৈশ্বিক পাবলিক সফট লঞ্চে — বিনামূল্যে চেষ্টা করুন।",
+          ru: "ClinicSlotHub находится в глобальном публичном soft launch — попробуйте бесплатно.",
+        };
+        const bannerText = banners[locale] ?? banners["en"];
+        return (
+          <div className="w-full border-b border-blue-200 bg-blue-50 dark:border-blue-900/40 dark:bg-blue-900/20">
+            <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2">
+              <p className="text-xs text-blue-700 dark:text-blue-300">{bannerText}</p>
+              <Link
+                href={`/${locale}/launch`}
+                className="shrink-0 rounded-md bg-blue-600 px-3 py-1 text-xs font-medium text-white hover:bg-blue-700 transition"
+              >
+                {locale === "de" ? "Mehr erfahren" : locale === "fr" ? "En savoir plus" : locale === "es" ? "Saber más" : locale === "pt" ? "Saiba mais" : locale === "ar" ? "اعرف أكثر" : "Learn more"}
+              </Link>
             </div>
-            <p className="mt-6 text-[13px]" style={{ color: PIVOT_COLORS.slate }}>{d.hero.trust}</p>
           </div>
-          <InteractiveDemo locale={locale} compact />
-        </Section>
+        );
+      })()}
+
+      {/* Hero — full-bleed blue-tint section */}
+      <div className="w-full bg-gradient-to-b from-blue-50/70 to-white dark:from-blue-950/20 dark:to-transparent">
+      <section className="relative mx-auto max-w-3xl px-4 py-16 text-center sm:py-24">
+        {/* Subtle radial glow */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 -z-10 mx-auto h-full max-w-lg rounded-full opacity-[0.06] blur-3xl dark:opacity-[0.04]"
+          style={{ background: "var(--gradient-brand)" }}
+        />
+        <div className="mb-5 inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-semibold shadow-sm" style={{ borderColor: "var(--color-border)", color: "var(--color-muted)", backgroundColor: "var(--color-surface)" }}>
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full" style={{ backgroundColor: "var(--color-accent)" }} />
+          {t("heroBadge")}
+        </div>
+        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100 sm:text-5xl lg:text-6xl">
+          {t("heroTitle")}
+        </h1>
+        <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+          {t("heroSubtitle")}
+        </p>
+        <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+          <Link href={`/${locale}/pricing`} className="btn-brand w-full px-7 py-3.5 text-base sm:w-auto">
+            {t("ctaPrimary")}
+          </Link>
+          <a href="#features" className="btn-outline-brand w-full px-7 py-3.5 text-base sm:w-auto">
+            {t("ctaSecondary")}
+          </a>
+        </div>
+        <p className="mt-4 text-xs text-slate-400 dark:text-slate-500">
+          {t("trialNote")} &nbsp;·&nbsp; {t("trialNoMessages")}
+        </p>
+      </section>
       </div>
 
-      {/* ── 2. Problem → Solution ─────────────────────────────────────────── */}
-      <Section className="py-16">
-        <h2 className="max-w-2xl text-2xl font-bold tracking-tight sm:text-3xl" style={{ color: PIVOT_COLORS.ink }}>{d.problem.title}</h2>
-        <div className="mt-7 grid grid-cols-2 gap-4 lg:grid-cols-4">
-          {d.problem.pains.map((p) => (
-            <div key={p} className="rounded-2xl border bg-white p-5 text-[14px] font-medium" style={{ borderColor: PIVOT_COLORS.line, color: PIVOT_COLORS.ink }}>
-              <span className="text-[18px]" style={{ color: PIVOT_COLORS.teal }} aria-hidden>•</span>
-              <p className="mt-2 leading-snug">{p}</p>
+      {/* Features — subtle slate-tinted section */}
+      <div className="w-full bg-slate-50/60 dark:bg-transparent">
+      <section id="features" className="mx-auto max-w-6xl px-4 py-16">
+        <h2 className="mb-2 text-center text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">
+          {t("featuresTitle")}
+        </h2>
+        <p className="mb-10 text-center text-sm text-slate-500 dark:text-slate-400">
+          {t("trustSubtitle")}
+        </p>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {features.map((f) => (
+            <div
+              key={f.title}
+              className="group rounded-2xl border p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+              style={{
+                backgroundColor: "var(--color-surface)",
+                borderColor: "var(--color-border)",
+              }}
+            >
+              <div
+                className="mb-4 inline-flex rounded-xl p-2.5 shadow-sm"
+                style={{ background: "var(--gradient-brand)" }}
+              >
+                <f.icon className="h-5 w-5 text-white" />
+              </div>
+              <h3 className="font-semibold text-slate-900 dark:text-slate-100">{f.title}</h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                {f.desc}
+              </p>
             </div>
           ))}
         </div>
-        <div className="mt-6 rounded-2xl p-7" style={{ backgroundColor: PIVOT_COLORS.tealDeep }}>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.16em]" style={{ color: PIVOT_COLORS.tealSoft }}>{d.problem.solutionTitle}</p>
-          <p className="mt-2 text-[18px] font-semibold leading-relaxed text-white">{d.problem.solution}</p>
-          <p className="mt-3 text-[13px]" style={{ color: "rgba(255,255,255,0.7)" }}>{d.patientsLine}</p>
-        </div>
-      </Section>
-
-      {/* ── 3. Interactive demo preview ───────────────────────────────────── */}
-      <div id="demo" className="scroll-mt-20" style={{ backgroundColor: PIVOT_COLORS.surface }}>
-        <Section className="py-16">
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_1.2fr] lg:items-center">
-            <div>
-              <h2 className="text-2xl font-bold tracking-tight sm:text-3xl" style={{ color: PIVOT_COLORS.ink }}>{d.demo.title}</h2>
-              <p className="mt-3 text-[15px] leading-relaxed" style={{ color: PIVOT_COLORS.slate }}>{d.demo.intro}</p>
-              <ul className="mt-5 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-                {d.demo.why.map((w) => (
-                  <li key={w} className="flex items-start gap-2 text-[14px]" style={{ color: PIVOT_COLORS.ink }}>
-                    <span className="mt-0.5 font-bold" style={{ color: PIVOT_COLORS.teal }}>✓</span>{w}
-                  </li>
-                ))}
-              </ul>
-              <Link href={L("/demo")} className="mt-7 inline-block rounded-xl px-6 py-3 text-[14px] font-semibold text-white" style={{ backgroundColor: PIVOT_COLORS.teal }}>{d.cta.viewDemo}</Link>
-            </div>
-            <InteractiveDemo locale={locale} />
-          </div>
-        </Section>
+      </section>
       </div>
 
-      {/* ── 4. How ClinicSlotHub makes money ──────────────────────────────── */}
-      <Section id="pricing" className="scroll-mt-20 py-16">
-        <h2 className="text-2xl font-bold tracking-tight sm:text-3xl" style={{ color: PIVOT_COLORS.ink }}>{d.money.title}</h2>
-        <p className="mt-3 max-w-2xl text-[15px] leading-relaxed" style={{ color: PIVOT_COLORS.slate }}>{d.money.intro}</p>
-        <div className="mt-8">
-          <PricingPlans locale={locale} email={CONTACT_EMAIL} />
-        </div>
-      </Section>
+      {/* Trust — subtle teal-tint section */}
+      <div className="w-full bg-gradient-to-b from-teal-50/25 to-white dark:from-teal-950/10 dark:to-transparent">
+      <section
+        id="trust"
+        className="mx-auto max-w-4xl px-4 py-16 text-center"
+      >
+        <h2 className="text-2xl font-bold">{t("trustTitle")}</h2>
+        <p className="mt-2 text-slate-600 dark:text-slate-300">
+          {t("trustSubtitle")}
+        </p>
+        <ul className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {(
+            [
+              t("trustPoint1"),
+              t("trustPoint2"),
+              t("trustPoint3"),
+              t("trustPoint4"),
+            ] as string[]
+          ).map((point) => (
+            <li
+              key={point}
+              className="flex items-start gap-3 rounded-xl border border-teal-100 bg-white px-5 py-4 text-left shadow-sm dark:border-teal-900/30 dark:bg-slate-900"
+            >
+              <CheckCircle2
+                className="mt-0.5 h-5 w-5 shrink-0"
+                style={{ color: "var(--color-accent)" }}
+              />
+              <span className="text-sm text-slate-700 dark:text-slate-300">
+                {point}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+      </div>
 
-      {/* ── 5. Request access + compact safety ────────────────────────────── */}
-      <Section className="pb-20">
-        <RequestAccess locale={locale} email={CONTACT_EMAIL} />
-        <div className="mt-5 rounded-2xl border p-6" style={{ borderColor: PIVOT_COLORS.line, backgroundColor: PIVOT_COLORS.bg }}>
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-            <div className="max-w-3xl">
-              <h3 className="text-[15px] font-bold" style={{ color: PIVOT_COLORS.ink }}>{d.safety.title}</h3>
-              <p className="mt-2 text-[12.5px] leading-relaxed" style={{ color: PIVOT_COLORS.slate }}>{d.safety.body}</p>
+      {/* Online-Booking Section */}
+      <section className="mx-auto max-w-6xl px-4 py-16">
+        <div
+          className="rounded-2xl border p-8"
+          style={{
+            backgroundColor: "var(--color-surface)",
+            borderColor: "var(--color-border)",
+          }}
+        >
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex-1">
+              <div className="mb-2 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium" style={{ backgroundColor: "var(--color-surface-2)", color: "var(--color-muted)" }}>
+                <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
+                {t("onlineBookingBadge")}
+              </div>
+              <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+                {t("onlineBookingTitle")}
+              </h2>
+              <p className="mt-2 text-sm text-slate-600 dark:text-slate-400 max-w-lg">
+                {t("onlineBookingDesc")}
+              </p>
+              <ul className="mt-4 space-y-1.5 text-sm text-slate-600 dark:text-slate-400">
+                <li className="flex items-center gap-2">
+                  <span style={{ color: "var(--color-accent)" }}>✓</span>
+                  {t("onlineBookingBullet1")}
+                </li>
+                <li className="flex items-center gap-2">
+                  <span style={{ color: "var(--color-accent)" }}>✓</span>
+                  {t("onlineBookingBullet2")}
+                </li>
+                <li className="flex items-center gap-2">
+                  <span style={{ color: "var(--color-accent)" }}>✓</span>
+                  {t("onlineBookingBullet3")}
+                </li>
+              </ul>
             </div>
-            <Link href={L("/safety-notes")} className="shrink-0 text-[13px] font-semibold underline" style={{ color: PIVOT_COLORS.tealDark }}>{d.nav.safety} →</Link>
+            <div className="shrink-0">
+              <Link href={`/${locale}/termin-buchen`} className="btn-brand">
+                {t("onlineBookingButton")}
+              </Link>
+            </div>
           </div>
         </div>
-      </Section>
-    </PivotShell>
+      </section>
+
+      {/* CTA */}
+      <section
+        className="mx-auto max-w-3xl rounded-3xl px-8 py-16 text-center mx-4 my-8"
+        style={{
+          background: "var(--gradient-brand)",
+          margin: "2rem auto",
+          maxWidth: "48rem",
+        }}
+      >
+        <h2 className="text-2xl font-bold text-white">{t("ctaBlockTitle")}</h2>
+        <p className="mt-2 text-white/80">
+          {t("ctaBlockSubtitle")}
+        </p>
+        <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+          <Link
+            href={`/${locale}/pricing`}
+            className="inline-flex w-full items-center justify-center rounded-lg bg-white px-6 py-3 text-sm font-semibold text-slate-900 shadow-lg transition hover:bg-slate-50 sm:w-auto"
+          >
+            {t("ctaPrimary")}
+          </Link>
+          <Link
+            href={`/${locale}/pricing`}
+            className="inline-flex w-full items-center justify-center rounded-lg border border-white/40 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10 sm:w-auto"
+          >
+            {t("comparePrices")}
+          </Link>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer
+        className="border-t"
+        style={{
+          backgroundColor: "var(--color-surface)",
+          borderColor: "var(--color-border)",
+        }}
+      >
+        <div className="mx-auto max-w-6xl px-4 py-10">
+          <div className="mb-6 flex items-center justify-between">
+            <SlotFillLogo href={`/${locale}`} size={30} />
+          </div>
+          <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm" style={{ color: "var(--color-muted)" }}>
+            <Link href={`/${locale}/impressum`} className="transition hover:text-slate-900 dark:hover:text-slate-100">
+              {tLegal("impressumTitle")}
+            </Link>
+            <Link href={`/${locale}/datenschutz`} className="transition hover:text-slate-900 dark:hover:text-slate-100">
+              {tLegal("datenschutzTitle")}
+            </Link>
+            <Link href={`/${locale}/agb`} className="transition hover:text-slate-900 dark:hover:text-slate-100">
+              {tLegal("agbTitle")}
+            </Link>
+            <Link href={`/${locale}/avv`} className="transition hover:text-slate-900 dark:hover:text-slate-100">
+              AVV
+            </Link>
+            <Link href={`/${locale}/blog`} className="transition hover:text-slate-900 dark:hover:text-slate-100">
+              {tNav("blog")}
+            </Link>
+            <Link href={`/${locale}/kontakt`} className="transition hover:text-slate-900 dark:hover:text-slate-100">
+              {tNav("contact")}
+            </Link>
+            <Link href={`/${locale}/termin-buchen`} className="transition hover:text-slate-900 dark:hover:text-slate-100">
+              {tNav("bookAppointment")}
+            </Link>
+            <Link href={`/${locale}/feedback`} className="transition hover:text-slate-900 dark:hover:text-slate-100">
+              {tNav("feedback")}
+            </Link>
+          </div>
+          <div className="mt-6 border-t pt-6 text-xs" style={{ borderColor: "var(--color-border)", color: "var(--color-muted)" }}
+            aria-label="Copyright">
+            <p>© {new Date().getFullYear()} {tNav("brand")}. {t("rights")}</p>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 }

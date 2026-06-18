@@ -49,13 +49,13 @@ const SHARE: Record<string, ShareContent> = {
     longPostLabel: "Langer Post (LinkedIn / Community)",
     longPost: `Ich habe ClinicSlotHub öffentlich gestartet.
 
-ClinicSlotHub ist eine mehrsprachige Plattform, mit der Kliniken in wachstumsstarken Gesundheitsmärkten WhatsApp-, Telefon-, Rezeptions- und mobile Patientenanfragen in einer einfachen Warteliste organisieren.
+ClinicSlotHub ist eine mehrsprachige SaaS-Plattform, mit der Praxen, Kliniken, Therapiezentren und Healthcare Provider weltweit Wartelisten digital verwalten und freie Terminslots schneller besetzen können.
 
 Das Problem: Wenn ein Patient absagt, bleibt der Termin oft leer – weil die Praxis keine Zeit hat, die Warteliste manuell durchzugehen.
 
 Die Lösung: Jede Praxis bekommt einen eigenen öffentlichen Buchungslink – teilbar per Website, E-Mail oder QR-Code. Patienten stellen darüber eine Anfrage, ohne sich anzumelden. Die Praxis bestätigt oder lehnt direkt im Dashboard ab.
 
-Aktuell: Early Access. Keine übertriebenen Zahlen. Ein funktionierendes Produkt, das jetzt getestet werden soll.
+Aktuell: Öffentlicher Soft Launch. Keine zahlenden Kunden. Keine übertriebenen Zahlen. Ein funktionierendes Produkt, das jetzt getestet werden soll.
 
 14 Tage kostenlos, keine Kreditkarte: clinicslothub.com
 
@@ -71,7 +71,7 @@ ich möchte dir ClinicSlotHub vorstellen – eine neue SaaS-Plattform für Praxe
 
 Was es löst: Wenn ein Termin kurzfristig wegfällt, bleibt der Slot oft leer. ClinicSlotHub digitalisiert die Warteliste: Patienten tragen sich ein, bei einem freien Termin werden passende Patienten per E-Mail benachrichtigt.
 
-Was es ist: Live-MVP, Early Access, Zugang auf Anfrage.
+Was es ist: Live-MVP, öffentlicher Soft Launch, 14 Tage kostenlos testbar, keine Kreditkarte.
 Was es nicht ist: Keine Garantien, keine Fake-Kunden, keine übertriebenen Versprechen.
 
 Link: clinicslothub.com
@@ -80,19 +80,19 @@ Bei Fragen bin ich erreichbar unter transl.delta@gmail.com.
 
 Viele Grüße`,
     communityLabel: "Community-Post (Forum / Reddit / Indie Hackers)",
-    community: `[Eigenprojekt] Mobiler Anfrage- und Warteliste-Desk für Kliniken in wachstumsstarken Gesundheitsmärkten – Early Access, Feedback willkommen
+    community: `[Eigenprojekt] Digitale Wartelisten-Plattform für Praxen – öffentlicher Soft Launch, Feedback willkommen
 
 Ich habe ClinicSlotHub entwickelt: eine mehrsprachige SaaS für Arzt- und Therapiepraxen, die Wartelisten digital verwalten und freie Termine schneller besetzen möchten.
 
-Status: Live-MVP, Early Access.
-Stack: Next.js, modern cloud infrastructure.
+Status: Live-MVP, keine zahlenden Kunden, Soft Launch.
+Stack: Next.js 14, Supabase, Resend, Vercel.
 10 Sprachen: DE, EN, FR, ES, PT, ZH, HI, AR, BN, RU.
 
 → clinicslothub.com
 
 Freue mich über technisches und produktbezogenes Feedback.`,
     bioLabel: "Profil-Bio (1 Satz)",
-    bio: `Ich entwickle ClinicSlotHub – mobiler Anfrage- und Warteliste-Desk für Kliniken in wachstumsstarken Gesundheitsmärkten. clinicslothub.com`,
+    bio: `Ich entwickle ClinicSlotHub – digitale Wartelisten-SaaS für Praxen und Kliniken weltweit. clinicslothub.com`,
     hashtagsLabel: "Hashtag-Vorschläge",
     hashtags: `#ClinicSlotHub #HealthcareSaaS #Warteliste #Praxismanagement #SoftLaunch #IndieHacker #B2BSaaS #HealthTech #Terminmanagement`,
     ogTitle: "Share Kit – ClinicSlotHub",
@@ -108,13 +108,13 @@ Freue mich über technisches und produktbezogenes Feedback.`,
     longPostLabel: "Long post (LinkedIn / community)",
     longPost: `I publicly launched ClinicSlotHub.
 
-ClinicSlotHub is a multilingual platform that helps clinics in emerging healthcare markets organize WhatsApp, phone, reception and mobile patient requests in one simple waitlist.
+ClinicSlotHub is a multilingual SaaS platform that helps practices, clinics, therapy centers and healthcare providers worldwide manage their waitlists digitally and fill appointment slots faster when cancellations occur.
 
 The problem: when a patient cancels, the slot often stays empty — because the practice has no time to manually go through the waitlist.
 
 The solution: every practice gets its own public booking link — shareable via website, email or QR code. Patients submit a request without creating an account. The practice confirms or rejects directly in the dashboard.
 
-Current status: early access. No exaggerated numbers. A working product that's now being tested.
+Current status: public soft launch. No paying customers. No exaggerated numbers. A working product that's now being tested.
 
 14-day free trial, no credit card: clinicslothub.com
 
@@ -130,7 +130,7 @@ I'd like to introduce ClinicSlotHub — a new SaaS platform for practices, clini
 
 What it solves: when an appointment is cancelled at short notice, the slot often stays empty. ClinicSlotHub digitalises the waitlist: patients sign up, and when a slot opens, matching patients are notified by email.
 
-What it is: live MVP, early access, access on request.
+What it is: live MVP, public soft launch, 14-day free trial, no credit card.
 What it isn't: no guarantees, no fake customers, no exaggerated claims.
 
 Link: clinicslothub.com
@@ -139,19 +139,19 @@ For questions: transl.delta@gmail.com
 
 Best regards`,
     communityLabel: "Community post (forum / Reddit / Indie Hackers)",
-    community: `[My project] Mobile request and waitlist desk for clinics in emerging healthcare markets — early access, feedback welcome
+    community: `[My project] Digital waitlist SaaS for medical practices — public soft launch, feedback welcome
 
 I built ClinicSlotHub: a multilingual SaaS for medical and therapy practices that want to manage waitlists digitally and fill appointment slots faster.
 
-Status: live MVP, early access.
-Stack: Next.js, modern cloud infrastructure.
+Status: live MVP, no paying customers, soft launch.
+Stack: Next.js 14, Supabase, Resend, Vercel.
 10 languages: DE, EN, FR, ES, PT, ZH, HI, AR, BN, RU.
 
 → clinicslothub.com
 
 Happy to get technical and product feedback.`,
     bioLabel: "Profile bio (1 sentence)",
-    bio: `Building ClinicSlotHub — mobile request and waitlist desk for clinics in emerging healthcare markets. clinicslothub.com`,
+    bio: `Building ClinicSlotHub — digital waitlist SaaS for clinics and healthcare providers worldwide. clinicslothub.com`,
     hashtagsLabel: "Hashtag suggestions",
     hashtags: `#ClinicSlotHub #HealthcareSaaS #Waitlist #PracticeManagement #SoftLaunch #IndieHacker #B2BSaaS #HealthTech #AppointmentManagement`,
     ogTitle: "Share Kit – ClinicSlotHub",

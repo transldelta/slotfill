@@ -502,10 +502,13 @@ test("Go-Live: A4 – Trust-Sektion: app/[locale]/page.tsx verwendet trustTitle"
     resolve(process.cwd(), "app/[locale]/page.tsx"),
     "utf8",
   );
-  // Visibility-Engine-Pivot: Trust/Safety-Zeile kommt aus der Pivot-Hero-Trust + Safety-Strip.
   assert.ok(
-    content.includes("d.hero.trust") || content.includes("d.safety"),
-    'app/[locale]/page.tsx: Trust/Safety-Sektion fehlt (Pivot)',
+    content.includes("trustTitle"),
+    'app/[locale]/page.tsx: trustTitle fehlt – Trust-Sektion nicht eingebaut',
+  );
+  assert.ok(
+    content.includes("trustPoint1"),
+    'app/[locale]/page.tsx: trustPoint1 fehlt',
   );
 });
 
@@ -522,21 +525,19 @@ test("Go-Live: A4 – KNOWN_CONTENT enthält TRUST_SECTION_ADDED → A4 ist read
   );
 });
 
-test("Go-Live: Aufgabe 4 – Scheduling-OS-Hero zeigt H1, Trust-Zeile und Dashboard-Mockup", () => {
-  // Modern Clinic Scheduling OS: Hero zeigt H1 + Subline + Trust-Zeile, Dashboard-
-  // Mockup und sichere CTAs (Request access / View demo).
+test("Go-Live: Aufgabe 4 – trialNoMessages im Hero der Startseite", () => {
   const { readFileSync } = require("fs");
   const content: string = readFileSync(
     resolve(process.cwd(), "app/[locale]/page.tsx"),
     "utf8",
   );
   assert.ok(
-    content.includes("d.hero.h1") && content.includes("d.hero.trust"),
-    'app/[locale]/page.tsx: Scheduling-Hero/Trust-Zeile fehlt',
+    content.includes("trialNoMessages"),
+    'app/[locale]/page.tsx: trialNoMessages fehlt – Messaging-Ehrlichkeit im Hero fehlt',
   );
   assert.ok(
-    content.includes("InteractiveDemo") && content.includes("d.cta.requestAccess") && content.includes("d.cta.viewDemo"),
-    'app/[locale]/page.tsx: interaktives Board oder sichere CTAs fehlen im Hero',
+    content.includes("trialNote"),
+    'app/[locale]/page.tsx: trialNote fehlt',
   );
 });
 
@@ -548,21 +549,19 @@ test("Go-Live: B3 – Trial-Infobox: messages/de.json enthält trialInfo", () =>
   assert.ok(msgs.pricing?.trialNoSms, "messages/de.json: pricing.trialNoSms fehlt");
 });
 
-test("Go-Live: B3 – Klinik-Zugang: pricing/page.tsx zeigt Preislogik-Note statt Trial-Infobox", () => {
-  // Premium Commercial Relaunch: die Trial-Infobox wurde durch eine lokalisierte
-  // Klinik-Preislogik-Note ersetzt (kein kostenloses Testen mehr beworben).
+test("Go-Live: B3 – Trial-Infobox: app/[locale]/pricing/page.tsx verwendet trialInfo", () => {
   const { readFileSync } = require("fs");
   const content: string = readFileSync(
     resolve(process.cwd(), "app/[locale]/pricing/page.tsx"),
     "utf8",
   );
   assert.ok(
-    content.includes("pc.priceLogicNote"),
-    'app/[locale]/pricing/page.tsx: Klinik-Preislogik-Note fehlt',
+    content.includes("trialInfo"),
+    'app/[locale]/pricing/page.tsx: trialInfo fehlt – Trial-Infobox nicht eingebaut',
   );
   assert.ok(
-    !content.includes('t("trialInfo")') && !content.includes('t("trialNoCreditCard")'),
-    'app/[locale]/pricing/page.tsx: alte Trial-Infobox noch eingebaut',
+    content.includes("trialNoCreditCard"),
+    'app/[locale]/pricing/page.tsx: trialNoCreditCard fehlt',
   );
 });
 
@@ -1267,16 +1266,23 @@ test("Legal: Legal-Seiten dürfen persönlichen Namen enthalten (erlaubte Ausnah
   }
 });
 
-test("Legal: Footer (PivotShell) verlinkt auf locale-spezifische Legal-Seiten", () => {
+test("Legal: Footer in app/[locale]/page.tsx verlinkt auf locale-spezifische Legal-Seiten", () => {
   const { readFileSync } = require("fs");
-  // Footer lebt nach dem Pivot in der gemeinsamen PivotShell.
-  const localePage = resolve(process.cwd(), "components/pivot/PivotShell.tsx");
-  assert.ok(existsSync(localePage), "components/pivot/PivotShell.tsx fehlt");
+  const localePage = resolve(process.cwd(), "app/[locale]/page.tsx");
+  assert.ok(existsSync(localePage), "app/[locale]/page.tsx fehlt");
   const src: string = readFileSync(localePage, "utf8");
-  // PivotShell baut locale-Pfade über L(p) = `/${locale}${p}`.
-  assert.ok(src.includes('L("/impressum")'), "Footer muss auf locale-spezifisches /impressum verlinken");
-  assert.ok(src.includes('L("/datenschutz")'), "Footer muss auf locale-spezifisches /datenschutz verlinken");
-  assert.ok(src.includes('L("/agb")'), "Footer muss auf locale-spezifisches /agb verlinken");
+  assert.ok(
+    src.includes("/${locale}/impressum") || src.includes("`/${locale}/impressum`"),
+    "Footer muss auf /${locale}/impressum verlinken (nicht hardcoded /impressum)",
+  );
+  assert.ok(
+    src.includes("/${locale}/datenschutz") || src.includes("`/${locale}/datenschutz`"),
+    "Footer muss auf /${locale}/datenschutz verlinken",
+  );
+  assert.ok(
+    src.includes("/${locale}/agb") || src.includes("`/${locale}/agb`"),
+    "Footer muss auf /${locale}/agb verlinken",
+  );
 });
 
 // ─── Legal i18n & RTL ────────────────────────────────────────────────────────
@@ -1892,15 +1898,13 @@ test("Logo: SlotFillLogo-Komponente verwendet BRAND_NAME (White-Label-fähig)", 
   assert.ok(src.includes("aria-label"), "SlotFillLogo muss aria-label haben");
 });
 
-test("Branding: Landing-Page nutzt die gemeinsame PivotShell (Header/Footer + Markenname)", () => {
+test("Logo: Landing-Page importiert SlotFillLogo-Komponente", () => {
   const { readFileSync, existsSync } = require("fs");
   const { resolve } = require("path");
   const p = resolve(process.cwd(), "app/[locale]/page.tsx");
   if (!existsSync(p)) return;
   const src: string = readFileSync(p, "utf8");
-  assert.ok(src.includes("PivotShell"), "Landing Page muss die PivotShell nutzen");
-  const shell: string = readFileSync(resolve(process.cwd(), "components/pivot/PivotShell.tsx"), "utf8");
-  assert.ok(shell.includes("d.brand"), "PivotShell muss den Markennamen rendern");
+  assert.ok(src.includes("SlotFillLogo"), "Landing Page muss SlotFillLogo importieren und nutzen");
 });
 
 test("Premium Colors: globals.css enthält --color-bg CSS-Variable", () => {

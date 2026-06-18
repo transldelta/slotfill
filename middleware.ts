@@ -55,57 +55,6 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // 1a. Public Language Gate (EN/FR/ES only) ───────────────────────────────────
-  //     Öffentliche Produktsprachen sind ausschließlich EN/FR/ES. Alle anderen
-  //     Locale-Routen (/de, /ar, /hi, /bn, /ru, /zh, /pt …) werden per 308 auf die
-  //     englische Variante des gleichen Pfads geleitet — kein deutsches/halb-
-  //     übersetztes Produkt öffentlich. Kein Loop: Ziel ist immer /en/...
-  const PRODUCT_LOCALES = new Set(["en", "fr", "es"]);
-  const seg0 = pathname.replace(/^\/+/, "").split("/");
-  if (
-    (routing.locales as readonly string[]).includes(seg0[0]) &&
-    !PRODUCT_LOCALES.has(seg0[0])
-  ) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/en" + pathname.slice(seg0[0].length + 1);
-    return NextResponse.redirect(url, { status: 308 });
-  }
-
-  // 1b. Freeze alter öffentlicher Routen nach dem Visibility-Pivot ─────────────
-  //     Alte Wartelisten-/Booking-/Launch-/Pricing-/Blog-Routen werden per 308
-  //     auf passende Pivot-Routen umgeleitet. Keine Admin-/Dashboard-/Auth-/API-
-  //     Pfade betroffen (oben bereits ausgenommen). Keine Redirect-Loops:
-  //     Ziel ist immer eine Pivot-Route, die selbst nicht eingefroren ist.
-  const FROZEN: Record<string, string> = {
-    pricing: "/for-clinics",
-    launch: "",
-    "public-launch": "",
-    share: "",
-    "termin-buchen": "/clinic-contact",
-    kontakt: "/clinic-contact",
-    blog: "",
-    // Medical-tourism-Reste des Visibility-Pivots → Home (Scheduling OS).
-    treatments: "",
-    destinations: "",
-  };
-  const seg = pathname.replace(/^\/+/, "").split("/");
-  const locs = routing.locales as readonly string[];
-  let frozenLocale: string | null = null;
-  let frozenKey: string | null = null;
-  if (locs.includes(seg[0]) && seg[1] && Object.prototype.hasOwnProperty.call(FROZEN, seg[1])) {
-    frozenLocale = seg[0];
-    frozenKey = seg[1];
-  } else if (Object.prototype.hasOwnProperty.call(FROZEN, seg[0])) {
-    frozenLocale = routing.defaultLocale;
-    frozenKey = seg[0];
-  }
-  if (frozenLocale && frozenKey) {
-    const url = request.nextUrl.clone();
-    url.pathname = `/${frozenLocale}${FROZEN[frozenKey]}`;
-    url.search = "";
-    return NextResponse.redirect(url, { status: 308 });
-  }
-
   // 2. /admin und /dashboard: Supabase-Auth-Check (Login-Pflicht)
   //    Nur erreichbar von canonical hosts (oben bereits gesichert).
   //    /admin wird NICHT auf /de/admin umgeleitet.

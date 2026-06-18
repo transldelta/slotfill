@@ -80,7 +80,7 @@ export function SlotFillLogo({
   if (href === null) return inner;
 
   return (
-    <Link href={href} aria-label={BRAND_NAME}>
+    <Link href={href} aria-label={`${BRAND_NAME} – zur Startseite`}>
       {inner}
     </Link>
   );

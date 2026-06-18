@@ -298,11 +298,6 @@ export default function BookSlugPage() {
             <li>2. Die Praxis prüft Ihre Anfrage und meldet sich per E-Mail.</li>
             <li>3. Erst nach Bestätigung durch die Praxis ist der Termin verbindlich.</li>
           </ol>
-          <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
-            Kein Konto nötig. Mobil nutzbar. Keine Notfälle, keine Diagnosen, keine Dokumente –
-            nur eine einfache Terminanfrage. Im Notfall wenden Sie sich bitte direkt an den
-            ärztlichen Notdienst oder die Notaufnahme.
-          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-5">

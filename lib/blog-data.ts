@@ -55,7 +55,7 @@ Fazit
 
 Eine gut gepflegte Warteliste ist eine der wirkungsvollsten Maßnahmen, um kurzfristige Terminlücken zu schließen. Mit klarer Struktur, regelmäßiger Pflege und – bei Bedarf – digitaler Unterstützung lässt sich die Auslastung einer Praxis spürbar verbessern.
 
-Zugang für Ihre Klinik anfragen: Sehen Sie, wie die Wartelisten-Verwaltung für Ihre Klinik einfacher wird.`,
+ClinicSlotHub kostenlos testen: Jetzt 14 Tage testen und sehen, wie die Wartelisten-Verwaltung einfacher wird.`,
   },
 
   {
@@ -96,7 +96,7 @@ Vorbereitete Benachrichtigungen lösen nicht jede Lücke. Mancher Termin bleibt 
 
 ClinicSlotHub unterstützt genau diesen Prozess: Bei einer Terminlücke werden passende Patienten aus der Warteliste vorbereitet, und die Praxis kann mit einem Klick einen sicheren Link an ausgewählte Personen versenden.
 
-Zugang anfragen: Fragen Sie Zugang für Ihre Klinik an und sehen Sie ClinicSlotHub in einer kurzen Demo.`,
+Jetzt ausprobieren: Testen Sie ClinicSlotHub 14 Tage kostenlos.`,
   },
 
   {
@@ -206,7 +206,7 @@ Fazit
 
 Terminlücken lassen sich nie vollständig vermeiden – aber durch klare Prozesse und eine aktive Warteliste deutlich reduzieren. Der erste Schritt ist meistens kein Tool, sondern eine Entscheidung: Wer ist zuständig, wenn ein Termin ausfällt?
 
-Wenn Sie ClinicSlotHub für Ihre Klinik kennenlernen möchten, können Sie Zugang anfragen oder eine kurze Klinik-Demo ansehen. Bei Fragen freuen wir uns auf Ihre Nachricht.`,
+Wenn Sie ClinicSlotHub als Unterstützung ausprobieren möchten, können Sie die Plattform 14 Tage kostenlos testen. Bei Fragen freuen wir uns auf Ihre Nachricht.`,
   },
 
   {
@@ -477,7 +477,7 @@ Fazit
 
 Eine strukturierte Warteliste ist kein Luxus für große Kliniken – sie ist ein einfaches, wirkungsvolles Instrument für jede Praxis. Der Einstieg muss nicht kompliziert sein: Mit einer klaren Tabelle und einem definierten Prozess lässt sich viel erreichen.
 
-Wenn Sie neugierig sind, wie ClinicSlotHub Ihre Klinik unterstützen kann, fragen Sie Zugang für Ihre Klinik an – oder kontaktieren Sie uns mit Ihren Fragen.`,
+Wenn Sie neugierig sind, wie ClinicSlotHub Ihre Praxis unterstützen kann, testen Sie die Plattform kostenlos – oder kontaktieren Sie uns mit Ihren Fragen.`,
   },
 ];
 
@@ -485,3 +485,55 @@ Wenn Sie neugierig sind, wie ClinicSlotHub Ihre Klinik unterstützen kann, frage
 export function getStaticPost(slug: string): StaticPost | null {
   return STATIC_BLOG_POSTS.find((p) => p.slug === slug) ?? null;
 }
+
+// Globaler Soft-Launch-Artikel (DE) – hinzugefügt Juni 2026
+// Direkte Ergänzung nach Array-Deklaration um Hoisting zu vermeiden.
+STATIC_BLOG_POSTS.push({
+  slug: "clinicslothub-global-soft-launch",
+  title: "ClinicSlotHub ist jetzt öffentlich gestartet – globaler Soft Launch",
+  excerpt: "ClinicSlotHub, die mehrsprachige Plattform für Terminanfragen und Wartelisten in Praxen, Kliniken und bei Healthcare Providern, ist jetzt öffentlich verfügbar. 14 Tage kostenlos testen, keine Kreditkarte.",
+  published_at: "2026-06-10T08:00:00.000Z",
+  content: `ClinicSlotHub ist jetzt öffentlich verfügbar.
+
+Nach mehreren Monaten Entwicklung und internen Tests startet die Plattform in den globalen öffentlichen Soft Launch. Ziel: Praxen, Kliniken, Therapiezentren und Healthcare Providern weltweit Zugang zu einem digitalen Werkzeug zu geben, das die Verwaltung von Terminanfragen und Wartelisten einfacher macht – ohne teure Integrationen, ohne kompliziertes Setup und ohne manuelle Zettelwirtschaft.
+
+Was ist ClinicSlotHub?
+
+ClinicSlotHub ist eine browserbasierte SaaS-Plattform, die Praxen und medizinische Einrichtungen dabei unterstützt, Wartelisten digital zu verwalten. Wenn eine Terminabsage eingeht, kann die Praxis schnell geeignete Patienten aus der Warteliste identifizieren und per E-Mail benachrichtigen – und optional per SMS oder WhatsApp, wenn ein Messaging-Provider konfiguriert ist.
+
+Die Plattform ist in 10 Sprachen verfügbar: Deutsch, Englisch, Französisch, Spanisch, Portugiesisch, Chinesisch, Hindi, Arabisch, Bengalisch und Russisch.
+
+Was aktuell funktioniert
+
+Folgende Funktionen sind live und in Betrieb:
+– Digitale Wartelisten-Verwaltung mit strukturierten Patientenprofilen
+– Teilbare Buchungslinks für Patienten (kein Patientenkonto nötig)
+– Terminverwaltung und Bestätigungsablauf
+– E-Mail-Benachrichtigungen für Patienten und die Praxis
+– Optionale SMS/WhatsApp-Benachrichtigungen (via Twilio, erfordert separate Konfiguration)
+– Mehrsprachige Patientenoberfläche in 10 Sprachen
+– Datenschutzbewusstes Design: kein Tracking, kein Massenversand ohne Einwilligung
+– Vollständige Legal-Seiten: Impressum, Datenschutz, AGB, AVV
+
+Aktueller Status: Soft Launch
+
+Es gibt noch keine zahlenden Kunden. Die Plattform befindet sich im öffentlichen Soft Launch. Praxen, die sich jetzt registrieren, sind Early Adopter – ihr Feedback wird die nächsten Entwicklungsprioritäten direkt beeinflussen.
+
+Stripe ist technisch integriert, aber noch nicht aktiviert. Die Trial-Phase ist kostenlos, keine Kreditkarte nötig.
+
+Für wen?
+
+ClinicSlotHub richtet sich an Praxen und Einrichtungen jeder Art: Allgemeinmedizin, Fachärzte, Physiotherapie, Logopädie, Ergotherapie, Psychotherapie, Zahnmedizin, kleine Kliniken und Healthcare Provider.
+
+Die Plattform ist für internationale Nutzung ausgelegt. Für den produktiven Einsatz mit echten Patientendaten empfiehlt sich vorab die Prüfung der lokalen rechtlichen und datenschutzrechtlichen Anforderungen.
+
+Kostenlos testen
+
+Die Registrierung ist vollständig selbstservice. Kein Invite, kein Admin-Approval:
+– clinicslothub.com aufrufen
+– „Registrieren" klicken
+– E-Mail bestätigen
+– 14-tägige Trial-Phase starten
+
+Fragen oder Feedback: transl.delta@gmail.com`,
+});

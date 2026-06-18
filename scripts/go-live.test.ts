@@ -552,19 +552,21 @@ test("Go-Live: B3 – Trial-Infobox: messages/de.json enthält trialInfo", () =>
   assert.ok(msgs.pricing?.trialNoSms, "messages/de.json: pricing.trialNoSms fehlt");
 });
 
-test("Go-Live: B3 – Trial-Infobox: app/[locale]/pricing/page.tsx verwendet trialInfo", () => {
+test("Go-Live: B3 – Klinik-Zugang: pricing/page.tsx zeigt Preislogik-Note statt Trial-Infobox", () => {
+  // Premium Commercial Relaunch: die Trial-Infobox wurde durch eine lokalisierte
+  // Klinik-Preislogik-Note ersetzt (kein kostenloses Testen mehr beworben).
   const { readFileSync } = require("fs");
   const content: string = readFileSync(
     resolve(process.cwd(), "app/[locale]/pricing/page.tsx"),
     "utf8",
   );
   assert.ok(
-    content.includes("trialInfo"),
-    'app/[locale]/pricing/page.tsx: trialInfo fehlt – Trial-Infobox nicht eingebaut',
+    content.includes("pc.priceLogicNote"),
+    'app/[locale]/pricing/page.tsx: Klinik-Preislogik-Note fehlt',
   );
   assert.ok(
-    content.includes("trialNoCreditCard"),
-    'app/[locale]/pricing/page.tsx: trialNoCreditCard fehlt',
+    !content.includes('t("trialInfo")') && !content.includes('t("trialNoCreditCard")'),
+    'app/[locale]/pricing/page.tsx: alte Trial-Infobox noch eingebaut',
   );
 });
 

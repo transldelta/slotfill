@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, MessageCircle, Phone, Building2 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { headers } from "next/headers";
 import { LanguageSwitcher } from "@/components/language-switcher";
@@ -221,6 +221,54 @@ export default async function LocaleLandingPage({
           ))}
         </div>
       </section>
+      </div>
+
+      {/* Product preview — stylized clinic waitlist (language-neutral, no external assets) */}
+      <div className="mx-auto -mt-10 mb-4 max-w-2xl px-4 sm:-mt-14">
+        <div
+          className="overflow-hidden rounded-2xl border bg-white shadow-xl shadow-slate-900/[0.06] dark:bg-slate-900"
+          style={{ borderColor: "var(--color-border)" }}
+        >
+          <div className="flex items-center justify-between border-b px-5 py-3.5" style={{ borderColor: "var(--color-border)" }}>
+            <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t("onlineBookingTitle")}</span>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-medium text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              {t("heroTrust2")}
+            </span>
+          </div>
+          <ul className="divide-y" style={{ borderColor: "var(--color-border)" }}>
+            {[
+              { Icon: MessageCircle, initial: "A", tint: "#22c55e", dot: "#22c55e" },
+              { Icon: Phone, initial: "M", tint: "#3b82f6", dot: "#f59e0b" },
+              { Icon: Building2, initial: "S", tint: "#8b5cf6", dot: "#94a3b8" },
+            ].map((r) => (
+              <li key={r.initial} className="flex items-center gap-3 px-5 py-3.5">
+                <span
+                  className="flex h-9 w-9 items-center justify-center rounded-full text-xs font-semibold text-white"
+                  style={{ backgroundColor: r.tint }}
+                  aria-hidden
+                >
+                  {r.initial}
+                </span>
+                <span
+                  className="flex h-7 w-7 items-center justify-center rounded-lg"
+                  style={{ backgroundColor: "var(--color-surface-2)", color: r.tint }}
+                  aria-hidden
+                >
+                  <r.Icon className="h-3.5 w-3.5" />
+                </span>
+                <div className="flex-1" aria-hidden>
+                  <div className="h-2.5 w-28 rounded bg-slate-200 dark:bg-slate-700" />
+                  <div className="mt-1.5 h-2 w-16 rounded bg-slate-100 dark:bg-slate-800" />
+                </div>
+                <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: r.dot }} aria-hidden />
+              </li>
+            ))}
+          </ul>
+        </div>
+        <p className="mt-3 text-center text-xs text-slate-400 dark:text-slate-500" aria-hidden>
+          {t("onlineBookingBadge")}
+        </p>
       </div>
 
       {/* How it works — 3 simple steps */}

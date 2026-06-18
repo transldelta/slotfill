@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import type { Locale } from "@/i18n/routing";
+import { getPricingContent, type PlanKey } from "@/lib/pricing-content";
 
 // ─── DB plan shape (name + price come from the API; features are hardcoded below) ─
 
@@ -17,127 +18,13 @@ type Plan = {
   price_monthly: number;
 };
 
-const CTA_BY_KEY: Record<string, string> = {
-  starter: "ctaStarter",
-  professional: "ctaProfessional",
-  praxis_plus: "ctaClinicPro",
+// Visual emphasis per plan key. All TEXT is localized in lib/pricing-content.ts.
+const PLAN_META: Record<string, { icon: React.ElementType; recommended?: boolean; premium?: boolean }> = {
+  starter: { icon: Zap },
+  professional: { icon: TrendingUp, recommended: true },
+  praxis_plus: { icon: Building2, premium: true },
 };
 
-// ─── Hardcoded feature lists per plan + locale ────────────────────────────────
-// Bypasses DB feature_keys to avoid inaccurate labels (e.g. "unlimitedPatients").
-// Only concrete, verifiable features are listed.
-
-type PlanMeta = {
-  subtitle: string;
-  badge?: string;
-  badgeColor?: "blue" | "emerald";
-  icon: React.ElementType;
-  highlight?: boolean;
-  features: string[];
-};
-
-const PLAN_CONTENT: Record<string, Record<string, PlanMeta>> = {
-  de: {
-    starter: {
-      subtitle:
-        "Für einzelne Praxen oder kleine Teams, die digitale Terminanfragen strukturiert starten möchten.",
-      icon: Zap,
-      features: [
-        "Öffentlicher Buchungslink für Ihre Praxis",
-        "Patientenanfragen ohne Login",
-        "Einfache Warteliste",
-        "Basis-Patientenverwaltung",
-        "Vorbereitete E-Mail-Benachrichtigungen",
-        "14 Tage kostenlos testen",
-        "Keine Kreditkarte erforderlich",
-      ],
-    },
-    professional: {
-      subtitle:
-        "Für Praxisteams mit mehreren Mitarbeitenden und regelmäßigem Anfragevolumen.",
-      badge: "Empfohlen",
-      badgeColor: "blue",
-      icon: TrendingUp,
-      highlight: true,
-      features: [
-        "Alles aus Starter",
-        "Team-Workflow für mehrere Mitarbeitende",
-        "Erweiterte Statistiken",
-        "Strukturierte Anfrage- und Statusverwaltung",
-        "Bessere Übersicht über Warteliste und freie Zeitfenster",
-        "Geeignet für aktive Praxisteams",
-      ],
-    },
-    praxis_plus: {
-      subtitle:
-        "Für größere Praxen, MVZ, Kliniken oder Einrichtungen mit mehreren Behandlern und höherem Anfragevolumen.",
-      badge: "Premium",
-      badgeColor: "emerald",
-      icon: Building2,
-      features: [
-        "Alles aus Professional",
-        "Geeignet für größere Wartelisten und höheres Anfragevolumen",
-        "Für mehrere Behandler und größere Organisationen",
-        "Erweiterte Organisationsübersicht",
-        "Vorrang bei Einrichtung und Support",
-        "Premium-Betriebsmodus für intensivere Nutzung",
-      ],
-    },
-  },
-  en: {
-    starter: {
-      subtitle:
-        "For individual practices or small teams ready to start managing appointment requests digitally.",
-      icon: Zap,
-      features: [
-        "Public booking link for your practice",
-        "Patient requests without login",
-        "Basic waitlist management",
-        "Patient management",
-        "Prepared email notifications",
-        "14-day free trial",
-        "No credit card required",
-      ],
-    },
-    professional: {
-      subtitle:
-        "For practice teams with multiple staff and regular appointment request volume.",
-      badge: "Recommended",
-      badgeColor: "blue",
-      icon: TrendingUp,
-      highlight: true,
-      features: [
-        "Everything in Starter",
-        "Team workflow for multiple staff members",
-        "Advanced statistics",
-        "Structured request and status management",
-        "Better overview of waitlist and open slots",
-        "Designed for active practice teams",
-      ],
-    },
-    praxis_plus: {
-      subtitle:
-        "For larger practices, MVZ, clinics or organizations with multiple practitioners and higher request volumes.",
-      badge: "Premium",
-      badgeColor: "emerald",
-      icon: Building2,
-      features: [
-        "Everything in Professional",
-        "Suited for larger waitlists and higher request volumes",
-        "For multiple practitioners and larger organizations",
-        "Extended organizational overview",
-        "Priority setup and support",
-        "Premium operating mode for intensive use",
-      ],
-    },
-  },
-};
-
-// Fallback to "en" for locales without dedicated content
-function getPlanContent(locale: string, planKey: string): PlanMeta | null {
-  const loc = PLAN_CONTENT[locale] ?? PLAN_CONTENT["en"];
-  return loc[planKey] ?? null;
-}
 
 export default function LocalePricingPage() {
   const t = useTranslations("pricing");
@@ -146,6 +33,7 @@ export default function LocalePricingPage() {
   const router = useRouter();
   const params = useParams();
   const locale = (params.locale as string) ?? "de";
+  const pc = getPricingContent(locale);
 
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
@@ -209,12 +97,12 @@ export default function LocalePricingPage() {
       <div className="mb-10 text-center">
         <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-1.5 text-xs font-semibold text-blue-700 dark:border-blue-800 dark:bg-blue-900/20 dark:text-blue-300">
           <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
-          {t("trial")}
+          {pc.header}
         </div>
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 sm:text-4xl">
           {t("title")}
         </h1>
-        <p className="mt-2 text-slate-500 dark:text-slate-400">{t("subtitle")}</p>
+        <p className="mt-2 text-slate-500 dark:text-slate-400">{pc.intro}</p>
       </div>
 
       {/* Value proposition */}
@@ -242,12 +130,14 @@ export default function LocalePricingPage() {
       {!loading && !error && (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {plans.map((plan) => {
-            const meta = getPlanContent(locale, plan.plan_key);
-            if (!meta) return null;
+            const pm = PLAN_META[plan.plan_key];
+            if (!pm) return null;
+            const key = plan.plan_key as PlanKey;
 
-            const Icon = meta.icon;
-            const isHighlight = meta.highlight ?? false;
+            const Icon = pm.icon;
+            const isHighlight = pm.recommended ?? false;
             const isClinicPro = plan.plan_key === "praxis_plus";
+            const badge = pm.recommended ? pc.badgeRecommended : pm.premium ? pc.badgePremium : null;
 
             return (
               <div
@@ -261,15 +151,13 @@ export default function LocalePricingPage() {
                 }`}
               >
                 {/* Badge */}
-                {meta.badge && (
+                {badge && (
                   <span
                     className={`absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-0.5 text-xs font-semibold text-white whitespace-nowrap ${
-                      meta.badgeColor === "emerald"
-                        ? "bg-emerald-600"
-                        : "bg-blue-600"
+                      pm.premium ? "bg-emerald-600" : "bg-blue-600"
                     }`}
                   >
-                    {meta.badge}
+                    {badge}
                   </span>
                 )}
 
@@ -288,10 +176,10 @@ export default function LocalePricingPage() {
                   </div>
                   <div>
                     <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                      {plan.name}
+                      {pc.planName[key] ?? plan.name}
                     </h2>
                     <p className="mt-0.5 text-xs leading-snug text-slate-500 dark:text-slate-400">
-                      {meta.subtitle}
+                      {pc.subtitle[key]}
                     </p>
                   </div>
                 </div>
@@ -315,12 +203,12 @@ export default function LocalePricingPage() {
                     : "border-slate-100 dark:border-slate-800"
                 }`} />
 
-                {/* Features — hardcoded, never from DB */}
+                {/* Features — localized in lib/pricing-content.ts */}
                 <p className="mb-3 text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
-                  {t("features")}
+                  {pc.featuresLabel}
                 </p>
                 <ul className="flex-1 space-y-2.5 text-sm">
-                  {meta.features.map((feature, i) => (
+                  {pc.features[key].map((feature, i) => (
                     <li key={i} className="flex items-start gap-2.5">
                       <Check
                         className={`mt-0.5 h-4 w-4 shrink-0 ${
@@ -350,9 +238,7 @@ export default function LocalePricingPage() {
                       : "bg-slate-900 text-white hover:bg-slate-800 focus:ring-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600"
                   }`}
                 >
-                  {pending === plan.plan_key
-                    ? tCommon("loading")
-                    : t(CTA_BY_KEY[plan.plan_key] ?? "ctaStarter")}
+                  {pending === plan.plan_key ? tCommon("loading") : pc.requestAccess}
                 </button>
               </div>
             );
@@ -360,28 +246,18 @@ export default function LocalePricingPage() {
         </div>
       )}
 
-      {/* Trial & info box */}
+      {/* Clinic access — pricing logic note */}
       <div className="mt-12 rounded-2xl border border-blue-100 bg-blue-50 px-6 py-6 dark:border-blue-900/40 dark:bg-blue-900/10">
-        <p className="font-semibold text-blue-900 dark:text-blue-200">{t("trialInfo")}</p>
-        <ul className="mt-3 space-y-1.5 text-sm text-blue-800 dark:text-blue-300">
-          <li className="flex items-center gap-2">
-            <Check className="h-4 w-4 shrink-0 text-emerald-500" />
-            {t("trialNoCreditCard")}
-          </li>
-          <li className="flex items-center gap-2">
-            <Check className="h-4 w-4 shrink-0 text-emerald-500" />
-            {t("trialNoSms")}
-          </li>
-        </ul>
-        <p className="mt-4 text-xs text-blue-600 dark:text-blue-400">
+        <p className="text-sm font-medium text-blue-900 dark:text-blue-200">{pc.priceLogicNote}</p>
+        <p className="mt-3 flex items-start gap-2 text-sm text-blue-800 dark:text-blue-300">
+          <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
           {t("providerCostNote")}
         </p>
       </div>
 
-      {/* Stripe soft-launch + price note */}
+      {/* Access note */}
       <div className="mt-4 space-y-1 text-center text-xs text-slate-400 dark:text-slate-500">
         <p>{t("stripeNotLive")}</p>
-        <p>{t("priceNote")}</p>
       </div>
     </main>
     </div>

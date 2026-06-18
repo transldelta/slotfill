@@ -23,6 +23,7 @@ import { join } from "node:path";
 import { getContinuousControlOffice, classifyCountry } from "../lib/emerging-markets-agent";
 import { assertNoSecretsInResponse } from "../lib/security-agent";
 import { LOCALE_QUALITY, verifiedLocales, localesNeedingReview } from "../lib/locale-quality";
+import { getPricingContent, PRICING_LOCALES, type PlanKey } from "../lib/pricing-content";
 
 const MESSAGE_LOCALES = ["en", "de", "ar", "hi", "bn", "pt", "es", "fr", "ru", "zh"];
 
@@ -262,6 +263,73 @@ test("Footer-Label: Patientenanfrage statt 'Termin buchen'/'Book Appointment' (R
   const de = (JSON.parse(read("messages/de.json")) as { nav: { bookAppointment: string } }).nav.bookAppointment;
   assert.equal(en, "Patient request");
   assert.equal(de, "Patientenanfrage");
+});
+
+// ─── Pricing Localization QA (lib/pricing-content.ts) ─────────────────────────
+
+const PLAN_KEYS: PlanKey[] = ["starter", "professional", "praxis_plus"];
+const LOCALE_MARKER: Record<string, string> = {
+  en: "clinic", de: "klinik", fr: "clinique", es: "clínica", pt: "clínica",
+  ar: "عياد", hi: "क्लीनिक", bn: "ক্লিনিক", ru: "клиник", zh: "诊所",
+};
+
+test("Pricing-Inhalte existieren in allen 10 Locales", () => {
+  for (const loc of MESSAGE_LOCALES) assert.ok(PRICING_LOCALES.includes(loc), `Pricing fehlt: ${loc}`);
+});
+
+test("Pricing ist je Locale vollständig (Name, Subtitle, Features, CTA)", () => {
+  for (const loc of MESSAGE_LOCALES) {
+    const pc = getPricingContent(loc);
+    for (const k of PLAN_KEYS) {
+      assert.ok(pc.planName[k]?.length > 0, `${loc}: planName.${k} fehlt`);
+      assert.ok(pc.subtitle[k]?.length > 0, `${loc}: subtitle.${k} fehlt`);
+      assert.ok(Array.isArray(pc.features[k]) && pc.features[k].length >= 3, `${loc}: features.${k} fehlt`);
+    }
+    assert.ok(pc.requestAccess.length > 0 && pc.header.length > 0 && pc.priceLogicNote.length > 0, `${loc}: Kerntexte fehlen`);
+  }
+});
+
+test("Pricing ist je Locale lokalisiert (Sprach-Marker vorhanden)", () => {
+  for (const loc of MESSAGE_LOCALES) {
+    const pc = getPricingContent(loc);
+    const blob = [pc.header, ...PLAN_KEYS.map((k) => pc.subtitle[k]), ...PLAN_KEYS.flatMap((k) => pc.features[k])].join(" ").toLowerCase();
+    assert.ok(blob.includes(LOCALE_MARKER[loc]), `${loc}: Sprach-Marker "${LOCALE_MARKER[loc]}" fehlt (Englisch-Leak?)`);
+  }
+});
+
+test("Nicht-en/de Pricing enthält keine englischen Pricing-Sätze (kein Fallback-Leak)", () => {
+  const englishMarkers = ["waitlist", "without login", "everything in", "your clinic", "priority setup", "request and status", "for larger clinics", "getting started with"];
+  for (const loc of ["fr", "es", "pt", "ar", "hi", "bn", "ru", "zh"]) {
+    const pc = getPricingContent(loc);
+    const blob = [...PLAN_KEYS.map((k) => pc.subtitle[k]), ...PLAN_KEYS.flatMap((k) => pc.features[k])].join(" ").toLowerCase();
+    for (const m of englishMarkers) assert.equal(blob.includes(m), false, `${loc}: englischer Pricing-Satz "${m}"`);
+  }
+});
+
+test("Pricing: neutrale Request-Access-CTA, keine Trial-/Free-Sprache", () => {
+  for (const loc of MESSAGE_LOCALES) {
+    const pc = getPricingContent(loc);
+    const all = JSON.stringify(pc).toLowerCase();
+    for (const bad of ["trial", "free trial", "kostenlos", "try for free", "14 tage", "14-day", "no credit card"]) {
+      assert.equal(all.includes(bad), false, `${loc}: Trial-/Free-Sprache "${bad}" im Pricing`);
+    }
+  }
+  assert.equal(getPricingContent("en").requestAccess, "Request access");
+  assert.equal(getPricingContent("de").requestAccess, "Zugang anfragen");
+});
+
+test("Pricing-Seite rendert lokalisiert (kein en-Fallback / keine Trial-Chip)", () => {
+  const src = read("app/[locale]/pricing/page.tsx");
+  assert.ok(src.includes("getPricingContent(locale)"), "pricing nutzt getPricingContent nicht");
+  assert.ok(src.includes("pc.planName[key]") && src.includes("pc.features[key]") && src.includes("pc.requestAccess"), "pricing rendert pc-Inhalte nicht");
+  assert.equal(src.includes('t("trial")'), false, "Trial-Chip noch in Pricing-Seite");
+  assert.equal(src.includes("CTA_BY_KEY"), false, "alte CTA_BY_KEY noch vorhanden");
+});
+
+test("Homepage zeigt ein Produkt-/Workflow-Mockup (Premium-Struktur)", () => {
+  const src = read("app/[locale]/page.tsx");
+  assert.ok(src.includes("Product preview"), "Produkt-Mockup fehlt");
+  assert.ok(src.includes("MessageCircle") && src.includes("Phone") && src.includes("Building2"), "Kanal-Icons im Mockup fehlen");
 });
 
 test("Blog öffentlich als 'Clinic Guides' / 'Ratgeber' (nicht generischer Blog)", () => {

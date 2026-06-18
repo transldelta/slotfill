@@ -1,4 +1,7 @@
 {
+  "meta": {
+    "title": "ClinicSlotHub – क्लीनिक अनुरोध और प्रतीक्षा-सूची डेस्क"
+  },
   "auth": {
     "loginTitle": "साइन इन करें",
     "registerTitle": "पंजीकरण करें",

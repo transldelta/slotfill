@@ -1,4 +1,7 @@
 {
+  "meta": {
+    "title": "ClinicSlotHub – ক্লিনিক অনুরোধ ও অপেক্ষমাণ-তালিকা ডেস্ক"
+  },
   "auth": {
     "loginTitle": "সাইন ইন করুন",
     "registerTitle": "নিবন্ধন করুন",

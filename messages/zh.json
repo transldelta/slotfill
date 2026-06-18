@@ -1,4 +1,7 @@
 {
+  "meta": {
+    "title": "ClinicSlotHub – 诊所请求与候补名单中心"
+  },
   "auth": {
     "loginTitle": "登录",
     "registerTitle": "注册",

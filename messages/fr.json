@@ -1,4 +1,7 @@
 {
+  "meta": {
+    "title": "ClinicSlotHub – Bureau de demandes et liste d'attente pour cliniques"
+  },
   "auth": {
     "loginTitle": "Se connecter",
     "registerTitle": "S'inscrire",

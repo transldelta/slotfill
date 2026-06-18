@@ -326,6 +326,49 @@ test("Pricing-Seite rendert lokalisiert (kein en-Fallback / keine Trial-Chip)", 
   assert.equal(src.includes("CTA_BY_KEY"), false, "alte CTA_BY_KEY noch vorhanden");
 });
 
+// ─── Metadata-Lokalisierung & RTL/Arabisch ────────────────────────────────────
+
+test("Layout-Metadata ohne alte Appointment-Booking-Sprache", () => {
+  for (const f of ["app/layout.tsx", "app/[locale]/layout.tsx"]) {
+    const src = read(f);
+    for (const bad of ["Appointment & Waitlist Management", "appointment bookings efficiently", "Waitlist Management for Clinics"]) {
+      assert.equal(src.includes(bad), false, `${f}: alte Metadata "${bad}"`);
+    }
+  }
+});
+
+test("[locale]/layout liefert lokalisierte Metadata (generateMetadata)", () => {
+  const src = read("app/[locale]/layout.tsx");
+  assert.ok(src.includes("export async function generateMetadata"), "generateMetadata fehlt");
+  assert.ok(src.includes('namespace: "meta"'), "meta-Namespace nicht genutzt");
+  assert.equal(/export const metadata\s*[:=]/.test(src), false, "statische Metadata noch vorhanden");
+});
+
+test("meta.title in allen 10 Locales; ar ist arabisch (RTL)", () => {
+  for (const loc of MESSAGE_LOCALES) {
+    const m = JSON.parse(read(`messages/${loc}.json`)) as { meta?: { title?: string } };
+    assert.ok((m.meta?.title ?? "").length > 0, `${loc}: meta.title fehlt`);
+    assert.equal(/appointment booking|waitlist management/i.test(m.meta!.title!), false, `${loc}: alte Sprache im meta.title`);
+  }
+  const ar = (JSON.parse(read("messages/ar.json")) as { meta: { title: string } }).meta.title;
+  assert.ok(/[؀-ۿ]/.test(ar), "ar meta.title nicht arabisch");
+});
+
+test("[locale]/layout setzt dir=rtl für Arabisch", () => {
+  const src = read("app/[locale]/layout.tsx");
+  assert.ok(/dir=\{locale === "ar" \? "rtl" : "ltr"\}/.test(src) || /"ar".*rtl/.test(src), "RTL-dir für ar fehlt");
+});
+
+test("Arabische öffentliche CTAs/Pricing sind arabisch (keine lateinischen UI-Texte außer Marke)", () => {
+  const ar = JSON.parse(read("messages/ar.json")) as { nav: Record<string, string>; landing: Record<string, string> };
+  const arPricing = getPricingContent("ar");
+  // Nur arabische Buchstaben (ClinicSlotHub/Latin-Marke kommt in diesen Keys nicht vor).
+  for (const v of [ar.nav.getStarted, ar.nav.bookAppointment, ar.landing.ctaPrimary, arPricing.requestAccess, arPricing.header]) {
+    assert.ok(/[؀-ۿ]/.test(v), `ar UI-Text nicht arabisch: "${v}"`);
+    assert.equal(/[A-Za-z]/.test(v), false, `ar UI-Text enthält lateinische Zeichen: "${v}"`);
+  }
+});
+
 test("Homepage zeigt ein Produkt-/Workflow-Mockup (Premium-Struktur)", () => {
   const src = read("app/[locale]/page.tsx");
   assert.ok(src.includes("Product preview"), "Produkt-Mockup fehlt");
@@ -453,7 +496,7 @@ const EXPECTED_GET_STARTED: Record<string, string> = {
   fr: "Demander l'accès",
   es: "Solicitar acceso",
   pt: "Solicitar acesso",
-  ar: "طلب الوصول",
+  ar: "اطلب الوصول",
   hi: "पहुँच का अनुरोध करें",
   bn: "অ্যাক্সেসের অনুরোধ করুন",
   ru: "Запросить доступ",

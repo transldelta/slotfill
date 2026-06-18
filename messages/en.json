@@ -1,4 +1,7 @@
 {
+  "meta": {
+    "title": "ClinicSlotHub – Clinic request & waitlist desk"
+  },
   "auth": {
     "loginTitle": "Sign In",
     "registerTitle": "Register",

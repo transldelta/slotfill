@@ -1,4 +1,7 @@
 {
+  "meta": {
+    "title": "ClinicSlotHub – Anfrage- & Warteliste-Desk für Kliniken"
+  },
   "auth": {
     "loginTitle": "Anmelden",
     "registerTitle": "Registrieren",

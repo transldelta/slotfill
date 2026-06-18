@@ -133,9 +133,9 @@ const PT: PricingContent = {
 };
 
 const AR: PricingContent = {
-  header: "خطط وصول للعيادات",
-  intro: "خطط بسيطة للعيادات التي تنظّم طلبات المرضى في قائمة انتظار واحدة.",
-  planName: { starter: "البداية", professional: "احترافي", praxis_plus: "العيادة برو" },
+  header: "باقات الوصول للعيادات",
+  intro: "باقات بسيطة للعيادات التي تنظّم طلبات المرضى في قائمة انتظار واحدة.",
+  planName: { starter: "الأساسية", professional: "الاحترافية", praxis_plus: "المتقدمة" },
   subtitle: {
     starter: "لعيادة واحدة تبدأ في استقبال طلبات المرضى.",
     professional: "لفِرَق العيادات ذات حجم طلبات منتظم.",
@@ -147,9 +147,9 @@ const AR: PricingContent = {
     praxis_plus: ["كل ما في الخطة الاحترافية", "لعدة أطباء", "أولوية في الإعداد والدعم"],
   },
   badgeRecommended: "موصى به",
-  badgePremium: "بريميوم",
-  requestAccess: "طلب الوصول",
-  featuresLabel: "متضمَّن",
+  badgePremium: "متميّزة",
+  requestAccess: "اطلب الوصول",
+  featuresLabel: "يشمل",
   priceLogicNote:
     "قد يعتمد السعر على حجم العيادة والدولة ونطاق التفعيل. يتم تأكيد السعر النهائي قبل التفعيل.",
 };

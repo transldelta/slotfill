@@ -1,4 +1,7 @@
 {
+  "meta": {
+    "title": "ClinicSlotHub – заявки и лист ожидания для клиник"
+  },
   "auth": {
     "loginTitle": "Войти",
     "registerTitle": "Зарегистрироваться",

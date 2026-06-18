@@ -1,16 +1,26 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import { getMessages, getTranslations } from "next-intl/server";
 import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "@/components/theme-provider";
 import { locales, type Locale } from "@/i18n/routing";
 import "../globals.css";
 
-export const metadata: Metadata = {
-  title: "ClinicSlotHub – Appointment & Waitlist Management for Clinics",
-  description: "ClinicSlotHub helps clinics, medical offices and healthcare providers manage waitlists and appointment bookings efficiently. Auto-confirm, email notifications, multilingual, GDPR-conscious.",
-};
+// Localized metadata per locale (emerging-markets positioning, no old appointment-booking wording).
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const tMeta = await getTranslations({ locale, namespace: "meta" });
+  const tLanding = await getTranslations({ locale, namespace: "landing" });
+  return {
+    title: tMeta("title"),
+    description: tLanding("heroSubtitle"),
+  };
+}
 
 // Setzt das Theme vor dem ersten Paint, um ein Aufblitzen zu vermeiden.
 const themeScript = `(function(){try{var t=localStorage.getItem('slotfill-theme');if(t==='dark'){document.documentElement.classList.add('dark');}}catch(e){}})();`;

@@ -177,19 +177,19 @@ export default async function LocaleLandingPage({
         </div>
       </header>
 
-      {/* Soft-Launch-Banner */}
+      {/* Positionierungs-Banner (Emerging Markets) */}
       {(() => {
         const banners: Record<string, string> = {
-          de: "Neu: ClinicSlotHub ist im globalen öffentlichen Soft Launch – jetzt kostenlos testen.",
-          en: "New: ClinicSlotHub is in global public soft launch – try it for free.",
-          fr: "Nouveau : ClinicSlotHub est en lancement public mondial – essayez gratuitement.",
-          es: "Nuevo: ClinicSlotHub está en lanzamiento público global – pruébalo gratis.",
-          pt: "Novo: ClinicSlotHub está em lançamento público global – teste gratuitamente.",
-          zh: "ClinicSlotHub 已进入全球公开软启动阶段 — 可免费试用。",
-          hi: "ClinicSlotHub अब वैश्विक सार्वजनिक सॉफ्ट लॉन्च में है — मुफ्त में आज़माएँ।",
-          ar: "ClinicSlotHub الآن في إطلاق عالمي تجريبي عام — جرّبه مجاناً.",
-          bn: "ClinicSlotHub এখন বৈশ্বিক পাবলিক সফট লঞ্চে — বিনামূল্যে চেষ্টা করুন।",
-          ru: "ClinicSlotHub находится в глобальном публичном soft launch — попробуйте бесплатно.",
+          de: "Neu: ClinicSlotHub — mobiler Anfrage- und Warteliste-Desk für Kliniken in wachstumsstarken Gesundheitsmärkten.",
+          en: "New: ClinicSlotHub — mobile request and waitlist desk for clinics in emerging healthcare markets.",
+          fr: "Nouveau : ClinicSlotHub — bureau mobile de demandes et de liste d'attente pour les cliniques des marchés de santé émergents.",
+          es: "Nuevo: ClinicSlotHub — central móvil de solicitudes y lista de espera para clínicas en mercados de salud emergentes.",
+          pt: "Novo: ClinicSlotHub — central móvel de pedidos e lista de espera para clínicas em mercados de saúde emergentes.",
+          zh: "新功能：ClinicSlotHub — 面向新兴医疗市场诊所的移动请求与候补名单中心。",
+          hi: "नया: ClinicSlotHub — उभरते स्वास्थ्य बाज़ारों के क्लीनिकों के लिए मोबाइल अनुरोध और प्रतीक्षा-सूची डेस्क।",
+          ar: "جديد: ClinicSlotHub — مكتب الطلبات وقائمة الانتظار عبر الهاتف للعيادات في أسواق الرعاية الصحية الناشئة.",
+          bn: "নতুন: ClinicSlotHub — উদীয়মান স্বাস্থ্যসেবা বাজারের ক্লিনিকগুলোর জন্য মোবাইল অনুরোধ ও অপেক্ষমাণ-তালিকা ডেস্ক।",
+          ru: "Новое: ClinicSlotHub — мобильный центр заявок и листа ожидания для клиник на развивающихся рынках здравоохранения.",
         };
         const bannerText = banners[locale] ?? banners["en"];
         return (

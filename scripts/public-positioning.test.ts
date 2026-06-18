@@ -227,3 +227,43 @@ test("Nur en/de gelten als verified; die 8 anderen brauchen Review", () => {
   const review = localesNeedingReview().sort();
   assert.deepEqual(review, ["ar", "bn", "es", "fr", "hi", "pt", "ru", "zh"]);
 });
+
+// ─── Homepage-Banner (app/[locale]/page.tsx) ──────────────────────────────────
+
+const HOMEPAGE_FORBIDDEN = [
+  /soft launch/i,
+  /global public soft launch/i,
+  /globalen öffentlichen/i,
+  /kostenlos testen/i,
+  /try it for free/i,
+  /try for free/i,
+  /lancement public mondial/i,
+  /lanzamiento público global/i,
+  /lançamento público global/i,
+  /公开软启动/,
+  /\bworldwide\b/i,
+  /\bweltweit\b/i,
+  /\btwilio\b/i,
+  /\bresend\b/i,
+  /provider configuration/i,
+  /no paying customers/i,
+  /unlimited patients/i,
+  /\bguaranteed\b/i,
+  /\b24\s*h\b/i,
+  /\b48\s*h\b/i,
+  /\binstant\b/i,
+  /trial mode/i,
+];
+
+test("Homepage (app/[locale]/page.tsx) enthält keine verbotenen öffentlichen Begriffe", () => {
+  const src = read("app/[locale]/page.tsx");
+  for (const re of HOMEPAGE_FORBIDDEN) {
+    assert.equal(re.test(src), false, `Homepage enthält verbotenen Begriff: ${re}`);
+  }
+});
+
+test("Homepage-Banner trägt Emerging-Markets-Positionierung (en/de)", () => {
+  const src = read("app/[locale]/page.tsx");
+  assert.ok(src.includes("emerging healthcare markets"), "EN Emerging-Positionierung fehlt im Banner");
+  assert.ok(src.includes("wachstumsstarken Gesundheitsmärkten"), "DE Emerging-Positionierung fehlt im Banner");
+});

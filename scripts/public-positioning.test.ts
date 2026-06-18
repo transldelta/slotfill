@@ -253,6 +253,17 @@ test("Workflow-Schritte nennen WhatsApp/Telefon/Rezeption als Workflow (en/de)",
   assert.ok(de.includes("whatsapp") && de.includes("telefon") && de.includes("rezeption"), "DE step1 Kanäle fehlen");
 });
 
+test("Footer-Label: Patientenanfrage statt 'Termin buchen'/'Book Appointment' (Rollen-Klarheit)", () => {
+  for (const loc of MESSAGE_LOCALES) {
+    const nav = (JSON.parse(read(`messages/${loc}.json`)) as { nav?: Record<string, string> }).nav ?? {};
+    assert.equal(/termin buchen|book appointment/i.test(nav.bookAppointment ?? ""), false, `${loc}: alte Booking-Buchung-Sprache im Footer-Label`);
+  }
+  const en = (JSON.parse(read("messages/en.json")) as { nav: { bookAppointment: string } }).nav.bookAppointment;
+  const de = (JSON.parse(read("messages/de.json")) as { nav: { bookAppointment: string } }).nav.bookAppointment;
+  assert.equal(en, "Patient request");
+  assert.equal(de, "Patientenanfrage");
+});
+
 test("Blog öffentlich als 'Clinic Guides' / 'Ratgeber' (nicht generischer Blog)", () => {
   const en = JSON.parse(read("messages/en.json")) as { nav: { blog: string }; blog: { title: string } };
   const de = JSON.parse(read("messages/de.json")) as { nav: { blog: string }; blog: { title: string } };

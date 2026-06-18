@@ -64,7 +64,7 @@ function buildSchemaOrg(locale: string) {
         applicationCategory: "BusinessApplication",
         operatingSystem: "Web",
         description:
-          "ClinicSlotHub helps clinics, medical offices and healthcare providers worldwide fill appointment slots from the waitlist automatically.",
+          "ClinicSlotHub helps clinics in emerging healthcare markets organize WhatsApp, phone, reception and mobile patient requests in one simple waitlist. No patient login. The clinic stays in control.",
         url: APP_URL,
         inLanguage: locale,
         offers: {
@@ -78,7 +78,7 @@ function buildSchemaOrg(locale: string) {
         "@type": "Organization",
         name: "ClinicSlotHub",
         url: APP_URL,
-        description: "ClinicSlotHub – Appointment and waitlist management for clinics and healthcare providers worldwide.",
+        description: "ClinicSlotHub – Mobile request and waitlist desk for clinics in emerging healthcare markets.",
       },
     ],
   };

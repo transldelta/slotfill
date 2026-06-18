@@ -10,9 +10,9 @@ export function PivotShell({ locale, children }: { locale: string; children: Rea
   const d = getPivot(locale);
   const L = (p: string) => `/${locale}${p}`;
   const nav = [
-    { href: L("/#how"), label: d.nav.howItWorks },
-    { href: L("/demo"), label: d.nav.demo },
     { href: L("/for-clinics"), label: d.nav.forClinics },
+    { href: L("/#pricing"), label: d.nav.pricing },
+    { href: L("/demo"), label: d.nav.demo },
     { href: L("/safety-notes"), label: d.nav.safety },
   ];
 

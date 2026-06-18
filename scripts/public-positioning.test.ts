@@ -40,16 +40,112 @@ function marketing(locale: string): string {
 
 // ─── 9. Scheduling-OS-Positionierung ──────────────────────────────────────────
 
-test("Positioning: Modern Clinic Scheduling OS in allen Produktsprachen", () => {
+test("Positioning: Produktlabel bleibt 'Modern Clinic Scheduling OS', H1 ist einfache Botschaft", () => {
   for (const loc of PRODUCT_LOCALES) {
     const d = getPivot(loc);
+    // Produktname bleibt als kleines Label erhalten ...
     assert.equal(d.tagline, "Modern Clinic Scheduling OS");
-    assert.ok(d.hero.h1.includes("Modern Clinic Scheduling OS"), `${loc}: H1 fehlt`);
+    // ... aber der H1 ist bewusst einfacher als der Produktname (Commercial Simplicity).
+    assert.ok(d.hero.h1.length > 10, `${loc}: H1 fehlt`);
+    assert.notEqual(d.hero.h1, d.tagline, `${loc}: H1 darf nicht der Produktname sein`);
+    assert.equal(d.hero.h1.includes("Modern Clinic Scheduling OS"), false, `${loc}: H1 soll einfacher sein als das Produktlabel`);
   }
+  // EN-H1 trägt die klare Tages-Board-Botschaft.
+  assert.ok(getPivot("en").hero.h1.toLowerCase().includes("one simple board"), "EN H1 ohne klare Board-Botschaft");
   const en = flattenPivot(getPivot("en")).toLowerCase();
-  for (const must of ["simple scheduling", "walk-in queue", "available slots", "today board", "room", "waiting", "completed", "available"]) {
+  for (const must of ["walk-in queue", "available slots", "today board", "room", "waiting", "completed", "available"]) {
     assert.ok(en.includes(must), `EN Scheduling-Begriff fehlt: ${must}`);
   }
+});
+
+// ─── Phase 11.1 — Homepage Clarity Guard ──────────────────────────────────────
+
+test("Homepage Clarity Guard: Startseite erklärt Produkt in einfachen Worten", () => {
+  const en = flattenPivot(getPivot("en")).toLowerCase();
+  for (const must of [
+    "run the clinic day in one simple board",
+    "appointments",
+    "walk-ins",
+    "rooms",
+    "open slots",
+    "monthly saas",
+    "request pilot access",
+  ]) {
+    assert.ok(en.includes(must.toLowerCase()), `Homepage-Klarheit fehlt: "${must}"`);
+  }
+  // Die Startseite rendert genau diese Felder.
+  const home = read("app/[locale]/page.tsx");
+  for (const ref of ["d.hero.h1", "d.hero.subline", "d.what", "d.pricing"]) {
+    assert.ok(home.includes(ref), `Homepage rendert ${ref} nicht`);
+  }
+});
+
+// ─── Phase 11.2 — Revenue Clarity Guard ───────────────────────────────────────
+
+test("Revenue Clarity Guard: klare monatliche Pläne, ohne Payment zu aktivieren", () => {
+  const en = getPivot("en");
+  assert.ok(en.pricing.title.toLowerCase().includes("monthly plans"), "Pricing-Titel ohne 'monthly plans'");
+  assert.ok(en.pricing.intro.toLowerCase().includes("monthly saas"), "Pricing-Intro ohne 'monthly SaaS'");
+  const names = en.pricing.plans.map((p) => p.name);
+  for (const n of ["Starter", "Clinic Pro", "Clinic Plus"]) {
+    assert.ok(names.includes(n), `Plan fehlt: ${n}`);
+  }
+  const prices = en.pricing.plans.map((p) => p.price).join(" ");
+  assert.ok(prices.includes("from $29/month"), "Starter-Preis fehlt");
+  assert.ok(prices.includes("from $79/month"), "Clinic-Pro-Preis fehlt");
+  assert.ok(/confirmed before activation/i.test(en.pricing.note), "Aktivierungs-Hinweis fehlt");
+  assert.ok(/no payment is processed on this website/i.test(en.pricing.note), "Kein-Zahlung-Hinweis fehlt");
+  // Pläne sind in allen Produktsprachen vorhanden (gleiche Plan-Namen, eigene Sprache).
+  for (const loc of PRODUCT_LOCALES) {
+    assert.equal(getPivot(loc).pricing.plans.length, 3, `${loc}: nicht 3 Pläne`);
+  }
+  // CTA bleibt sicher: nur mailto-/Demo-Logik, kein Checkout im Quelltext.
+  const home = stripComments(read("app/[locale]/page.tsx"));
+  assert.equal(/checkout|stripe|<form|createCheckout/i.test(home), false, "Homepage enthält Checkout/Form");
+});
+
+// ─── Phase 11.3 — No Overload Guard ───────────────────────────────────────────
+
+test("No Overload Guard: Startseite nutzt kurze Karten statt langer Textblöcke", () => {
+  const d = getPivot("en");
+  // Kurze Karten: What-Karten und Plan-Beschreibungen bleiben knapp.
+  assert.equal(d.what.cards.length, 3, "What-Sektion soll genau 3 Karten haben");
+  for (const c of d.what.cards) {
+    assert.ok(c.body.length <= 130, `What-Karte zu lang: "${c.title}"`);
+  }
+  for (const p of d.pricing.plans) {
+    assert.ok(p.for.length <= 110, `Plan-Beschreibung zu lang: "${p.name}"`);
+  }
+  // Hero-Supporting bleibt eine kurze Zeile, kein Absatzblock.
+  assert.ok(d.hero.supporting.length <= 140, "Hero-Supporting zu lang");
+  // Keine überlangen Marketing-Absätze (außer Safety-Disclaimer-Body).
+  const longBlocks: string[] = [];
+  const walk = (v: unknown) => {
+    if (typeof v === "string") { if (v.length > 220) longBlocks.push(v); }
+    else if (Array.isArray(v)) v.forEach(walk);
+    else if (v && typeof v === "object") Object.values(v).forEach(walk);
+  };
+  const { safety, ...rest } = d;
+  walk(rest);
+  assert.equal(longBlocks.length, 0, `zu lange Textblöcke: ${JSON.stringify(longBlocks)}`);
+});
+
+// ─── Phase 11.4 — Clinic Buyer Guard ──────────────────────────────────────────
+
+test("Clinic Buyer Guard: Seite verkauft an Kliniken, Patienten sind nicht der Hauptkunde", () => {
+  for (const loc of PRODUCT_LOCALES) {
+    const d = getPivot(loc);
+    const blob = flattenPivot(d).toLowerCase();
+    assert.ok(/clinic|clínica|cliniqu/.test(blob), `${loc}: Klinik-Käufer nicht adressiert`);
+    // Patienten-Abschnitt bleibt kompakt (eine kurze Zeile).
+    assert.ok(d.patientsLine.length <= 140, `${loc}: Patientenzeile zu lang (nicht kompakt)`);
+  }
+  // EN spricht Klinik-Team / Front Desk an.
+  const en = flattenPivot(getPivot("en")).toLowerCase();
+  assert.ok(en.includes("front desk") || en.includes("clinic teams"), "EN adressiert nicht Klinik-Team/Front Desk");
+  // Homepage rendert die kompakte Patientenzeile (statt großem Patienten-Block).
+  const home = read("app/[locale]/page.tsx");
+  assert.ok(home.includes("d.patientsLine"), "Homepage rendert kompakte Patientenzeile nicht");
 });
 
 // ─── 1. Public Locale Guard (EN/FR/ES) ────────────────────────────────────────

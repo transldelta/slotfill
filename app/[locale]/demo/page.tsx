@@ -26,6 +26,19 @@ export default async function DemoPage({ params }: { params: Promise<{ locale: s
           <DashboardMockup locale={locale} />
         </div>
 
+        {/* Why it matters */}
+        <div className="mt-12">
+          <h2 className="text-xl font-bold tracking-tight sm:text-2xl" style={{ color: PIVOT_COLORS.ink }}>{d.demo.whyTitle}</h2>
+          <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {d.demo.why.map((w) => (
+              <div key={w} className="rounded-xl border bg-white p-4 text-[14px]" style={{ borderColor: PIVOT_COLORS.line, color: PIVOT_COLORS.ink }}>
+                <span className="font-bold" style={{ color: PIVOT_COLORS.teal }}>✓</span>
+                <p className="mt-2 leading-relaxed">{w}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Mobile preview */}
         <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-[1fr_auto] sm:items-start">
           <div className="rounded-2xl border p-6" style={{ borderColor: PIVOT_COLORS.line, backgroundColor: PIVOT_COLORS.surface }}>

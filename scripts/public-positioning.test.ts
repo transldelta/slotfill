@@ -267,3 +267,38 @@ test("Homepage-Banner trägt Emerging-Markets-Positionierung (en/de)", () => {
   assert.ok(src.includes("emerging healthcare markets"), "EN Emerging-Positionierung fehlt im Banner");
   assert.ok(src.includes("wachstumsstarken Gesundheitsmärkten"), "DE Emerging-Positionierung fehlt im Banner");
 });
+
+// ─── Header-/Nav-CTA (nav.getStarted) ─────────────────────────────────────────
+
+// Trial-/Free-Test-Sprache, die im sichtbaren nav-Namespace verboten ist.
+const NAV_FORBIDDEN = /kostenlos|gratis|gratuit|free trial|free test|try for free|\btrial\b|teste grátis|prueba gratis|免费试用|免费|निःशुल्क|مجان|бесплатно|বিনামূল্যে|soft launch|no paying customers/i;
+
+const EXPECTED_GET_STARTED: Record<string, string> = {
+  en: "Request access",
+  de: "Zugang anfragen",
+  fr: "Demander l'accès",
+  es: "Solicitar acceso",
+  pt: "Solicitar acesso",
+  ar: "طلب الوصول",
+  hi: "पहुँच का अनुरोध करें",
+  bn: "অ্যাক্সেসের অনুরোধ করুন",
+  ru: "Запросить доступ",
+  zh: "申请访问权限",
+};
+
+test("nav-Namespace aller 10 Locales ohne Trial-/Free-Test-Sprache", () => {
+  for (const loc of MESSAGE_LOCALES) {
+    const m = JSON.parse(read(`messages/${loc}.json`)) as Record<string, unknown>;
+    const navText = flatten((m as { nav?: unknown }).nav);
+    assert.equal(NAV_FORBIDDEN.test(navText), false, `${loc}: nav enthält Trial-/Free-Sprache`);
+  }
+});
+
+test("nav.getStarted ist in allen 10 Locales die neutrale Zugang-anfragen-CTA", () => {
+  for (const loc of MESSAGE_LOCALES) {
+    const m = JSON.parse(read(`messages/${loc}.json`)) as { nav?: { getStarted?: string } };
+    const v = m.nav?.getStarted ?? "";
+    assert.equal(NAV_FORBIDDEN.test(v), false, `${loc}: getStarted trägt Trial-Sprache ("${v}")`);
+    assert.equal(v, EXPECTED_GET_STARTED[loc], `${loc}: getStarted nicht die erwartete Request-Access-CTA`);
+  }
+});

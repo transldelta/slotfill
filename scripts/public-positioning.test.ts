@@ -22,6 +22,9 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { getContinuousControlOffice, classifyCountry } from "../lib/emerging-markets-agent";
 import { assertNoSecretsInResponse } from "../lib/security-agent";
+import { LOCALE_QUALITY, verifiedLocales, localesNeedingReview } from "../lib/locale-quality";
+
+const MESSAGE_LOCALES = ["en", "de", "ar", "hi", "bn", "pt", "es", "fr", "ru", "zh"];
 
 const ROOT = process.cwd();
 const read = (p: string) => readFileSync(join(ROOT, p), "utf8");
@@ -166,4 +169,61 @@ test("Dauerkontroll- und Qualitätssicherungsamt bleibt GREEN", () => {
   const cc = getContinuousControlOffice();
   assert.equal(cc.status, "green");
   assert.equal(assertNoSecretsInResponse(cc), true);
+});
+
+// ─── Locale Rollout: alle 10 öffentlichen Sprachen ────────────────────────────
+
+const VALUE_FORBIDDEN = [
+  "twilio", "resend", "soft launch", "worldwide", "weltweit", "stripe",
+  "provider configuration", "no real messages", "doctolib", "supabase",
+  "unlimited patients", "automatically", "no paying customers",
+];
+
+test("Alle 10 Locales: landing+pricing Werte ohne verbotene öffentliche Begriffe", () => {
+  for (const loc of MESSAGE_LOCALES) {
+    const m = JSON.parse(read(`messages/${loc}.json`)) as Record<string, unknown>;
+    const text = (flatten(m.landing) + flatten(m.pricing)).toLowerCase();
+    for (const bad of VALUE_FORBIDDEN) {
+      assert.equal(text.includes(bad), false, `${loc}: verbotener Begriff "${bad}"`);
+    }
+  }
+});
+
+test("Alle 10 Locales: 'WhatsApp-ready ohne API'-Anker (API) in landing sichtbar", () => {
+  for (const loc of MESSAGE_LOCALES) {
+    const m = JSON.parse(read(`messages/${loc}.json`)) as Record<string, unknown>;
+    const text = flatten(m.landing).toLowerCase();
+    assert.ok(text.includes("api"), `${loc}: API-Anker fehlt (WhatsApp-ready ohne API)`);
+    // WhatsApp als lateinische Marke ODER lokalisierte Form (z. B. arabisch "واتساب").
+    assert.ok(text.includes("whatsapp") || text.includes("واتساب"), `${loc}: WhatsApp-Kanal fehlt in landing`);
+  }
+});
+
+test("Öffentliche Launch-/Share-Seiten: keine verbotenen Begriffe", () => {
+  const files = [
+    "app/[locale]/launch/page.tsx",
+    "app/[locale]/public-launch/page.tsx",
+    "app/[locale]/share/page.tsx",
+  ];
+  const bad = ["Soft Launch", "soft launch", "Twilio", "Resend", "Supabase", "worldwide", "weltweit", "no paying customers", "zahlenden Kunden", "mondial", "monde entier", "todo el mundo", "todo o mundo"];
+  for (const f of files) {
+    const src = read(f);
+    for (const b of bad) {
+      assert.equal(src.includes(b), false, `${f}: enthält "${b}"`);
+    }
+  }
+});
+
+// ─── Linguistic Quality Registry (Ehrlichkeit) ────────────────────────────────
+
+test("Linguistic Quality Registry deckt alle Message-Locales ab", () => {
+  for (const loc of MESSAGE_LOCALES) {
+    assert.ok(LOCALE_QUALITY.some((l) => l.locale === loc), `Registry fehlt: ${loc}`);
+  }
+});
+
+test("Nur en/de gelten als verified; die 8 anderen brauchen Review", () => {
+  assert.deepEqual(verifiedLocales().sort(), ["de", "en"]);
+  const review = localesNeedingReview().sort();
+  assert.deepEqual(review, ["ar", "bn", "es", "fr", "hi", "pt", "ru", "zh"]);
 });

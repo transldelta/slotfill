@@ -1,186 +1,197 @@
 /**
- * Pivot content — ClinicSlotHub as International Clinic Visibility Engine.
+ * Public product content — ClinicSlotHub: Modern Clinic Scheduling OS.
  *
- * READ-ONLY copy data. DE/EN are the professional, reviewed languages.
- * Other locales fall back to EN (safe neutral) — no machine-translated rollout.
- *
- * ClinicSlotHub is NOT a medical provider, booking platform or middleman.
- * No medical advice, no result guarantees, no patient data, no payment.
+ * READ-ONLY copy data. Public product languages: EN (main), FR, ES.
+ * No German public product copy. No external services, no patient data,
+ * no medical advice, no payment, no booking storage. Static demo only.
  */
 
 export interface PivotDict {
   brand: string;
   tagline: string;
-  nav: { home: string; forClinics: string; treatments: string; destinations: string; safety: string; contact: string };
-  cta: { requestReview: string; contact: string; viewTreatments: string; forClinics: string };
-  hero: { eyebrow: string; title: string; subline: string; trust: string[] };
-  demoNote: string;
-  demoCards: { name: string; category: string; region: string }[];
-  treatmentsTitle: string;
-  treatmentsIntro: string;
-  treatments: string[];
-  destinationsTitle: string;
-  destinationsIntro: string;
-  destinations: string[];
-  forClinics: { title: string; intro: string; points: string[]; notList: string[] };
-  safety: { title: string; intro: string; points: string[] };
-  contact: { title: string; intro: string; points: string[]; note: string };
+  nav: { home: string; howItWorks: string; demo: string; forClinics: string; safety: string };
+  cta: { requestAccess: string; viewDemo: string; pilotAccess: string; contact: string };
+  hero: { h1: string; subline: string; supporting: string; trust: string };
+  mockup: {
+    todayBoard: string; appointments: string; walkInQueue: string; availableSlots: string;
+    rooms: string; services: string; quickActions: string; stats: string; mobilePreview: string;
+    waiting: string; inProgress: string; completed: string; available: string;
+  };
+  forClinics: { title: string; intro: string; points: string[] };
+  forPatients: { title: string; intro: string; points: string[] };
+  howItWorks: { title: string; steps: string[] };
+  demo: { title: string; intro: string; notes: string[] };
+  pricing: { title: string; note: string };
+  safety: { title: string; body: string };
   footerNote: string;
   rights: string;
 }
 
 const EN: PivotDict = {
   brand: "ClinicSlotHub",
-  tagline: "International Clinic Visibility Engine",
-  nav: { home: "Home", forClinics: "For clinics", treatments: "Treatments", destinations: "Regions", safety: "Safety notes", contact: "Contact" },
-  cta: { requestReview: "Request visibility review", contact: "Contact us", viewTreatments: "View treatment areas", forClinics: "For clinics" },
+  tagline: "Modern Clinic Scheduling OS",
+  nav: { home: "Home", howItWorks: "How it works", demo: "Demo", forClinics: "For clinics", safety: "Safety" },
+  cta: { requestAccess: "Request access", viewDemo: "View demo", pilotAccess: "Pilot access on request", contact: "Contact" },
   hero: {
-    eyebrow: "For private, self-pay clinics",
-    title: "International visibility for private clinics. Direct contact for patients.",
-    subline:
-      "ClinicSlotHub helps private clinics become visible to international patients. Patients contact clinics directly. No medical advice, no booking, no middleman.",
-    trust: ["Patients contact clinics directly", "No medical advice", "No booking, no payment through us"],
+    h1: "ClinicSlotHub — Modern Clinic Scheduling OS",
+    subline: "Simple scheduling, walk-in queue and daily slot management for clinics.",
+    supporting: "Plan appointments, walk-ins, rooms and available slots in one simple board — without heavy hospital software.",
+    trust: "A clean scheduling workspace for clinics that need clarity, not complexity.",
   },
-  demoNote: "The cards below are generic examples for layout only — not real clinics and not endorsements.",
-  demoCards: [
-    { name: "Example Clinic A", category: "Hair Transplant", region: "Region A" },
-    { name: "Example Clinic B", category: "Dental Implants", region: "Region B" },
-    { name: "Example Clinic C", category: "Eye Laser", region: "Region C" },
-  ],
-  treatmentsTitle: "Treatment areas",
-  treatmentsIntro: "Neutral categories that clinics can present. ClinicSlotHub gives no medical advice and recommends no treatment.",
-  treatments: ["Hair Transplant", "Dental Implants", "Veneers", "Aesthetic Surgery", "Eye Laser", "Dermatology & Laser", "Diagnostics & Check-ups", "Longevity / Preventive Health", "Orthopedics / Sports Medicine"],
-  destinationsTitle: "Clinic regions",
-  destinationsIntro: "Provider regions where private clinics operate. This is not travel advice and not a medical recommendation.",
-  destinations: ["Turkey", "Morocco", "Tunisia", "Egypt", "Thailand", "India", "Mexico", "Colombia"],
+  mockup: {
+    todayBoard: "Today board", appointments: "Appointments", walkInQueue: "Walk-in queue", availableSlots: "Available slots",
+    rooms: "Rooms", services: "Services", quickActions: "Quick actions", stats: "Today", mobilePreview: "Mobile preview",
+    waiting: "Waiting", inProgress: "In progress", completed: "Completed", available: "Available",
+  },
   forClinics: {
-    title: "For private clinics",
-    intro: "Become visible to international self-pay patients and let them contact you directly. You stay fully responsible for medical quality, pricing and care.",
-    points: [
-      "Present your treatment areas to international patients",
-      "Show clear, direct contact options",
-      "The clinic stays responsible for quality, risks, pricing and aftercare",
-      "Visibility only — ClinicSlotHub does not treat, book or take payment",
-    ],
-    notList: [
-      "No booking platform",
-      "No commission per treatment",
-      "No patient payments through ClinicSlotHub",
-      "No medical recommendation by ClinicSlotHub",
-    ],
+    title: "A calmer way to run the clinic day.",
+    intro: "Keep the daily schedule, appointments, walk-ins, rooms and services organized in one simple board.",
+    points: ["Daily schedule at a glance", "Appointments and walk-ins together", "Rooms and services overview", "Front desk clarity", "Simple operation — no heavy enterprise system"],
   },
+  forPatients: {
+    title: "Simple status, clear timing, less confusion.",
+    intro: "Patients see only what they need — no accounts, no medical data.",
+    points: ["Queue number", "Appointment time", "Room status", "General visit category"],
+  },
+  howItWorks: {
+    title: "How it works",
+    steps: ["Set the day's schedule", "Add appointments and walk-ins", "Manage rooms, services and availability", "Keep the clinic day organized"],
+  },
+  demo: {
+    title: "View the demo",
+    intro: "A static demo with anonymized sample data.",
+    notes: ["Static demo — anonymized sample data", "No real patient data", "No medical records", "No payment processing", "No uploads"],
+  },
+  pricing: { title: "Pricing", note: "Pricing is prepared for pilot access and will be confirmed before activation." },
   safety: {
-    title: "Safety notes",
-    intro: "Please read carefully. ClinicSlotHub provides visibility only.",
-    points: [
-      "ClinicSlotHub gives no medical advice and no treatment recommendation.",
-      "There is no result guarantee and no quality guarantee.",
-      "This is not an emergency platform.",
-      "Patients contact clinics directly.",
-      "Patients must check qualification, risks, aftercare, prices and contracts directly with the clinic.",
-      "Medical responsibility lies with the clinic and the treating professional.",
-    ],
+    title: "Safety",
+    body: "ClinicSlotHub is not a medical advice tool. It does not provide diagnosis, treatment recommendations or emergency services. The MVP does not store medical records, accept medical uploads or process patient payments. Clinics remain responsible for their own medical, legal and operational processes.",
   },
-  contact: {
-    title: "Contact",
-    intro: "A simple way for private clinics to get in touch about visibility. For clinics only — not a patient treatment form.",
-    points: [
-      "No patient health data, no diagnosis text, no uploads",
-      "No automatic forwarding to clinics",
-      "We reply to clinic enquiries about visibility",
-    ],
-    note: "Patients: please contact the clinic of your choice directly. ClinicSlotHub does not arrange treatment.",
-  },
-  footerNote: "ClinicSlotHub is a visibility platform for private clinics. No medical advice, no booking, no payment, no patient data.",
+  footerNote: "ClinicSlotHub is a lightweight clinic scheduling tool. No medical advice, no diagnosis, no patient records, no payment.",
   rights: "All rights reserved.",
 };
 
-const DE: PivotDict = {
+const FR: PivotDict = {
   brand: "ClinicSlotHub",
-  tagline: "International Clinic Visibility Engine",
-  nav: { home: "Start", forClinics: "Für Kliniken", treatments: "Behandlungen", destinations: "Regionen", safety: "Sicherheitshinweise", contact: "Kontakt" },
-  cta: { requestReview: "Sichtbarkeits-Prüfung anfragen", contact: "Kontakt aufnehmen", viewTreatments: "Behandlungsbereiche ansehen", forClinics: "Für Kliniken" },
+  tagline: "Modern Clinic Scheduling OS",
+  nav: { home: "Accueil", howItWorks: "Comment ça marche", demo: "Démo", forClinics: "Pour les cliniques", safety: "Sécurité" },
+  cta: { requestAccess: "Demander l'accès", viewDemo: "Voir la démo", pilotAccess: "Accès pilote sur demande", contact: "Contact" },
   hero: {
-    eyebrow: "Für private Selbstzahler-Kliniken",
-    title: "Internationale Sichtbarkeit für private Kliniken. Direkter Kontakt für Patienten.",
-    subline:
-      "ClinicSlotHub macht private Kliniken für internationale Patienten sichtbar. Patienten kontaktieren Kliniken direkt. Keine medizinische Beratung, keine Buchung, kein Mittelsmann.",
-    trust: ["Patienten kontaktieren Kliniken direkt", "Keine medizinische Beratung", "Keine Buchung, keine Zahlung über uns"],
+    h1: "ClinicSlotHub — Modern Clinic Scheduling OS",
+    subline: "Planification simple des rendez-vous, de la file d'attente et des créneaux quotidiens pour les cliniques.",
+    supporting: "Organisez les rendez-vous, les arrivées sans rendez-vous, les salles et les créneaux disponibles dans un tableau clair — sans logiciel hospitalier lourd.",
+    trust: "Un espace de planification clair pour les cliniques qui ont besoin de simplicité, pas de complexité.",
   },
-  demoNote: "Die folgenden Karten sind generische Beispiele nur für das Layout — keine echten Kliniken und keine Empfehlung.",
-  demoCards: [
-    { name: "Beispiel-Klinik A", category: "Haartransplantation", region: "Region A" },
-    { name: "Beispiel-Klinik B", category: "Zahnimplantate", region: "Region B" },
-    { name: "Beispiel-Klinik C", category: "Augenlaser", region: "Region C" },
-  ],
-  treatmentsTitle: "Behandlungsbereiche",
-  treatmentsIntro: "Neutrale Kategorien, die Kliniken präsentieren können. ClinicSlotHub gibt keine medizinische Beratung und empfiehlt keine Behandlung.",
-  treatments: ["Haartransplantation", "Zahnimplantate", "Veneers", "Ästhetische Chirurgie", "Augenlaser", "Dermatologie & Laser", "Diagnostik & Check-ups", "Longevity / Präventivmedizin", "Orthopädie / Sportmedizin"],
-  destinationsTitle: "Klinik-Regionen",
-  destinationsIntro: "Anbieterregionen, in denen private Kliniken tätig sind. Dies ist keine Reiseberatung und keine medizinische Empfehlung.",
-  destinations: ["Türkei", "Marokko", "Tunesien", "Ägypten", "Thailand", "Indien", "Mexiko", "Kolumbien"],
+  mockup: {
+    todayBoard: "Tableau du jour", appointments: "Rendez-vous", walkInQueue: "File d'attente", availableSlots: "Créneaux disponibles",
+    rooms: "Salles", services: "Services", quickActions: "Actions rapides", stats: "Aujourd'hui", mobilePreview: "Aperçu mobile",
+    waiting: "En attente", inProgress: "En cours", completed: "Terminé", available: "Disponible",
+  },
   forClinics: {
-    title: "Für private Kliniken",
-    intro: "Werden Sie für internationale Selbstzahler sichtbar und lassen Sie sich direkt kontaktieren. Die Klinik bleibt voll verantwortlich für medizinische Qualität, Preise und Versorgung.",
-    points: [
-      "Präsentieren Sie Ihre Behandlungsbereiche internationalen Patienten",
-      "Zeigen Sie klare, direkte Kontaktwege",
-      "Die Klinik bleibt verantwortlich für Qualität, Risiken, Preise und Nachsorge",
-      "Nur Sichtbarkeit — ClinicSlotHub behandelt nicht, bucht nicht und nimmt kein Geld",
-    ],
-    notList: [
-      "Keine Buchungsplattform",
-      "Keine Provision pro Behandlung",
-      "Keine Patientenzahlungen über ClinicSlotHub",
-      "Keine medizinische Empfehlung durch ClinicSlotHub",
-    ],
+    title: "Une façon plus claire d'organiser la journée de la clinique.",
+    intro: "Gardez le planning du jour, les rendez-vous, les arrivées, les salles et les services organisés dans un tableau simple.",
+    points: ["Planning du jour en un coup d'œil", "Rendez-vous et arrivées réunis", "Vue des salles et des services", "Clarté à l'accueil", "Fonctionnement simple — sans système d'entreprise lourd"],
   },
+  forPatients: {
+    title: "Un statut simple, des horaires clairs, moins de confusion.",
+    intro: "Les patients voient seulement l'essentiel — sans compte, sans données médicales.",
+    points: ["Numéro de file", "Heure du rendez-vous", "Statut de la salle", "Catégorie de visite générale"],
+  },
+  howItWorks: {
+    title: "Comment ça marche",
+    steps: ["Préparez le planning du jour", "Ajoutez les rendez-vous et les arrivées sans rendez-vous", "Gérez les salles, les services et les disponibilités", "Gardez la journée organisée"],
+  },
+  demo: {
+    title: "Voir la démo",
+    intro: "Une démo statique avec des données d'exemple anonymisées.",
+    notes: ["Démo statique — données d'exemple anonymisées", "Aucune donnée patient réelle", "Aucun dossier médical", "Aucun paiement", "Aucun téléversement"],
+  },
+  pricing: { title: "Tarifs", note: "Les tarifs sont préparés pour l'accès pilote et seront confirmés avant activation." },
   safety: {
-    title: "Sicherheitshinweise",
-    intro: "Bitte sorgfältig lesen. ClinicSlotHub bietet ausschließlich Sichtbarkeit.",
-    points: [
-      "ClinicSlotHub gibt keine medizinische Beratung und keine Behandlungsempfehlung.",
-      "Es gibt keine Ergebnisgarantie und keine Qualitätsgarantie.",
-      "Dies ist keine Notfallplattform.",
-      "Patienten kontaktieren Kliniken direkt.",
-      "Patienten müssen Qualifikation, Risiken, Nachsorge, Preise und Verträge direkt mit der Klinik prüfen.",
-      "Die medizinische Verantwortung liegt bei der Klinik und dem behandelnden Fachpersonal.",
-    ],
+    title: "Sécurité",
+    body: "ClinicSlotHub n'est pas un outil de conseil médical. Il ne fournit pas de diagnostic, de recommandation de traitement ni de service d'urgence. Le MVP ne stocke pas de dossier médical, n'accepte pas de téléversement médical et ne traite pas les paiements des patients. Les cliniques restent responsables de leurs propres processus médicaux, juridiques et opérationnels.",
   },
-  contact: {
-    title: "Kontakt",
-    intro: "Eine einfache Möglichkeit für private Kliniken, uns zur Sichtbarkeit zu kontaktieren. Nur für Kliniken — kein Patienten-Behandlungsformular.",
-    points: [
-      "Keine Patienten-Gesundheitsdaten, kein Diagnosetext, keine Uploads",
-      "Keine automatische Weiterleitung an Kliniken",
-      "Wir antworten auf Klinik-Anfragen zur Sichtbarkeit",
-    ],
-    note: "Patienten: Bitte kontaktieren Sie die Klinik Ihrer Wahl direkt. ClinicSlotHub vermittelt keine Behandlung.",
-  },
-  footerNote: "ClinicSlotHub ist eine Sichtbarkeitsplattform für private Kliniken. Keine medizinische Beratung, keine Buchung, keine Zahlung, keine Patientendaten.",
-  rights: "Alle Rechte vorbehalten.",
+  footerNote: "ClinicSlotHub est un outil léger de planification pour cliniques. Pas de conseil médical, pas de diagnostic, pas de dossier patient, pas de paiement.",
+  rights: "Tous droits réservés.",
 };
 
-const DICTS: Record<string, PivotDict> = { en: EN, de: DE };
+const ES: PivotDict = {
+  brand: "ClinicSlotHub",
+  tagline: "Modern Clinic Scheduling OS",
+  nav: { home: "Inicio", howItWorks: "Cómo funciona", demo: "Demo", forClinics: "Para clínicas", safety: "Seguridad" },
+  cta: { requestAccess: "Solicitar acceso", viewDemo: "Ver demo", pilotAccess: "Acceso piloto a pedido", contact: "Contacto" },
+  hero: {
+    h1: "ClinicSlotHub — Modern Clinic Scheduling OS",
+    subline: "Planificación simple de citas, turnos sin reserva y gestión diaria de horarios para clínicas.",
+    supporting: "Organice citas, llegadas sin reserva, salas y horarios disponibles en un panel claro — sin software hospitalario complejo.",
+    trust: "Un espacio de planificación claro para clínicas que necesitan simplicidad, no complejidad.",
+  },
+  mockup: {
+    todayBoard: "Panel del día", appointments: "Citas", walkInQueue: "Fila sin reserva", availableSlots: "Horarios disponibles",
+    rooms: "Salas", services: "Servicios", quickActions: "Acciones rápidas", stats: "Hoy", mobilePreview: "Vista móvil",
+    waiting: "En espera", inProgress: "En curso", completed: "Completado", available: "Disponible",
+  },
+  forClinics: {
+    title: "Una forma más clara de organizar el día de la clínica.",
+    intro: "Mantenga el horario del día, las citas, las llegadas, las salas y los servicios organizados en un panel simple.",
+    points: ["Horario del día de un vistazo", "Citas y llegadas juntas", "Vista de salas y servicios", "Claridad en recepción", "Operación simple — sin sistema empresarial complejo"],
+  },
+  forPatients: {
+    title: "Estado simple, horarios claros y menos confusión.",
+    intro: "Los pacientes ven solo lo necesario — sin cuentas, sin datos médicos.",
+    points: ["Número de fila", "Hora de la cita", "Estado de la sala", "Categoría de visita general"],
+  },
+  howItWorks: {
+    title: "Cómo funciona",
+    steps: ["Prepare el horario del día", "Añada citas y llegadas sin reserva", "Gestione salas, servicios y disponibilidad", "Mantenga el día organizado"],
+  },
+  demo: {
+    title: "Ver la demo",
+    intro: "Una demo estática con datos de ejemplo anonimizados.",
+    notes: ["Demo estática — datos de ejemplo anonimizados", "Sin datos reales de pacientes", "Sin historiales médicos", "Sin procesamiento de pagos", "Sin cargas de archivos"],
+  },
+  pricing: { title: "Precios", note: "Los precios están preparados para el acceso piloto y se confirmarán antes de la activación." },
+  safety: {
+    title: "Seguridad",
+    body: "ClinicSlotHub no es una herramienta de asesoramiento médico. No proporciona diagnósticos, recomendaciones de tratamiento ni servicios de emergencia. El MVP no almacena historiales médicos, no acepta cargas de documentos médicos y no procesa pagos de pacientes. Las clínicas siguen siendo responsables de sus propios procesos médicos, legales y operativos.",
+  },
+  footerNote: "ClinicSlotHub es una herramienta ligera de planificación para clínicas. Sin asesoramiento médico, sin diagnóstico, sin historiales de pacientes, sin pagos.",
+  rights: "Todos los derechos reservados.",
+};
 
-/** DE/EN professionell; alle anderen Locales sicher auf EN (kein KI-Rollout). */
+const DICTS: Record<string, PivotDict> = { en: EN, fr: FR, es: ES };
+
+/** Public product languages: EN/FR/ES. Any other locale falls back to EN. */
 export function getPivot(locale: string): PivotDict {
   return DICTS[locale] ?? EN;
 }
+
+/** Active public product locales (Sitemap/Nav/Routing-Gate). */
+export const PRODUCT_LOCALES = ["en", "fr", "es"] as const;
 
 /** Alle öffentlichen Copy-Strings einer Sprache flach (für Safety-Scan/Tests). */
 export function flattenPivot(d: PivotDict): string {
   return JSON.stringify(d);
 }
 
-/** Premium-Farbwelt: Navy / Creme / Gold / dezentes Grün. */
+/** Anonymisierte Mockup-Beispieldaten — keine Namen, keine PII. */
+export const MOCK_ROWS = [
+  { id: "Appointment #1042", time: "09:00", room: "Room 1", kind: "Consultation", state: "completed" },
+  { id: "Appointment #1043", time: "09:30", room: "Room 2", kind: "Follow-up", state: "inProgress" },
+  { id: "Walk-in #18", time: "10:00", room: "Room 3", kind: "General visit", state: "waiting" },
+  { id: "Appointment #1044", time: "10:30", room: "Room 1", kind: "Check-in", state: "available" },
+] as const;
+
+/** Premium teal/türkis Palette (hell, modern, vertrauenswürdig). */
 export const PIVOT_COLORS = {
-  navy: "#0B1F3A",
-  navySoft: "#13294B",
-  cream: "#F7F2E7",
-  creamSoft: "#FBF7EE",
-  gold: "#C2A14A",
-  goldSoft: "#D8BD78",
-  green: "#2F6F5E",
-  ink: "#1A2433",
+  teal: "#0D9488",
+  tealDark: "#0F766E",
+  tealDeep: "#134E4A",
+  tealSoft: "#5EEAD4",
+  tealTint: "#CCFBF1",
+  bg: "#F3FBFA",
+  surface: "#FFFFFF",
+  ink: "#0F2A2A",
+  slate: "#475569",
+  line: "#E2E8F0",
 } as const;

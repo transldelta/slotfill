@@ -55,6 +55,22 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // 1a. Public Language Gate (EN/FR/ES only) ───────────────────────────────────
+  //     Öffentliche Produktsprachen sind ausschließlich EN/FR/ES. Alle anderen
+  //     Locale-Routen (/de, /ar, /hi, /bn, /ru, /zh, /pt …) werden per 308 auf die
+  //     englische Variante des gleichen Pfads geleitet — kein deutsches/halb-
+  //     übersetztes Produkt öffentlich. Kein Loop: Ziel ist immer /en/...
+  const PRODUCT_LOCALES = new Set(["en", "fr", "es"]);
+  const seg0 = pathname.replace(/^\/+/, "").split("/");
+  if (
+    (routing.locales as readonly string[]).includes(seg0[0]) &&
+    !PRODUCT_LOCALES.has(seg0[0])
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/en" + pathname.slice(seg0[0].length + 1);
+    return NextResponse.redirect(url, { status: 308 });
+  }
+
   // 1b. Freeze alter öffentlicher Routen nach dem Visibility-Pivot ─────────────
   //     Alte Wartelisten-/Booking-/Launch-/Pricing-/Blog-Routen werden per 308
   //     auf passende Pivot-Routen umgeleitet. Keine Admin-/Dashboard-/Auth-/API-
@@ -68,6 +84,9 @@ export async function middleware(request: NextRequest) {
     "termin-buchen": "/clinic-contact",
     kontakt: "/clinic-contact",
     blog: "",
+    // Medical-tourism-Reste des Visibility-Pivots → Home (Scheduling OS).
+    treatments: "",
+    destinations: "",
   };
   const seg = pathname.replace(/^\/+/, "").split("/");
   const locs = routing.locales as readonly string[];

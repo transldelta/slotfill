@@ -522,21 +522,21 @@ test("Go-Live: A4 – KNOWN_CONTENT enthält TRUST_SECTION_ADDED → A4 ist read
   );
 });
 
-test("Go-Live: Aufgabe 4 – Pivot-Hero zeigt Visibility-Positionierung + Trust-Zeile", () => {
-  // Visibility-Engine-Pivot: Hero zeigt Titel/Subline + ruhige Trust-Zeile (d.hero.trust)
-  // und CTAs für Kliniken (Request visibility review / Treatments).
+test("Go-Live: Aufgabe 4 – Scheduling-OS-Hero zeigt H1, Trust-Zeile und Dashboard-Mockup", () => {
+  // Modern Clinic Scheduling OS: Hero zeigt H1 + Subline + Trust-Zeile, Dashboard-
+  // Mockup und sichere CTAs (Request access / View demo).
   const { readFileSync } = require("fs");
   const content: string = readFileSync(
     resolve(process.cwd(), "app/[locale]/page.tsx"),
     "utf8",
   );
   assert.ok(
-    content.includes("d.hero.title") && content.includes("d.hero.trust"),
-    'app/[locale]/page.tsx: Pivot-Hero/Trust-Zeile fehlt',
+    content.includes("d.hero.h1") && content.includes("d.hero.trust"),
+    'app/[locale]/page.tsx: Scheduling-Hero/Trust-Zeile fehlt',
   );
   assert.ok(
-    content.includes("d.cta.requestReview") || content.includes("for-clinics"),
-    'app/[locale]/page.tsx: Klinik-CTA fehlt im Hero',
+    content.includes("DashboardMockup") && content.includes("d.cta.requestAccess") && content.includes("d.cta.viewDemo"),
+    'app/[locale]/page.tsx: Mockup oder sichere CTAs fehlen im Hero',
   );
 });
 

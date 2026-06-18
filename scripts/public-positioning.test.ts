@@ -1,17 +1,8 @@
 /**
- * Public Emerging Markets Positioning – Tests
+ * Public Positioning & Safety Guards — ClinicSlotHub: Modern Clinic Scheduling OS.
  *
- * Prüft die ÖFFENTLICHE Positionierung (en + de) auf den Kernflächen:
- *   - messages/en.json + de.json (landing, pricing)
- *   - app/[locale]/page.tsx (hardcodierte JSON-LD/Meta)
- *   - app/[locale]/launch/page.tsx (en/de Copy)
- *   - app/book/[slug]/page.tsx (Patienten-Buchung)
- *
- * Pflicht: emerging healthcare markets, no patient login, WhatsApp-ready ohne API,
- * phone/reception fallback, request is not confirmation, clinic stays in control.
- * Verboten öffentlich: Soft Launch, Twilio, Resend, Stripe, provider configuration,
- * worldwide/weltweit, guaranteed, 24h/48h/instant, no paying customers, positive
- * "automatic appointment confirmation / medical decision / diagnosis upload".
+ * Public product languages: EN (main), FR, ES. No German public product copy.
+ * No external services, no patient data, no medical promises, no PII in mockups.
  *
  * Lauf: tsx --test scripts/public-positioning.test.ts
  */
@@ -20,667 +11,237 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
-import { getContinuousControlOffice, classifyCountry } from "../lib/emerging-markets-agent";
-import { assertNoSecretsInResponse } from "../lib/security-agent";
-import { LOCALE_QUALITY, verifiedLocales, localesNeedingReview, localesNeedingNativeReview } from "../lib/locale-quality";
-import { getPricingContent, PRICING_LOCALES, type PlanKey } from "../lib/pricing-content";
-import { getPivot, flattenPivot } from "../lib/pivot-content";
-import { runSafetyTower, scanPublicCopy, POSITIONING, REQUIRED_SAFETY_STATEMENTS } from "../lib/safety-tower";
-
-const MESSAGE_LOCALES = ["en", "de", "ar", "hi", "bn", "pt", "es", "fr", "ru", "zh"];
+import { getPivot, flattenPivot, PRODUCT_LOCALES, MOCK_ROWS } from "../lib/pivot-content";
+import { runSafetyTower, scanPublicCopy, POSITIONING } from "../lib/safety-tower";
 
 const ROOT = process.cwd();
 const read = (p: string) => readFileSync(join(ROOT, p), "utf8");
-const existsPivotPage = (slug: string) => existsSync(join(ROOT, `app/[locale]/${slug}/page.tsx`));
-const en = JSON.parse(read("messages/en.json")) as Record<string, Record<string, unknown>>;
-const de = JSON.parse(read("messages/de.json")) as Record<string, Record<string, unknown>>;
+// Kommentare entfernen — Safety-Kommentare ("no payments", "no patient names")
+// sind Dokumentation, kein Verstoß.
+const stripComments = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:])\/\/.*$/gm, "$1");
 
-/** Alle String-Werte eines Objekts rekursiv zu einem Text zusammenführen. */
-function flatten(obj: unknown): string {
-  if (typeof obj === "string") return obj + " ";
-  if (Array.isArray(obj)) return obj.map(flatten).join(" ");
-  if (obj && typeof obj === "object") return Object.values(obj).map(flatten).join(" ");
-  return "";
+const PIVOT_PAGES = [
+  "app/[locale]/page.tsx",
+  "app/[locale]/demo/page.tsx",
+  "app/[locale]/for-clinics/page.tsx",
+  "app/[locale]/safety-notes/page.tsx",
+  "app/[locale]/clinic-contact/page.tsx",
+  "components/pivot/PivotShell.tsx",
+  "components/pivot/DashboardMockup.tsx",
+];
+const allPivotSrc = PIVOT_PAGES.map(read).join("\n");
+
+// Marketing-Text (ohne Safety-Disclaimer-Body, der bewusst "no diagnosis" etc. enthält).
+function marketing(locale: string): string {
+  const d = getPivot(locale);
+  const { safety, ...rest } = d;
+  return JSON.stringify({ ...rest, safety: { title: safety.title } }).toLowerCase();
 }
 
-const enLanding = flatten(en.landing).toLowerCase();
-const deLanding = flatten(de.landing).toLowerCase();
-const enPricing = flatten(en.pricing).toLowerCase();
-const dePricing = flatten(de.pricing).toLowerCase();
+// ─── 9. Scheduling-OS-Positionierung ──────────────────────────────────────────
 
-// Tokens, die in öffentlicher en/de-Copy NIRGENDS vorkommen dürfen.
-const FORBIDDEN_PUBLIC = [
-  "soft launch",
-  "twilio",
-  "resend",
-  "provider configuration",
-  "anbieter-konfiguration",
-  "no real messages are sent",
-  "trial mode",
-  "no paying customers",
-  "zahlenden kunden",
-  "stripe",
-  "worldwide",
-  "weltweit",
-  "doctolib",
-  "guaranteed",
-  "guarantee",
-  "24h",
-  "48h",
-  "instant",
-  "unlimited patients",
-  "unbegrenzt patienten",
-  "supabase",
-];
-
-/** Negierte Form entfernen, dann darf der positive Claim nicht übrig bleiben. */
-function assertOnlyNegated(text: string, claim: string, label: string): void {
-  const stripped = text.replace(
-    new RegExp(`(no|not|never|kein|keine|ohne)\\s+[\\wäöü-]*\\s*${claim}`, "gi"),
-    "",
-  );
-  assert.equal(new RegExp(claim, "i").test(stripped), false, `${label}: positiver Claim "${claim}"`);
-}
-
-// ─── Pflicht-Botschaften EN ───────────────────────────────────────────────────
-
-test("EN landing enthält die Pflicht-Positionierung", () => {
-  for (const phrase of [
-    "emerging healthcare markets",
-    "no patient login",
-    "workflows your clinic already uses",
-    "phone and reception fallback",
-    "clinic stays in control",
-    "simple waitlist",
-    "is not an appointment confirmation",
-  ]) {
-    assert.ok(enLanding.includes(phrase), `EN landing fehlt: "${phrase}"`);
+test("Positioning: Modern Clinic Scheduling OS in allen Produktsprachen", () => {
+  for (const loc of PRODUCT_LOCALES) {
+    const d = getPivot(loc);
+    assert.equal(d.tagline, "Modern Clinic Scheduling OS");
+    assert.ok(d.hero.h1.includes("Modern Clinic Scheduling OS"), `${loc}: H1 fehlt`);
+  }
+  const en = flattenPivot(getPivot("en")).toLowerCase();
+  for (const must of ["simple scheduling", "walk-in queue", "available slots", "today board", "room", "waiting", "completed", "available"]) {
+    assert.ok(en.includes(must), `EN Scheduling-Begriff fehlt: ${must}`);
   }
 });
 
-test("DE landing enthält die Pflicht-Positionierung", () => {
-  for (const phrase of [
-    "wachstumsstarken gesundheitsmärkten",
-    "kein patienten-login",
-    "abläufen, die ihre klinik bereits nutzt",
-    "rezeptions-fallback",
-    "behält die kontrolle",
-    "einfache warteliste",
-    "keine terminbestätigung",
-  ]) {
-    assert.ok(deLanding.includes(phrase), `DE landing fehlt: "${phrase}"`);
+// ─── 1. Public Locale Guard (EN/FR/ES) ────────────────────────────────────────
+
+test("Public Locale Guard: nur en/fr/es sind Produktsprachen + Sitemap", () => {
+  assert.deepEqual([...PRODUCT_LOCALES], ["en", "fr", "es"]);
+  const sm = read("app/sitemap.ts");
+  assert.ok(sm.includes("PRODUCT_LOCALES"), "Sitemap nutzt PRODUCT_LOCALES nicht");
+  for (const bad of ['"de"', '"ar"', '"hi"', '"bn"', '"ru"', '"zh"', '"pt"', "locales"]) {
+    assert.equal(sm.includes(bad), false, `Sitemap referenziert nicht-Produktsprache/all-locales: ${bad}`);
   }
 });
 
-// ─── Verbotene öffentliche Begriffe ───────────────────────────────────────────
+test("Middleware: Public Language Gate leitet nicht-EN/FR/ES Locales auf /en", () => {
+  const mw = read("middleware.ts");
+  assert.ok(mw.includes('new Set(["en", "fr", "es"])') || /PRODUCT_LOCALES\s*=\s*new Set\(\["en", "fr", "es"\]\)/.test(mw), "Language Gate fehlt");
+  assert.ok(/url\.pathname\s*=\s*"\/en"/.test(mw), "Gate leitet nicht auf /en");
+  assert.ok(mw.includes("status: 308"), "kein 308");
+});
 
-test("EN/DE landing enthalten keine verbotenen öffentlichen Begriffe", () => {
-  for (const bad of FORBIDDEN_PUBLIC) {
-    assert.equal(enLanding.includes(bad), false, `EN landing enthält "${bad}"`);
-    assert.equal(deLanding.includes(bad), false, `DE landing enthält "${bad}"`);
+// ─── 2. No German Public Product Copy ─────────────────────────────────────────
+
+test("No German Product Copy: EN/FR/ES enthalten keine deutschen Produktwörter", () => {
+  const german = ["terminverwaltung", "warteschlange", "praxis", "klinikplanung", "anfrage senden", "demo ansehen", "kostenlos testen", "deutschland", "preise vergleichen"];
+  for (const loc of PRODUCT_LOCALES) {
+    const t = marketing(loc);
+    for (const g of german) assert.equal(t.includes(g), false, `${loc}: deutsches Produktwort "${g}"`);
   }
 });
 
-test("EN/DE pricing enthalten keine verbotenen öffentlichen Begriffe", () => {
-  for (const bad of FORBIDDEN_PUBLIC) {
-    assert.equal(enPricing.includes(bad), false, `EN pricing enthält "${bad}"`);
-    assert.equal(dePricing.includes(bad), false, `DE pricing enthält "${bad}"`);
-  }
-});
+// ─── 3. Translation Quality ───────────────────────────────────────────────────
 
-test("Sensible Claims erscheinen nur negiert (keine positiven Versprechen)", () => {
-  for (const text of [enLanding, deLanding]) {
-    assertOnlyNegated(text, "automatic appointment confirmation", "landing");
-    assertOnlyNegated(text, "automatic medical decision", "landing");
-    assertOnlyNegated(text, "automatische terminbestätigung", "landing");
-    assertOnlyNegated(text, "automatische medizinische entscheidung", "landing");
-  }
-});
-
-// ─── Öffentliche Seitendateien ────────────────────────────────────────────────
-
-test("Pivot-Homepage: Visibility-Engine-Positionierung, kein 'worldwide'", () => {
-  const src = read("app/[locale]/page.tsx").toLowerCase();
-  assert.ok(src.includes("getpivot") && src.includes("pivotshell"), "Pivot-Homepage nutzt getPivot/PivotShell nicht");
-  assert.equal(src.includes("worldwide"), false, "'worldwide' noch vorhanden");
-});
-
-test("Launch-Seite: keine verbotenen englischen Tokens in en/de-Copy", () => {
-  const src = read("app/[locale]/launch/page.tsx");
-  for (const bad of ["Soft Launch", "now available worldwide", "weltweit verfügbar", "no paying customers", "Keine zahlenden Kunden"]) {
-    assert.equal(src.includes(bad), false, `Launch enthält "${bad}"`);
-  }
-  assert.ok(src.includes("emerging healthcare markets"), "EN emerging-Positionierung fehlt");
-  assert.ok(src.includes("wachstumsstarken Gesundheitsmärkten"), "DE emerging-Positionierung fehlt");
-});
-
-test("Booking-Seite: kein Login, Anfrage ist keine Bestätigung, keine Notfälle/Diagnosen/Dokumente", () => {
-  const src = read("app/book/[slug]/page.tsx");
-  assert.ok(/Kein Login nötig|Kein Konto nötig/.test(src), "Kein-Login-Hinweis fehlt");
-  assert.ok(src.includes("keine verbindliche Terminbestätigung"), "Hinweis 'keine Terminbestätigung' fehlt");
-  assert.ok(/Keine Notfälle, keine Diagnosen, keine Dokumente/.test(src), "Safety-Microcopy fehlt");
-});
-
-// ─── Konsistenz mit interner Governance (Phase 0) ─────────────────────────────
-
-test("Country Control: emerging target, entwickelte Märkte blockiert", () => {
-  assert.equal(classifyCountry("NG").decision, "target");
-  assert.equal(classifyCountry("DE").decision, "blocked_until_legal_review");
-  assert.equal(classifyCountry("US").decision, "blocked_until_legal_review");
-});
-
-test("Dauerkontroll- und Qualitätssicherungsamt bleibt GREEN", () => {
-  const cc = getContinuousControlOffice();
-  assert.equal(cc.status, "green");
-  assert.equal(assertNoSecretsInResponse(cc), true);
-});
-
-// ─── Locale Rollout: alle 10 öffentlichen Sprachen ────────────────────────────
-
-const VALUE_FORBIDDEN = [
-  "twilio", "resend", "soft launch", "worldwide", "weltweit", "stripe",
-  "provider configuration", "no real messages", "doctolib", "supabase",
-  "unlimited patients", "automatically", "no paying customers",
-];
-
-test("Alle 10 Locales: landing+pricing Werte ohne verbotene öffentliche Begriffe", () => {
-  for (const loc of MESSAGE_LOCALES) {
-    const m = JSON.parse(read(`messages/${loc}.json`)) as Record<string, unknown>;
-    const text = (flatten(m.landing) + flatten(m.pricing)).toLowerCase();
-    for (const bad of VALUE_FORBIDDEN) {
-      assert.equal(text.includes(bad), false, `${loc}: verbotener Begriff "${bad}"`);
+test("Translation Quality: keine Platzhalter, FR/ES sprachlich eigenständig", () => {
+  for (const loc of PRODUCT_LOCALES) {
+    const t = marketing(loc);
+    for (const ph of ["lorem", "ipsum", "coming soon", "xxxx", "placeholder"]) {
+      assert.equal(t.includes(ph), false, `${loc}: Platzhalter "${ph}"`);
     }
+    // Code-Marker "TODO" (Großschreibung) — "todo"/"todos" (Spanisch) ist erlaubt.
+    assert.equal(/\bTODO\b/.test(flattenPivot(getPivot(loc))), false, `${loc}: TODO-Marker`);
+  }
+  // FR/ES müssen eigene Sprache tragen (nicht nur EN-Fallback).
+  assert.ok(getPivot("fr").hero.subline.toLowerCase().includes("rendez-vous"), "FR nicht französisch");
+  assert.ok(getPivot("es").hero.subline.toLowerCase().includes("citas"), "ES nicht spanisch");
+  // EN-Fallback-Leak: FR/ES Subline darf nicht identisch mit EN sein.
+  assert.notEqual(getPivot("fr").hero.subline, getPivot("en").hero.subline);
+  assert.notEqual(getPivot("es").hero.subline, getPivot("en").hero.subline);
+});
+
+// ─── 4. Anonymous Mockup Guard ────────────────────────────────────────────────
+
+test("Anonymous Mockup: keine Patientennamen / PII", () => {
+  const src = stripComments(read("components/pivot/DashboardMockup.tsx")) + JSON.stringify(MOCK_ROWS);
+  const pii = ["Sarah", "Ahmed", "Maria", "John", "Fatima", "Mohammed", "Ana", "Carlos", "Patient Name", "diagnosis", "symptom", "medical record", "DOB", "insurance"];
+  // E-Mail-/Telefon-Muster nur in den Beispieldaten (nicht im Import-Alias) verbieten.
+  assert.equal(/@|phone|\+\d{6,}/i.test(JSON.stringify(MOCK_ROWS)), false, "Mockup-Daten enthalten Kontakt-PII");
+  for (const p of pii) assert.equal(src.toLowerCase().includes(p.toLowerCase()), false, `Mockup enthält PII/Name: ${p}`);
+  // Erlaubte anonyme Tokens vorhanden.
+  assert.ok(/Appointment #|Walk-in #|Room \d/.test(JSON.stringify(MOCK_ROWS)), "anonyme Tokens fehlen");
+});
+
+// ─── 5. Forbidden Region Wording ──────────────────────────────────────────────
+
+test("Forbidden Region Wording: keine Schwellenland-/Region-only-Sprache öffentlich", () => {
+  const bad = ["emerging countries", "emerging healthcare markets", "schwellenländer", "africa-only", "asia-only", "south america-only", "latin america-only", "third world", "poor clinics", "low-income", "developing world", "developing countries", "unterentwickelte"];
+  const blob = (PRODUCT_LOCALES.map((l) => flattenPivot(getPivot(l))).join(" ") + allPivotSrc).toLowerCase();
+  for (const b of bad) assert.equal(blob.includes(b), false, `verbotene Region-Sprache: ${b}`);
+});
+
+// ─── 6. High-Regulation Targeting ─────────────────────────────────────────────
+
+test("High-Regulation Targeting: keine aktive Bewerbung von DE/EU/USA/UK/CA/AU", () => {
+  const targets = ["germany", "deutschland", "european union", " eu ", "united states", " usa ", "united kingdom", " uk ", "canada", "kanada", "australia", "australien"];
+  const blob = (PRODUCT_LOCALES.map((l) => flattenPivot(getPivot(l))).join(" ") + allPivotSrc).toLowerCase();
+  for (const t of targets) assert.equal(blob.includes(t), false, `Hochregulierungs-Targeting: ${t.trim()}`);
+});
+
+// ─── 7. Medical Promise Guard ─────────────────────────────────────────────────
+
+test("Medical Promise Guard: keine medizinischen Versprechen in Marketing-Copy", () => {
+  const bad = ["best clinic", "guaranteed patients", "guaranteed bookings", "guaranteed revenue", "guaranteed result", "risk-free", "medical recommendation", "treatment recommendation", "emergency support", "success guarantee", "ai doctor", "cure"];
+  for (const loc of PRODUCT_LOCALES) {
+    const t = marketing(loc); // ohne Safety-Disclaimer-Body
+    for (const b of bad) assert.equal(t.includes(b), false, `${loc}: medizinisches Versprechen "${b}"`);
   }
 });
 
-test("Alle 10 Locales: WhatsApp-Kanal sichtbar, aber KEIN öffentliches 'API'-Wording", () => {
-  for (const loc of MESSAGE_LOCALES) {
-    const m = JSON.parse(read(`messages/${loc}.json`)) as Record<string, unknown>;
-    const land = flatten(m.landing);
-    const text = (land + flatten((m as { pricing?: unknown }).pricing)).toLowerCase();
-    // WhatsApp als lateinische Marke ODER lokalisierte Form (z. B. arabisch "واتساب").
-    assert.ok(land.toLowerCase().includes("whatsapp") || land.includes("واتساب"), `${loc}: WhatsApp-Kanal fehlt in landing`);
-    // Öffentlich kein technisches API-Wording mehr.
-    assert.equal(/\bapi\b/i.test(text), false, `${loc}: öffentliches 'API'-Wort gefunden`);
-    assert.equal(/without api|ohne api|sans api|sin api|sem api|без api|بدون واجهة برمجية|無需 api|API के बिना|API ছাড়াই/i.test(text), false, `${loc}: 'without API'-Phrase gefunden`);
-  }
-});
-
-test("Workflow-Phrase ersetzt API-Wording (en/de)", () => {
-  const en = flatten((JSON.parse(read("messages/en.json")) as { landing?: unknown }).landing).toLowerCase();
-  const de = flatten((JSON.parse(read("messages/de.json")) as { landing?: unknown }).landing).toLowerCase();
-  assert.ok(en.includes("workflows your clinic already uses"), "EN Workflow-Phrase fehlt");
-  assert.ok(de.includes("abläufen, die ihre klinik bereits nutzt"), "DE Workflow-Phrase fehlt");
-});
-
-test("Sekundär-CTA ist die Klinik-Demo (en/de)", () => {
-  const en = (JSON.parse(read("messages/en.json")) as { landing?: { ctaSecondary?: string } }).landing?.ctaSecondary;
-  const de = (JSON.parse(read("messages/de.json")) as { landing?: { ctaSecondary?: string } }).landing?.ctaSecondary;
-  assert.equal(en, "View clinic demo");
-  assert.equal(de, "Klinik-Demo ansehen");
-});
-
-// ─── Premium UI Relaunch ──────────────────────────────────────────────────────
-
-test("Pivot-Homepage: rendert Hero, Behandlungsbereiche und generische Demo-Karten", () => {
-  const src = read("app/[locale]/page.tsx");
-  assert.ok(src.includes("d.hero.title") && src.includes("d.hero.subline"), "Hero fehlt");
-  assert.ok(src.includes("d.treatments"), "Behandlungsbereiche fehlen");
-  assert.ok(src.includes("d.demoCards") && src.includes("demoNote"), "generische Demo-Karten/Hinweis fehlen");
-  assert.ok(src.includes("d.cta.requestReview") || src.includes("for-clinics"), "For-clinics-CTA fehlt");
-});
-
-test("Alle 10 Locales haben Steps & Audience (Key-Parität) und kein API darin", () => {
-  for (const loc of MESSAGE_LOCALES) {
-    const land = (JSON.parse(read(`messages/${loc}.json`)) as { landing?: Record<string, string> }).landing ?? {};
-    for (const key of ["heroTrust1", "stepsTitle", "step1", "step2", "step3", "audienceTitle", "audienceIntro", "audienceList", "demoCta"]) {
-      assert.ok(typeof land[key] === "string" && land[key].length > 0, `${loc}: Key ${key} fehlt`);
-    }
-    const blob = ["step1", "step2", "step3", "heroTrust1", "heroTrust2", "heroTrust3"].map((k) => land[k]).join(" ");
-    assert.equal(/\bapi\b/i.test(blob), false, `${loc}: API in Steps/Hero-Trust`);
-  }
-});
-
-test("Zielgruppen-Sektion nennt Klinik-Typen (en/de)", () => {
-  const en = (JSON.parse(read("messages/en.json")) as { landing?: { audienceList?: string } }).landing?.audienceList?.toLowerCase() ?? "";
-  const de = (JSON.parse(read("messages/de.json")) as { landing?: { audienceList?: string } }).landing?.audienceList?.toLowerCase() ?? "";
-  for (const term of ["dental", "medical", "outpatient", "therapy"]) assert.ok(en.includes(term), `EN audience fehlt: ${term}`);
-  for (const term of ["zahn", "medizin", "ambulant", "therapie"]) assert.ok(de.includes(term), `DE audience fehlt: ${term}`);
-});
-
-test("Workflow-Schritte nennen WhatsApp/Telefon/Rezeption als Workflow (en/de)", () => {
-  const en = ((JSON.parse(read("messages/en.json")) as { landing?: { step1?: string } }).landing?.step1 ?? "").toLowerCase();
-  const de = ((JSON.parse(read("messages/de.json")) as { landing?: { step1?: string } }).landing?.step1 ?? "").toLowerCase();
-  assert.ok(en.includes("whatsapp") && en.includes("phone") && en.includes("reception"), "EN step1 Kanäle fehlen");
-  assert.ok(de.includes("whatsapp") && de.includes("telefon") && de.includes("rezeption"), "DE step1 Kanäle fehlen");
-});
-
-test("Footer-Label: Patientenanfrage statt 'Termin buchen'/'Book Appointment' (Rollen-Klarheit)", () => {
-  for (const loc of MESSAGE_LOCALES) {
-    const nav = (JSON.parse(read(`messages/${loc}.json`)) as { nav?: Record<string, string> }).nav ?? {};
-    assert.equal(/termin buchen|book appointment/i.test(nav.bookAppointment ?? ""), false, `${loc}: alte Booking-Buchung-Sprache im Footer-Label`);
-  }
-  const en = (JSON.parse(read("messages/en.json")) as { nav: { bookAppointment: string } }).nav.bookAppointment;
-  const de = (JSON.parse(read("messages/de.json")) as { nav: { bookAppointment: string } }).nav.bookAppointment;
-  assert.equal(en, "Patient request");
-  assert.equal(de, "Patientenanfrage");
-});
-
-// ─── Pricing Localization QA (lib/pricing-content.ts) ─────────────────────────
-
-const PLAN_KEYS: PlanKey[] = ["starter", "professional", "praxis_plus"];
-const LOCALE_MARKER: Record<string, string> = {
-  en: "clinic", de: "klinik", fr: "clinique", es: "clínica", pt: "clínica",
-  ar: "عياد", hi: "क्लीनिक", bn: "ক্লিনিক", ru: "клиник", zh: "诊所",
-};
-
-test("Pricing-Inhalte existieren in allen 10 Locales", () => {
-  for (const loc of MESSAGE_LOCALES) assert.ok(PRICING_LOCALES.includes(loc), `Pricing fehlt: ${loc}`);
-});
-
-test("Pricing ist je Locale vollständig (Name, Subtitle, Features, CTA)", () => {
-  for (const loc of MESSAGE_LOCALES) {
-    const pc = getPricingContent(loc);
-    for (const k of PLAN_KEYS) {
-      assert.ok(pc.planName[k]?.length > 0, `${loc}: planName.${k} fehlt`);
-      assert.ok(pc.subtitle[k]?.length > 0, `${loc}: subtitle.${k} fehlt`);
-      assert.ok(Array.isArray(pc.features[k]) && pc.features[k].length >= 3, `${loc}: features.${k} fehlt`);
-    }
-    assert.ok(pc.requestAccess.length > 0 && pc.header.length > 0 && pc.priceLogicNote.length > 0, `${loc}: Kerntexte fehlen`);
-  }
-});
-
-test("Pricing ist je Locale lokalisiert (Sprach-Marker vorhanden)", () => {
-  for (const loc of MESSAGE_LOCALES) {
-    const pc = getPricingContent(loc);
-    const blob = [pc.header, ...PLAN_KEYS.map((k) => pc.subtitle[k]), ...PLAN_KEYS.flatMap((k) => pc.features[k])].join(" ").toLowerCase();
-    assert.ok(blob.includes(LOCALE_MARKER[loc]), `${loc}: Sprach-Marker "${LOCALE_MARKER[loc]}" fehlt (Englisch-Leak?)`);
-  }
-});
-
-test("Nicht-en/de Pricing enthält keine englischen Pricing-Sätze (kein Fallback-Leak)", () => {
-  const englishMarkers = ["waitlist", "without login", "everything in", "your clinic", "priority setup", "request and status", "for larger clinics", "getting started with"];
-  for (const loc of ["fr", "es", "pt", "ar", "hi", "bn", "ru", "zh"]) {
-    const pc = getPricingContent(loc);
-    const blob = [...PLAN_KEYS.map((k) => pc.subtitle[k]), ...PLAN_KEYS.flatMap((k) => pc.features[k])].join(" ").toLowerCase();
-    for (const m of englishMarkers) assert.equal(blob.includes(m), false, `${loc}: englischer Pricing-Satz "${m}"`);
-  }
-});
-
-test("Pricing: neutrale Request-Access-CTA, keine Trial-/Free-Sprache", () => {
-  for (const loc of MESSAGE_LOCALES) {
-    const pc = getPricingContent(loc);
-    const all = JSON.stringify(pc).toLowerCase();
-    for (const bad of ["trial", "free trial", "kostenlos", "try for free", "14 tage", "14-day", "no credit card"]) {
-      assert.equal(all.includes(bad), false, `${loc}: Trial-/Free-Sprache "${bad}" im Pricing`);
-    }
-  }
-  assert.equal(getPricingContent("en").requestAccess, "Request access");
-  assert.equal(getPricingContent("de").requestAccess, "Zugang anfragen");
-});
-
-test("Pricing-Seite rendert lokalisiert (kein en-Fallback / keine Trial-Chip)", () => {
-  const src = read("app/[locale]/pricing/page.tsx");
-  assert.ok(src.includes("getPricingContent(locale)"), "pricing nutzt getPricingContent nicht");
-  assert.ok(src.includes("pc.planName[key]") && src.includes("pc.features[key]") && src.includes("pc.requestAccess"), "pricing rendert pc-Inhalte nicht");
-  assert.equal(src.includes('t("trial")'), false, "Trial-Chip noch in Pricing-Seite");
-  assert.equal(src.includes("CTA_BY_KEY"), false, "alte CTA_BY_KEY noch vorhanden");
-});
-
-// ─── Metadata-Lokalisierung & RTL/Arabisch ────────────────────────────────────
-
-test("Layout-Metadata ohne alte Appointment-Booking-Sprache", () => {
-  for (const f of ["app/layout.tsx", "app/[locale]/layout.tsx"]) {
-    const src = read(f);
-    for (const bad of ["Appointment & Waitlist Management", "appointment bookings efficiently", "Waitlist Management for Clinics"]) {
-      assert.equal(src.includes(bad), false, `${f}: alte Metadata "${bad}"`);
-    }
-  }
-});
-
-test("[locale]/layout liefert lokalisierte Metadata (generateMetadata)", () => {
-  const src = read("app/[locale]/layout.tsx");
-  assert.ok(src.includes("export async function generateMetadata"), "generateMetadata fehlt");
-  assert.ok(src.includes('namespace: "meta"'), "meta-Namespace nicht genutzt");
-  assert.equal(/export const metadata\s*[:=]/.test(src), false, "statische Metadata noch vorhanden");
-});
-
-test("meta.title in allen 10 Locales; ar ist arabisch (RTL)", () => {
-  for (const loc of MESSAGE_LOCALES) {
-    const m = JSON.parse(read(`messages/${loc}.json`)) as { meta?: { title?: string } };
-    assert.ok((m.meta?.title ?? "").length > 0, `${loc}: meta.title fehlt`);
-    assert.equal(/appointment booking|waitlist management/i.test(m.meta!.title!), false, `${loc}: alte Sprache im meta.title`);
-  }
-  const ar = (JSON.parse(read("messages/ar.json")) as { meta: { title: string } }).meta.title;
-  assert.ok(/[؀-ۿ]/.test(ar), "ar meta.title nicht arabisch");
-});
-
-test("[locale]/layout setzt dir=rtl für Arabisch", () => {
-  const src = read("app/[locale]/layout.tsx");
-  assert.ok(/dir=\{locale === "ar" \? "rtl" : "ltr"\}/.test(src) || /"ar".*rtl/.test(src), "RTL-dir für ar fehlt");
-});
-
-test("Arabische öffentliche CTAs/Pricing sind arabisch (keine lateinischen UI-Texte außer Marke)", () => {
-  const ar = JSON.parse(read("messages/ar.json")) as { nav: Record<string, string>; landing: Record<string, string> };
-  const arPricing = getPricingContent("ar");
-  // Nur arabische Buchstaben (ClinicSlotHub/Latin-Marke kommt in diesen Keys nicht vor).
-  for (const v of [ar.nav.getStarted, ar.nav.bookAppointment, ar.landing.ctaPrimary, arPricing.requestAccess, arPricing.header]) {
-    assert.ok(/[؀-ۿ]/.test(v), `ar UI-Text nicht arabisch: "${v}"`);
-    assert.equal(/[A-Za-z]/.test(v), false, `ar UI-Text enthält lateinische Zeichen: "${v}"`);
-  }
-});
-
-// ─── Launch-Seite: Language Gate + Cleanup ────────────────────────────────────
-
-test("Launch-Seite: Language Gate leitet needs_review-Locales weg (nur en/de Detail)", () => {
-  const src = read("app/[locale]/launch/page.tsx");
-  assert.ok(src.includes("shouldRedirectLaunch") && src.includes("redirect(`/${locale}`)"), "Launch-Redirect-Gate fehlt");
-  assert.ok(src.includes("localesNeedingNativeReview"), "Gate nutzt Quality-Registry nicht");
-  // CONTENT enthält nur noch de/en (tote Locale-Objekte entfernt).
-  const contentBlock = src.slice(src.indexOf("const CONTENT"), src.indexOf("function getContent"));
-  for (const loc of ["fr", "es", "pt", "ar", "hi", "bn", "ru", "zh"]) {
-    assert.equal(new RegExp(`\\n  ${loc}: \\{`).test(contentBlock), false, `Launch CONTENT hat noch ${loc}-Objekt`);
-  }
-});
-
-test("Launch-Seite: frei von verbotenen Begriffen & alter arabischer Phrase", () => {
-  const src = read("app/[locale]/launch/page.tsx");
-  for (const bad of [
-    "without API", "ohne API", "Soft Launch", "Twilio", "Resend", "Supabase",
-    "العيادة تبقى المتحكمة", "Essayer gratuitement", "免费试用", "جرّب مجاناً",
-    "Попробовать бесплатно", "Probar gratis", "मुफ्त आज़माएँ", "appointment bookings efficiently",
-  ]) {
-    assert.equal(src.includes(bad), false, `Launch-Seite enthält "${bad}"`);
-  }
-});
-
-// ─── Aria-Label Lokalisierung ─────────────────────────────────────────────────
-
-test("Aria-Labels nicht deutsch auf fremden Locales (LanguageSwitcher + Logo)", () => {
-  const ls = read("components/language-switcher.tsx");
-  assert.ok(ls.includes("ARIA_CHANGE_LANGUAGE"), "lokalisierte aria-Map fehlt");
-  assert.equal(ls.includes('aria-label="Sprache wechseln / Change language"'), false, "hartes deutsches aria-label noch vorhanden");
-  for (const loc of ["ar", "fr", "hi", "zh"]) assert.ok(ls.includes(`${loc}:`), `aria-Map fehlt ${loc}`);
-  const logo = read("components/ui/SlotFillLogo.tsx");
-  assert.equal(logo.includes("zur Startseite"), false, "deutsches 'zur Startseite' im Logo-aria-label");
-});
-
-test("Pivot-Homepage: Demo-Karten sind eindeutig generisch (keine Fake-Kliniken)", () => {
-  const src = read("app/[locale]/page.tsx");
-  // Karten müssen als Beispiel markiert sein und der Hinweis muss gerendert werden.
-  assert.ok(/Example/.test(src), "Example-Markierung fehlt auf Demo-Karten");
-  assert.ok(src.includes("d.demoNote"), "Demo-Hinweis (generisch) fehlt");
-  assert.ok(/example|generic/i.test(getPivot("en").demoNote), "demoNote macht generischen Charakter nicht klar");
-});
-
-test("Blog öffentlich als 'Clinic Guides' / 'Ratgeber' (nicht generischer Blog)", () => {
-  const en = JSON.parse(read("messages/en.json")) as { nav: { blog: string }; blog: { title: string } };
-  const de = JSON.parse(read("messages/de.json")) as { nav: { blog: string }; blog: { title: string } };
-  assert.equal(en.nav.blog, "Clinic Guides");
-  assert.equal(en.blog.title, "Clinic Guides");
-  assert.ok(de.nav.blog.includes("Ratgeber") && de.blog.title.includes("Ratgeber"), "DE Blog-Rename fehlt");
-  assert.notEqual(en.nav.blog, "Blog");
-});
-
-test("Blog/Ratgeber (lib/blog-data.ts): keine alten/verbotenen öffentlichen Begriffe", () => {
-  const src = read("lib/blog-data.ts");
-  for (const re of [
-    /soft launch/i, /\btwilio\b/i, /\bstripe\b/i, /\bsupabase\b/i, /\bresend\b/i,
-    /kostenlos testen/i, /14 Tage kostenlos/i, /free trial/i, /try for free/i,
-    /\bweltweit\b/i, /\bworldwide\b/i, /no paying customers/i,
-  ]) {
-    assert.equal(re.test(src), false, `blog-data enthält verbotenen Begriff: ${re}`);
-  }
-});
-
-test("Öffentliche Botschaft frei von internen Governance-/Technik-Begriffen (messages + Kernseiten)", () => {
-  const targets = [
-    "messages/en.json", "messages/de.json",
-    "app/[locale]/page.tsx", "app/[locale]/launch/page.tsx", "app/[locale]/pricing/page.tsx",
-  ];
-  // Nur landing/pricing/contact/nav der messages prüfen (interne admin-Namespaces sind erlaubt).
-  const internal = [/market proof/i, /phase 0/i, /zero-cost/i, /governance/i, /provider configuration/i, /no real messages/i];
-  for (const f of targets) {
-    let src: string;
-    if (f.endsWith(".json")) {
-      const m = JSON.parse(read(f)) as Record<string, unknown>;
-      src = flatten(m.landing) + flatten(m.pricing) + flatten(m.contact) + flatten(m.nav);
-    } else {
-      src = read(f);
-    }
-    for (const re of internal) {
-      assert.equal(re.test(src), false, `${f}: interner Begriff öffentlich (${re})`);
-    }
-  }
-});
-
-test("Öffentliche Launch-/Share-Seiten: keine verbotenen Begriffe", () => {
-  const files = [
-    "app/[locale]/launch/page.tsx",
-    "app/[locale]/public-launch/page.tsx",
-    "app/[locale]/share/page.tsx",
-  ];
-  const bad = ["Soft Launch", "soft launch", "Twilio", "Resend", "Supabase", "worldwide", "weltweit", "no paying customers", "zahlenden Kunden", "mondial", "monde entier", "todo el mundo", "todo o mundo"];
-  for (const f of files) {
-    const src = read(f);
-    for (const b of bad) {
-      assert.equal(src.includes(b), false, `${f}: enthält "${b}"`);
-    }
-  }
-});
-
-// ─── Linguistic Quality Registry (Ehrlichkeit) ────────────────────────────────
-
-test("Linguistic Quality Registry deckt alle Message-Locales ab", () => {
-  for (const loc of MESSAGE_LOCALES) {
-    assert.ok(LOCALE_QUALITY.some((l) => l.locale === loc), `Registry fehlt: ${loc}`);
-  }
-});
-
-test("Nur en/de gelten als verified; die 8 anderen brauchen Review", () => {
-  assert.deepEqual(verifiedLocales().sort(), ["de", "en"]);
-  const review = localesNeedingReview().sort();
-  assert.deepEqual(review, ["ar", "bn", "es", "fr", "hi", "pt", "ru", "zh"]);
-});
-
-test("Quality-Registry: vollständige Felder, nur en/de ohne Native-Review", () => {
-  assert.equal(LOCALE_QUALITY.length, 10);
-  for (const l of LOCALE_QUALITY) {
-    assert.ok(l.publicCopyStatus && l.pricingStatus && l.metadataStatus && l.publicRisk, `${l.locale}: Felder unvollständig`);
-    assert.equal(typeof l.needsNativeReview, "boolean");
-  }
-  assert.deepEqual(localesNeedingNativeReview().sort(), ["ar", "bn", "es", "fr", "hi", "pt", "ru", "zh"]);
-  for (const v of ["en", "de"]) assert.equal(LOCALE_QUALITY.find((l) => l.locale === v)!.needsNativeReview, false, `${v} darf keinen Native-Review brauchen`);
-});
-
-// ─── Pricing-Content: harte Forbidden-Words über alle 10 Locales ──────────────
-
-test("pricing-content.ts: keine verbotenen öffentlichen Begriffe in irgendeiner Locale", () => {
-  const bad = ["api", "twilio", "resend", "stripe", "supabase", "soft launch", "trial", "free trial", "kostenlos", "14 day", "14-day", "no credit card", "book appointment", "appointment booking", "without api"];
-  for (const loc of MESSAGE_LOCALES) {
-    const blob = JSON.stringify(getPricingContent(loc)).toLowerCase();
-    for (const b of bad) {
-      // "api" nur als ganzes Wort (vermeidet z. B. nichts in diesem Datensatz)
-      const re = b === "api" ? /\bapi\b/ : new RegExp(b.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
-      assert.equal(re.test(blob), false, `${loc}: pricing-content enthält "${b}"`);
-    }
-  }
-});
-
-// ─── Arabisch-Qualitäts-Guards ────────────────────────────────────────────────
-
-test("Arabisch: kürzere H1 (kein erschlagender Titel)", () => {
-  const ar = JSON.parse(read("messages/ar.json")) as { landing: { heroTitle: string } };
-  assert.ok(ar.landing.heroTitle.length <= 70, `ar H1 zu lang (${ar.landing.heroTitle.length})`);
-});
-
-test("Arabisch: alte steife Phrasen verboten", () => {
-  const ar = read("messages/ar.json");
-  for (const stiff of ["العيادة تبقى المتحكمة", "ويبقى المتحكم"]) {
-    assert.equal(ar.includes(stiff), false, `ar enthält steife Phrase "${stiff}"`);
-  }
-});
-
-test("Arabisch: Metadata, Plan-Namen und Preisnotiz sind arabisch", () => {
-  const arMeta = (JSON.parse(read("messages/ar.json")) as { meta: { title: string } }).meta.title;
-  assert.ok(/[؀-ۿ]/.test(arMeta), "ar meta.title nicht arabisch");
-  const p = getPricingContent("ar");
-  for (const v of [p.header, p.planName.starter, p.planName.professional, p.planName.praxis_plus, p.requestAccess, p.priceLogicNote]) {
-    assert.ok(/[؀-ۿ]/.test(v), `ar pricing nicht arabisch: "${v}"`);
-    assert.equal(/[A-Za-z]/.test(v), false, `ar pricing enthält Latein: "${v}"`);
-  }
-});
-
-// ─── Homepage-Banner (app/[locale]/page.tsx) ──────────────────────────────────
-
-const HOMEPAGE_FORBIDDEN = [
-  /soft launch/i,
-  /global public soft launch/i,
-  /globalen öffentlichen/i,
-  /kostenlos testen/i,
-  /try it for free/i,
-  /try for free/i,
-  /lancement public mondial/i,
-  /lanzamiento público global/i,
-  /lançamento público global/i,
-  /公开软启动/,
-  /\bworldwide\b/i,
-  /\bweltweit\b/i,
-  /\btwilio\b/i,
-  /\bresend\b/i,
-  /provider configuration/i,
-  /no paying customers/i,
-  /unlimited patients/i,
-  /\bguaranteed\b/i,
-  /\b24\s*h\b/i,
-  /\b48\s*h\b/i,
-  /\binstant\b/i,
-  /trial mode/i,
-];
-
-test("Homepage (app/[locale]/page.tsx) enthält keine verbotenen öffentlichen Begriffe", () => {
-  const src = read("app/[locale]/page.tsx");
-  for (const re of HOMEPAGE_FORBIDDEN) {
-    assert.equal(re.test(src), false, `Homepage enthält verbotenen Begriff: ${re}`);
-  }
-});
-
-test("Pivot: Visibility-Engine-Positionierung in DE/EN (kein Medizin-/Buchungs-/Mittelsmann)", () => {
-  const en = getPivot("en");
-  const de = getPivot("de");
-  assert.ok(/visibility/i.test(en.tagline) && /visible to international patients/i.test(en.hero.subline), "EN Positionierung fehlt");
-  assert.ok(/sichtbar/i.test(de.hero.subline), "DE Positionierung fehlt");
-  for (const dict of [en, de]) {
-    const blob = flattenPivot(dict).toLowerCase();
-    assert.ok(blob.includes("no medical advice") || blob.includes("keine medizinische beratung"), "Safety-Kernaussage fehlt");
-    assert.ok(blob.includes("no booking") || blob.includes("keine buchung"), "no-booking fehlt");
-  }
-});
-
-// ─── Safety Control Tower ─────────────────────────────────────────────────────
-
-test("Safety-Tower: alle Pivot-Texte (de/en) ohne verbotene Claims", () => {
-  const sources = [getPivot("en"), getPivot("de")].map(flattenPivot);
+test("Safety Tower: Marketing-Copy aller Produktsprachen ohne verbotene Claims", () => {
+  const sources = PRODUCT_LOCALES.map((l) => {
+    const d = getPivot(l);
+    const { safety, ...rest } = d;
+    return JSON.stringify({ ...rest, safety: { title: safety.title } });
+  });
   const res = runSafetyTower(sources);
   assert.equal(res.status, "green", "verbotene Claims: " + JSON.stringify(res.violations));
 });
 
-test("Safety-Tower: scanner erkennt verbotene Claims", () => {
-  for (const bad of ["best clinic", "guaranteed result", "book surgery now", "risk-free", "commission per surgery", "we recommend this clinic"]) {
+test("Safety Tower: Scanner erkennt verbotene Claims; Positionierung bleibt raus aus Medizin/Buchung/Zahlung", () => {
+  for (const bad of ["best clinic", "guaranteed result", "book surgery now", "risk-free", "commission per surgery"]) {
     assert.equal(scanPublicCopy(`xx ${bad} yy`).status, "red", `nicht erkannt: ${bad}`);
   }
-  assert.equal(scanPublicCopy("International visibility for private clinics. Direct contact.").status, "green");
-});
-
-test("Safety-Tower: Positionierung bleibt raus aus Medizin/Buchung/Zahlung", () => {
   assert.equal(POSITIONING.isMedicalProvider, false);
   assert.equal(POSITIONING.isBookingPlatform, false);
   assert.equal(POSITIONING.storesPatientData, false);
   assert.equal(POSITIONING.takesPayment, false);
-  assert.equal(POSITIONING.commissionPerTreatment, false);
 });
 
-test("Pivot-Seiten existieren (For Clinics, Treatments, Destinations, Safety, Contact)", () => {
-  for (const p of ["for-clinics", "treatments", "destinations", "safety-notes", "clinic-contact"]) {
-    assert.ok(existsPivotPage(p), `Pivot-Seite fehlt: ${p}`);
+// ─── 8. External Activation Guard ─────────────────────────────────────────────
+
+test("External Activation Guard: keine externen Dienste in den öffentlichen Seiten", () => {
+  for (const f of [...PIVOT_PAGES, "app/sitemap.ts"]) {
+    const src = stripComments(read(f));
+    for (const bad of [/from\s+["']@supabase\/supabase-js["']/, /\bstripe\b/i, /createCheckout/i, /nodemailer/i, /from\s+["']resend["']/, /twilio/i, /<input\s+type=["']file/i, /multipart\/form-data/i, /\bfetch\s*\(/]) {
+      assert.equal(bad.test(src), false, `${f}: externe/aktive Logik (${bad})`);
+    }
   }
 });
 
-test("Pivot-Contact: kein Patienten-Formular / keine Gesundheitsdaten", () => {
-  const src = read("app/[locale]/clinic-contact/page.tsx");
-  assert.equal(/<form|<input|<textarea|upload/i.test(src), false, "Contact-Seite enthält Formular/Upload");
-  assert.ok(src.includes("CONTACT_EMAIL"), "kein einfacher Kontaktweg (mailto) vorhanden");
-});
+// ─── 10. Sitemap Guard ────────────────────────────────────────────────────────
 
-test("Safety-Notes-Seite enthält die Pflicht-Aussagen", () => {
-  const blob = flattenPivot(getPivot("en")).toLowerCase();
-  for (const must of REQUIRED_SAFETY_STATEMENTS.en) {
-    assert.ok(blob.includes(must.toLowerCase()), `Pflicht-Aussage fehlt: ${must}`);
-  }
-});
-
-// ─── Phase 2: Altbestand-Freeze ───────────────────────────────────────────────
-
-test("Middleware friert alte Routen ein (308 → Pivot-Routen, kein Loop)", () => {
-  const mw = read("middleware.ts");
-  assert.ok(mw.includes("status: 308"), "kein 308-Freeze-Redirect");
-  // Mapping-Ziele müssen Pivot-Routen sein (nicht selbst eingefroren).
-  for (const [key, target] of [["pricing", '"/for-clinics"'], ["termin-buchen", '"/clinic-contact"'], ["kontakt", '"/clinic-contact"']] as const) {
-    assert.ok(mw.includes(`${key.includes("-") ? `"${key}"` : key}: ${target}`), `Freeze-Mapping fehlt: ${key} → ${target}`);
-  }
-  for (const k of ["launch", "public-launch", "share", "blog"]) {
-    assert.ok(new RegExp(`"?${k}"?:\\s*""`).test(mw), `Freeze-Mapping (→ Home) fehlt: ${k}`);
-  }
-});
-
-test("Sitemap enthält nur Pivot-Routen — keine alten Routen", () => {
+test("Sitemap Guard: nur sichere Scheduling-OS-Seiten, keine alten Routen", () => {
   const sm = read("app/sitemap.ts");
-  for (const good of ["/for-clinics", "/treatments", "/destinations", "/safety-notes", "/clinic-contact"]) {
-    assert.ok(sm.includes(`"${good}"`), `Sitemap fehlt Pivot-Route ${good}`);
+  for (const good of ["/", "/demo", "/for-clinics", "/safety-notes", "/clinic-contact"]) {
+    assert.ok(sm.includes(`"${good}"`), `Sitemap fehlt ${good}`);
   }
-  for (const bad of ["/pricing", "/launch", "/public-launch", "/share", "/termin-buchen", "/blog", "/kontakt"]) {
+  for (const bad of ["/pricing", "/launch", "/public-launch", "/share", "/termin-buchen", "/blog", "/kontakt", "/treatments", "/destinations"]) {
     assert.equal(sm.includes(`"${bad}"`), false, `Sitemap enthält alte Route ${bad}`);
   }
 });
 
-test("Pivot-Shell (Nav/Footer) verlinkt keine alten Routen", () => {
-  const shell = read("components/pivot/PivotShell.tsx");
-  for (const bad of ["/pricing", "/launch", "/public-launch", "/share", "/termin-buchen", "/blog"]) {
-    assert.equal(new RegExp(`["'\`]${bad}["'\`/]`).test(shell), false, `PivotShell verlinkt alte Route ${bad}`);
+// ─── 11. CTA Safety Guard ─────────────────────────────────────────────────────
+
+test("CTA Safety: nur mailto / interne Demo-Links, keine Zahlung/Speicherung", () => {
+  const home = read("app/[locale]/page.tsx");
+  assert.ok(home.includes("mailto:") && home.includes("/demo"), "sichere CTAs fehlen");
+  for (const f of PIVOT_PAGES) {
+    const src = stripComments(read(f));
+    assert.equal(/checkout|stripe|payment|<form/i.test(src), false, `${f}: unsichere CTA/Form`);
   }
 });
 
-// ─── Header-/Nav-CTA (nav.getStarted) ─────────────────────────────────────────
+test("Pivot-Contact: kein Patienten-Formular / kein Upload", () => {
+  const src = read("app/[locale]/clinic-contact/page.tsx");
+  assert.equal(/<form|<input|<textarea|upload/i.test(src), false, "Contact enthält Formular/Upload");
+  assert.ok(src.includes("mailto:"), "kein einfacher Kontaktweg");
+});
 
-// Trial-/Free-Test-Sprache, die im sichtbaren nav-Namespace verboten ist.
-const NAV_FORBIDDEN = /kostenlos|gratis|gratuit|free trial|free test|try for free|\btrial\b|teste grátis|prueba gratis|免费试用|免费|निःशुल्क|مجان|бесплатно|বিনামূল্যে|soft launch|no paying customers/i;
+// ─── 12. Mobile/UX Guard ──────────────────────────────────────────────────────
 
-const EXPECTED_GET_STARTED: Record<string, string> = {
-  en: "Request access",
-  de: "Zugang anfragen",
-  fr: "Demander l'accès",
-  es: "Solicitar acceso",
-  pt: "Solicitar acesso",
-  ar: "اطلب الوصول",
-  hi: "पहुँच का अनुरोध करें",
-  bn: "অ্যাক্সেসের অনুরোধ করুন",
-  ru: "Запросить доступ",
-  zh: "申请访问权限",
-};
+test("Mobile/UX: Homepage nicht leer, Mockup + klare CTAs + Demo-Route", () => {
+  const home = read("app/[locale]/page.tsx");
+  assert.ok(home.includes("DashboardMockup"), "Mockup fehlt auf Homepage");
+  assert.ok(home.includes("d.hero.h1") && home.includes("d.cta.requestAccess") && home.includes("d.cta.viewDemo"), "Hero/CTAs fehlen");
+  assert.ok(existsSync(join(ROOT, "app/[locale]/demo/page.tsx")), "Demo-Route fehlt");
+  // Treatments/Destinations (Medical-Tourism-Reste) sind entfernt.
+  assert.equal(existsSync(join(ROOT, "app/[locale]/treatments/page.tsx")), false, "treatments-Seite noch vorhanden");
+  assert.equal(existsSync(join(ROOT, "app/[locale]/destinations/page.tsx")), false, "destinations-Seite noch vorhanden");
+});
 
-test("nav-Namespace aller 10 Locales ohne Trial-/Free-Test-Sprache", () => {
-  for (const loc of MESSAGE_LOCALES) {
-    const m = JSON.parse(read(`messages/${loc}.json`)) as Record<string, unknown>;
-    const navText = flatten((m as { nav?: unknown }).nav);
-    assert.equal(NAV_FORBIDDEN.test(navText), false, `${loc}: nav enthält Trial-/Free-Sprache`);
+// ─── 13. Technology Discipline Guard ──────────────────────────────────────────
+
+test("Tech Discipline: keine neuen riskanten Dependencies / experimentelle Pakete", () => {
+  const pkg = JSON.parse(read("package.json")) as { dependencies?: Record<string, string>; devDependencies?: Record<string, string> };
+  const deps = { ...(pkg.dependencies ?? {}), ...(pkg.devDependencies ?? {}) };
+  for (const risky of ["@stripe/stripe-js", "openai", "@vercel/analytics", "mixpanel", "segment", "@sentry/nextjs"]) {
+    assert.equal(risky in deps, false, `riskante neue Dependency: ${risky}`);
+  }
+  // Stack bleibt Next/React/Tailwind.
+  assert.ok("next" in deps && "react" in deps && "tailwindcss" in deps, "Kern-Stack fehlt");
+});
+
+// ─── Safety Notes Pflicht-Disclaimer ──────────────────────────────────────────
+
+test("Safety-Body enthält die Pflicht-Disclaimer (keine medizinische Beratung/Diagnose/Notfall/Zahlung)", () => {
+  for (const loc of PRODUCT_LOCALES) {
+    const b = getPivot(loc).safety.body.toLowerCase();
+    const ok =
+      (b.includes("not a medical") || b.includes("pas un outil de conseil") || b.includes("no es una herramienta")) &&
+      (b.includes("diagn")) &&
+      (b.includes("payment") || b.includes("paiement") || b.includes("pago"));
+    assert.ok(ok, `${loc}: Safety-Disclaimer unvollständig`);
   }
 });
 
-test("nav.getStarted ist in allen 10 Locales die neutrale Zugang-anfragen-CTA", () => {
-  for (const loc of MESSAGE_LOCALES) {
-    const m = JSON.parse(read(`messages/${loc}.json`)) as { nav?: { getStarted?: string } };
-    const v = m.nav?.getStarted ?? "";
-    assert.equal(NAV_FORBIDDEN.test(v), false, `${loc}: getStarted trägt Trial-Sprache ("${v}")`);
-    assert.equal(v, EXPECTED_GET_STARTED[loc], `${loc}: getStarted nicht die erwartete Request-Access-CTA`);
+// ─── Freeze alter Routen (Phase 2 bleibt aktiv) ───────────────────────────────
+
+test("Middleware friert alte Routen ein (inkl. treatments/destinations → Home)", () => {
+  const mw = read("middleware.ts");
+  assert.ok(mw.includes("status: 308"), "kein 308-Freeze");
+  assert.ok(mw.includes('pricing: "/for-clinics"'), "pricing-Freeze fehlt");
+  for (const k of ["launch", "public-launch", "share", "blog", "treatments", "destinations"]) {
+    assert.ok(new RegExp(`"?${k}"?:\\s*""`).test(mw), `Freeze (→ Home) fehlt: ${k}`);
   }
+  assert.ok(mw.includes('kontakt: "/clinic-contact"') && mw.includes('"termin-buchen": "/clinic-contact"'), "Kontakt-Freeze fehlt");
 });

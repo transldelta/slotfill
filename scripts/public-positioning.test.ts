@@ -216,6 +216,52 @@ test("Sekundär-CTA ist die Klinik-Demo (en/de)", () => {
   assert.equal(de, "Klinik-Demo ansehen");
 });
 
+// ─── Premium UI Relaunch ──────────────────────────────────────────────────────
+
+test("Homepage rendert die neuen Premium-Sektionen (Hero-Trust, Steps, Zielgruppe, Demo-CTA)", () => {
+  const src = read("app/[locale]/page.tsx");
+  for (const key of ["heroTrust1", "heroTrust2", "heroTrust3", "stepsTitle", "step1", "step2", "step3", "audienceTitle", "audienceIntro", "audienceList", "demoCta"]) {
+    assert.ok(src.includes(`t("${key}")`), `Homepage rendert t("${key}") nicht`);
+  }
+  // Aufgeräumter Hero: kein Badge-Chip und keine Trial-Doppelzeile mehr.
+  assert.equal(src.includes('t("heroBadge")'), false, "heroBadge-Chip noch im Hero");
+  assert.equal(src.includes('t("trialNote")'), false, "trialNote noch im Hero");
+});
+
+test("Alle 10 Locales haben Steps & Audience (Key-Parität) und kein API darin", () => {
+  for (const loc of MESSAGE_LOCALES) {
+    const land = (JSON.parse(read(`messages/${loc}.json`)) as { landing?: Record<string, string> }).landing ?? {};
+    for (const key of ["heroTrust1", "stepsTitle", "step1", "step2", "step3", "audienceTitle", "audienceIntro", "audienceList", "demoCta"]) {
+      assert.ok(typeof land[key] === "string" && land[key].length > 0, `${loc}: Key ${key} fehlt`);
+    }
+    const blob = ["step1", "step2", "step3", "heroTrust1", "heroTrust2", "heroTrust3"].map((k) => land[k]).join(" ");
+    assert.equal(/\bapi\b/i.test(blob), false, `${loc}: API in Steps/Hero-Trust`);
+  }
+});
+
+test("Zielgruppen-Sektion nennt Klinik-Typen (en/de)", () => {
+  const en = (JSON.parse(read("messages/en.json")) as { landing?: { audienceList?: string } }).landing?.audienceList?.toLowerCase() ?? "";
+  const de = (JSON.parse(read("messages/de.json")) as { landing?: { audienceList?: string } }).landing?.audienceList?.toLowerCase() ?? "";
+  for (const term of ["dental", "medical", "outpatient", "therapy"]) assert.ok(en.includes(term), `EN audience fehlt: ${term}`);
+  for (const term of ["zahn", "medizin", "ambulant", "therapie"]) assert.ok(de.includes(term), `DE audience fehlt: ${term}`);
+});
+
+test("Workflow-Schritte nennen WhatsApp/Telefon/Rezeption als Workflow (en/de)", () => {
+  const en = ((JSON.parse(read("messages/en.json")) as { landing?: { step1?: string } }).landing?.step1 ?? "").toLowerCase();
+  const de = ((JSON.parse(read("messages/de.json")) as { landing?: { step1?: string } }).landing?.step1 ?? "").toLowerCase();
+  assert.ok(en.includes("whatsapp") && en.includes("phone") && en.includes("reception"), "EN step1 Kanäle fehlen");
+  assert.ok(de.includes("whatsapp") && de.includes("telefon") && de.includes("rezeption"), "DE step1 Kanäle fehlen");
+});
+
+test("Blog öffentlich als 'Clinic Guides' / 'Ratgeber' (nicht generischer Blog)", () => {
+  const en = JSON.parse(read("messages/en.json")) as { nav: { blog: string }; blog: { title: string } };
+  const de = JSON.parse(read("messages/de.json")) as { nav: { blog: string }; blog: { title: string } };
+  assert.equal(en.nav.blog, "Clinic Guides");
+  assert.equal(en.blog.title, "Clinic Guides");
+  assert.ok(de.nav.blog.includes("Ratgeber") && de.blog.title.includes("Ratgeber"), "DE Blog-Rename fehlt");
+  assert.notEqual(en.nav.blog, "Blog");
+});
+
 test("Blog/Ratgeber (lib/blog-data.ts): keine alten/verbotenen öffentlichen Begriffe", () => {
   const src = read("lib/blog-data.ts");
   for (const re of [

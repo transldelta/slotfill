@@ -525,19 +525,22 @@ test("Go-Live: A4 – KNOWN_CONTENT enthält TRUST_SECTION_ADDED → A4 ist read
   );
 });
 
-test("Go-Live: Aufgabe 4 – trialNoMessages im Hero der Startseite", () => {
+test("Go-Live: Aufgabe 4 – Premium-Hero zeigt klinik-fokussierte Trust-Zeile", () => {
+  // Premium UI Relaunch: der Hero zeigt keine Trial-Zeilen mehr, sondern eine
+  // ruhige Klinik-Trust-Zeile (Kein Patienten-Login / Klinik behält Kontrolle /
+  // Für WhatsApp, Telefon & Rezeption) plus die Klinik-Demo-CTA.
   const { readFileSync } = require("fs");
   const content: string = readFileSync(
     resolve(process.cwd(), "app/[locale]/page.tsx"),
     "utf8",
   );
   assert.ok(
-    content.includes("trialNoMessages"),
-    'app/[locale]/page.tsx: trialNoMessages fehlt – Messaging-Ehrlichkeit im Hero fehlt',
+    content.includes('t("heroTrust1")') && content.includes('t("heroTrust3")'),
+    'app/[locale]/page.tsx: Hero-Trust-Zeile fehlt',
   );
   assert.ok(
-    content.includes("trialNote"),
-    'app/[locale]/page.tsx: trialNote fehlt',
+    content.includes('t("demoCta")'),
+    'app/[locale]/page.tsx: Klinik-Demo-CTA fehlt im Hero',
   );
 });
 

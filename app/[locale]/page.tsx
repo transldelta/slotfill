@@ -1,12 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  Bell,
-  CalendarClock,
-  ListOrdered,
-  ShieldCheck,
-  CheckCircle2,
-} from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { headers } from "next/headers";
 import { LanguageSwitcher } from "@/components/language-switcher";
@@ -106,10 +100,10 @@ export default async function LocaleLandingPage({
   const tLegal = await getTranslations({ locale, namespace: "legal" });
 
   const features = [
-    { icon: ListOrdered, title: t("feature1Title"), desc: t("feature1Desc") },
-    { icon: Bell, title: t("feature2Title"), desc: t("feature2Desc") },
-    { icon: CalendarClock, title: t("feature3Title"), desc: t("feature3Desc") },
-    { icon: ShieldCheck, title: t("feature4Title"), desc: t("feature4Desc") },
+    { title: t("feature1Title"), desc: t("feature1Desc") },
+    { title: t("feature2Title"), desc: t("feature2Desc") },
+    { title: t("feature3Title"), desc: t("feature3Desc") },
+    { title: t("feature4Title"), desc: t("feature4Desc") },
   ];
 
   const schemaOrg = buildSchemaOrg(locale);
@@ -158,12 +152,6 @@ export default async function LocaleLandingPage({
               {tNav("contact")}
             </Link>
             <Link
-              href={`/${locale}/termin-buchen`}
-              className="hidden rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:inline"
-            >
-              {tNav("bookAppointment")}
-            </Link>
-            <Link
               href="/auth/login"
               className="rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
             >
@@ -207,73 +195,89 @@ export default async function LocaleLandingPage({
         );
       })()}
 
-      {/* Hero — full-bleed blue-tint section */}
+      {/* Hero */}
       <div className="w-full bg-gradient-to-b from-blue-50/70 to-white dark:from-blue-950/20 dark:to-transparent">
-      <section className="relative mx-auto max-w-3xl px-4 py-16 text-center sm:py-24">
-        {/* Subtle radial glow */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 mx-auto h-full max-w-lg rounded-full opacity-[0.06] blur-3xl dark:opacity-[0.04]"
-          style={{ background: "var(--gradient-brand)" }}
-        />
-        <div className="mb-5 inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-semibold shadow-sm" style={{ borderColor: "var(--color-border)", color: "var(--color-muted)", backgroundColor: "var(--color-surface)" }}>
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full" style={{ backgroundColor: "var(--color-accent)" }} />
-          {t("heroBadge")}
-        </div>
-        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100 sm:text-5xl lg:text-6xl">
+      <section className="relative mx-auto max-w-3xl px-4 py-20 text-center sm:py-28">
+        <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100 sm:text-5xl lg:text-[3.5rem] lg:leading-[1.05]">
           {t("heroTitle")}
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-300">
           {t("heroSubtitle")}
         </p>
-        <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+        <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
           <Link href={`/${locale}/pricing`} className="btn-brand w-full px-7 py-3.5 text-base sm:w-auto">
             {t("ctaPrimary")}
           </Link>
-          <a href="#features" className="btn-outline-brand w-full px-7 py-3.5 text-base sm:w-auto">
-            {t("ctaSecondary")}
-          </a>
+          <Link href={`/${locale}/launch`} className="btn-outline-brand w-full px-7 py-3.5 text-base sm:w-auto">
+            {t("demoCta")}
+          </Link>
         </div>
-        <p className="mt-4 text-xs text-slate-400 dark:text-slate-500">
-          {t("trialNote")} &nbsp;·&nbsp; {t("trialNoMessages")}
-        </p>
-      </section>
-      </div>
-
-      {/* Features — subtle slate-tinted section */}
-      <div className="w-full bg-slate-50/60 dark:bg-transparent">
-      <section id="features" className="mx-auto max-w-6xl px-4 py-16">
-        <h2 className="mb-2 text-center text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">
-          {t("featuresTitle")}
-        </h2>
-        <p className="mb-10 text-center text-sm text-slate-500 dark:text-slate-400">
-          {t("trustSubtitle")}
-        </p>
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {features.map((f) => (
-            <div
-              key={f.title}
-              className="group rounded-2xl border p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
-              style={{
-                backgroundColor: "var(--color-surface)",
-                borderColor: "var(--color-border)",
-              }}
-            >
-              <div
-                className="mb-4 inline-flex rounded-xl p-2.5 shadow-sm"
-                style={{ background: "var(--gradient-brand)" }}
-              >
-                <f.icon className="h-5 w-5 text-white" />
-              </div>
-              <h3 className="font-semibold text-slate-900 dark:text-slate-100">{f.title}</h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                {f.desc}
-              </p>
-            </div>
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm text-slate-500 dark:text-slate-400">
+          {[t("heroTrust1"), t("heroTrust2"), t("heroTrust3")].map((item) => (
+            <span key={item} className="inline-flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 shrink-0" style={{ color: "var(--color-accent)" }} />
+              {item}
+            </span>
           ))}
         </div>
       </section>
       </div>
+
+      {/* How it works — 3 simple steps */}
+      <section className="mx-auto max-w-5xl px-4 py-20">
+        <h2 className="mb-12 text-center text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">
+          {t("stepsTitle")}
+        </h2>
+        <ol className="grid grid-cols-1 gap-10 sm:grid-cols-3">
+          {[t("step1"), t("step2"), t("step3")].map((step, i) => (
+            <li key={step} className="text-center sm:text-left">
+              <span
+                className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-full text-base font-bold"
+                style={{ backgroundColor: "var(--color-surface-2)", color: "var(--color-accent)" }}
+              >
+                {i + 1}
+              </span>
+              <p className="text-[15px] leading-relaxed text-slate-700 dark:text-slate-300">{step}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {/* Who it's built for */}
+      <div className="w-full bg-slate-50/60 dark:bg-transparent">
+      <section className="mx-auto max-w-3xl px-4 py-20 text-center">
+        <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">
+          {t("audienceTitle")}
+        </h2>
+        <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+          {t("audienceIntro")}
+        </p>
+        <p className="mx-auto mt-6 max-w-2xl text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+          {t("audienceList")}
+        </p>
+      </section>
+      </div>
+
+      {/* Why clinics use it — calm benefit list */}
+      <section id="features" className="mx-auto max-w-5xl px-4 py-20">
+        <h2 className="mb-3 text-center text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">
+          {t("featuresTitle")}
+        </h2>
+        <p className="mx-auto mb-12 max-w-2xl text-center text-base text-slate-500 dark:text-slate-400">
+          {t("trustSubtitle")}
+        </p>
+        <div className="mx-auto grid max-w-3xl grid-cols-1 gap-x-10 gap-y-8 sm:grid-cols-2">
+          {features.map((f) => (
+            <div key={f.title} className="flex items-start gap-4">
+              <CheckCircle2 className="mt-0.5 h-6 w-6 shrink-0" style={{ color: "var(--color-accent)" }} />
+              <div>
+                <h3 className="text-[15px] font-semibold text-slate-900 dark:text-slate-100">{f.title}</h3>
+                <p className="mt-1 text-sm leading-relaxed text-slate-600 dark:text-slate-400">{f.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
 
       {/* Trust — subtle teal-tint section */}
       <div className="w-full bg-gradient-to-b from-teal-50/25 to-white dark:from-teal-950/10 dark:to-transparent">

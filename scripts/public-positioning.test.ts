@@ -18,17 +18,20 @@
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { getContinuousControlOffice, classifyCountry } from "../lib/emerging-markets-agent";
 import { assertNoSecretsInResponse } from "../lib/security-agent";
 import { LOCALE_QUALITY, verifiedLocales, localesNeedingReview, localesNeedingNativeReview } from "../lib/locale-quality";
 import { getPricingContent, PRICING_LOCALES, type PlanKey } from "../lib/pricing-content";
+import { getPivot, flattenPivot } from "../lib/pivot-content";
+import { runSafetyTower, scanPublicCopy, POSITIONING, REQUIRED_SAFETY_STATEMENTS } from "../lib/safety-tower";
 
 const MESSAGE_LOCALES = ["en", "de", "ar", "hi", "bn", "pt", "es", "fr", "ru", "zh"];
 
 const ROOT = process.cwd();
 const read = (p: string) => readFileSync(join(ROOT, p), "utf8");
+const existsPivotPage = (slug: string) => existsSync(join(ROOT, `app/[locale]/${slug}/page.tsx`));
 const en = JSON.parse(read("messages/en.json")) as Record<string, Record<string, unknown>>;
 const de = JSON.parse(read("messages/de.json")) as Record<string, Record<string, unknown>>;
 
@@ -136,9 +139,9 @@ test("Sensible Claims erscheinen nur negiert (keine positiven Versprechen)", () 
 
 // ─── Öffentliche Seitendateien ────────────────────────────────────────────────
 
-test("Homepage JSON-LD/Meta ist neu positioniert (kein 'worldwide')", () => {
+test("Pivot-Homepage: Visibility-Engine-Positionierung, kein 'worldwide'", () => {
   const src = read("app/[locale]/page.tsx").toLowerCase();
-  assert.ok(src.includes("emerging healthcare markets"), "emerging-Positionierung fehlt");
+  assert.ok(src.includes("getpivot") && src.includes("pivotshell"), "Pivot-Homepage nutzt getPivot/PivotShell nicht");
   assert.equal(src.includes("worldwide"), false, "'worldwide' noch vorhanden");
 });
 
@@ -219,14 +222,12 @@ test("Sekundär-CTA ist die Klinik-Demo (en/de)", () => {
 
 // ─── Premium UI Relaunch ──────────────────────────────────────────────────────
 
-test("Homepage rendert die neuen Premium-Sektionen (Hero-Trust, Steps, Zielgruppe, Demo-CTA)", () => {
+test("Pivot-Homepage: rendert Hero, Behandlungsbereiche und generische Demo-Karten", () => {
   const src = read("app/[locale]/page.tsx");
-  for (const key of ["heroTrust1", "heroTrust2", "heroTrust3", "stepsTitle", "step1", "step2", "step3", "audienceTitle", "audienceIntro", "audienceList", "demoCta"]) {
-    assert.ok(src.includes(`t("${key}")`), `Homepage rendert t("${key}") nicht`);
-  }
-  // Aufgeräumter Hero: kein Badge-Chip und keine Trial-Doppelzeile mehr.
-  assert.equal(src.includes('t("heroBadge")'), false, "heroBadge-Chip noch im Hero");
-  assert.equal(src.includes('t("trialNote")'), false, "trialNote noch im Hero");
+  assert.ok(src.includes("d.hero.title") && src.includes("d.hero.subline"), "Hero fehlt");
+  assert.ok(src.includes("d.treatments"), "Behandlungsbereiche fehlen");
+  assert.ok(src.includes("d.demoCards") && src.includes("demoNote"), "generische Demo-Karten/Hinweis fehlen");
+  assert.ok(src.includes("d.cta.requestReview") || src.includes("for-clinics"), "For-clinics-CTA fehlt");
 });
 
 test("Alle 10 Locales haben Steps & Audience (Key-Parität) und kein API darin", () => {
@@ -404,10 +405,12 @@ test("Aria-Labels nicht deutsch auf fremden Locales (LanguageSwitcher + Logo)", 
   assert.equal(logo.includes("zur Startseite"), false, "deutsches 'zur Startseite' im Logo-aria-label");
 });
 
-test("Homepage zeigt ein Produkt-/Workflow-Mockup (Premium-Struktur)", () => {
+test("Pivot-Homepage: Demo-Karten sind eindeutig generisch (keine Fake-Kliniken)", () => {
   const src = read("app/[locale]/page.tsx");
-  assert.ok(src.includes("Product preview"), "Produkt-Mockup fehlt");
-  assert.ok(src.includes("MessageCircle") && src.includes("Phone") && src.includes("Building2"), "Kanal-Icons im Mockup fehlen");
+  // Karten müssen als Beispiel markiert sein und der Hinweis muss gerendert werden.
+  assert.ok(/Example/.test(src), "Example-Markierung fehlt auf Demo-Karten");
+  assert.ok(src.includes("d.demoNote"), "Demo-Hinweis (generisch) fehlt");
+  assert.ok(/example|generic/i.test(getPivot("en").demoNote), "demoNote macht generischen Charakter nicht klar");
 });
 
 test("Blog öffentlich als 'Clinic Guides' / 'Ratgeber' (nicht generischer Blog)", () => {
@@ -562,10 +565,58 @@ test("Homepage (app/[locale]/page.tsx) enthält keine verbotenen öffentlichen B
   }
 });
 
-test("Homepage-Banner trägt Emerging-Markets-Positionierung (en/de)", () => {
-  const src = read("app/[locale]/page.tsx");
-  assert.ok(src.includes("emerging healthcare markets"), "EN Emerging-Positionierung fehlt im Banner");
-  assert.ok(src.includes("wachstumsstarken Gesundheitsmärkten"), "DE Emerging-Positionierung fehlt im Banner");
+test("Pivot: Visibility-Engine-Positionierung in DE/EN (kein Medizin-/Buchungs-/Mittelsmann)", () => {
+  const en = getPivot("en");
+  const de = getPivot("de");
+  assert.ok(/visibility/i.test(en.tagline) && /visible to international patients/i.test(en.hero.subline), "EN Positionierung fehlt");
+  assert.ok(/sichtbar/i.test(de.hero.subline), "DE Positionierung fehlt");
+  for (const dict of [en, de]) {
+    const blob = flattenPivot(dict).toLowerCase();
+    assert.ok(blob.includes("no medical advice") || blob.includes("keine medizinische beratung"), "Safety-Kernaussage fehlt");
+    assert.ok(blob.includes("no booking") || blob.includes("keine buchung"), "no-booking fehlt");
+  }
+});
+
+// ─── Safety Control Tower ─────────────────────────────────────────────────────
+
+test("Safety-Tower: alle Pivot-Texte (de/en) ohne verbotene Claims", () => {
+  const sources = [getPivot("en"), getPivot("de")].map(flattenPivot);
+  const res = runSafetyTower(sources);
+  assert.equal(res.status, "green", "verbotene Claims: " + JSON.stringify(res.violations));
+});
+
+test("Safety-Tower: scanner erkennt verbotene Claims", () => {
+  for (const bad of ["best clinic", "guaranteed result", "book surgery now", "risk-free", "commission per surgery", "we recommend this clinic"]) {
+    assert.equal(scanPublicCopy(`xx ${bad} yy`).status, "red", `nicht erkannt: ${bad}`);
+  }
+  assert.equal(scanPublicCopy("International visibility for private clinics. Direct contact.").status, "green");
+});
+
+test("Safety-Tower: Positionierung bleibt raus aus Medizin/Buchung/Zahlung", () => {
+  assert.equal(POSITIONING.isMedicalProvider, false);
+  assert.equal(POSITIONING.isBookingPlatform, false);
+  assert.equal(POSITIONING.storesPatientData, false);
+  assert.equal(POSITIONING.takesPayment, false);
+  assert.equal(POSITIONING.commissionPerTreatment, false);
+});
+
+test("Pivot-Seiten existieren (For Clinics, Treatments, Destinations, Safety, Contact)", () => {
+  for (const p of ["for-clinics", "treatments", "destinations", "safety-notes", "clinic-contact"]) {
+    assert.ok(existsPivotPage(p), `Pivot-Seite fehlt: ${p}`);
+  }
+});
+
+test("Pivot-Contact: kein Patienten-Formular / keine Gesundheitsdaten", () => {
+  const src = read("app/[locale]/clinic-contact/page.tsx");
+  assert.equal(/<form|<input|<textarea|upload/i.test(src), false, "Contact-Seite enthält Formular/Upload");
+  assert.ok(src.includes("CONTACT_EMAIL"), "kein einfacher Kontaktweg (mailto) vorhanden");
+});
+
+test("Safety-Notes-Seite enthält die Pflicht-Aussagen", () => {
+  const blob = flattenPivot(getPivot("en")).toLowerCase();
+  for (const must of REQUIRED_SAFETY_STATEMENTS.en) {
+    assert.ok(blob.includes(must.toLowerCase()), `Pflicht-Aussage fehlt: ${must}`);
+  }
 });
 
 // ─── Header-/Nav-CTA (nav.getStarted) ─────────────────────────────────────────

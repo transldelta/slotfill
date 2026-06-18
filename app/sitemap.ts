@@ -7,7 +7,7 @@ import { STATIC_BLOG_POSTS } from "@/lib/blog-data";
 const baseUrl = CANONICAL_URL;
 
 // Öffentliche Seiten, die für jede Locale generiert werden
-const PUBLIC_PATHS = ["/", "/pricing", "/blog", "/kontakt", "/launch", "/public-launch", "/share"];
+const PUBLIC_PATHS = ["/", "/for-clinics", "/treatments", "/destinations", "/safety-notes", "/clinic-contact", "/blog", "/kontakt", "/launch"];
 
 // Statische Slug-Liste als Fallback (immer aktuell, da aus blog-data importiert)
 const STATIC_SLUGS = STATIC_BLOG_POSTS.map((p) => p.slug);

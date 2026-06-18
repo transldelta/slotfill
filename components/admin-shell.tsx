@@ -11,6 +11,7 @@ import {
   Bug,
   Building2,
   CalendarClock,
+  Globe,
   Inbox,
   LayoutDashboard,
   LineChart,
@@ -49,6 +50,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     { href: "/admin/marketing", label: t("marketing.title"), icon: LineChart },
     { href: "/admin/go-live", label: t("goLive.nav"), icon: Rocket },
     { href: "/admin/ceo-launch", label: "CEO Launch Ops", icon: Target },
+    { href: "/admin/emerging-markets", label: "Emerging Markets", icon: Globe },
     { href: "/admin/communication", label: "Kommunikation", icon: Radio },
     {
       href: "/admin/booking-settings",

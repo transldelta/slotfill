@@ -55,6 +55,38 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // 1b. Freeze alter öffentlicher Routen nach dem Visibility-Pivot ─────────────
+  //     Alte Wartelisten-/Booking-/Launch-/Pricing-/Blog-Routen werden per 308
+  //     auf passende Pivot-Routen umgeleitet. Keine Admin-/Dashboard-/Auth-/API-
+  //     Pfade betroffen (oben bereits ausgenommen). Keine Redirect-Loops:
+  //     Ziel ist immer eine Pivot-Route, die selbst nicht eingefroren ist.
+  const FROZEN: Record<string, string> = {
+    pricing: "/for-clinics",
+    launch: "",
+    "public-launch": "",
+    share: "",
+    "termin-buchen": "/clinic-contact",
+    kontakt: "/clinic-contact",
+    blog: "",
+  };
+  const seg = pathname.replace(/^\/+/, "").split("/");
+  const locs = routing.locales as readonly string[];
+  let frozenLocale: string | null = null;
+  let frozenKey: string | null = null;
+  if (locs.includes(seg[0]) && seg[1] && Object.prototype.hasOwnProperty.call(FROZEN, seg[1])) {
+    frozenLocale = seg[0];
+    frozenKey = seg[1];
+  } else if (Object.prototype.hasOwnProperty.call(FROZEN, seg[0])) {
+    frozenLocale = routing.defaultLocale;
+    frozenKey = seg[0];
+  }
+  if (frozenLocale && frozenKey) {
+    const url = request.nextUrl.clone();
+    url.pathname = `/${frozenLocale}${FROZEN[frozenKey]}`;
+    url.search = "";
+    return NextResponse.redirect(url, { status: 308 });
+  }
+
   // 2. /admin und /dashboard: Supabase-Auth-Check (Login-Pflicht)
   //    Nur erreichbar von canonical hosts (oben bereits gesichert).
   //    /admin wird NICHT auf /de/admin umgeleitet.

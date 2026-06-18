@@ -619,6 +619,37 @@ test("Safety-Notes-Seite enthält die Pflicht-Aussagen", () => {
   }
 });
 
+// ─── Phase 2: Altbestand-Freeze ───────────────────────────────────────────────
+
+test("Middleware friert alte Routen ein (308 → Pivot-Routen, kein Loop)", () => {
+  const mw = read("middleware.ts");
+  assert.ok(mw.includes("status: 308"), "kein 308-Freeze-Redirect");
+  // Mapping-Ziele müssen Pivot-Routen sein (nicht selbst eingefroren).
+  for (const [key, target] of [["pricing", '"/for-clinics"'], ["termin-buchen", '"/clinic-contact"'], ["kontakt", '"/clinic-contact"']] as const) {
+    assert.ok(mw.includes(`${key.includes("-") ? `"${key}"` : key}: ${target}`), `Freeze-Mapping fehlt: ${key} → ${target}`);
+  }
+  for (const k of ["launch", "public-launch", "share", "blog"]) {
+    assert.ok(new RegExp(`"?${k}"?:\\s*""`).test(mw), `Freeze-Mapping (→ Home) fehlt: ${k}`);
+  }
+});
+
+test("Sitemap enthält nur Pivot-Routen — keine alten Routen", () => {
+  const sm = read("app/sitemap.ts");
+  for (const good of ["/for-clinics", "/treatments", "/destinations", "/safety-notes", "/clinic-contact"]) {
+    assert.ok(sm.includes(`"${good}"`), `Sitemap fehlt Pivot-Route ${good}`);
+  }
+  for (const bad of ["/pricing", "/launch", "/public-launch", "/share", "/termin-buchen", "/blog", "/kontakt"]) {
+    assert.equal(sm.includes(`"${bad}"`), false, `Sitemap enthält alte Route ${bad}`);
+  }
+});
+
+test("Pivot-Shell (Nav/Footer) verlinkt keine alten Routen", () => {
+  const shell = read("components/pivot/PivotShell.tsx");
+  for (const bad of ["/pricing", "/launch", "/public-launch", "/share", "/termin-buchen", "/blog"]) {
+    assert.equal(new RegExp(`["'\`]${bad}["'\`/]`).test(shell), false, `PivotShell verlinkt alte Route ${bad}`);
+  }
+});
+
 // ─── Header-/Nav-CTA (nav.getStarted) ─────────────────────────────────────────
 
 // Trial-/Free-Test-Sprache, die im sichtbaren nav-Namespace verboten ist.

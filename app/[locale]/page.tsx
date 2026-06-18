@@ -12,7 +12,7 @@ import { headers } from "next/headers";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { SlotFillLogo } from "@/components/ui/SlotFillLogo";
 import { locales, type Locale } from "@/i18n/routing";
-import { CANONICAL_URL } from "@/lib/brand";
+import { CANONICAL_URL, PUBLIC_BRAND_NAME } from "@/lib/brand";
 
 const APP_URL = CANONICAL_URL;
 
@@ -24,7 +24,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "landing" });
   const tNav = await getTranslations({ locale, namespace: "nav" });
-  const title = `ClinicSlotHub – ${t("heroTitle")}`;
+  const title = `${PUBLIC_BRAND_NAME} – ${t("heroTitle")}`;
   const description = t("heroSubtitle");
 
   return {
@@ -41,7 +41,7 @@ export async function generateMetadata({
       title,
       description,
       url: `/${locale}`,
-      siteName: "ClinicSlotHub",
+      siteName: PUBLIC_BRAND_NAME,
       locale: locale === "de" ? "de_DE" : locale,
       type: "website",
     },
@@ -60,25 +60,25 @@ function buildSchemaOrg(locale: string) {
     "@graph": [
       {
         "@type": "SoftwareApplication",
-        name: "ClinicSlotHub",
+        name: PUBLIC_BRAND_NAME,
         applicationCategory: "BusinessApplication",
         operatingSystem: "Web",
         description:
-          "ClinicSlotHub helps clinics, medical offices and healthcare providers worldwide fill appointment slots from the waitlist automatically.",
+          "Slotfill helps patients book clinic appointments online. Clinics show available appointment options and receive patient requests in a simple, clear flow.",
         url: APP_URL,
         inLanguage: locale,
         offers: {
           "@type": "Offer",
           price: "49",
           priceCurrency: "EUR",
-          description: "Starter plan from €49/month, 14-day free trial included",
+          description: "Starter plan from €49/month. Pricing confirmed before activation.",
         },
       },
       {
         "@type": "Organization",
-        name: "ClinicSlotHub",
+        name: PUBLIC_BRAND_NAME,
         url: APP_URL,
-        description: "ClinicSlotHub – Appointment and waitlist management for clinics and healthcare providers worldwide.",
+        description: "Slotfill – online clinic appointment booking for patients and clinics.",
       },
     ],
   };
@@ -177,36 +177,6 @@ export default async function LocaleLandingPage({
         </div>
       </header>
 
-      {/* Soft-Launch-Banner */}
-      {(() => {
-        const banners: Record<string, string> = {
-          de: "Neu: ClinicSlotHub ist im globalen öffentlichen Soft Launch – jetzt kostenlos testen.",
-          en: "New: ClinicSlotHub is in global public soft launch – try it for free.",
-          fr: "Nouveau : ClinicSlotHub est en lancement public mondial – essayez gratuitement.",
-          es: "Nuevo: ClinicSlotHub está en lanzamiento público global – pruébalo gratis.",
-          pt: "Novo: ClinicSlotHub está em lançamento público global – teste gratuitamente.",
-          zh: "ClinicSlotHub 已进入全球公开软启动阶段 — 可免费试用。",
-          hi: "ClinicSlotHub अब वैश्विक सार्वजनिक सॉफ्ट लॉन्च में है — मुफ्त में आज़माएँ।",
-          ar: "ClinicSlotHub الآن في إطلاق عالمي تجريبي عام — جرّبه مجاناً.",
-          bn: "ClinicSlotHub এখন বৈশ্বিক পাবলিক সফট লঞ্চে — বিনামূল্যে চেষ্টা করুন।",
-          ru: "ClinicSlotHub находится в глобальном публичном soft launch — попробуйте бесплатно.",
-        };
-        const bannerText = banners[locale] ?? banners["en"];
-        return (
-          <div className="w-full border-b border-blue-200 bg-blue-50 dark:border-blue-900/40 dark:bg-blue-900/20">
-            <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2">
-              <p className="text-xs text-blue-700 dark:text-blue-300">{bannerText}</p>
-              <Link
-                href={`/${locale}/launch`}
-                className="shrink-0 rounded-md bg-blue-600 px-3 py-1 text-xs font-medium text-white hover:bg-blue-700 transition"
-              >
-                {locale === "de" ? "Mehr erfahren" : locale === "fr" ? "En savoir plus" : locale === "es" ? "Saber más" : locale === "pt" ? "Saiba mais" : locale === "ar" ? "اعرف أكثر" : "Learn more"}
-              </Link>
-            </div>
-          </div>
-        );
-      })()}
-
       {/* Hero — full-bleed blue-tint section */}
       <div className="w-full bg-gradient-to-b from-blue-50/70 to-white dark:from-blue-950/20 dark:to-transparent">
       <section className="relative mx-auto max-w-3xl px-4 py-16 text-center sm:py-24">
@@ -227,12 +197,12 @@ export default async function LocaleLandingPage({
           {t("heroSubtitle")}
         </p>
         <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-          <Link href={`/${locale}/pricing`} className="btn-brand w-full px-7 py-3.5 text-base sm:w-auto">
+          <Link href={`/${locale}/termin-buchen`} className="btn-brand w-full px-7 py-3.5 text-base sm:w-auto">
             {t("ctaPrimary")}
           </Link>
-          <a href="#features" className="btn-outline-brand w-full px-7 py-3.5 text-base sm:w-auto">
+          <Link href="/book/testpraxis-delta" className="btn-outline-brand w-full px-7 py-3.5 text-base sm:w-auto">
             {t("ctaSecondary")}
-          </a>
+          </Link>
         </div>
         <p className="mt-4 text-xs text-slate-400 dark:text-slate-500">
           {t("trialNote")} &nbsp;·&nbsp; {t("trialNoMessages")}
@@ -371,7 +341,7 @@ export default async function LocaleLandingPage({
         </p>
         <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
           <Link
-            href={`/${locale}/pricing`}
+            href={`/${locale}/termin-buchen`}
             className="inline-flex w-full items-center justify-center rounded-lg bg-white px-6 py-3 text-sm font-semibold text-slate-900 shadow-lg transition hover:bg-slate-50 sm:w-auto"
           >
             {t("ctaPrimary")}

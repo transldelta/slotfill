@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BRAND_NAME } from "@/lib/brand";
+import { PUBLIC_BRAND_NAME } from "@/lib/brand";
 
 interface SlotFillLogoProps {
   /** Href the logo links to. Pass null to render without a link. */
@@ -71,7 +71,7 @@ export function SlotFillLogo({
             backgroundClip: "text",
           }}
         >
-          {BRAND_NAME}
+          {PUBLIC_BRAND_NAME}
         </span>
       )}
     </span>
@@ -80,7 +80,7 @@ export function SlotFillLogo({
   if (href === null) return inner;
 
   return (
-    <Link href={href} aria-label={`${BRAND_NAME} – zur Startseite`}>
+    <Link href={href} aria-label={`${PUBLIC_BRAND_NAME} – zur Startseite`}>
       {inner}
     </Link>
   );

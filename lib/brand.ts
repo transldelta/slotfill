@@ -25,6 +25,14 @@ export const BRAND_NAME = "ClinicSlotHub" as const;
 export const BRAND_TEAM_NAME = "ClinicSlotHub Team" as const;
 
 /**
+ * Öffentlich sichtbarer Markenname (Wordmark, Header/Footer, Landing-Metadaten,
+ * Schema.org). Bewusst von BRAND_NAME getrennt: die öffentliche Marke ist
+ * "Slotfill" (einfache Patienten-Terminbuchung), während interne/technische
+ * Bestandteile (E-Mails, Legal, Domain clinicslothub.com) unverändert bleiben.
+ */
+export const PUBLIC_BRAND_NAME = "Slotfill" as const;
+
+/**
  * Support-E-Mail (Transactional-Rückmeldungen).
  * Fallback: persönliche E-Mail des Betreibers bis zur Einrichtung einer
  * geschäftlichen Adresse. Für Produktion SUPPORT_EMAIL als Umgebungsvariable

@@ -84,7 +84,7 @@ test("EN landing enthält die Pflicht-Positionierung", () => {
   for (const phrase of [
     "emerging healthcare markets",
     "no patient login",
-    "whatsapp-ready without api",
+    "workflows your clinic already uses",
     "phone and reception fallback",
     "clinic stays in control",
     "simple waitlist",
@@ -98,7 +98,7 @@ test("DE landing enthält die Pflicht-Positionierung", () => {
   for (const phrase of [
     "wachstumsstarken gesundheitsmärkten",
     "kein patienten-login",
-    "whatsapp-ready ohne api",
+    "abläufen, die ihre klinik bereits nutzt",
     "rezeptions-fallback",
     "behält die kontrolle",
     "einfache warteliste",
@@ -189,13 +189,62 @@ test("Alle 10 Locales: landing+pricing Werte ohne verbotene öffentliche Begriff
   }
 });
 
-test("Alle 10 Locales: 'WhatsApp-ready ohne API'-Anker (API) in landing sichtbar", () => {
+test("Alle 10 Locales: WhatsApp-Kanal sichtbar, aber KEIN öffentliches 'API'-Wording", () => {
   for (const loc of MESSAGE_LOCALES) {
     const m = JSON.parse(read(`messages/${loc}.json`)) as Record<string, unknown>;
-    const text = flatten(m.landing).toLowerCase();
-    assert.ok(text.includes("api"), `${loc}: API-Anker fehlt (WhatsApp-ready ohne API)`);
+    const land = flatten(m.landing);
+    const text = (land + flatten((m as { pricing?: unknown }).pricing)).toLowerCase();
     // WhatsApp als lateinische Marke ODER lokalisierte Form (z. B. arabisch "واتساب").
-    assert.ok(text.includes("whatsapp") || text.includes("واتساب"), `${loc}: WhatsApp-Kanal fehlt in landing`);
+    assert.ok(land.toLowerCase().includes("whatsapp") || land.includes("واتساب"), `${loc}: WhatsApp-Kanal fehlt in landing`);
+    // Öffentlich kein technisches API-Wording mehr.
+    assert.equal(/\bapi\b/i.test(text), false, `${loc}: öffentliches 'API'-Wort gefunden`);
+    assert.equal(/without api|ohne api|sans api|sin api|sem api|без api|بدون واجهة برمجية|無需 api|API के बिना|API ছাড়াই/i.test(text), false, `${loc}: 'without API'-Phrase gefunden`);
+  }
+});
+
+test("Workflow-Phrase ersetzt API-Wording (en/de)", () => {
+  const en = flatten((JSON.parse(read("messages/en.json")) as { landing?: unknown }).landing).toLowerCase();
+  const de = flatten((JSON.parse(read("messages/de.json")) as { landing?: unknown }).landing).toLowerCase();
+  assert.ok(en.includes("workflows your clinic already uses"), "EN Workflow-Phrase fehlt");
+  assert.ok(de.includes("abläufen, die ihre klinik bereits nutzt"), "DE Workflow-Phrase fehlt");
+});
+
+test("Sekundär-CTA ist die Klinik-Demo (en/de)", () => {
+  const en = (JSON.parse(read("messages/en.json")) as { landing?: { ctaSecondary?: string } }).landing?.ctaSecondary;
+  const de = (JSON.parse(read("messages/de.json")) as { landing?: { ctaSecondary?: string } }).landing?.ctaSecondary;
+  assert.equal(en, "View clinic demo");
+  assert.equal(de, "Klinik-Demo ansehen");
+});
+
+test("Blog/Ratgeber (lib/blog-data.ts): keine alten/verbotenen öffentlichen Begriffe", () => {
+  const src = read("lib/blog-data.ts");
+  for (const re of [
+    /soft launch/i, /\btwilio\b/i, /\bstripe\b/i, /\bsupabase\b/i, /\bresend\b/i,
+    /kostenlos testen/i, /14 Tage kostenlos/i, /free trial/i, /try for free/i,
+    /\bweltweit\b/i, /\bworldwide\b/i, /no paying customers/i,
+  ]) {
+    assert.equal(re.test(src), false, `blog-data enthält verbotenen Begriff: ${re}`);
+  }
+});
+
+test("Öffentliche Botschaft frei von internen Governance-/Technik-Begriffen (messages + Kernseiten)", () => {
+  const targets = [
+    "messages/en.json", "messages/de.json",
+    "app/[locale]/page.tsx", "app/[locale]/launch/page.tsx", "app/[locale]/pricing/page.tsx",
+  ];
+  // Nur landing/pricing/contact/nav der messages prüfen (interne admin-Namespaces sind erlaubt).
+  const internal = [/market proof/i, /phase 0/i, /zero-cost/i, /governance/i, /provider configuration/i, /no real messages/i];
+  for (const f of targets) {
+    let src: string;
+    if (f.endsWith(".json")) {
+      const m = JSON.parse(read(f)) as Record<string, unknown>;
+      src = flatten(m.landing) + flatten(m.pricing) + flatten(m.contact) + flatten(m.nav);
+    } else {
+      src = read(f);
+    }
+    for (const re of internal) {
+      assert.equal(re.test(src), false, `${f}: interner Begriff öffentlich (${re})`);
+    }
   }
 });
 

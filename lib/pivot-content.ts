@@ -1,12 +1,11 @@
 /**
- * Public product content — ClinicSlotHub: Modern Clinic Scheduling OS.
+ * Public product content — ClinicSlotHub: a simple daily board for clinic
+ * reception and practice organization.
  *
  * READ-ONLY copy data. Public product languages: EN (main), FR, ES.
  * No German public product copy. No external services, no patient data,
- * no medical advice, no payment, no booking storage. Static demo only.
- *
- * Commercial simplicity: the H1 is a plain promise, the product name is a
- * smaller label, money logic is explained without activating any payment.
+ * no medical advice, no payment, no booking storage. Interactive demo runs
+ * purely in React state (no storage, no API) and uses anonymized sample tokens.
  */
 
 export interface PivotDict {
@@ -15,7 +14,7 @@ export interface PivotDict {
   nav: { home: string; howItWorks: string; demo: string; forClinics: string; pricing: string; safety: string };
   cta: { requestAccess: string; viewDemo: string; pilotAccess: string; contact: string };
   hero: { h1: string; subline: string; supporting: string; trust: string };
-  what: { title: string; cards: { title: string; body: string }[] };
+  problem: { title: string; pains: string[]; solutionTitle: string; solution: string };
   mockup: {
     todayBoard: string; appointments: string; walkInQueue: string; availableSlots: string;
     rooms: string; services: string; quickActions: string; stats: string; mobilePreview: string;
@@ -25,8 +24,13 @@ export interface PivotDict {
   forPatients: { title: string; intro: string; points: string[] };
   patientsLine: string;
   howItWorks: { title: string; steps: string[] };
-  demo: { title: string; intro: string; notes: string[]; whyTitle: string; why: string[] };
-  pricing: { title: string; intro: string; plans: { name: string; for: string; price: string }[]; cta: string; note: string };
+  demo: {
+    title: string; intro: string; notes: string[]; whyTitle: string; why: string[]; safeNote: string;
+    tabs: { todayBoard: string; walkInQueue: string; openSlots: string; rooms: string };
+    actions: { addWalkIn: string; markCompleted: string; showOpenSlots: string; reset: string };
+  };
+  money: { title: string; intro: string; plans: { name: string; price: string; for: string }[]; note: string; cta: string };
+  access: { pilotRequest: string; emailIntro: string; copyEmail: string; copied: string };
   safety: { title: string; body: string };
   footerNote: string;
   rights: string;
@@ -36,20 +40,18 @@ const EN: PivotDict = {
   brand: "ClinicSlotHub",
   tagline: "Modern Clinic Scheduling OS",
   nav: { home: "Home", howItWorks: "How it works", demo: "Demo", forClinics: "For clinics", pricing: "Pricing", safety: "Safety" },
-  cta: { requestAccess: "Request pilot access", viewDemo: "View demo", pilotAccess: "Request pilot access", contact: "Email the team" },
+  cta: { requestAccess: "Request pilot access", viewDemo: "Open interactive demo", pilotAccess: "Request pilot access", contact: "Email the team" },
   hero: {
-    h1: "Run the clinic day in one simple board.",
-    subline: "ClinicSlotHub helps clinics manage appointments, walk-ins, rooms and open slots without heavy hospital software.",
-    supporting: "Built for front desks that need clarity, speed and a calmer daily workflow.",
+    h1: "One board for today's clinic work.",
+    subline: "Manage appointments, walk-ins, rooms and open slots in a simple front-desk board.",
+    supporting: "Built for clinics that need less chaos at reception and a faster view of the day.",
     trust: "Made for clinic teams that need clarity, not complexity.",
   },
-  what: {
-    title: "What ClinicSlotHub does",
-    cards: [
-      { title: "Appointments", body: "Plan scheduled visits in a simple daily view." },
-      { title: "Walk-ins", body: "Add walk-in patients to a clear queue — no names or medical details in the public demo." },
-      { title: "Available slots", body: "See open times, rooms and service capacity at a glance." },
-    ],
+  problem: {
+    title: "Busy clinic days create front-desk confusion.",
+    pains: ["Appointments change", "Walk-ins arrive", "Rooms become busy", "Open slots get missed"],
+    solutionTitle: "The fix",
+    solution: "ClinicSlotHub gives the team one simple board for today's work.",
   },
   mockup: {
     todayBoard: "Today board", appointments: "Appointments", walkInQueue: "Walk-in queue", availableSlots: "Available slots",
@@ -66,34 +68,38 @@ const EN: PivotDict = {
     intro: "Patients see only what they need — no accounts, no medical data.",
     points: ["Queue number", "Appointment time", "Room status", "General visit category"],
   },
-  patientsLine: "For patients: clearer check-in, simple queue status and less confusion.",
+  patientsLine: "For patients, the experience stays simple: clearer check-in, queue status and less confusion.",
   howItWorks: {
     title: "How it works",
     steps: ["Set the day's schedule", "Add appointments and walk-ins", "Manage rooms, services and availability", "Keep the clinic day organized"],
   },
   demo: {
-    title: "View the demo",
-    intro: "This demo shows how a clinic can organize today's appointments, walk-ins, rooms and available slots in one simple board.",
-    notes: ["Static demo — anonymized sample data", "No real patient data", "No medical records", "No payment processing", "No uploads"],
+    title: "Interactive demo",
+    intro: "Try a clinic's daily board: switch tabs, add a sample walk-in, mark one as completed and reset.",
+    notes: ["Safe sample demo — anonymized data only", "No real patient data", "No medical records", "No payment processing", "No uploads"],
     whyTitle: "Why it matters",
     why: ["Less front-desk confusion", "Clearer daily planning", "Faster overview of open slots", "Simple workflow for small teams"],
+    safeNote: "This is a safe sample demo. It does not store real patient data.",
+    tabs: { todayBoard: "Today Board", walkInQueue: "Walk-in Queue", openSlots: "Open Slots", rooms: "Rooms" },
+    actions: { addWalkIn: "Add sample walk-in", markCompleted: "Mark sample as completed", showOpenSlots: "Show open slots", reset: "Reset demo" },
   },
-  pricing: {
-    title: "Simple monthly plans for clinics",
-    intro: "ClinicSlotHub is designed as a monthly SaaS tool for clinics and small medical teams.",
+  money: {
+    title: "How ClinicSlotHub makes money",
+    intro: "Clinics pay a monthly subscription for a simple scheduling board. Patients do not pay on this website.",
     plans: [
-      { name: "Starter", for: "For small clinics that need one simple daily board.", price: "from $29/month" },
-      { name: "Clinic Pro", for: "For clinics that manage appointments and walk-ins every day.", price: "from $79/month" },
-      { name: "Clinic Plus", for: "For larger teams, multiple rooms or higher daily volume.", price: "Pilot pricing on request" },
+      { name: "Starter", price: "from $29/month", for: "For one small clinic that needs a simple daily board." },
+      { name: "Clinic Pro", price: "from $79/month", for: "For teams that manage appointments and walk-ins every day." },
+      { name: "Clinic Plus", price: "custom pilot pricing", for: "For larger teams, multiple rooms or higher daily volume." },
     ],
+    note: "No payment is processed on this website. Pricing is confirmed before activation.",
     cta: "Request pilot access",
-    note: "Final pricing is confirmed before activation. No payment is processed on this website.",
   },
+  access: { pilotRequest: "Pilot request:", emailIntro: "Email us at", copyEmail: "Copy email", copied: "Copied" },
   safety: {
     title: "Safety",
-    body: "ClinicSlotHub is not a medical advice tool. It does not provide diagnosis, treatment recommendations or emergency services. The MVP does not store medical records, accept medical uploads or process patient payments. Clinics remain responsible for their own medical, legal and operational processes.",
+    body: "ClinicSlotHub is not a medical advice tool. It does not provide diagnosis, treatment recommendations or emergency services. The demo does not store medical records, accept uploads or process patient payments.",
   },
-  footerNote: "ClinicSlotHub is a lightweight clinic scheduling tool. No medical advice, no diagnosis, no patient records, no payment.",
+  footerNote: "ClinicSlotHub is a lightweight clinic scheduling board. No medical advice, no diagnosis, no patient records, no payment.",
   rights: "All rights reserved.",
 };
 
@@ -101,20 +107,18 @@ const FR: PivotDict = {
   brand: "ClinicSlotHub",
   tagline: "Modern Clinic Scheduling OS",
   nav: { home: "Accueil", howItWorks: "Comment ça marche", demo: "Démo", forClinics: "Pour les cliniques", pricing: "Tarifs", safety: "Sécurité" },
-  cta: { requestAccess: "Demander l'accès pilote", viewDemo: "Voir la démo", pilotAccess: "Demander l'accès pilote", contact: "Écrire à l'équipe" },
+  cta: { requestAccess: "Demander l'accès pilote", viewDemo: "Ouvrir la démo interactive", pilotAccess: "Demander l'accès pilote", contact: "Écrire à l'équipe" },
   hero: {
-    h1: "Organisez la journée de la clinique dans un tableau simple.",
-    subline: "ClinicSlotHub aide les cliniques à gérer les rendez-vous, les arrivées sans réservation, les salles et les créneaux disponibles sans logiciel hospitalier lourd.",
-    supporting: "Conçu pour les accueils qui ont besoin de clarté, de rapidité et d'un quotidien plus serein.",
+    h1: "Un seul tableau pour organiser la journée de la clinique.",
+    subline: "Gérez les rendez-vous, les arrivées sans réservation, les salles et les créneaux disponibles dans un tableau simple pour l'accueil.",
+    supporting: "Conçu pour les cliniques qui veulent moins de chaos à l'accueil et une vue plus rapide de la journée.",
     trust: "Pensé pour les équipes de clinique qui veulent de la clarté, pas de la complexité.",
   },
-  what: {
-    title: "Ce que fait ClinicSlotHub",
-    cards: [
-      { title: "Rendez-vous", body: "Planifiez les visites programmées dans une vue quotidienne simple." },
-      { title: "Arrivées sans réservation", body: "Ajoutez les patients sans réservation à une file claire — sans nom ni détail médical dans la démo publique." },
-      { title: "Créneaux disponibles", body: "Visualisez les horaires libres, les salles et la capacité de service d'un coup d'œil." },
-    ],
+  problem: {
+    title: "Les journées chargées créent de la confusion à l'accueil.",
+    pains: ["Les rendez-vous changent", "Des patients arrivent sans réservation", "Les salles se remplissent", "Des créneaux libres passent inaperçus"],
+    solutionTitle: "La solution",
+    solution: "ClinicSlotHub donne à l'équipe un seul tableau simple pour le travail du jour.",
   },
   mockup: {
     todayBoard: "Tableau du jour", appointments: "Rendez-vous", walkInQueue: "File d'attente", availableSlots: "Créneaux disponibles",
@@ -131,34 +135,38 @@ const FR: PivotDict = {
     intro: "Les patients voient seulement l'essentiel — sans compte, sans données médicales.",
     points: ["Numéro de file", "Heure du rendez-vous", "Statut de la salle", "Catégorie de visite générale"],
   },
-  patientsLine: "Pour les patients : un accueil plus clair, un statut de file simple et moins de confusion.",
+  patientsLine: "Pour les patients, l'expérience reste simple : un accueil plus clair, le statut de la file et moins de confusion.",
   howItWorks: {
     title: "Comment ça marche",
     steps: ["Préparez le planning du jour", "Ajoutez les rendez-vous et les arrivées sans réservation", "Gérez les salles, les services et les disponibilités", "Gardez la journée organisée"],
   },
   demo: {
-    title: "Voir la démo",
-    intro: "Cette démo montre comment une clinique peut organiser les rendez-vous, les arrivées, les salles et les créneaux disponibles du jour dans un tableau simple.",
-    notes: ["Démo statique — données d'exemple anonymisées", "Aucune donnée patient réelle", "Aucun dossier médical", "Aucun paiement", "Aucun téléversement"],
+    title: "Démo interactive",
+    intro: "Essayez le tableau quotidien d'une clinique : changez d'onglet, ajoutez une arrivée d'exemple, marquez-en une comme terminée et réinitialisez.",
+    notes: ["Démo d'exemple sûre — données anonymisées uniquement", "Aucune donnée patient réelle", "Aucun dossier médical", "Aucun paiement", "Aucun téléversement"],
     whyTitle: "Pourquoi c'est utile",
     why: ["Moins de confusion à l'accueil", "Une planification quotidienne plus claire", "Un aperçu plus rapide des créneaux libres", "Un flux simple pour les petites équipes"],
+    safeNote: "Ceci est une démo d'exemple sûre. Elle ne stocke aucune donnée patient réelle.",
+    tabs: { todayBoard: "Tableau du jour", walkInQueue: "File d'attente", openSlots: "Créneaux libres", rooms: "Salles" },
+    actions: { addWalkIn: "Ajouter une arrivée d'exemple", markCompleted: "Marquer l'exemple comme terminé", showOpenSlots: "Afficher les créneaux libres", reset: "Réinitialiser la démo" },
   },
-  pricing: {
-    title: "Forfaits mensuels simples pour les cliniques",
-    intro: "ClinicSlotHub est conçu comme un outil SaaS mensuel pour les cliniques et les petites équipes médicales.",
+  money: {
+    title: "Comment ClinicSlotHub gagne de l'argent",
+    intro: "Les cliniques paient un abonnement mensuel pour un tableau de planification simple. Les patients ne paient pas sur ce site.",
     plans: [
-      { name: "Starter", for: "Pour les petites cliniques qui ont besoin d'un seul tableau quotidien simple.", price: "à partir de 29 $/mois" },
-      { name: "Clinic Pro", for: "Pour les cliniques qui gèrent chaque jour les rendez-vous et les arrivées.", price: "à partir de 79 $/mois" },
-      { name: "Clinic Plus", for: "Pour les grandes équipes, plusieurs salles ou un volume quotidien plus élevé.", price: "Tarif pilote sur demande" },
+      { name: "Starter", price: "à partir de 29 $/mois", for: "Pour une petite clinique qui a besoin d'un tableau quotidien simple." },
+      { name: "Clinic Pro", price: "à partir de 79 $/mois", for: "Pour les équipes qui gèrent chaque jour les rendez-vous et les arrivées." },
+      { name: "Clinic Plus", price: "tarif pilote personnalisé", for: "Pour les grandes équipes, plusieurs salles ou un volume quotidien plus élevé." },
     ],
+    note: "Aucun paiement n'est traité sur ce site web. Le tarif est confirmé avant l'activation.",
     cta: "Demander l'accès pilote",
-    note: "Le tarif final est confirmé avant l'activation. Aucun paiement n'est traité sur ce site web.",
   },
+  access: { pilotRequest: "Demande pilote :", emailIntro: "Écrivez-nous à", copyEmail: "Copier l'e-mail", copied: "Copié" },
   safety: {
     title: "Sécurité",
-    body: "ClinicSlotHub n'est pas un outil de conseil médical. Il ne fournit pas de diagnostic, de recommandation de traitement ni de service d'urgence. Le MVP ne stocke pas de dossier médical, n'accepte pas de téléversement médical et ne traite pas les paiements des patients. Les cliniques restent responsables de leurs propres processus médicaux, juridiques et opérationnels.",
+    body: "ClinicSlotHub n'est pas un outil de conseil médical. Il ne fournit pas de diagnostic, de recommandation de traitement ni de service d'urgence. La démo ne stocke pas de dossier médical, n'accepte pas de téléversement et ne traite pas les paiements des patients.",
   },
-  footerNote: "ClinicSlotHub est un outil léger de planification pour cliniques. Pas de conseil médical, pas de diagnostic, pas de dossier patient, pas de paiement.",
+  footerNote: "ClinicSlotHub est un tableau de planification léger pour cliniques. Pas de conseil médical, pas de diagnostic, pas de dossier patient, pas de paiement.",
   rights: "Tous droits réservés.",
 };
 
@@ -166,20 +174,18 @@ const ES: PivotDict = {
   brand: "ClinicSlotHub",
   tagline: "Modern Clinic Scheduling OS",
   nav: { home: "Inicio", howItWorks: "Cómo funciona", demo: "Demo", forClinics: "Para clínicas", pricing: "Precios", safety: "Seguridad" },
-  cta: { requestAccess: "Solicitar acceso piloto", viewDemo: "Ver demo", pilotAccess: "Solicitar acceso piloto", contact: "Escribir al equipo" },
+  cta: { requestAccess: "Solicitar acceso piloto", viewDemo: "Abrir demo interactiva", pilotAccess: "Solicitar acceso piloto", contact: "Escribir al equipo" },
   hero: {
-    h1: "Organice el día de la clínica en un panel simple.",
-    subline: "ClinicSlotHub ayuda a las clínicas a gestionar citas, llegadas sin reserva, salas y horarios disponibles sin software hospitalario complejo.",
-    supporting: "Diseñado para recepciones que necesitan claridad, rapidez y un día a día más tranquilo.",
+    h1: "Un solo panel para organizar el día de la clínica.",
+    subline: "Gestione citas, llegadas sin reserva, salas y horarios disponibles en un panel simple para recepción.",
+    supporting: "Diseñado para clínicas que quieren menos caos en recepción y una vista más rápida del día.",
     trust: "Hecho para equipos de clínica que quieren claridad, no complejidad.",
   },
-  what: {
-    title: "Qué hace ClinicSlotHub",
-    cards: [
-      { title: "Citas", body: "Planifique las visitas programadas en una vista diaria simple." },
-      { title: "Llegadas sin reserva", body: "Añada pacientes sin reserva a una fila clara — sin nombres ni detalles médicos en la demo pública." },
-      { title: "Horarios disponibles", body: "Vea los horarios libres, las salas y la capacidad de servicio de un vistazo." },
-    ],
+  problem: {
+    title: "Los días con mucho movimiento generan confusión en recepción.",
+    pains: ["Las citas cambian", "Llegan pacientes sin reserva", "Las salas se ocupan", "Se pierden horarios libres"],
+    solutionTitle: "La solución",
+    solution: "ClinicSlotHub le da al equipo un solo panel simple para el trabajo del día.",
   },
   mockup: {
     todayBoard: "Panel del día", appointments: "Citas", walkInQueue: "Fila sin reserva", availableSlots: "Horarios disponibles",
@@ -196,34 +202,38 @@ const ES: PivotDict = {
     intro: "Los pacientes ven solo lo necesario — sin cuentas, sin datos médicos.",
     points: ["Número de fila", "Hora de la cita", "Estado de la sala", "Categoría de visita general"],
   },
-  patientsLine: "Para pacientes: un registro más claro, un estado de fila simple y menos confusión.",
+  patientsLine: "Para los pacientes, la experiencia sigue siendo simple: un registro más claro, el estado de la fila y menos confusión.",
   howItWorks: {
     title: "Cómo funciona",
     steps: ["Prepare el horario del día", "Añada citas y llegadas sin reserva", "Gestione salas, servicios y disponibilidad", "Mantenga el día organizado"],
   },
   demo: {
-    title: "Ver la demo",
-    intro: "Esta demo muestra cómo una clínica puede organizar las citas, las llegadas, las salas y los horarios disponibles del día en un panel simple.",
-    notes: ["Demo estática — datos de ejemplo anonimizados", "Sin datos reales de pacientes", "Sin historiales médicos", "Sin procesamiento de pagos", "Sin cargas de archivos"],
+    title: "Demo interactiva",
+    intro: "Pruebe el panel diario de una clínica: cambie de pestaña, añada una llegada de ejemplo, marque una como completada y reinicie.",
+    notes: ["Demo de ejemplo segura — solo datos anonimizados", "Sin datos reales de pacientes", "Sin historiales médicos", "Sin procesamiento de pagos", "Sin cargas de archivos"],
     whyTitle: "Por qué importa",
     why: ["Menos confusión en recepción", "Una planificación diaria más clara", "Una visión más rápida de los horarios libres", "Un flujo simple para equipos pequeños"],
+    safeNote: "Esta es una demo de ejemplo segura. No almacena datos reales de pacientes.",
+    tabs: { todayBoard: "Panel del día", walkInQueue: "Fila sin reserva", openSlots: "Horarios libres", rooms: "Salas" },
+    actions: { addWalkIn: "Añadir llegada de ejemplo", markCompleted: "Marcar ejemplo como completado", showOpenSlots: "Mostrar horarios libres", reset: "Reiniciar demo" },
   },
-  pricing: {
-    title: "Planes mensuales simples para clínicas",
-    intro: "ClinicSlotHub está diseñado como una herramienta SaaS mensual para clínicas y equipos médicos pequeños.",
+  money: {
+    title: "Cómo gana dinero ClinicSlotHub",
+    intro: "Las clínicas pagan una suscripción mensual por un panel de planificación simple. Los pacientes no pagan en este sitio web.",
     plans: [
-      { name: "Starter", for: "Para clínicas pequeñas que necesitan un panel diario simple.", price: "desde $29/mes" },
-      { name: "Clinic Pro", for: "Para clínicas que gestionan citas y llegadas sin reserva cada día.", price: "desde $79/mes" },
-      { name: "Clinic Plus", for: "Para equipos más grandes, varias salas o mayor volumen diario.", price: "Precio piloto a pedido" },
+      { name: "Starter", price: "desde $29/mes", for: "Para una clínica pequeña que necesita un panel diario simple." },
+      { name: "Clinic Pro", price: "desde $79/mes", for: "Para equipos que gestionan citas y llegadas cada día." },
+      { name: "Clinic Plus", price: "precio piloto personalizado", for: "Para equipos más grandes, varias salas o mayor volumen diario." },
     ],
+    note: "No se procesa ningún pago en este sitio web. El precio se confirma antes de la activación.",
     cta: "Solicitar acceso piloto",
-    note: "El precio final se confirma antes de la activación. No se procesa ningún pago en este sitio web.",
   },
+  access: { pilotRequest: "Solicitud piloto:", emailIntro: "Escríbanos a", copyEmail: "Copiar correo", copied: "Copiado" },
   safety: {
     title: "Seguridad",
-    body: "ClinicSlotHub no es una herramienta de asesoramiento médico. No proporciona diagnósticos, recomendaciones de tratamiento ni servicios de emergencia. El MVP no almacena historiales médicos, no acepta cargas de documentos médicos y no procesa pagos de pacientes. Las clínicas siguen siendo responsables de sus propios procesos médicos, legales y operativos.",
+    body: "ClinicSlotHub no es una herramienta de asesoramiento médico. No proporciona diagnósticos, recomendaciones de tratamiento ni servicios de emergencia. La demo no almacena historiales médicos, no acepta cargas de archivos y no procesa pagos de pacientes.",
   },
-  footerNote: "ClinicSlotHub es una herramienta ligera de planificación para clínicas. Sin asesoramiento médico, sin diagnóstico, sin historiales de pacientes, sin pagos.",
+  footerNote: "ClinicSlotHub es un panel de planificación ligero para clínicas. Sin asesoramiento médico, sin diagnóstico, sin historiales de pacientes, sin pagos.",
   rights: "Todos los derechos reservados.",
 };
 
@@ -242,12 +252,19 @@ export function flattenPivot(d: PivotDict): string {
   return JSON.stringify(d);
 }
 
-/** Anonymisierte Mockup-Beispieldaten — keine Namen, keine PII. */
+/** Anonymisierte Mockup-/Demo-Beispieldaten — keine Namen, keine PII. */
 export const MOCK_ROWS = [
   { id: "Appointment #1042", time: "09:00", room: "Room 1", kind: "Consultation", state: "completed" },
   { id: "Appointment #1043", time: "09:30", room: "Room 2", kind: "Follow-up", state: "inProgress" },
   { id: "Walk-in #18", time: "10:00", room: "Room 3", kind: "General visit", state: "waiting" },
   { id: "Appointment #1044", time: "10:30", room: "Room 1", kind: "Check-in", state: "available" },
+] as const;
+
+/** Anonyme Beispiel-Walk-ins für die interaktive Demo (nur lokaler React-State). */
+export const DEMO_WALKINS = [
+  { id: "Walk-in #19", time: "10:15", room: "Room 2", kind: "General visit", state: "waiting" },
+  { id: "Walk-in #20", time: "10:45", room: "Room 3", kind: "General visit", state: "waiting" },
+  { id: "Walk-in #21", time: "11:00", room: "Room 1", kind: "General visit", state: "waiting" },
 ] as const;
 
 /** Premium teal/türkis Palette (hell, modern, vertrauenswürdig). */

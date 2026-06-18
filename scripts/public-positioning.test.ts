@@ -27,7 +27,9 @@ const PIVOT_PAGES = [
   "app/[locale]/safety-notes/page.tsx",
   "app/[locale]/clinic-contact/page.tsx",
   "components/pivot/PivotShell.tsx",
-  "components/pivot/DashboardMockup.tsx",
+  "components/pivot/InteractiveDemo.tsx",
+  "components/pivot/PricingPlans.tsx",
+  "components/pivot/RequestAccess.tsx",
 ];
 const allPivotSrc = PIVOT_PAGES.map(read).join("\n");
 
@@ -51,101 +53,158 @@ test("Positioning: Produktlabel bleibt 'Modern Clinic Scheduling OS', H1 ist ein
     assert.equal(d.hero.h1.includes("Modern Clinic Scheduling OS"), false, `${loc}: H1 soll einfacher sein als das Produktlabel`);
   }
   // EN-H1 trägt die klare Tages-Board-Botschaft.
-  assert.ok(getPivot("en").hero.h1.toLowerCase().includes("one simple board"), "EN H1 ohne klare Board-Botschaft");
+  assert.ok(getPivot("en").hero.h1.toLowerCase().includes("one board for today's clinic work"), "EN H1 ohne klare Board-Botschaft");
   const en = flattenPivot(getPivot("en")).toLowerCase();
   for (const must of ["walk-in queue", "available slots", "today board", "room", "waiting", "completed", "available"]) {
     assert.ok(en.includes(must), `EN Scheduling-Begriff fehlt: ${must}`);
   }
 });
 
-// ─── Phase 11.1 — Homepage Clarity Guard ──────────────────────────────────────
+// ─── Phase 12.1 — Commercial Rejection Audit existiert ────────────────────────
 
-test("Homepage Clarity Guard: Startseite erklärt Produkt in einfachen Worten", () => {
+test("Commercial Rejection Audit: Datei existiert mit Technical GO / Commercial NO-GO", () => {
+  const p = "docs/commercial-rejection-audit-8b71ebc.md";
+  assert.ok(existsSync(join(ROOT, p)), "Audit-Datei fehlt");
+  const md = read(p).toLowerCase();
+  assert.ok(md.includes("technical go") && md.includes("commercial no-go"), "GO/NO-GO-Urteil fehlt");
+  assert.ok(md.includes("button"), "Button-Funktionsproblem nicht dokumentiert");
+  assert.ok(md.includes("unclear") || md.includes("concept"), "Konzept-Unklarheit nicht dokumentiert");
+});
+
+// ─── Phase 12.2 — Hero Clarity Guard ──────────────────────────────────────────
+
+test("Hero Clarity Guard: Startseite in 5s verständlich (Tagesboard)", () => {
   const en = flattenPivot(getPivot("en")).toLowerCase();
-  for (const must of [
-    "run the clinic day in one simple board",
-    "appointments",
-    "walk-ins",
-    "rooms",
-    "open slots",
-    "monthly saas",
-    "request pilot access",
-  ]) {
-    assert.ok(en.includes(must.toLowerCase()), `Homepage-Klarheit fehlt: "${must}"`);
+  for (const must of ["one board for today's clinic work", "appointments", "walk-ins", "rooms", "open slots", "front-desk board"]) {
+    assert.ok(en.includes(must.toLowerCase()), `Hero-Klarheit fehlt: "${must}"`);
   }
-  // Die Startseite rendert genau diese Felder.
   const home = read("app/[locale]/page.tsx");
-  for (const ref of ["d.hero.h1", "d.hero.subline", "d.what", "d.pricing"]) {
+  for (const ref of ["d.hero.h1", "d.hero.subline", "d.problem", "d.money.title"]) {
     assert.ok(home.includes(ref), `Homepage rendert ${ref} nicht`);
   }
 });
 
-// ─── Phase 11.2 — Revenue Clarity Guard ───────────────────────────────────────
+// ─── Phase 12.3 — Button Function Guard ───────────────────────────────────────
 
-test("Revenue Clarity Guard: klare monatliche Pläne, ohne Payment zu aktivieren", () => {
-  const en = getPivot("en");
-  assert.ok(en.pricing.title.toLowerCase().includes("monthly plans"), "Pricing-Titel ohne 'monthly plans'");
-  assert.ok(en.pricing.intro.toLowerCase().includes("monthly saas"), "Pricing-Intro ohne 'monthly SaaS'");
-  const names = en.pricing.plans.map((p) => p.name);
-  for (const n of ["Starter", "Clinic Pro", "Clinic Plus"]) {
-    assert.ok(names.includes(n), `Plan fehlt: ${n}`);
+test("Button Function Guard: keine toten CTAs, alle Buttons mit sichtbarer Aktion", () => {
+  const files = [
+    "app/[locale]/page.tsx",
+    "app/[locale]/demo/page.tsx",
+    "components/pivot/InteractiveDemo.tsx",
+    "components/pivot/PricingPlans.tsx",
+    "components/pivot/RequestAccess.tsx",
+    "components/pivot/PivotShell.tsx",
+  ];
+  for (const f of files) {
+    const src = read(f);
+    assert.equal(/href=["']#["']/.test(src), false, `${f}: toter Anker href="#"`);
+    assert.equal(/<button[^>]*>\s*<\/button>/.test(src), false, `${f}: leerer Button`);
+    // Kein dauerhaft deaktivierter Button (disabled ohne Bedingung).
+    assert.equal(/disabled(\s|>)/.test(src), false, `${f}: CTA dauerhaft disabled`);
   }
-  const prices = en.pricing.plans.map((p) => p.price).join(" ");
-  assert.ok(prices.includes("from $29/month"), "Starter-Preis fehlt");
-  assert.ok(prices.includes("from $79/month"), "Clinic-Pro-Preis fehlt");
-  assert.ok(/confirmed before activation/i.test(en.pricing.note), "Aktivierungs-Hinweis fehlt");
-  assert.ok(/no payment is processed on this website/i.test(en.pricing.note), "Kein-Zahlung-Hinweis fehlt");
-  // Pläne sind in allen Produktsprachen vorhanden (gleiche Plan-Namen, eigene Sprache).
-  for (const loc of PRODUCT_LOCALES) {
-    assert.equal(getPivot(loc).pricing.plans.length, 3, `${loc}: nicht 3 Pläne`);
-  }
-  // CTA bleibt sicher: nur mailto-/Demo-Logik, kein Checkout im Quelltext.
-  const home = stripComments(read("app/[locale]/page.tsx"));
-  assert.equal(/checkout|stripe|<form|createCheckout/i.test(home), false, "Homepage enthält Checkout/Form");
+  // Interaktive Demo-Buttons haben Handler.
+  const demo = read("components/pivot/InteractiveDemo.tsx");
+  assert.ok((demo.match(/onClick=/g) || []).length >= 4, "Demo-Buttons ohne onClick-Aktion");
+  // Pricing-Buttons haben ein Ziel/Aktion.
+  const plans = read("components/pivot/PricingPlans.tsx");
+  assert.ok(plans.includes("onClick="), "Pricing-Button ohne Aktion");
+  assert.ok(plans.includes("d.access.pilotRequest"), "Pricing zeigt keine sichtbare 'Pilot request'-Bestätigung");
+  // Request access: sichtbarer Mail-Fallback + Copy-Funktion.
+  const ra = read("components/pivot/RequestAccess.tsx");
+  assert.ok(ra.includes("mailto:"), "Request access ohne mailto");
+  assert.ok(ra.includes("d.access.emailIntro") && ra.includes("{email}"), "Request access ohne sichtbaren Mail-Fallback");
+  assert.ok(ra.includes("navigator.clipboard") && ra.includes("d.access.copyEmail"), "Copy-email-Funktion fehlt");
+  // Hero-CTAs sind aktiv: View-Demo-Anker + mailto im Quelltext.
+  const home = read("app/[locale]/page.tsx");
+  assert.ok(home.includes('href="#demo"') && home.includes("mailto:"), "Hero-CTAs ohne Ziel");
 });
 
-// ─── Phase 11.3 — No Overload Guard ───────────────────────────────────────────
+// ─── Phase 12.4 — Interactive Demo Guard ──────────────────────────────────────
 
-test("No Overload Guard: Startseite nutzt kurze Karten statt langer Textblöcke", () => {
+test("Interactive Demo Guard: client-seitig, interaktiv, ohne Speicherung", () => {
+  // Kommentar-Doku ("no localStorage") ist kein Verstoß — vor dem Scan entfernen.
+  const demo = stripComments(read("components/pivot/InteractiveDemo.tsx"));
+  assert.ok(demo.includes('"use client"'), "Demo ist keine Client-Komponente");
+  assert.ok(demo.includes("useState"), "Demo ohne React-State");
+  for (const bad of [/localStorage/, /sessionStorage/, /indexedDB/, /\bfetch\s*\(/, /\/api\//, /supabase/i]) {
+    assert.equal(bad.test(demo), false, `Demo nutzt unerlaubte Persistenz/Dienst: ${bad}`);
+  }
+  // Erwartete Tabs + Aktionen (Dict) — exakt die geforderten Begriffe.
+  const en = getPivot("en");
+  assert.deepEqual(
+    [en.demo.tabs.todayBoard, en.demo.tabs.walkInQueue, en.demo.tabs.openSlots, en.demo.tabs.rooms],
+    ["Today Board", "Walk-in Queue", "Open Slots", "Rooms"],
+  );
+  assert.equal(en.demo.actions.addWalkIn, "Add sample walk-in");
+  assert.equal(en.demo.actions.markCompleted, "Mark sample as completed");
+  assert.equal(en.demo.actions.reset, "Reset demo");
+  const flat = flattenPivot(en).toLowerCase();
+  assert.ok(flat.includes("safe sample demo"), "Safe-Sample-Hinweis fehlt");
+  assert.ok(flat.includes("no real patient data"), "Hinweis 'no real patient data' fehlt");
+  // Demo rendert Tabs + Aktions-Handler tatsächlich.
+  for (const ref of ["d.demo.tabs", "d.demo.actions", "addWalkIn", "markCompleted", "showOpenSlots", "reset"]) {
+    assert.ok(demo.includes(ref), `Demo rendert ${ref} nicht`);
+  }
+});
+
+// ─── Phase 12.5 — Revenue Clarity Guard ───────────────────────────────────────
+
+test("Revenue Clarity Guard: Geldlogik klar (monatlich, Patienten zahlen nicht)", () => {
+  const en = getPivot("en");
+  assert.ok(en.money.title.toLowerCase().includes("how clinicslothub makes money"), "Money-Titel fehlt");
+  assert.ok(en.money.intro.toLowerCase().includes("monthly subscription"), "'monthly subscription' fehlt");
+  assert.ok(en.money.intro.toLowerCase().includes("patients do not pay on this website"), "'Patients do not pay' fehlt");
+  const names = en.money.plans.map((p) => p.name);
+  for (const n of ["Starter", "Clinic Pro", "Clinic Plus"]) assert.ok(names.includes(n), `Plan fehlt: ${n}`);
+  const prices = en.money.plans.map((p) => p.price).join(" ");
+  assert.ok(prices.includes("from $29/month") && prices.includes("from $79/month"), "Plan-Preise fehlen");
+  assert.ok(/no payment is processed on this website/i.test(en.money.note), "Kein-Zahlung-Hinweis fehlt");
+  for (const loc of PRODUCT_LOCALES) assert.equal(getPivot(loc).money.plans.length, 3, `${loc}: nicht 3 Pläne`);
+  // Homepage rendert Money-Sektion + sichere CTAs, kein Checkout.
+  const home = stripComments(read("app/[locale]/page.tsx"));
+  assert.ok(home.includes("d.money.title") && home.includes("PricingPlans"), "Money-Sektion fehlt auf Homepage");
+  assert.equal(/checkout|stripe|<form|createCheckout/i.test(home), false, "Homepage enthält Checkout/Form");
+  const plans = stripComments(read("components/pivot/PricingPlans.tsx"));
+  assert.equal(/checkout|stripe|createCheckout|<form/i.test(plans), false, "Pricing aktiviert Zahlung");
+});
+
+// ─── Phase 12.6 — Buyer Focus Guard ───────────────────────────────────────────
+
+test("Buyer Focus Guard: Klinik ist Hauptkunde, Patient nur kompakt", () => {
+  for (const loc of PRODUCT_LOCALES) {
+    const d = getPivot(loc);
+    assert.ok(/clinic|clínica|cliniqu/.test(flattenPivot(d).toLowerCase()), `${loc}: Klinik nicht adressiert`);
+    assert.ok(d.patientsLine.length <= 160, `${loc}: Patientenzeile zu lang`);
+  }
+  const en = flattenPivot(getPivot("en")).toLowerCase();
+  assert.ok(en.includes("front desk") || en.includes("front-desk") || en.includes("reception"), "EN adressiert nicht Klinik-Empfang");
+  // Homepage rendert nur die kompakte Patientenzeile, keinen großen Patienten-Block.
+  const home = read("app/[locale]/page.tsx");
+  assert.ok(home.includes("d.patientsLine"), "kompakte Patientenzeile fehlt");
+  assert.equal(home.includes("d.forPatients"), false, "großer Patienten-Block (forPatients) auf Homepage");
+});
+
+// ─── Phase 12.7 — No Overload Guard ───────────────────────────────────────────
+
+test("No Overload Guard: kurze Blöcke, keine Textwüste, Safety nicht dominant", () => {
   const d = getPivot("en");
-  // Kurze Karten: What-Karten und Plan-Beschreibungen bleiben knapp.
-  assert.equal(d.what.cards.length, 3, "What-Sektion soll genau 3 Karten haben");
-  for (const c of d.what.cards) {
-    assert.ok(c.body.length <= 130, `What-Karte zu lang: "${c.title}"`);
-  }
-  for (const p of d.pricing.plans) {
-    assert.ok(p.for.length <= 110, `Plan-Beschreibung zu lang: "${p.name}"`);
-  }
-  // Hero-Supporting bleibt eine kurze Zeile, kein Absatzblock.
+  assert.ok(d.problem.pains.length >= 3 && d.problem.pains.length <= 5, "Pain-Karten 3–5 erwartet");
+  for (const p of d.problem.pains) assert.ok(p.length <= 60, `Pain zu lang: "${p}"`);
+  assert.equal(d.money.plans.length, 3, "3 Pläne erwartet");
+  for (const p of d.money.plans) assert.ok(p.for.length <= 120, `Plan-Beschreibung zu lang: "${p.name}"`);
   assert.ok(d.hero.supporting.length <= 140, "Hero-Supporting zu lang");
-  // Keine überlangen Marketing-Absätze (außer Safety-Disclaimer-Body).
-  const longBlocks: string[] = [];
+  const long: string[] = [];
   const walk = (v: unknown) => {
-    if (typeof v === "string") { if (v.length > 220) longBlocks.push(v); }
+    if (typeof v === "string") { if (v.length > 230) long.push(v); }
     else if (Array.isArray(v)) v.forEach(walk);
     else if (v && typeof v === "object") Object.values(v).forEach(walk);
   };
   const { safety, ...rest } = d;
   walk(rest);
-  assert.equal(longBlocks.length, 0, `zu lange Textblöcke: ${JSON.stringify(longBlocks)}`);
-});
-
-// ─── Phase 11.4 — Clinic Buyer Guard ──────────────────────────────────────────
-
-test("Clinic Buyer Guard: Seite verkauft an Kliniken, Patienten sind nicht der Hauptkunde", () => {
-  for (const loc of PRODUCT_LOCALES) {
-    const d = getPivot(loc);
-    const blob = flattenPivot(d).toLowerCase();
-    assert.ok(/clinic|clínica|cliniqu/.test(blob), `${loc}: Klinik-Käufer nicht adressiert`);
-    // Patienten-Abschnitt bleibt kompakt (eine kurze Zeile).
-    assert.ok(d.patientsLine.length <= 140, `${loc}: Patientenzeile zu lang (nicht kompakt)`);
-  }
-  // EN spricht Klinik-Team / Front Desk an.
-  const en = flattenPivot(getPivot("en")).toLowerCase();
-  assert.ok(en.includes("front desk") || en.includes("clinic teams"), "EN adressiert nicht Klinik-Team/Front Desk");
-  // Homepage rendert die kompakte Patientenzeile (statt großem Patienten-Block).
+  assert.equal(long.length, 0, `zu lange Textblöcke: ${JSON.stringify(long)}`);
+  // Safety bleibt kompakt; Geldlogik ist sichtbarer Hauptinhalt.
   const home = read("app/[locale]/page.tsx");
-  assert.ok(home.includes("d.patientsLine"), "Homepage rendert kompakte Patientenzeile nicht");
+  assert.ok(home.includes("d.money.title"), "Geldlogik fehlt als Hauptinhalt");
 });
 
 // ─── 1. Public Locale Guard (EN/FR/ES) ────────────────────────────────────────
@@ -198,7 +257,7 @@ test("Translation Quality: keine Platzhalter, FR/ES sprachlich eigenständig", (
 // ─── 4. Anonymous Mockup Guard ────────────────────────────────────────────────
 
 test("Anonymous Mockup: keine Patientennamen / PII", () => {
-  const src = stripComments(read("components/pivot/DashboardMockup.tsx")) + JSON.stringify(MOCK_ROWS);
+  const src = stripComments(read("components/pivot/InteractiveDemo.tsx")) + JSON.stringify(MOCK_ROWS);
   const pii = ["Sarah", "Ahmed", "Maria", "John", "Fatima", "Mohammed", "Ana", "Carlos", "Patient Name", "diagnosis", "symptom", "medical record", "DOB", "insurance"];
   // E-Mail-/Telefon-Muster nur in den Beispieldaten (nicht im Import-Alias) verbieten.
   assert.equal(/@|phone|\+\d{6,}/i.test(JSON.stringify(MOCK_ROWS)), false, "Mockup-Daten enthalten Kontakt-PII");
@@ -297,7 +356,7 @@ test("Pivot-Contact: kein Patienten-Formular / kein Upload", () => {
 
 test("Mobile/UX: Homepage nicht leer, Mockup + klare CTAs + Demo-Route", () => {
   const home = read("app/[locale]/page.tsx");
-  assert.ok(home.includes("DashboardMockup"), "Mockup fehlt auf Homepage");
+  assert.ok(home.includes("InteractiveDemo"), "Interaktives Board fehlt auf Homepage");
   assert.ok(home.includes("d.hero.h1") && home.includes("d.cta.requestAccess") && home.includes("d.cta.viewDemo"), "Hero/CTAs fehlen");
   assert.ok(existsSync(join(ROOT, "app/[locale]/demo/page.tsx")), "Demo-Route fehlt");
   // Treatments/Destinations (Medical-Tourism-Reste) sind entfernt.

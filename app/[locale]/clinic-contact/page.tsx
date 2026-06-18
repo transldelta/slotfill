@@ -10,7 +10,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   const d = getPivot(locale);
-  return { title: `${d.cta.requestAccess} — ${d.brand}`, description: d.pricing.note, alternates: { canonical: `/${locale}/clinic-contact` } };
+  return { title: `${d.cta.requestAccess} — ${d.brand}`, description: d.money.note, alternates: { canonical: `/${locale}/clinic-contact` } };
 }
 
 export default async function ContactPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -20,7 +20,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
     <PivotShell locale={locale}>
       <section className="mx-auto max-w-2xl px-4 py-16">
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl" style={{ color: PIVOT_COLORS.ink }}>{d.cta.requestAccess}</h1>
-        <p className="mt-4 text-[15px] leading-relaxed" style={{ color: PIVOT_COLORS.slate }}>{d.pricing.note}</p>
+        <p className="mt-4 text-[15px] leading-relaxed" style={{ color: PIVOT_COLORS.slate }}>{d.money.note}</p>
 
         {/* No patient form — clinic enquiry only, via the visitor's own email client */}
         <div className="mt-8 rounded-2xl border bg-white p-7" style={{ borderColor: PIVOT_COLORS.line }}>

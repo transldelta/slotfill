@@ -535,8 +535,8 @@ test("Go-Live: Aufgabe 4 – Scheduling-OS-Hero zeigt H1, Trust-Zeile und Dashbo
     'app/[locale]/page.tsx: Scheduling-Hero/Trust-Zeile fehlt',
   );
   assert.ok(
-    content.includes("DashboardMockup") && content.includes("d.cta.requestAccess") && content.includes("d.cta.viewDemo"),
-    'app/[locale]/page.tsx: Mockup oder sichere CTAs fehlen im Hero',
+    content.includes("InteractiveDemo") && content.includes("d.cta.requestAccess") && content.includes("d.cta.viewDemo"),
+    'app/[locale]/page.tsx: interaktives Board oder sichere CTAs fehlen im Hero',
   );
 });
 

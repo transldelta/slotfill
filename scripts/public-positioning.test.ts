@@ -369,6 +369,41 @@ test("Arabische öffentliche CTAs/Pricing sind arabisch (keine lateinischen UI-T
   }
 });
 
+// ─── Launch-Seite: Language Gate + Cleanup ────────────────────────────────────
+
+test("Launch-Seite: Language Gate leitet needs_review-Locales weg (nur en/de Detail)", () => {
+  const src = read("app/[locale]/launch/page.tsx");
+  assert.ok(src.includes("shouldRedirectLaunch") && src.includes("redirect(`/${locale}`)"), "Launch-Redirect-Gate fehlt");
+  assert.ok(src.includes("localesNeedingNativeReview"), "Gate nutzt Quality-Registry nicht");
+  // CONTENT enthält nur noch de/en (tote Locale-Objekte entfernt).
+  const contentBlock = src.slice(src.indexOf("const CONTENT"), src.indexOf("function getContent"));
+  for (const loc of ["fr", "es", "pt", "ar", "hi", "bn", "ru", "zh"]) {
+    assert.equal(new RegExp(`\\n  ${loc}: \\{`).test(contentBlock), false, `Launch CONTENT hat noch ${loc}-Objekt`);
+  }
+});
+
+test("Launch-Seite: frei von verbotenen Begriffen & alter arabischer Phrase", () => {
+  const src = read("app/[locale]/launch/page.tsx");
+  for (const bad of [
+    "without API", "ohne API", "Soft Launch", "Twilio", "Resend", "Supabase",
+    "العيادة تبقى المتحكمة", "Essayer gratuitement", "免费试用", "جرّب مجاناً",
+    "Попробовать бесплатно", "Probar gratis", "मुफ्त आज़माएँ", "appointment bookings efficiently",
+  ]) {
+    assert.equal(src.includes(bad), false, `Launch-Seite enthält "${bad}"`);
+  }
+});
+
+// ─── Aria-Label Lokalisierung ─────────────────────────────────────────────────
+
+test("Aria-Labels nicht deutsch auf fremden Locales (LanguageSwitcher + Logo)", () => {
+  const ls = read("components/language-switcher.tsx");
+  assert.ok(ls.includes("ARIA_CHANGE_LANGUAGE"), "lokalisierte aria-Map fehlt");
+  assert.equal(ls.includes('aria-label="Sprache wechseln / Change language"'), false, "hartes deutsches aria-label noch vorhanden");
+  for (const loc of ["ar", "fr", "hi", "zh"]) assert.ok(ls.includes(`${loc}:`), `aria-Map fehlt ${loc}`);
+  const logo = read("components/ui/SlotFillLogo.tsx");
+  assert.equal(logo.includes("zur Startseite"), false, "deutsches 'zur Startseite' im Logo-aria-label");
+});
+
 test("Homepage zeigt ein Produkt-/Workflow-Mockup (Premium-Struktur)", () => {
   const src = read("app/[locale]/page.tsx");
   assert.ok(src.includes("Product preview"), "Produkt-Mockup fehlt");

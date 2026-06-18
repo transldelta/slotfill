@@ -17,6 +17,20 @@ const LANGUAGE_NAMES: Record<Locale, string> = {
   ru: "Русский",
 };
 
+// Lokalisierte aria-labels (Accessibility) — keine deutschen Labels auf fremden Locales.
+const ARIA_CHANGE_LANGUAGE: Record<Locale, string> = {
+  de: "Sprache wechseln",
+  en: "Change language",
+  zh: "切换语言",
+  hi: "भाषा बदलें",
+  es: "Cambiar idioma",
+  ar: "تغيير اللغة",
+  fr: "Changer de langue",
+  pt: "Mudar idioma",
+  bn: "ভাষা পরিবর্তন করুন",
+  ru: "Сменить язык",
+};
+
 const LANGUAGE_LABELS: Record<Locale, string> = {
   de: "DE",
   en: "EN",
@@ -63,7 +77,7 @@ export function LanguageSwitcher({ currentLocale, currentPath }: Props) {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((v) => !v)}
-        aria-label="Sprache wechseln / Change language"
+        aria-label={ARIA_CHANGE_LANGUAGE[currentLocale] ?? "Change language"}
         className="flex items-center gap-1 rounded-md border border-slate-300 bg-white px-2 py-1 text-xs font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
       >
         <span>{LANGUAGE_LABELS[currentLocale]}</span>

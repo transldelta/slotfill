@@ -126,3 +126,39 @@ test("FAQ Guard: FAQ-Sektion + Nav-Link vorhanden, vertrauensbildend, ohne verbo
     assert.equal(enBlob.includes(bad), false, `EN FAQ/Copy enthält verbotenen Begriff: "${bad}"`);
   }
 });
+
+// ─── 8. Public Logo Guard ─────────────────────────────────────────────────────
+
+import { existsSync } from "node:fs";
+
+test("Public Logo Guard: neues ClinicSlotHub-Logo-Asset im Header/Footer genutzt", () => {
+  // Lokale Brand-Assets vorhanden (kein Hotlink).
+  assert.ok(existsSync(join(ROOT, "public/brand/clinicslothub-logo.png")), "clinicslothub-logo.png fehlt");
+  assert.ok(existsSync(join(ROOT, "public/brand/clinicslothub-icon.png")), "clinicslothub-icon.png fehlt");
+  // Logo-Komponente nutzt die neuen Assets + die Markenquelle.
+  const logo = read(LOGO);
+  assert.ok(logo.includes("clinicslothub-logo.png") && logo.includes("clinicslothub-icon.png"), "Logo-Komponente nutzt die neuen ClinicSlotHub-Assets nicht");
+  assert.ok(logo.includes("PUBLIC_BRAND_NAME"), "Logo-Komponente nutzt PUBLIC_BRAND_NAME nicht");
+  // Favicon/App-Icon erneuert.
+  assert.ok(existsSync(join(ROOT, "app/icon.png")), "app/icon.png (Favicon) fehlt");
+  // Header + Footer rendern das Logo.
+  const home = read(PAGE);
+  assert.ok((home.match(/<SlotFillLogo/g) ?? []).length >= 2, "Header/Footer rendern das Logo nicht beide");
+});
+
+// ─── 9. Brand Spelling Guard ──────────────────────────────────────────────────
+
+test("Brand Spelling Guard: öffentliche Marke exakt 'ClinicSlotHub'", () => {
+  // Korrekte Schreibweise in der Einzelquelle.
+  const brand = read("lib/brand.ts");
+  assert.ok(/PUBLIC_BRAND_NAME\s*=\s*"ClinicSlotHub"/.test(brand), "PUBLIC_BRAND_NAME ist nicht exakt 'ClinicSlotHub'");
+  // Keine Fehlschreibweisen in öffentlicher Landing-/Nav-Copy.
+  for (const loc of locales) {
+    const m = msg(loc);
+    const blob = (JSON.stringify(m.landing ?? {}) + JSON.stringify(m.nav ?? {}));
+    for (const bad of ["ClinicsLotHub", "Clinicslothub", "clinicSlotHub", "Slotfill"]) {
+      assert.equal(blob.includes(bad), false, `${loc}: falsche/alte Markenschreibweise "${bad}"`);
+    }
+    assert.equal(m.nav?.brand, "ClinicSlotHub", `${loc}: nav.brand ≠ ClinicSlotHub`);
+  }
+});

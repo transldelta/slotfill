@@ -192,7 +192,7 @@ export default async function LocaleLandingPage({
         }}
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <SlotFillLogo href={`/${locale}`} size={34} hideWordmarkOnMobile />
+          <SlotFillLogo href={`/${locale}`} size={40} hideWordmarkOnMobile priority />
           <nav className="flex items-center gap-1 text-sm">
             <a
               href="#how-patients"

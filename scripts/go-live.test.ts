@@ -1868,12 +1868,12 @@ test("Logo: SVG enthält gradient-Definition (Blau → Teal)", () => {
   );
 });
 
-test("Logo: app/icon.svg existiert (Browser-Favicon)", () => {
+test("Logo: app/icon.png existiert (ClinicSlotHub Browser-Favicon)", () => {
   const { existsSync } = require("fs");
   const { resolve } = require("path");
   assert.ok(
-    existsSync(resolve(process.cwd(), "app/icon.svg")),
-    "app/icon.svg (Browser-Favicon) fehlt",
+    existsSync(resolve(process.cwd(), "app/icon.png")),
+    "app/icon.png (Browser-Favicon) fehlt",
   );
 });
 

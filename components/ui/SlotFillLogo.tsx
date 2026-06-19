@@ -1,83 +1,71 @@
 import Link from "next/link";
+import Image from "next/image";
 import { PUBLIC_BRAND_NAME } from "@/lib/brand";
 
 interface SlotFillLogoProps {
   /** Href the logo links to. Pass null to render without a link. */
   href?: string | null;
-  /** Height in px (icon scales proportionally). Default: 36. */
+  /** Rendered height in px (width scales proportionally). Default: 36. */
   size?: number;
-  /** Show the product name wordmark next to the icon. Default: true. */
+  /** Show the full logo (icon + wordmark). false → icon only. Default: true. */
   showWordmark?: boolean;
-  /** Hide the wordmark below the `sm` breakpoint (icon-only on mobile). */
+  /** Below the `sm` breakpoint show only the icon (icon-only on mobile). */
   hideWordmarkOnMobile?: boolean;
+  /** Eager-load (header/LCP). Default: false. */
+  priority?: boolean;
   className?: string;
 }
 
 /**
- * White-Label-ready brand logo.
+ * Öffentliches ClinicSlotHub-Markenlogo.
  *
- * ● Kein externes Bild – reines inline SVG.
- * ● Produktname kommt aus lib/brand.ts (BRAND_NAME).
- * ● Für White-Label-Anpassung: nur BRAND_NAME in lib/brand.ts ändern.
- * ● Professionelles, minimalistisches B2B-SaaS-Design.
- * ● Desktop und Mobile sauber.
- *
- * Icon: Abstraktes 4-Quadranten-Raster (symbolisiert Terminplanung / Workflow)
- * mit Blau-Indigo-Verlauf – zeitlos, kein Emoji, kein Kalender-Klischee.
+ * ● Lokale Assets (kein Hotlink): public/brand/clinicslothub-logo.png (Icon +
+ *   Wordmark „ClinicSlotHub") und public/brand/clinicslothub-icon.png (nur Icon).
+ * ● Öffentliche Wordmark = PUBLIC_BRAND_NAME aus lib/brand.ts ("ClinicSlotHub").
+ * ● Desktop: volles Logo. Mobile (mit hideWordmarkOnMobile): nur Icon.
+ * ● Weißer Logo-Hintergrund ist gerundet, damit er in Light- und Dark-Header
+ *   sauber wirkt.
  */
+const LOGO_SRC = "/brand/clinicslothub-logo.png"; // 1024 × 256 (4:1)
+const ICON_SRC = "/brand/clinicslothub-icon.png"; // 512 × 512 (1:1)
+const LOGO_RATIO = 1024 / 256;
+
 export function SlotFillLogo({
   href = "/",
   size = 36,
   showWordmark = true,
   hideWordmarkOnMobile = false,
+  priority = false,
   className = "",
 }: SlotFillLogoProps) {
-  const iconSize = Math.max(24, Math.round(size * 0.85));
+  const h = Math.round(size);
+  const logoW = Math.round(h * LOGO_RATIO);
+  const alt = PUBLIC_BRAND_NAME; // "ClinicSlotHub"
 
-  const inner = (
-    <span className={`inline-flex items-center gap-2.5 select-none ${className}`}>
-      {/* Minimalist geometric mark – inline SVG, zero external dependencies */}
-      <svg
-        width={iconSize}
-        height={iconSize}
-        viewBox="0 0 32 32"
-        fill="none"
-        aria-hidden="true"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <defs>
-          <linearGradient id="pf-grad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#2563eb" />
-            <stop offset="100%" stopColor="#6366f1" />
-          </linearGradient>
-        </defs>
-        {/* Container */}
-        <rect width="32" height="32" rx="7" fill="url(#pf-grad)" />
-        {/* 4-tile grid: top-left */}
-        <rect x="7" y="7" width="7" height="7" rx="1.5" fill="white" opacity="0.95" />
-        {/* top-right */}
-        <rect x="18" y="7" width="7" height="7" rx="1.5" fill="white" opacity="0.95" />
-        {/* bottom-left */}
-        <rect x="7" y="18" width="7" height="7" rx="1.5" fill="white" opacity="0.5" />
-        {/* bottom-right – lighter, suggests flow direction */}
-        <rect x="18" y="18" width="7" height="7" rx="1.5" fill="white" opacity="0.25" />
-      </svg>
-
-      {showWordmark && (
-        <span
-          className={`font-bold leading-none text-slate-900 dark:text-white ${
-            hideWordmarkOnMobile ? "hidden sm:inline-block" : "inline-block"
-          }`}
-          style={{
-            fontSize: `${Math.round(size * 0.5)}px`,
-            letterSpacing: "-0.015em",
-          }}
-        >
-          {PUBLIC_BRAND_NAME}
-        </span>
-      )}
-    </span>
+  const iconImg = (
+    <Image src={ICON_SRC} alt={alt} width={h} height={h} priority={priority} className="rounded-md" />
   );
+
+  const fullImg = (
+    <Image src={LOGO_SRC} alt={alt} width={logoW} height={h} priority={priority} className="rounded-md" />
+  );
+
+  let visual;
+  if (!showWordmark) {
+    visual = iconImg;
+  } else if (hideWordmarkOnMobile) {
+    // Mobile: nur Icon · ab sm: volles Logo.
+    visual = (
+      <>
+        <span className="inline-flex sm:hidden">{iconImg}</span>
+        <span className="hidden sm:inline-flex">{fullImg}</span>
+      </>
+    );
+  } else {
+    visual = fullImg;
+  }
+
+  const inner = <span className={`inline-flex items-center select-none ${className}`}>{visual}</span>;
 
   if (href === null) return inner;
 

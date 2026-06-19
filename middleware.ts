@@ -68,43 +68,57 @@ export async function middleware(request: NextRequest) {
   //    Nur erreichbar von canonical hosts (oben bereits gesichert).
   //    /admin wird NICHT auf /de/admin umgeleitet.
   if (AUTH_PROTECTED.some((p) => pathname.startsWith(p))) {
-    let response = NextResponse.next({ request });
-
-    const supabase = createServerClient(
-      process.env.SUPABASE_URL ?? "",
-      process.env.SUPABASE_ANON_KEY ?? "",
-      {
-        cookies: {
-          getAll() {
-            return request.cookies.getAll();
-          },
-          setAll(
-            cookiesToSet: {
-              name: string;
-              value: string;
-              options: CookieOptions;
-            }[],
-          ) {
-            cookiesToSet.forEach(({ name, value }) =>
-              request.cookies.set(name, value),
-            );
-            response = NextResponse.next({ request });
-            cookiesToSet.forEach(({ name, value, options }) =>
-              response.cookies.set(name, value, options),
-            );
-          },
-        },
-      },
-    );
-
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
+    const loginRedirect = () => {
       const url = request.nextUrl.clone();
       url.pathname = "/auth/login";
       return NextResponse.redirect(url);
+    };
+
+    // Fail-closed: jeder Auth-Fehler – auch fehlende/ungültige Supabase-
+    // Konfiguration oder eine Ausnahme beim Client-Aufbau – wird wie „nicht
+    // eingeloggt" behandelt. So entsteht niemals offener Zugriff auf /admin
+    // oder /dashboard (kein 500, kein Durchlassen).
+    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
+      return loginRedirect();
+    }
+
+    let response = NextResponse.next({ request });
+    let user = null;
+    try {
+      const supabase = createServerClient(
+        process.env.SUPABASE_URL,
+        process.env.SUPABASE_ANON_KEY,
+        {
+          cookies: {
+            getAll() {
+              return request.cookies.getAll();
+            },
+            setAll(
+              cookiesToSet: {
+                name: string;
+                value: string;
+                options: CookieOptions;
+              }[],
+            ) {
+              cookiesToSet.forEach(({ name, value }) =>
+                request.cookies.set(name, value),
+              );
+              response = NextResponse.next({ request });
+              cookiesToSet.forEach(({ name, value, options }) =>
+                response.cookies.set(name, value, options),
+              );
+            },
+          },
+        },
+      );
+      const result = await supabase.auth.getUser();
+      user = result.data.user;
+    } catch {
+      return loginRedirect();
+    }
+
+    if (!user) {
+      return loginRedirect();
     }
 
     return response;

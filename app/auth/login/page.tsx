@@ -137,12 +137,12 @@ export default function LoginPage() {
         {/* Card footer */}
         <div className="border-t border-slate-100 bg-slate-50/60 px-6 py-4 dark:border-slate-800 dark:bg-slate-800/20">
           <p className="text-center text-sm text-slate-500 dark:text-slate-400">
-            Noch kein Praxis-Konto?{" "}
+            Anmeldung nur für bereits geprüfte Praxis-/Demo-Zugänge. Praxiszugang gewünscht?{" "}
             <Link
-              href="/auth/register"
+              href="/de/kontakt"
               className="font-semibold text-blue-600 hover:underline dark:text-blue-400"
             >
-              Kostenlos registrieren
+              Praxiszugang anfragen
             </Link>
           </p>
         </div>

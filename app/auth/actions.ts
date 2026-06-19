@@ -33,6 +33,15 @@ function mapSignUpError(message: string): string {
 
 // --- Registrierung -------------------------------------------------
 export async function signUp(formData: FormData): Promise<ActionResult> {
+  // SECURITY FREEZE (P1): Öffentliche Selfservice-Registrierung ist deaktiviert.
+  // In der aktuellen Phase wird Praxiszugang ausschließlich nach manueller Prüfung
+  // über die Kontaktseite vergeben. Diese Sperre wirkt auch bei direktem Aufruf der
+  // Server Action (nicht nur im Formular). Re-Aktivierung NUR mit ausdrücklicher
+  // CEO-Freigabe über ENABLE_PUBLIC_SIGNUP=true.
+  if (process.env.ENABLE_PUBLIC_SIGNUP !== "true") {
+    return { code: "REGISTRATION_DISABLED", error: "Registration is disabled." };
+  }
+
   const parsed = credentialsSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),

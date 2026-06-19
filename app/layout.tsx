@@ -4,8 +4,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Slotfill – Book clinic appointments online",
-  description: "Slotfill helps patients book clinic appointments online in a simple, clear flow. Clinics show available appointment options and receive patient requests — multilingual, GDPR-conscious.",
+  title: "ClinicSlotHub – Book clinic appointments online",
+  description: "ClinicSlotHub helps patients book clinic appointments online in a simple, clear flow. Clinics show available appointment options and receive patient requests — multilingual, GDPR-conscious.",
 };
 
 // Setzt das Theme vor dem ersten Paint, um ein Aufblitzen zu vermeiden.

@@ -66,10 +66,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale, slug } = await params;
   const post = await loadPost(slug, locale);
-  if (!post) return { title: "Slotfill Blog" };
+  if (!post) return { title: "ClinicSlotHub Blog" };
 
-  const title = `${post.title} – Slotfill`;
-  const description = post.excerpt ?? "Praxistipps von Slotfill.";
+  const title = `${post.title} – ClinicSlotHub`;
+  const description = post.excerpt ?? "Praxistipps von ClinicSlotHub.";
 
   return {
     title,
@@ -85,7 +85,7 @@ export async function generateMetadata({
       title,
       description,
       url: `/${locale}/blog/${post.slug}`,
-      siteName: "Slotfill",
+      siteName: "ClinicSlotHub",
       locale: locale === "de" ? "de_DE" : locale,
       type: "article",
       publishedTime: post.published_at ?? undefined,

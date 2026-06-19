@@ -75,7 +75,7 @@ function buildSchemaOrg(locale: string) {
         applicationCategory: "BusinessApplication",
         operatingSystem: "Web",
         description:
-          "Slotfill helps patients book clinic appointments online. Clinics show available appointment options and receive patient requests in a simple, clear flow.",
+          "ClinicSlotHub helps patients book clinic appointments online. Clinics show available appointment options and receive patient requests in a simple, clear flow.",
         url: APP_URL,
         inLanguage: locale,
         offers: {
@@ -89,7 +89,7 @@ function buildSchemaOrg(locale: string) {
         "@type": "Organization",
         name: PUBLIC_BRAND_NAME,
         url: APP_URL,
-        description: "Slotfill – online clinic appointment booking for patients and clinics.",
+        description: "ClinicSlotHub – online clinic appointment booking for patients and clinics.",
       },
     ],
   };
@@ -146,7 +146,7 @@ export default async function LocaleLandingPage({
   const trustPoints = [t("trustPoint1"), t("trustPoint2"), t("trustPoint3"), t("trustPoint4")];
   const safetyPoints = [t("safety1"), t("safety2"), t("safety3")];
 
-  // What Slotfill sells — SaaS access points for providers.
+  // What ClinicSlotHub sells — SaaS access points for providers.
   const sellPoints = [t("sell1"), t("sell2"), t("sell3"), t("sell4"), t("sell5"), t("sell6")];
 
   // FAQ — trust-building answers, no client JS (native details/summary).

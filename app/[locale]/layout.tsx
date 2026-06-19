@@ -6,8 +6,8 @@ import { locales, type Locale } from "@/i18n/routing";
 import { LocaleHtmlLang } from "@/components/LocaleHtmlLang";
 
 export const metadata: Metadata = {
-  title: "Slotfill – Book clinic appointments online",
-  description: "Slotfill helps patients book clinic appointments online in a simple, clear flow. Clinics show available appointment options and receive patient requests — multilingual, GDPR-conscious.",
+  title: "ClinicSlotHub – Book clinic appointments online",
+  description: "ClinicSlotHub helps patients book clinic appointments online in a simple, clear flow. Clinics show available appointment options and receive patient requests — multilingual, GDPR-conscious.",
 };
 
 export function generateStaticParams() {

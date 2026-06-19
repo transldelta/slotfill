@@ -1,10 +1,12 @@
 /**
- * Slotfill Public Positioning Guards.
+ * Public Positioning Guards.
  *
- * Slotfill ist die öffentliche Marke für eine einfache Patienten-Terminbuchung.
+ * ClinicSlotHub ist die öffentliche Marke für eine einfache Patienten-Terminbuchung
+ * (per CEO-Entscheid von der früheren öffentlichen Marke "Slotfill" vereinheitlicht).
  * Diese Guards stellen sicher, dass die abgelehnte Board-/OS-/Visibility-Richtung
- * öffentlich nicht zurückkehrt, die Marke "Slotfill" ist, die Buchungsroute
- * existiert und keine medizinischen/Trial-/Automatisierungs-Versprechen erscheinen.
+ * öffentlich nicht zurückkehrt, die öffentliche Marke "ClinicSlotHub" ist, die
+ * Buchungsroute existiert und keine medizinischen/Trial-/Automatisierungs-Versprechen
+ * erscheinen.
  *
  * Lauf: tsx --test scripts/slotfill-positioning.test.ts
  */
@@ -26,19 +28,19 @@ const PAGE = "app/[locale]/page.tsx";
 const LAYOUT = "app/[locale]/layout.tsx";
 const LOGO = "components/ui/SlotFillLogo.tsx";
 
-// ─── 1. Slotfill Brand Guard ──────────────────────────────────────────────────
+// ─── 1. Public Brand Guard ────────────────────────────────────────────────────
 
-test("Slotfill Brand Guard: öffentliche Marke ist Slotfill, nicht ClinicSlotHub", () => {
-  assert.equal(PUBLIC_BRAND_NAME, "Slotfill", `PUBLIC_BRAND_NAME soll 'Slotfill' sein, ist: ${PUBLIC_BRAND_NAME}`);
-  // Wordmark/Logo nutzt die öffentliche Marke.
+test("Public Brand Guard: öffentliche Marke ist ClinicSlotHub (CEO-Vereinheitlichung)", () => {
+  assert.equal(PUBLIC_BRAND_NAME, "ClinicSlotHub", `PUBLIC_BRAND_NAME soll 'ClinicSlotHub' sein, ist: ${PUBLIC_BRAND_NAME}`);
+  // Wordmark/Logo nutzt die öffentliche Marke aus der Einzelquelle.
   assert.ok(read(LOGO).includes("PUBLIC_BRAND_NAME"), "Logo nutzt PUBLIC_BRAND_NAME nicht");
-  // nav.brand ist in allen Locales Slotfill.
+  // nav.brand ist in allen aktiven Locales ClinicSlotHub – kein altes 'Slotfill' mehr.
   for (const loc of locales) {
-    assert.equal(msg(loc).nav?.brand, "Slotfill", `${loc}: nav.brand ist nicht 'Slotfill'`);
+    assert.equal(msg(loc).nav?.brand, "ClinicSlotHub", `${loc}: nav.brand ist nicht 'ClinicSlotHub'`);
   }
-  // Öffentliche Landing-Metadaten/Schema hardcoden ClinicSlotHub nicht.
-  for (const f of [PAGE, LAYOUT]) {
-    assert.equal(read(f).includes('"ClinicSlotHub"'), false, `${f}: ClinicSlotHub als öffentliche Hauptmarke hardcodet`);
+  // Kein sichtbares Alt-Branding 'Slotfill' in öffentlicher Landing-Copy.
+  for (const loc of locales) {
+    assert.equal(landingBlob(loc).includes("slotfill"), false, `${loc}: altes 'Slotfill' in Landing-Copy`);
   }
   // Keine abgelehnte Hauptpositionierung öffentlich.
   for (const f of [PAGE, LAYOUT]) {
@@ -48,9 +50,7 @@ test("Slotfill Brand Guard: öffentliche Marke ist Slotfill, nicht ClinicSlotHub
     }
   }
   for (const loc of locales) {
-    const b = landingBlob(loc);
-    assert.equal(b.includes("clinicslothub"), false, `${loc}: ClinicSlotHub in Landing-Copy`);
-    assert.equal(b.includes("modern clinic scheduling os"), false, `${loc}: Scheduling-OS in Landing-Copy`);
+    assert.equal(landingBlob(loc).includes("modern clinic scheduling os"), false, `${loc}: Scheduling-OS in Landing-Copy`);
   }
 });
 
@@ -289,15 +289,15 @@ const PUBLIC_MSG_KEYS = [
   ["pricing", "trialInfo"],
 ];
 
-test("Secondary Brand Guard: öffentliche Sekundär-Strings nutzen Slotfill, nicht ClinicSlotHub", () => {
+test("Secondary Brand Guard: öffentliche Sekundär-Strings nutzen ClinicSlotHub, kein altes Slotfill", () => {
   for (const loc of locales) {
     const m = msg(loc);
     for (const [ns, key] of PUBLIC_MSG_KEYS) {
       const v = (m[ns]?.[key] ?? "").toLowerCase();
-      assert.equal(v.includes("clinicslothub"), false, `${loc}: ${ns}.${key} zeigt ClinicSlotHub`);
+      assert.equal(v.includes("slotfill"), false, `${loc}: ${ns}.${key} zeigt altes 'Slotfill'`);
     }
-    // Blog-Untertitel trägt die öffentliche Marke.
-    assert.ok((m.blog?.subtitle ?? "").includes("Slotfill"), `${loc}: blog.subtitle ohne Slotfill`);
+    // Blog-Untertitel trägt die öffentliche Marke ClinicSlotHub.
+    assert.ok((m.blog?.subtitle ?? "").includes("ClinicSlotHub"), `${loc}: blog.subtitle ohne ClinicSlotHub`);
   }
 });
 
@@ -358,9 +358,8 @@ test("Public Legal Consistency Guard: nicht aktivierte Dienste nicht als aktiv d
 
 // ─── 23. Secondary Page Chrome Guard ──────────────────────────────────────────
 
-test("Secondary Page Chrome Guard: öffentliche Sekundärseiten ohne ClinicSlotHub-Marke", () => {
+test("Secondary Page Chrome Guard: öffentliche Sekundärseiten ohne altes Slotfill-Branding", () => {
   const files = [
-    "app/layout.tsx",
     "app/[locale]/blog/page.tsx",
     "app/[locale]/blog/[slug]/page.tsx",
     "app/kontakt/layout.tsx",
@@ -368,9 +367,10 @@ test("Secondary Page Chrome Guard: öffentliche Sekundärseiten ohne ClinicSlotH
     "app/auth/login/page.tsx",
   ];
   for (const f of files) {
-    // Die technische Domain clinicslothub.com bleibt erlaubt — das Markenwort nicht.
-    const src = read(f).replace(/clinicslothub\.com/gi, "");
-    assert.equal(/ClinicSlotHub/.test(src), false, `${f}: ClinicSlotHub-Marke im öffentlichen Chrome`);
+    const src = read(f);
+    // Kein altes öffentliches 'Slotfill'-Markenwort mehr (SlotFillLogo-Komponentenname bleibt erlaubt).
+    const brandRefs = src.replace(/SlotFillLogo/g, "");
+    assert.equal(/\bSlotfill\b/.test(brandRefs), false, `${f}: altes 'Slotfill'-Branding im öffentlichen Chrome`);
     // Keine Trial-Claims im öffentlichen Chrome.
     assert.equal(/14[- ](day|tage)|kostenlos testen|free trial/i.test(src), false, `${f}: Trial-Claim im öffentlichen Chrome`);
   }

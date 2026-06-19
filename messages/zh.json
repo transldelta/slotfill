@@ -403,7 +403,7 @@
     "LIMITS_RESET": "限制已重置"
   },
   "nav": {
-    "brand": "Slotfill",
+    "brand": "ClinicSlotHub",
     "features": "功能",
     "pricing": "价格",
     "blog": "博客",
@@ -415,11 +415,11 @@
   },
   "landing": {
     "heroTitle": "在线预约诊所就诊。",
-    "heroSubtitle": "Slotfill 帮助患者通过简单清晰的流程申请可用的就诊预约。",
+    "heroSubtitle": "ClinicSlotHub 帮助患者通过简单清晰的流程申请可用的就诊预约。",
     "ctaPrimary": "预约就诊",
     "ctaSecondary": "查看演示诊所",
     "comparePrices": "比较价格",
-    "featuresTitle": "Slotfill为您的诊所提供什么",
+    "featuresTitle": "ClinicSlotHub为您的诊所提供什么",
     "feature1Title": "管理候诊名单",
     "feature1Desc": "将所有等待患者集中在一处查看。",
     "feature2Title": "准备好的通知",
@@ -432,7 +432,7 @@
     "ctaBlockSubtitle": "展示可预约时间，在线接收患者申请。",
     "rights": "保留所有权利。",
     "trustTitle": "诊所始终保持控制权",
-    "trustSubtitle": "Slotfill 提供支持——决策权始终在诊所手中。",
+    "trustSubtitle": "ClinicSlotHub 提供支持——决策权始终在诊所手中。",
     "trustPoint1": "未经诊所批准，不发送任何自动消息。",
     "trustPoint2": "患者数据保持最少——仅需预约申请所需的信息。",
     "trustPoint3": "在默认模式下，消息仅被准备好，不会自动发送。",

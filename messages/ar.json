@@ -403,7 +403,7 @@
     "LIMITS_RESET": "تم إعادة تعيين الحدود"
   },
   "nav": {
-    "brand": "Slotfill",
+    "brand": "ClinicSlotHub",
     "features": "الميزات",
     "pricing": "الأسعار",
     "blog": "المدونة",
@@ -415,11 +415,11 @@
   },
   "landing": {
     "heroTitle": "احجز مواعيد العيادة عبر الإنترنت.",
-    "heroSubtitle": "يساعد Slotfill المرضى على طلب المواعيد المتاحة في خطوات بسيطة وواضحة.",
+    "heroSubtitle": "يساعد ClinicSlotHub المرضى على طلب المواعيد المتاحة في خطوات بسيطة وواضحة.",
     "ctaPrimary": "احجز موعدًا",
     "ctaSecondary": "عرض العيادة التجريبية",
     "comparePrices": "مقارنة الأسعار",
-    "featuresTitle": "ما يقدمه Slotfill لعيادتك",
+    "featuresTitle": "ما يقدمه ClinicSlotHub لعيادتك",
     "feature1Title": "إدارة قائمة الانتظار",
     "feature1Desc": "تتبّع جميع المرضى المنتظرين في مكان واحد.",
     "feature2Title": "إشعارات جاهزة",
@@ -432,7 +432,7 @@
     "ctaBlockSubtitle": "اعرض المواعيد المتاحة واستقبل طلبات المرضى عبر الإنترنت.",
     "rights": "جميع الحقوق محفوظة.",
     "trustTitle": "العيادة تحتفظ بالتحكم",
-    "trustSubtitle": "تدعم Slotfill – القرارات دائماً بيد العيادة.",
+    "trustSubtitle": "تدعم ClinicSlotHub – القرارات دائماً بيد العيادة.",
     "trustPoint1": "لا رسائل تلقائية دون موافقة العيادة.",
     "trustPoint2": "تبقى بيانات المريض في حدها الأدنى — فقط ما يحتاجه طلب الموعد.",
     "trustPoint3": "في الوضع الافتراضي، يتم إعداد الرسائل وليس إرسالها تلقائياً.",

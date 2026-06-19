@@ -95,6 +95,9 @@ test("No Old Pivot Guard: keine Scheduling-OS-/Board-/Visibility-/Emerging-Reste
     "soft launch",
     "try for free",
     "14-day free trial",
+    "fill appointment slots automatically",
+    "try free for 14 days",
+    "sms/whatsapp optional via twilio",
   ];
   const srcs = [read(PAGE).toLowerCase(), read(LAYOUT).toLowerCase(), ...locales.map(landingBlob)];
   for (const s of srcs) {
@@ -231,6 +234,48 @@ test("Visual Hero Guard: anonyme Termin-Vorschaukarte im Hero (keine echten Date
   const home = read(PAGE);
   assert.ok(home.includes('t("previewClinic")') && home.includes('"09:00"') && home.includes('"10:30"'), "Hero-Vorschaukarte fehlt");
   assert.equal(/Sarah|Ahmed|Maria|Fatima|Mohammed|diagnosis|symptom/i.test(home), false, "mögliche PII/Diagnose im Homepage-Quelltext");
+  // DE-Vorschaukarte trägt die geforderten lokalisierten Begriffe.
+  const de = msg("de").landing;
+  assert.ok(de.previewClinic.includes("Demo-Praxis"), "DE previewClinic");
+  assert.ok(de.previewAvailable.includes("Verfügbar"), "DE previewAvailable");
+  assert.ok(de.previewRequest.includes("Terminanfrage"), "DE previewRequest");
+  assert.ok(de.previewPending.includes("Bestätigung der Praxis ausstehend"), "DE previewPending");
+});
+
+// ─── 16. Patient Navigation Guard ─────────────────────────────────────────────
+
+test("Patient Navigation Guard: klarer Haupt-CTA, vereinfachte Navigation", () => {
+  const home = read(PAGE);
+  // Haupt-CTA = Termin buchen (btn-brand → /termin-buchen).
+  assert.ok(home.includes('tNav("bookAppointment")'), "Haupt-CTA Termin buchen fehlt");
+  assert.ok(home.includes('btn-brand ml-1'), "Termin-buchen-CTA ist nicht der primäre Header-Button");
+  // 'Loslegen'/getStarted und 'Preise vergleichen' aus den Patienten-CTAs entfernt.
+  assert.equal(home.includes('tNav("getStarted")'), false, "verwirrender 'Loslegen'-CTA noch vorhanden");
+  assert.equal(home.includes('t("comparePrices")'), false, "'Preise vergleichen' verwirrt Patienten noch");
+  // Neue, einfachere Nav-Items.
+  assert.ok(home.includes('tNav("forClinics")') && home.includes('tNav("demoClinic")'), "Nav-Items Für Praxen/Demo-Praxis fehlen");
+  for (const loc of locales) {
+    assert.ok((msg(loc).nav?.forClinics ?? "").trim().length > 1, `${loc}: nav.forClinics fehlt`);
+    assert.ok((msg(loc).nav?.demoClinic ?? "").trim().length > 1, `${loc}: nav.demoClinic fehlt`);
+  }
+});
+
+// ─── 17. Clinics Section Guard ────────────────────────────────────────────────
+
+test("Clinics Section Guard: 'Für Praxen' kompakt, unten, ohne Fachjargon", () => {
+  for (const loc of locales) {
+    const l = msg(loc).landing;
+    assert.ok((l.clinicsTitle ?? "").trim().length > 3, `${loc}: clinicsTitle fehlt`);
+    assert.ok((l.clinicsSubline ?? "").trim().length > 5, `${loc}: clinicsSubline fehlt`);
+    for (const k of ["clinic1", "clinic2", "clinic3", "clinic4"]) {
+      assert.ok((l[k] ?? "").trim().length > 2 && l[k].length <= 45, `${loc}: ${k} fehlt/zu lang`);
+    }
+  }
+  const home = read(PAGE);
+  assert.ok(
+    home.includes('id="for-clinics"') && home.includes("clinicCards") && home.includes('t("clinicsTitle")'),
+    "Praxis-Sektion (for-clinics) fehlt/unvollständig",
+  );
 });
 
 // ─── 5. Medical Safety Guard ──────────────────────────────────────────────────

@@ -410,8 +410,10 @@
     "contact": "Contato",
     "login": "Entrar",
     "getStarted": "Começar",
-    "bookAppointment": "Agendar consulta",
-    "feedback": "Feedback"
+    "bookAppointment": "Marcar consulta",
+    "feedback": "Feedback",
+    "forClinics": "Para clínicas",
+    "demoClinic": "Clínica demo"
   },
   "landing": {
     "heroTitle": "Marque uma consulta médica online.",
@@ -428,8 +430,8 @@
     "feature3Desc": "Identifique consultas canceladas e preencha as vagas rapidamente.",
     "feature4Title": "Pronto para uso em clínicas",
     "feature4Desc": "Comunicação com uso mínimo de dados e processos conscientes de proteção de dados.",
-    "ctaBlockTitle": "Pronto para simplificar a marcação de consultas?",
-    "ctaBlockSubtitle": "Mostre as consultas disponíveis e receba pedidos de pacientes online.",
+    "ctaBlockTitle": "Pronto para receber consultas mais facilmente?",
+    "ctaBlockSubtitle": "Mostre horários disponíveis e receba pedidos de consulta online.",
     "rights": "Todos os direitos reservados.",
     "trustTitle": "O consultório mantém o controle",
     "trustSubtitle": "Slotfill apoia – as decisões são sempre do consultório.",
@@ -455,7 +457,14 @@
     "previewToday": "Hoje",
     "previewAvailable": "Disponível",
     "previewRequest": "Pedido de consulta",
-    "previewPending": "Confirmação da clínica pendente"
+    "previewPending": "Confirmação da clínica pendente",
+    "clinicsTitle": "Para clínicas e consultórios",
+    "clinicsSubline": "O Slotfill ajuda a receber pedidos de consulta online — a clínica mantém o controlo.",
+    "clinic1": "Receba pedidos online",
+    "clinic2": "Mostre horários disponíveis",
+    "clinic3": "Menos chamadas telefónicas",
+    "clinic4": "A clínica confirma as consultas",
+    "ctaForClinics": "Para clínicas"
   },
   "blog": {
     "title": "Blog",

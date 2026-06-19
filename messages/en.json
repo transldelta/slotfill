@@ -411,8 +411,10 @@
     "contact": "Contact",
     "login": "Practice Login",
     "getStarted": "Get started",
-    "bookAppointment": "Book Appointment",
-    "feedback": "Feedback"
+    "bookAppointment": "Book appointment",
+    "feedback": "Feedback",
+    "forClinics": "For clinics",
+    "demoClinic": "Demo clinic"
   },
   "landing": {
     "heroTitle": "Book doctor appointments online.",
@@ -429,8 +431,8 @@
     "feature3Desc": "Identify cancelled appointments and quickly fill the gaps.",
     "feature4Title": "Ready for Practice Use",
     "feature4Desc": "Data-minimising communication and data-protection-aware processes.",
-    "ctaBlockTitle": "Ready to make appointment booking easier?",
-    "ctaBlockSubtitle": "Show available appointments and receive patient requests online.",
+    "ctaBlockTitle": "Ready to make appointment requests easier?",
+    "ctaBlockSubtitle": "Show available times and receive appointment requests online.",
     "rights": "All rights reserved.",
     "trustTitle": "The practice stays in control",
     "trustSubtitle": "Slotfill supports – decisions are always made by the practice.",
@@ -456,7 +458,14 @@
     "previewToday": "Today",
     "previewAvailable": "Available",
     "previewRequest": "Appointment request",
-    "previewPending": "Clinic confirmation pending"
+    "previewPending": "Clinic confirmation pending",
+    "clinicsTitle": "For clinics and practices",
+    "clinicsSubline": "Slotfill helps you accept appointment requests online — your clinic stays in control.",
+    "clinic1": "Receive appointment requests online",
+    "clinic2": "Show available times",
+    "clinic3": "Less phone back-and-forth",
+    "clinic4": "Clinic confirms appointments",
+    "ctaForClinics": "For clinics"
   },
   "blog": {
     "title": "Blog",

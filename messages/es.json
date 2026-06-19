@@ -411,7 +411,9 @@
     "login": "Iniciar sesión",
     "getStarted": "Comenzar",
     "bookAppointment": "Reservar cita",
-    "feedback": "Comentarios"
+    "feedback": "Comentarios",
+    "forClinics": "Para clínicas",
+    "demoClinic": "Clínica demo"
   },
   "landing": {
     "heroTitle": "Reserve una cita médica en línea.",
@@ -428,8 +430,8 @@
     "feature3Desc": "Identifica citas canceladas y cubre los espacios rápidamente.",
     "feature4Title": "Listo para uso en consultorios",
     "feature4Desc": "Comunicación con uso mínimo de datos y procesos conscientes de la protección de datos.",
-    "ctaBlockTitle": "¿Listo para simplificar la reserva de citas?",
-    "ctaBlockSubtitle": "Muestre las citas disponibles y reciba solicitudes de pacientes en línea.",
+    "ctaBlockTitle": "¿Listo para recibir citas más fácilmente?",
+    "ctaBlockSubtitle": "Muestre horarios disponibles y reciba solicitudes de cita en línea.",
     "rights": "Todos los derechos reservados.",
     "trustTitle": "La consulta mantiene el control",
     "trustSubtitle": "Slotfill apoya – las decisiones siempre las toma la consulta.",
@@ -455,7 +457,14 @@
     "previewToday": "Hoy",
     "previewAvailable": "Disponible",
     "previewRequest": "Solicitud de cita",
-    "previewPending": "Confirmación de la clínica pendiente"
+    "previewPending": "Confirmación de la clínica pendiente",
+    "clinicsTitle": "Para clínicas y consultorios",
+    "clinicsSubline": "Slotfill le ayuda a recibir solicitudes de cita en línea — la clínica mantiene el control.",
+    "clinic1": "Reciba solicitudes en línea",
+    "clinic2": "Muestre horarios disponibles",
+    "clinic3": "Menos llamadas telefónicas",
+    "clinic4": "La clínica confirma las citas",
+    "ctaForClinics": "Para clínicas"
   },
   "blog": {
     "title": "Blog",

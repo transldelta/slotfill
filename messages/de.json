@@ -412,7 +412,9 @@
     "login": "Praxis-Login",
     "getStarted": "Loslegen",
     "bookAppointment": "Termin buchen",
-    "feedback": "Feedback"
+    "feedback": "Feedback",
+    "forClinics": "Für Praxen",
+    "demoClinic": "Demo-Praxis"
   },
   "landing": {
     "heroTitle": "Arzttermine online buchen.",
@@ -429,8 +431,8 @@
     "feature3Desc": "Ausgefallene Termine erkennen und Lücken schnell wieder füllen.",
     "feature4Title": "Für den Praxiseinsatz vorbereitet",
     "feature4Desc": "Datensparsame Kommunikation und DSGVO-bewusste Prozesse.",
-    "ctaBlockTitle": "Bereit, die Terminbuchung einfacher zu machen?",
-    "ctaBlockSubtitle": "Zeigen Sie verfügbare Termine und erhalten Sie Patientenanfragen online.",
+    "ctaBlockTitle": "Bereit, Termine einfacher online anzunehmen?",
+    "ctaBlockSubtitle": "Zeigen Sie verfügbare Zeiten und erhalten Sie Terminanfragen online.",
     "rights": "Alle Rechte vorbehalten.",
     "trustTitle": "Die Praxis behält die Kontrolle",
     "trustSubtitle": "Slotfill unterstützt – entschieden wird immer in der Praxis.",
@@ -456,7 +458,14 @@
     "previewToday": "Heute",
     "previewAvailable": "Verfügbar",
     "previewRequest": "Terminanfrage",
-    "previewPending": "Bestätigung der Praxis ausstehend"
+    "previewPending": "Bestätigung der Praxis ausstehend",
+    "clinicsTitle": "Für Praxen und Kliniken",
+    "clinicsSubline": "Slotfill hilft, Terminanfragen online anzunehmen — die Praxis behält die Kontrolle.",
+    "clinic1": "Terminanfragen online erhalten",
+    "clinic2": "Verfügbare Zeiten zeigen",
+    "clinic3": "Weniger Telefonaufwand",
+    "clinic4": "Praxis bestätigt Termine",
+    "ctaForClinics": "Für Praxen ansehen"
   },
   "blog": {
     "title": "Blog",

@@ -410,8 +410,10 @@
     "contact": "Contact",
     "login": "Se connecter",
     "getStarted": "Commencer",
-    "bookAppointment": "Prendre rendez-vous",
-    "feedback": "Commentaires"
+    "bookAppointment": "Réserver",
+    "feedback": "Commentaires",
+    "forClinics": "Pour les cliniques",
+    "demoClinic": "Clinique démo"
   },
   "landing": {
     "heroTitle": "Réservez un rendez-vous médical en ligne.",
@@ -428,8 +430,8 @@
     "feature3Desc": "Identifiez les rendez-vous annulés et comblez rapidement les créneaux.",
     "feature4Title": "Prêt pour l'usage en cabinet",
     "feature4Desc": "Communication minimisant les données et processus respectueux de la protection des données.",
-    "ctaBlockTitle": "Prêt à simplifier la prise de rendez-vous ?",
-    "ctaBlockSubtitle": "Affichez les rendez-vous disponibles et recevez les demandes des patients en ligne.",
+    "ctaBlockTitle": "Prêt à recevoir les rendez-vous plus facilement ?",
+    "ctaBlockSubtitle": "Affichez les créneaux disponibles et recevez les demandes de rendez-vous en ligne.",
     "rights": "Tous droits réservés.",
     "trustTitle": "Le cabinet garde le contrôle",
     "trustSubtitle": "Slotfill accompagne – les décisions appartiennent toujours au cabinet.",
@@ -455,7 +457,14 @@
     "previewToday": "Aujourd'hui",
     "previewAvailable": "Disponible",
     "previewRequest": "Demande de rendez-vous",
-    "previewPending": "Confirmation de la clinique en attente"
+    "previewPending": "Confirmation de la clinique en attente",
+    "clinicsTitle": "Pour les cliniques et cabinets",
+    "clinicsSubline": "Slotfill vous aide à recevoir les demandes de rendez-vous en ligne — la clinique garde le contrôle.",
+    "clinic1": "Recevoir les demandes en ligne",
+    "clinic2": "Afficher les créneaux disponibles",
+    "clinic3": "Moins d'appels téléphoniques",
+    "clinic4": "La clinique confirme les rendez-vous",
+    "ctaForClinics": "Pour les cliniques"
   },
   "blog": {
     "title": "Blog",

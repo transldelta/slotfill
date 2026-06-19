@@ -105,11 +105,11 @@ export default async function LocaleLandingPage({
   const tNav = await getTranslations({ locale, namespace: "nav" });
   const tLegal = await getTranslations({ locale, namespace: "legal" });
 
-  const features = [
-    { icon: ListOrdered, title: t("feature1Title"), desc: t("feature1Desc") },
-    { icon: Bell, title: t("feature2Title"), desc: t("feature2Desc") },
-    { icon: CalendarClock, title: t("feature3Title"), desc: t("feature3Desc") },
-    { icon: ShieldCheck, title: t("feature4Title"), desc: t("feature4Desc") },
+  const clinicCards = [
+    { icon: CalendarClock, text: t("clinic1") },
+    { icon: ListOrdered, text: t("clinic2") },
+    { icon: Bell, text: t("clinic3") },
+    { icon: ShieldCheck, text: t("clinic4") },
   ];
 
   const schemaOrg = buildSchemaOrg(locale);
@@ -134,34 +134,22 @@ export default async function LocaleLandingPage({
           <SlotFillLogo href={`/${locale}`} size={34} />
           <nav className="flex items-center gap-1 text-sm">
             <a
-              href="#features"
+              href="#how"
               className="hidden rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:inline"
             >
               {tNav("features")}
             </a>
-            <Link
-              href={`/${locale}/pricing`}
-              className="rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
-            >
-              {tNav("pricing")}
-            </Link>
-            <Link
-              href={`/${locale}/blog`}
+            <a
+              href="#for-clinics"
               className="hidden rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:inline"
             >
-              {tNav("blog")}
-            </Link>
+              {tNav("forClinics")}
+            </a>
             <Link
-              href={`/${locale}/kontakt`}
+              href="/book/testpraxis-delta"
               className="hidden rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:inline"
             >
-              {tNav("contact")}
-            </Link>
-            <Link
-              href={`/${locale}/termin-buchen`}
-              className="hidden rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:inline"
-            >
-              {tNav("bookAppointment")}
+              {tNav("demoClinic")}
             </Link>
             <Link
               href="/auth/login"
@@ -169,8 +157,8 @@ export default async function LocaleLandingPage({
             >
               {tNav("login")}
             </Link>
-            <Link href={`/${locale}/pricing`} className="btn-brand ml-1 px-4 py-2 text-xs">
-              {tNav("getStarted")}
+            <Link href={`/${locale}/termin-buchen`} className="btn-brand ml-1 px-4 py-2 text-xs">
+              {tNav("bookAppointment")}
             </Link>
             <LanguageSwitcher currentLocale={locale as Locale} currentPath="/" />
           </nav>
@@ -213,19 +201,19 @@ export default async function LocaleLandingPage({
               style={{ borderColor: "var(--color-border)" }}
             >
               <span
-                className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white"
                 style={{ background: "var(--gradient-brand)" }}
               >
                 {i + 1}
               </span>
-              <span className="text-sm text-slate-700 dark:text-slate-300">{step}</span>
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{step}</span>
             </div>
           ))}
         </div>
 
         {/* Hero preview card — anonymized demo, no real patient data */}
         <div
-          className="mx-auto mt-8 max-w-sm rounded-2xl border bg-white p-4 text-left shadow-sm dark:bg-slate-900"
+          className="mx-auto mt-8 max-w-md rounded-2xl border bg-white p-5 text-left shadow-md dark:bg-slate-900"
           style={{ borderColor: "var(--color-border)" }}
         >
           <div className="flex items-center justify-between">
@@ -263,20 +251,69 @@ export default async function LocaleLandingPage({
       </section>
       </div>
 
-      {/* Features — subtle slate-tinted section */}
-      <div className="w-full bg-slate-50/60 dark:bg-transparent">
-      <section id="features" className="mx-auto max-w-6xl px-4 py-16">
-        <h2 className="mb-2 text-center text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">
-          {t("featuresTitle")}
+      {/* 1. How online booking works (patient + demo) */}
+      <div id="how" className="w-full scroll-mt-20 bg-slate-50/60 dark:bg-transparent">
+      <section className="mx-auto max-w-6xl px-4 py-16">
+        <div
+          className="rounded-2xl border p-8 shadow-sm"
+          style={{
+            backgroundColor: "var(--color-surface)",
+            borderColor: "var(--color-border)",
+          }}
+        >
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex-1">
+              <div className="mb-2 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium" style={{ backgroundColor: "var(--color-surface-2)", color: "var(--color-muted)" }}>
+                <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
+                {t("onlineBookingBadge")}
+              </div>
+              <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+                {t("onlineBookingTitle")}
+              </h2>
+              <p className="mt-2 max-w-lg text-sm text-slate-600 dark:text-slate-400">
+                {t("onlineBookingDesc")}
+              </p>
+              <ul className="mt-4 space-y-1.5 text-sm text-slate-600 dark:text-slate-400">
+                <li className="flex items-center gap-2">
+                  <span style={{ color: "var(--color-accent)" }}>✓</span>
+                  {t("onlineBookingBullet1")}
+                </li>
+                <li className="flex items-center gap-2">
+                  <span style={{ color: "var(--color-accent)" }}>✓</span>
+                  {t("onlineBookingBullet2")}
+                </li>
+                <li className="flex items-center gap-2">
+                  <span style={{ color: "var(--color-accent)" }}>✓</span>
+                  {t("onlineBookingBullet3")}
+                </li>
+              </ul>
+            </div>
+            <div className="flex shrink-0 flex-col gap-3">
+              <Link href={`/${locale}/termin-buchen`} className="btn-brand text-center">
+                {t("onlineBookingButton")}
+              </Link>
+              <Link href="/book/testpraxis-delta" className="btn-outline-brand text-center">
+                {t("ctaSecondary")}
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+      </div>
+
+      {/* 2. For clinics and practices */}
+      <section id="for-clinics" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-16">
+        <h2 className="text-center text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">
+          {t("clinicsTitle")}
         </h2>
-        <p className="mb-10 text-center text-sm text-slate-500 dark:text-slate-400">
-          {t("trustSubtitle")}
+        <p className="mx-auto mt-2 max-w-2xl text-center text-sm text-slate-500 dark:text-slate-400">
+          {t("clinicsSubline")}
         </p>
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {features.map((f) => (
+        <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {clinicCards.map((c) => (
             <div
-              key={f.title}
-              className="group rounded-2xl border p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+              key={c.text}
+              className="rounded-2xl border p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
               style={{
                 backgroundColor: "var(--color-surface)",
                 borderColor: "var(--color-border)",
@@ -286,19 +323,17 @@ export default async function LocaleLandingPage({
                 className="mb-4 inline-flex rounded-xl p-2.5 shadow-sm"
                 style={{ background: "var(--gradient-brand)" }}
               >
-                <f.icon className="h-5 w-5 text-white" />
+                <c.icon className="h-5 w-5 text-white" />
               </div>
-              <h3 className="font-semibold text-slate-900 dark:text-slate-100">{f.title}</h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                {f.desc}
+              <p className="text-sm font-medium leading-relaxed text-slate-800 dark:text-slate-200">
+                {c.text}
               </p>
             </div>
           ))}
         </div>
       </section>
-      </div>
 
-      {/* Trust — subtle teal-tint section */}
+      {/* 3. Trust — subtle teal-tint section */}
       <div className="w-full bg-gradient-to-b from-teal-50/25 to-white dark:from-teal-950/10 dark:to-transparent">
       <section
         id="trust"
@@ -334,51 +369,6 @@ export default async function LocaleLandingPage({
       </section>
       </div>
 
-      {/* Online-Booking Section */}
-      <section className="mx-auto max-w-6xl px-4 py-16">
-        <div
-          className="rounded-2xl border p-8"
-          style={{
-            backgroundColor: "var(--color-surface)",
-            borderColor: "var(--color-border)",
-          }}
-        >
-          <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex-1">
-              <div className="mb-2 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium" style={{ backgroundColor: "var(--color-surface-2)", color: "var(--color-muted)" }}>
-                <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
-                {t("onlineBookingBadge")}
-              </div>
-              <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
-                {t("onlineBookingTitle")}
-              </h2>
-              <p className="mt-2 text-sm text-slate-600 dark:text-slate-400 max-w-lg">
-                {t("onlineBookingDesc")}
-              </p>
-              <ul className="mt-4 space-y-1.5 text-sm text-slate-600 dark:text-slate-400">
-                <li className="flex items-center gap-2">
-                  <span style={{ color: "var(--color-accent)" }}>✓</span>
-                  {t("onlineBookingBullet1")}
-                </li>
-                <li className="flex items-center gap-2">
-                  <span style={{ color: "var(--color-accent)" }}>✓</span>
-                  {t("onlineBookingBullet2")}
-                </li>
-                <li className="flex items-center gap-2">
-                  <span style={{ color: "var(--color-accent)" }}>✓</span>
-                  {t("onlineBookingBullet3")}
-                </li>
-              </ul>
-            </div>
-            <div className="shrink-0">
-              <Link href={`/${locale}/termin-buchen`} className="btn-brand">
-                {t("onlineBookingButton")}
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* CTA */}
       <section
         className="mx-auto max-w-3xl rounded-3xl px-8 py-16 text-center mx-4 my-8"
@@ -400,13 +390,13 @@ export default async function LocaleLandingPage({
             {t("ctaPrimary")}
           </Link>
           <Link
-            href={`/${locale}/pricing`}
+            href={`/${locale}#for-clinics`}
             className="inline-flex w-full items-center justify-center rounded-lg border border-white/40 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10 sm:w-auto"
           >
-            {t("comparePrices")}
+            {t("ctaForClinics")}
           </Link>
         </div>
-        {/* Pricing richtet sich an Praxen/Kliniken, nicht an Patienten */}
+        {/* Preise richten sich an Praxen/Kliniken, nicht an Patienten */}
         <p className="mt-4 text-xs text-white/70">{t("pricingForClinics")}</p>
       </section>
 
@@ -434,6 +424,9 @@ export default async function LocaleLandingPage({
             </Link>
             <Link href={`/${locale}/avv`} className="transition hover:text-slate-900 dark:hover:text-slate-100">
               AVV
+            </Link>
+            <Link href={`/${locale}/pricing`} className="transition hover:text-slate-900 dark:hover:text-slate-100">
+              {tNav("pricing")}
             </Link>
             <Link href={`/${locale}/blog`} className="transition hover:text-slate-900 dark:hover:text-slate-100">
               {tNav("blog")}

@@ -27,14 +27,23 @@ Feste Tore (Gates), die Claude Code bei jeder Arbeit durchläuft. Jedes Gate ist
 - Keine neuen Abhängigkeiten ohne Notwendigkeit.
 - **NO-GO** bei drohenden Kosten ohne Freigabe.
 
-## 5. UX Gate (bei sichtbaren Änderungen)
+## 4b. Legal / Compliance Gate
+
+- Market-Scope erhalten (selected markets, legal review required, unsupported
+  jurisdictions may be rejected).
+- Keine falschen Compliance-Aussagen (kein „GDPR-ready/HIPAA-ready/fully compliant/
+  garantiert rechtssicher/medizinisch zertifiziert").
+- Keine medizinischen/rechtlichen/finanziellen Garantien; kein Notfall-/Soforttermin.
+- **NO-GO** bei verbotener Rechts-/Compliance-Aussage.
+
+## 5. UX/Design Gate (bei sichtbaren Änderungen)
 
 - Visuelle Prüfung Mobile (360/375/390/430) + Desktop (1280/1440).
 - 0 Console-Errors, 0 Hydration-Errors, 0 broken images, 0 horizontaler Overflow.
 - CTAs sichtbar & klickbar; `/book/testpraxis-delta` = HTTP 200.
 - **NO-GO** bei kaputtem Button/Bild/Layout oder Client-Fehler.
 
-## 6. Test Gate
+## 6. Test & Build Gate
 
 - `npm run lint` ✓ · `npm run build` ✓ · `npm test` ✓.
 - **NO-GO** bei Rot (kein Commit). Fehlende Tests werden gemeldet, nicht erfunden.
@@ -49,6 +58,18 @@ Feste Tore (Gates), die Claude Code bei jeder Arbeit durchläuft. Jedes Gate ist
 
 - `npm run claude:final` (`--full` inkl. build) → alle Pflicht-Gates grün.
 - Commit nur gezielt; Push nur bei GO.
+
+## Fail-Closed-Regel (verbindlich)
+
+Im Zweifel **immer STOPP / NO-GO**:
+
+- Projekt unklar → STOP. · Secret-Risiko → STOP. · Kostenrisiko → STOP.
+- Externer Dienst ohne CEO-Freigabe → STOP. · Fake-Claim → STOP.
+- Tests/Build/Lint rot → NO-GO (kein Commit/Push).
+- Automatik nicht beweisbar aktiv → NO-GO oder GELB mit klarer Warnung.
+
+Diese Regeln sind automatisiert: lokale Git-Hooks (`pre-commit`/`pre-push`) und der
+zentrale `scripts/claude/auto-guard.mjs` brechen Commit/Push bei Rot ab.
 
 ## CEO-Bericht (Format)
 

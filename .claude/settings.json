@@ -18,7 +18,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/claude/project-identity-gate.mjs\" --hook session"
+            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/claude/auto-guard.mjs\" start"
           }
         ]
       }
@@ -29,7 +29,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/claude/security-cost-guard.mjs\" --hook bash"
+            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/claude/auto-guard.mjs\" pre-bash"
           }
         ]
       },
@@ -38,7 +38,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/claude/security-cost-guard.mjs\" --hook write"
+            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/claude/auto-guard.mjs\" pre-write"
           }
         ]
       }
@@ -49,7 +49,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/claude/security-cost-guard.mjs\" --hook posttooluse"
+            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/claude/auto-guard.mjs\" post-edit"
           }
         ]
       }
@@ -59,7 +59,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo '🏁 Slotfill: Vor dem Abschluss bitte CEO-Bericht (Go/No-Go) liefern. Vollcheck: npm run claude:final. Nur gezielt committen (kein git add .), keine Secrets, keine Screenshots.'"
+            "command": "echo '🏁 Slotfill: Vor dem Abschluss bitte CEO-Bericht (Go/No-Go) liefern. Vollcheck: npm run claude:final. Vor Commit/Push laufen die Git-Hooks automatisch. Nur gezielt committen (kein bulk-add), keine Secrets, keine Screenshots.'"
           }
         ]
       }

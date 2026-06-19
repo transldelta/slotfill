@@ -21,6 +21,20 @@ Arbeit an diesem Repository. Halte dich ohne Ausnahme daran.
 - **Architektur:** Next.js 14 (App Router) · next-intl (de/en/fr/es/pt) · Tailwind ·
   Supabase (nur via Env, nicht lokal aktiviert) · Vercel. Tests: `tsx --test`.
 
+### Projektprofil (Kurz)
+
+| Feld | Wert |
+| --- | --- |
+| Öffentliche Marke | Slotfill |
+| Domain | clinicslothub.com (technisch) |
+| Wer zahlt | Praxen / Kliniken / Gesundheitszentren (monatlicher SaaS-Zugang) |
+| Wer nutzt | Patient:innen (anfragen) + Praxen (bestätigen) |
+| Status | Öffentliche Website live; Booking-Backend nur mit Env (Supabase) |
+| Aktive Dienste | Next.js/Vercel/next-intl (statisch) |
+| Gesperrte Dienste | Stripe/Payment, DB-Migration, Supabase-Schreibbetrieb, SMTP/Resend, Twilio/SMS – nur mit CEO-Freigabe |
+| Kostenstatus | 0 € – keine kostenpflichtige Aktivierung ohne CEO-Freigabe |
+| Größte Risiken | versehentliche Secret-/Dienst-Aktivierung, Fake-Claims, Market-Scope-Aufweichung |
+
 ## 2. Oberste Regeln
 
 1. **Erst prüfen, dann verstehen, dann planen, dann minimal & sauber umsetzen, dann
@@ -69,7 +83,31 @@ Arbeit an diesem Repository. Halte dich ohne Ausnahme daran.
 6. **Commit:** nur gezielte Dateien, klare Message. **Push** nur, wenn alles grün ist.
 7. **Bericht:** CEO-Go/No-Go (siehe `docs/release-gates.md`).
 
-## 6. Schnellbefehle
+## 6. Automatik & Owner-Zero-Memory
+
+Der Inhaber ist kein Programmierer, hat wenig Zeit und **muss sich keine technischen
+Befehle merken**. Das Kontrollsystem schützt automatisch:
+
+- **Sitzungsstart** → Projekt-Identität wird geprüft (`auto-guard start`).
+- **Vor jedem Bash-Befehl** → gefährliche Aktionen werden blockiert (`auto-guard pre-bash`):
+  Bulk-Staging, `.env`-Lesen, Secret-Dumps, `curl|bash`, destruktives `rm -rf /`.
+- **Vor jedem Schreiben** → Schreiben in `.env`/Secret-/Key-Dateien blockiert (`pre-write`).
+- **Nach jeder Dateiänderung** → stiller Secret-Scan der Datei (`post-edit`).
+- **Vor jedem Commit** → lokaler Git-Hook `pre-commit` startet `auto-guard pre-commit`
+  (Identity + Security + No-Fake-Claims). **Commit bricht bei Rot ab.**
+- **Vor jedem Push** → lokaler Git-Hook `pre-push` startet `auto-guard pre-push`
+  (Final-Verify inkl. Lint + Tests). **Push bricht bei Rot ab.**
+- **Beim Beenden** → Erinnerung an den CEO-Bericht.
+
+Lokale Git-Hooks (einmalig je Rechner): `npm run claude:install-hooks`.
+Die `npm run claude:*`-Befehle sind nur **Backup**, keine tägliche Pflicht.
+
+**Fail-Closed-Regel:** Im Zweifel STOPP/NO-GO. Unklares Projekt, Secret-Risiko,
+Kostenrisiko, externer Dienst ohne Freigabe, Fake-Claim, rote Tests/Build/Lint →
+**keine Freigabe**. Claude darf Arbeit **nie** als GO melden, wenn ein Pflicht-Gate
+rot ist.
+
+## 7. Schnellbefehle
 
 - `npm run claude:project-gate` — Projekt-Identität prüfen
 - `npm run claude:security` — Secrets-/Kosten-/Dienst-Scan
@@ -77,3 +115,5 @@ Arbeit an diesem Repository. Halte dich ohne Ausnahme daran.
 - `npm run claude:changed-files` — geänderte Dateien + Risiko
 - `npm run claude:all-gates` — alle Gates nacheinander
 - `npm run claude:final` — Gates + lint + test + GO/NO-GO (`--full` inkl. build)
+- `npm run claude:install-hooks` — lokale Git-Hooks (pre-commit/pre-push) installieren
+- `npm run claude:auto-start` / `claude:auto-stop` — Automatik-Runner manuell

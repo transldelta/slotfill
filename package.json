@@ -14,6 +14,9 @@
     "claude:changed-files": "node scripts/claude/changed-files-report.mjs",
     "claude:final": "node scripts/claude/final-verify.mjs",
     "claude:all-gates": "node scripts/claude/project-identity-gate.mjs && node scripts/claude/security-cost-guard.mjs && node scripts/claude/no-fake-claims-guard.mjs && node scripts/claude/changed-files-report.mjs",
+    "claude:auto-start": "node scripts/claude/auto-guard.mjs start",
+    "claude:auto-stop": "node scripts/claude/auto-guard.mjs stop",
+    "claude:install-hooks": "node scripts/claude/install-local-git-hooks.mjs",
     "test": "tsx --test scripts/messaging.test.ts scripts/operations.test.ts scripts/hardening.test.ts scripts/ceo.test.ts scripts/marketing.test.ts scripts/seo.test.ts scripts/i18n.test.ts scripts/go-live.test.ts scripts/booking-flow.test.ts scripts/ceo-launch.test.ts scripts/slotfill-positioning.test.ts scripts/slotfill-visuals.test.ts scripts/slotfill-pricing.test.ts"
   },
   "dependencies": {

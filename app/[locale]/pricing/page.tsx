@@ -6,6 +6,7 @@ import { Check, Zap, TrendingUp, Building2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import type { Locale } from "@/i18n/routing";
+import { PRICE_FROM_BY_KEY, type PricingPlanKey } from "@/lib/pricing";
 
 // ─── DB plan shape (name + price come from the API; features are hardcoded below) ─
 
@@ -16,10 +17,12 @@ type Plan = {
   price_monthly: number;
 };
 
-const CTA_BY_KEY: Record<string, string> = {
-  starter: "ctaStarter",
-  professional: "ctaProfessional",
-  praxis_plus: "ctaClinicPro",
+// Plan-CTAs nutzen dieselbe Anfrage-Copy wie die Homepage (landing-Namespace) –
+// keine abweichende oder Trial-Sprache ("… anfragen", nicht "… testen").
+const LANDING_CTA_BY_KEY: Record<string, string> = {
+  starter: "planStarterCta",
+  professional: "planPracticeCta",
+  praxis_plus: "planClinicCta",
 };
 
 // ─── Hardcoded feature lists per plan + locale ────────────────────────────────
@@ -141,15 +144,19 @@ function getPlanContent(locale: string, planKey: string): PlanMeta | null {
 // Statische, sichere Pläne — KEINE DB-/Stripe-Abhängigkeit (verhindert Crashes
 // ohne konfigurierte Umgebung). Preise sind eine vorsichtige Pilot-Orientierung;
 // die Aktivierung erfolgt nur nach Bestätigung, es wird keine Zahlung verarbeitet.
+// Preise stammen aus der zentralen Einzelquelle lib/pricing.ts (identisch zur
+// Homepage – kein zweiter, abweichender Preis mehr).
 const STATIC_PLANS: Plan[] = [
-  { id: "starter", plan_key: "starter", name: "Starter", price_monthly: 29 },
-  { id: "professional", plan_key: "professional", name: "Practice", price_monthly: 79 },
-  { id: "praxis_plus", plan_key: "praxis_plus", name: "Clinic", price_monthly: 149 },
+  { id: "starter", plan_key: "starter", name: "Starter", price_monthly: PRICE_FROM_BY_KEY.starter },
+  { id: "professional", plan_key: "professional", name: "Practice", price_monthly: PRICE_FROM_BY_KEY.professional },
+  { id: "praxis_plus", plan_key: "praxis_plus", name: "Clinic", price_monthly: PRICE_FROM_BY_KEY.praxis_plus },
 ];
 
 export default function LocalePricingPage() {
   const t = useTranslations("pricing");
   const tCommon = useTranslations("common");
+  // Gemeinsame Preis-/Hinweis-Copy mit der Homepage (landing-Namespace).
+  const tl = useTranslations("landing");
   const router = useRouter();
   const params = useParams();
   const locale = (params.locale as string) ?? "de";
@@ -159,8 +166,8 @@ export default function LocalePricingPage() {
   const loading = false;
   const error = false;
 
-  // Kein Stripe, keine Zahlung: Plan-CTA leitet zur Kontakt-/Praxiszugang-Anfrage.
-  function startCheckout(planKey: string) {
+  // Keine Zahlung: Plan-CTA leitet zur Kontakt-/Praxiszugang-Anfrage.
+  function requestPlanAccess(planKey: string) {
     setPending(planKey);
     router.push(`/${locale}/kontakt`);
   }
@@ -263,14 +270,12 @@ export default function LocalePricingPage() {
                   </div>
                 </div>
 
-                {/* Price */}
-                <div className="flex items-baseline gap-1 mb-5">
-                  <span className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
-                    {plan.price_monthly} €
+                {/* Price — same "ab/from … € / month" logic as the homepage */}
+                <div className="mb-5">
+                  <span className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
+                    {tl("pricePerMonthFrom", { price: plan.price_monthly })}
                   </span>
-                  <span className="text-sm text-slate-400 dark:text-slate-500">
-                    {t("monthly")}
-                  </span>
+                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{tl("pricingOnRequest")}</p>
                 </div>
 
                 {/* Divider */}
@@ -307,7 +312,7 @@ export default function LocalePricingPage() {
 
                 {/* CTA */}
                 <button
-                  onClick={() => startCheckout(plan.plan_key)}
+                  onClick={() => requestPlanAccess(plan.plan_key)}
                   disabled={pending !== null}
                   className={`mt-7 w-full rounded-xl px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
                     isHighlight
@@ -319,13 +324,18 @@ export default function LocalePricingPage() {
                 >
                   {pending === plan.plan_key
                     ? tCommon("loading")
-                    : t(CTA_BY_KEY[plan.plan_key] ?? "ctaStarter")}
+                    : tl(LANDING_CTA_BY_KEY[plan.plan_key] ?? "planStarterCta")}
                 </button>
               </div>
             );
           })}
         </div>
       )}
+
+      {/* Unified orientation / market-review / no-patient-payment note (same as homepage) */}
+      <p className="mx-auto mt-8 max-w-3xl text-center text-sm text-slate-500 dark:text-slate-400">
+        {tl("pricingMoneyNote")}
+      </p>
 
       {/* Trial & info box */}
       <div className="mt-12 rounded-2xl border border-blue-100 bg-blue-50 px-6 py-6 dark:border-blue-900/40 dark:bg-blue-900/10">

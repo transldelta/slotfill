@@ -25,6 +25,7 @@ import { HealthcareImage } from "@/components/ui/HealthcareImage";
 import { locales, type Locale } from "@/i18n/routing";
 import { CANONICAL_URL, PUBLIC_BRAND_NAME } from "@/lib/brand";
 import { getMarketScope } from "@/lib/market-scope";
+import { PRICING_PLANS } from "@/lib/pricing";
 
 const APP_URL = CANONICAL_URL;
 
@@ -158,34 +159,20 @@ export default async function LocaleLandingPage({
     { q: t("faq5Q"), a: t("faq5A") },
   ];
 
-  // Pricing packages — names match the static /pricing page (Starter/Practice/Clinic).
-  // No fixed amounts here; CTA → contact / practice-access request. No payment provider.
-  const pricingPlans = [
-    {
-      name: "Starter",
-      icon: Zap,
-      desc: t("planStarterDesc"),
-      cta: t("planStarterCta"),
-      features: [t("planStarterF1"), t("planStarterF2"), t("planStarterF3")],
-      highlight: false,
-    },
-    {
-      name: "Practice",
-      icon: TrendingUp,
-      desc: t("planPracticeDesc"),
-      cta: t("planPracticeCta"),
-      features: [t("planPracticeF1"), t("planPracticeF2"), t("planPracticeF3")],
-      highlight: true,
-    },
-    {
-      name: "Clinic",
-      icon: Building2,
-      desc: t("planClinicDesc"),
-      cta: t("planClinicCta"),
-      features: [t("planClinicF1"), t("planClinicF2"), t("planClinicF3")],
-      highlight: false,
-    },
-  ];
+  // Pricing packages — prices come from the single source lib/pricing.ts (same
+  // numbers as the /pricing page). Visible "ab/from … € / month" starting prices;
+  // CTA → contact / practice-access request only. No payment provider.
+  const planMeta: Record<string, { icon: typeof Zap; desc: string; cta: string; features: string[] }> = {
+    starter: { icon: Zap, desc: t("planStarterDesc"), cta: t("planStarterCta"), features: [t("planStarterF1"), t("planStarterF2"), t("planStarterF3")] },
+    professional: { icon: TrendingUp, desc: t("planPracticeDesc"), cta: t("planPracticeCta"), features: [t("planPracticeF1"), t("planPracticeF2"), t("planPracticeF3")] },
+    praxis_plus: { icon: Building2, desc: t("planClinicDesc"), cta: t("planClinicCta"), features: [t("planClinicF1"), t("planClinicF2"), t("planClinicF3")] },
+  };
+  const pricingPlans = PRICING_PLANS.map((p) => ({
+    name: p.name,
+    priceFrom: p.priceFrom,
+    highlight: !!p.recommended,
+    ...planMeta[p.key],
+  }));
 
   const schemaOrg = buildSchemaOrg(locale);
 
@@ -592,7 +579,10 @@ export default async function LocaleLandingPage({
                 <span className="text-lg font-bold text-slate-900 dark:text-slate-100">{plan.name}</span>
               </div>
               <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">{plan.desc}</p>
-              <p className="mt-4 text-sm font-semibold text-slate-900 dark:text-slate-100">{t("pricingOnRequest")}</p>
+              <p className="mt-4 text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
+                {t("pricePerMonthFrom", { price: plan.priceFrom })}
+              </p>
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{t("pricingOnRequest")}</p>
               <ul className="mt-4 flex-1 space-y-2.5 text-sm">
                 {plan.features.map((f) => (
                   <li key={f} className="flex items-start gap-2.5">

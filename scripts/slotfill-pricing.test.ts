@@ -171,3 +171,32 @@ test("Pricing Brand & No-Checkout Guard: ClinicSlotHub, kein sichtbares Slotfill
   assert.ok((msg("de").landing.pricingMoneyNote || "").includes("Patienten zahlen nicht auf dieser Website"), "DE Geldlogik fehlt");
   assert.ok((msg("en").landing.pricingMoneyNote || "").toLowerCase().includes("patients do not pay"), "EN Geldlogik fehlt");
 });
+
+// ─── 11. Public Technical Terms Guard ─────────────────────────────────────────
+
+test("Public Technical Terms Guard: keine internen Technikbegriffe in öffentlicher Marketing-Copy", () => {
+  // Gilt für die öffentlichen Marketing-Namespaces (landing + pricing). Legal-Seiten
+  // (Datenschutz/AGB/AVV) dürfen Sub-Prozessoren rechtlich nennen – die liegen in
+  // lib/market-scope.ts / legal-content und sind hier NICHT erfasst.
+  const BANNED = [
+    "stripe", "twilio", "supabase", "neon", "resend", "brevo", "smtp", "webhook",
+    "whatsapp", " sms", "sms ", "/sms", "testmodus", "soft launch", "provider-konfiguration",
+    "externe anbieter", "anbietergebühren", "anbieterkosten", "integriert, aber nicht aktiv",
+  ];
+  // Nur sichtbare VALUES prüfen (Key-Namen wie 'stripeNotLive' sind nicht öffentlich sichtbar).
+  const values = (o: unknown): string[] => {
+    if (typeof o === "string") return [o];
+    if (o && typeof o === "object") return Object.values(o).flatMap(values);
+    return [];
+  };
+  for (const loc of locales) {
+    const m = msg(loc);
+    const blob = [...values(m.landing ?? {}), ...values(m.pricing ?? {})].join(" ").toLowerCase();
+    for (const term of BANNED) {
+      assert.equal(blob.includes(term), false, `${loc}: interner Technikbegriff in öffentlicher Copy: "${term.trim()}"`);
+    }
+  }
+  // Die öffentliche Pricing-Seite rendert nur die bereinigten Hinweis-Keys.
+  const pricing = read(PRICING_PAGE);
+  assert.equal(/Twilio|Supabase|Stripe-Preis/.test(pricing), false, "Pricing-Seite zeigt internen Technikbegriff im Code-sichtbaren Text");
+});

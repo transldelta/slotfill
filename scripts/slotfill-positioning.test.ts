@@ -343,16 +343,20 @@ test("Email Branding Guard: Templates nutzen eine Brand-Einzelquelle, keine Vers
 
 // ─── 22. Public Legal Consistency Guard ───────────────────────────────────────
 
-test("Public Legal Consistency Guard: nicht aktivierte Dienste nicht als aktiv dargestellt", () => {
+test("Public Legal Consistency Guard: keine Zahlung dargestellt, keine internen Technikbegriffe öffentlich", () => {
+  // CEO-V2: öffentliche Pricing-Copy nennt keine internen Dienst-/Provider-Namen mehr,
+  // sondern sagt neutral, dass keine Zahlung verarbeitet wird und Aktivierung nach Prüfung erfolgt.
+  const TECH = /stripe|twilio|supabase|neon|resend|brevo|smtp|webhook|whatsapp|\bsms\b/;
   for (const loc of locales) {
     const p = msg(loc).pricing ?? {};
-    // Stripe wird ehrlich als (noch) nicht aktiv dargestellt.
     const s = (p.stripeNotLive ?? "").toLowerCase();
     assert.ok(s.length > 0, `${loc}: pricing.stripeNotLive fehlt`);
-    assert.ok(/not yet|noch nicht|pas encore|todav|aún no|ainda n/.test(s), `${loc}: stripeNotLive stellt Stripe nicht als inaktiv dar`);
-    // SMS/WhatsApp werden als optional/provider-abhängig dargestellt, nicht als aktiver Versand.
+    // Ehrliche Geldlogik: keine Zahlung wird verarbeitet (locale-äquivalent).
+    assert.ok(/keine zahlung|no payment|aucun paiement|ningún pago|qualquer pagamento/.test(s), `${loc}: stripeNotLive ohne klare 'keine Zahlung'-Aussage`);
+    // Keine internen Technikbegriffe öffentlich.
+    assert.equal(TECH.test(s), false, `${loc}: stripeNotLive enthält internen Technikbegriff`);
     const note = (p.providerCostNote ?? "").toLowerCase();
-    if (note) assert.ok(/provider|anbieter|fournisseur|proveedor|fornecedor|twilio/.test(note), `${loc}: providerCostNote ohne Provider-Kontext`);
+    assert.equal(TECH.test(note), false, `${loc}: providerCostNote enthält internen Technikbegriff`);
   }
 });
 

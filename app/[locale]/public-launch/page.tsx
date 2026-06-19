@@ -111,6 +111,8 @@ export async function generateMetadata({
   return {
     title: `${h.ogTitle} – ClinicSlotHub`,
     description: h.ogDesc,
+    // Alte Kampagnenseite – nicht Teil der aktuellen Positionierung, nicht indexieren.
+    robots: { index: false, follow: false },
     metadataBase: new URL(CANONICAL_URL),
     alternates: {
       canonical: `/${locale}/public-launch`,

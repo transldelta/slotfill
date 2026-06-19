@@ -490,12 +490,12 @@ export function getStaticPost(slug: string): StaticPost | null {
 // Direkte Ergänzung nach Array-Deklaration um Hoisting zu vermeiden.
 STATIC_BLOG_POSTS.push({
   slug: "clinicslothub-global-soft-launch",
-  title: "ClinicSlotHub ist jetzt öffentlich gestartet – globaler Start",
+  title: "ClinicSlotHub ist jetzt öffentlich gestartet",
   excerpt: "ClinicSlotHub, die mehrsprachige Plattform für Terminanfragen und Wartelisten in Praxen, Kliniken und bei Healthcare Providern, ist jetzt öffentlich verfügbar. Online-Terminbuchung für Praxen.",
   published_at: "2026-06-10T08:00:00.000Z",
   content: `ClinicSlotHub ist jetzt öffentlich verfügbar.
 
-Nach mehreren Monaten Entwicklung und internen Tests startet die Plattform in den globalen öffentlichen Start. Ziel: Praxen, Kliniken, Therapiezentren und Healthcare Providern weltweit Zugang zu einem digitalen Werkzeug zu geben, das die Verwaltung von Terminanfragen und Wartelisten einfacher macht – ohne teure Integrationen, ohne kompliziertes Setup und ohne manuelle Zettelwirtschaft.
+Nach mehreren Monaten Entwicklung und internen Tests startet die Plattform öffentlich für ausgewählte internationale Märkte. Ziel: Praxen, Kliniken, Therapiezentren und Healthcare Providern in ausgewählten internationalen Märkten Zugang zu einem digitalen Werkzeug zu geben, das die Verwaltung von Terminanfragen und Wartelisten einfacher macht – ohne teure Integrationen, ohne kompliziertes Setup und ohne manuelle Zettelwirtschaft. Verfügbarkeit und Aktivierung erfolgen nach Prüfung von Land, Einrichtung und rechtlichen Anforderungen.
 
 Was ist ClinicSlotHub?
 

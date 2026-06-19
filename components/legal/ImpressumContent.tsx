@@ -118,9 +118,11 @@ export function ImpressumContent({
             </h2>
             <div className="mt-2 space-y-1 leading-relaxed">
               <p>
-                ClinicSlotHub ist eine internationale SaaS-Plattform für Termin-, Wartelisten- und Anfrageverwaltung.
-                Die Plattform richtet sich ausschließlich an gewerbliche Nutzerinnen und Nutzer –
-                Arztpraxen, Therapiepraxen, Kliniken, Gesundheitsanbieter und medizinische Einrichtungen weltweit.
+                ClinicSlotHub ist eine SaaS-Plattform für Termin-, Wartelisten- und Anfrageverwaltung für
+                ausgewählte internationale Märkte. Die Plattform richtet sich ausschließlich an gewerbliche
+                Nutzerinnen und Nutzer – Arztpraxen, Therapiepraxen, Kliniken, Gesundheitsanbieter und
+                medizinische Einrichtungen. Nutzung und Aktivierung erfolgen nur nach Prüfung von Land,
+                Einrichtung, technischer Umsetzbarkeit und rechtlichen Anforderungen.
               </p>
               <p>
                 ClinicSlotHub erbringt keine medizinischen Leistungen und ersetzt keine ärztliche Beratung,
@@ -161,8 +163,8 @@ export function ImpressumContent({
         <section className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/50">
           <p className="text-xs text-slate-500 dark:text-slate-400">
             {isDE
-              ? (<>Persönliche Anbieterangaben erscheinen gemäß § 5 DDG ausschließlich auf dieser Seite. In automatischer Kommunikation wird ausschließlich &bdquo;ClinicSlotHub Team&ldquo; als Absender verwendet.</>)
-              : (<>Personal operator information appears only on this legal notice page, as required by § 5 DDG. All automated communication uses &ldquo;ClinicSlotHub Team&rdquo; as the sender.</>)
+              ? (<>Persönliche Anbieterangaben erscheinen gemäß § 5 DDG ausschließlich auf dieser Seite. Falls später nach Freigabe automatisierte Kommunikation eingesetzt wird, erfolgt diese ausschließlich unter der Marke &bdquo;ClinicSlotHub&ldquo;.</>)
+              : (<>Personal operator information appears only on this legal notice page, as required by § 5 DDG. If automated communication is introduced after approval in the future, it will be sent only under the &ldquo;ClinicSlotHub&rdquo; brand.</>)
             }
           </p>
         </section>

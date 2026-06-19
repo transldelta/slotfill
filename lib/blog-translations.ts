@@ -1337,12 +1337,12 @@ const LAUNCH_DATE = "2026-06-10T08:00:00.000Z";
 
 const EN_LAUNCH: StaticPost = {
   slug: LAUNCH_SLUG,
-  title: "ClinicSlotHub is now publicly available — global launch",
+  title: "ClinicSlotHub is now publicly available",
   excerpt: "ClinicSlotHub, the multilingual appointment and waitlist management platform for clinics and healthcare providers, has entered public launch. Online appointment booking for clinics and practices.",
   published_at: LAUNCH_DATE,
   content: `ClinicSlotHub is now publicly available.
 
-After months of development and internal testing, the platform is entering its global public launch phase. The goal: to give practices, clinics, therapy centers, and healthcare providers worldwide access to a digital tool that makes appointment request and waitlist management easier — without expensive integrations, without complex setup, and without a paper-based process.
+After months of development and internal testing, the platform is launching publicly for selected international markets. The goal: to give practices, clinics, therapy centers, and healthcare providers in selected international markets access to a digital tool that makes appointment request and waitlist management easier — without expensive integrations, without complex setup, and without a paper-based process. Availability and activation are subject to review of the country, provider and legal requirements.
 
 What is ClinicSlotHub?
 
@@ -1391,12 +1391,12 @@ Questions or feedback: transl.delta@gmail.com`,
 
 const FR_LAUNCH: StaticPost = {
   slug: LAUNCH_SLUG,
-  title: "ClinicSlotHub est maintenant disponible — lancement public mondial",
+  title: "ClinicSlotHub est maintenant disponible — lancement public",
   excerpt: "ClinicSlotHub, la plateforme multilingue de gestion des rendez-vous et des listes d'attente pour cliniques et professionnels de santé, entre en phase de lancement public. En ligne.",
   published_at: LAUNCH_DATE,
   content: `ClinicSlotHub est maintenant disponible publiquement.
 
-Après plusieurs mois de développement et de tests internes, la plateforme entre dans sa phase de lancement public mondial. L'objectif : donner aux cabinets médicaux, cliniques, centres de soins et professionnels de santé du monde entier accès à un outil numérique qui simplifie la gestion des demandes de rendez-vous et des listes d'attente.
+Après plusieurs mois de développement et de tests internes, la plateforme est lancée publiquement pour certains marchés internationaux sélectionnés. L'objectif : donner aux cabinets médicaux, cliniques, centres de soins et professionnels de santé de marchés internationaux sélectionnés accès à un outil numérique qui simplifie la gestion des demandes de rendez-vous et des listes d'attente. La disponibilité et l'activation sont soumises à une vérification du pays, de l'établissement et des exigences légales.
 
 Qu'est-ce que ClinicSlotHub ?
 
@@ -1436,12 +1436,12 @@ Questions ou retours : transl.delta@gmail.com`,
 
 const ES_LAUNCH: StaticPost = {
   slug: LAUNCH_SLUG,
-  title: "ClinicSlotHub ya está disponible — lanzamiento público global",
+  title: "ClinicSlotHub ya está disponible — lanzamiento público",
   excerpt: "ClinicSlotHub, la plataforma multilingüe de gestión de citas y listas de espera para clínicas y proveedores de salud, entra en fase de lanzamiento público. Reserva de citas en línea para clínicas.",
   published_at: LAUNCH_DATE,
   content: `ClinicSlotHub ya está disponible públicamente.
 
-Tras meses de desarrollo y pruebas internas, la plataforma entra en su fase de lanzamiento público global. El objetivo: dar a consultorios médicos, clínicas, centros de salud y proveedores de atención sanitaria de todo el mundo acceso a una herramienta digital que simplifica la gestión de solicitudes de citas y listas de espera.
+Tras meses de desarrollo y pruebas internas, la plataforma se lanza públicamente para mercados internacionales seleccionados. El objetivo: dar a consultorios médicos, clínicas, centros de salud y proveedores de atención sanitaria en mercados internacionales seleccionados acceso a una herramienta digital que simplifica la gestión de solicitudes de citas y listas de espera. La disponibilidad y la activación están sujetas a una revisión del país, el centro y los requisitos legales.
 
 ¿Qué es ClinicSlotHub?
 
@@ -1470,12 +1470,12 @@ Preguntas o comentarios: transl.delta@gmail.com`,
 
 const PT_LAUNCH: StaticPost = {
   slug: LAUNCH_SLUG,
-  title: "ClinicSlotHub já está disponível — lançamento público global",
+  title: "ClinicSlotHub já está disponível — lançamento público",
   excerpt: "ClinicSlotHub, a plataforma multilíngue de gestão de consultas e listas de espera para clínicas e prestadores de saúde, entra em fase de lançamento público. Online.",
   published_at: LAUNCH_DATE,
   content: `ClinicSlotHub já está disponível publicamente.
 
-Após meses de desenvolvimento e testes internos, a plataforma entra na sua fase de lançamento público global. O objetivo: dar a consultórios médicos, clínicas, centros de saúde e prestadores de serviços de saúde de todo o mundo acesso a uma ferramenta digital que simplifica a gestão de pedidos de consultas e listas de espera.
+Após meses de desenvolvimento e testes internos, a plataforma é lançada publicamente para mercados internacionais selecionados. O objetivo: dar a consultórios médicos, clínicas, centros de saúde e prestadores de serviços de saúde em mercados internacionais selecionados acesso a uma ferramenta digital que simplifica a gestão de pedidos de consultas e listas de espera. A disponibilidade e a ativação estão sujeitas a uma análise do país, do estabelecimento e dos requisitos legais.
 
 O que é o ClinicSlotHub?
 

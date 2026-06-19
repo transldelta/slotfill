@@ -150,7 +150,7 @@ export default function LoginPage() {
 
       {/* Footer caption */}
       <p className="relative mt-8 text-center text-xs text-slate-400 max-w-xs leading-relaxed dark:text-slate-500">
-        ClinicSlotHub · Terminmanagement für Arztpraxen und Kliniken weltweit
+        ClinicSlotHub · Terminmanagement für Arztpraxen und Kliniken in ausgewählten internationalen Märkten
       </p>
     </main>
   );

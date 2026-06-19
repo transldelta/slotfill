@@ -17,7 +17,7 @@
     "claude:auto-start": "node scripts/claude/auto-guard.mjs start",
     "claude:auto-stop": "node scripts/claude/auto-guard.mjs stop",
     "claude:install-hooks": "node scripts/claude/install-local-git-hooks.mjs",
-    "test": "tsx --test scripts/messaging.test.ts scripts/operations.test.ts scripts/hardening.test.ts scripts/ceo.test.ts scripts/marketing.test.ts scripts/seo.test.ts scripts/i18n.test.ts scripts/go-live.test.ts scripts/booking-flow.test.ts scripts/ceo-launch.test.ts scripts/slotfill-positioning.test.ts scripts/slotfill-visuals.test.ts scripts/slotfill-pricing.test.ts scripts/seo-foundation.test.ts"
+    "test": "tsx --test scripts/messaging.test.ts scripts/operations.test.ts scripts/hardening.test.ts scripts/ceo.test.ts scripts/marketing.test.ts scripts/seo.test.ts scripts/i18n.test.ts scripts/go-live.test.ts scripts/booking-flow.test.ts scripts/ceo-launch.test.ts scripts/slotfill-positioning.test.ts scripts/slotfill-visuals.test.ts scripts/slotfill-pricing.test.ts scripts/seo-foundation.test.ts scripts/legal-scope.test.ts"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.5",

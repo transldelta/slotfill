@@ -4,6 +4,21 @@ Ziel: Der Inhaber muss **nicht täglich selbst suchen**. Dieser Plan beschreibt,
 beobachtet wird, welche Signale zählen und was ausdrücklich **nicht** ohne CEO-Freigabe
 passiert. 0 € · keine Ads · keine Kaltakquise · keine Tracking-Aktivierung.
 
+## Beobachtungs-Cadence (Tag 0 / 7 / 14 / 30)
+
+- **Tag 0 (Launch/Deploy):** Live-Website sauber? robots.txt + sitemap.xml
+  erreichbar (200)? Kernseiten crawlbar (kein noindex)? Marke ClinicSlotHub,
+  0 sichtbares Slotfill? → Festhalten in `visibility-observation-log.md`.
+- **Tag 7:** Manueller `site:clinicslothub.com`-Check in Google **und** Bing
+  (im echten Browser). Brand-Suche „ClinicSlotHub". Keine alten Brandreste?
+- **Tag 14:** Wiederholen. Sind Startseite / Pricing / Kontakt indexiert?
+- **Tag 30:** Bewertung — indexiert? Anfragen eingegangen? Suchtreffer? technische
+  Fehler? → Nächster CEO-Entscheidungspunkt (z. B. Search Console freigeben).
+
+> Hinweis: Index-Status lässt sich **nicht** zuverlässig per Skript/curl abfragen
+> (Consent-Walls, Bot-Schutz, JS-gerenderte Ergebnisse). Verlässlich nur per
+> manueller Browser-Suche oder — mit CEO-Freigabe — über die Search Console.
+
 ## Wöchentlich (5 Minuten, read-only)
 
 - **Indexierung:** `site:clinicslothub.com` in Google/Bing manuell prüfen — erscheinen

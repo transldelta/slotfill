@@ -6,7 +6,7 @@ const APP_URL = CANONICAL_URL;
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations();
-  const title = `${t("pricing.title")} – ClinicSlotHub`;
+  const title = `${t("pricing.title")} – Slotfill`;
   const description = t("pricing.subtitle");
 
   return {
@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title,
       description,
       url: "/pricing",
-      siteName: "ClinicSlotHub",
+      siteName: "Slotfill",
       locale: "de_DE",
       type: "website",
     },

@@ -66,10 +66,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale, slug } = await params;
   const post = await loadPost(slug, locale);
-  if (!post) return { title: "ClinicSlotHub Blog" };
+  if (!post) return { title: "Slotfill Blog" };
 
-  const title = `${post.title} – ClinicSlotHub`;
-  const description = post.excerpt ?? "Praxistipps von ClinicSlotHub.";
+  const title = `${post.title} – Slotfill`;
+  const description = post.excerpt ?? "Praxistipps von Slotfill.";
 
   return {
     title,
@@ -85,7 +85,7 @@ export async function generateMetadata({
       title,
       description,
       url: `/${locale}/blog/${post.slug}`,
-      siteName: "ClinicSlotHub",
+      siteName: "Slotfill",
       locale: locale === "de" ? "de_DE" : locale,
       type: "article",
       publishedTime: post.published_at ?? undefined,
@@ -136,17 +136,17 @@ export default async function LocaleBlogPostPage({
       {/* CTA am Ende */}
       <div className="mt-10 rounded-xl border border-blue-100 bg-blue-50 p-6 text-center dark:border-blue-900/50 dark:bg-blue-950/30">
         <p className="font-semibold text-slate-900 dark:text-slate-100">
-          ClinicSlotHub kostenlos testen
+          Arzttermine online buchen
         </p>
         <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-          14 Tage kostenlos – keine Kreditkarte erforderlich.
+          Wählen Sie eine verfügbare Zeit und senden Sie Ihre Anfrage an die Praxis.
         </p>
         <div className="mt-4 flex flex-wrap justify-center gap-3">
           <Link
-            href={`/${locale}/pricing`}
+            href={`/${locale}/termin-buchen`}
             className="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
           >
-            {tNav("getStarted")}
+            {tNav("bookAppointment")}
           </Link>
           <Link
             href={`/${locale}/kontakt`}

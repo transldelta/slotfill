@@ -355,6 +355,26 @@ test("Public Legal Consistency Guard: nicht aktivierte Dienste nicht als aktiv d
   }
 });
 
+// ─── 23. Secondary Page Chrome Guard ──────────────────────────────────────────
+
+test("Secondary Page Chrome Guard: öffentliche Sekundärseiten ohne ClinicSlotHub-Marke", () => {
+  const files = [
+    "app/layout.tsx",
+    "app/[locale]/blog/page.tsx",
+    "app/[locale]/blog/[slug]/page.tsx",
+    "app/kontakt/layout.tsx",
+    "app/pricing/layout.tsx",
+    "app/auth/login/page.tsx",
+  ];
+  for (const f of files) {
+    // Die technische Domain clinicslothub.com bleibt erlaubt — das Markenwort nicht.
+    const src = read(f).replace(/clinicslothub\.com/gi, "");
+    assert.equal(/ClinicSlotHub/.test(src), false, `${f}: ClinicSlotHub-Marke im öffentlichen Chrome`);
+    // Keine Trial-Claims im öffentlichen Chrome.
+    assert.equal(/14[- ](day|tage)|kostenlos testen|free trial/i.test(src), false, `${f}: Trial-Claim im öffentlichen Chrome`);
+  }
+});
+
 // ─── 5. Medical Safety Guard ──────────────────────────────────────────────────
 
 test("Medical Safety Guard: keine medizinischen/Trial-/Automatisierungs-Versprechen", () => {

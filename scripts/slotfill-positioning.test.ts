@@ -278,6 +278,83 @@ test("Clinics Section Guard: 'Für Praxen' kompakt, unten, ohne Fachjargon", () 
   );
 });
 
+// ─── 18. Secondary Brand Guard ────────────────────────────────────────────────
+
+const PUBLIC_MSG_KEYS = [
+  ["blog", "subtitle"],
+  ["trust", "privacy1"],
+  ["pricing", "providerCostNote"],
+  ["pricing", "trial"],
+  ["pricing", "trialInfo"],
+];
+
+test("Secondary Brand Guard: öffentliche Sekundär-Strings nutzen Slotfill, nicht ClinicSlotHub", () => {
+  for (const loc of locales) {
+    const m = msg(loc);
+    for (const [ns, key] of PUBLIC_MSG_KEYS) {
+      const v = (m[ns]?.[key] ?? "").toLowerCase();
+      assert.equal(v.includes("clinicslothub"), false, `${loc}: ${ns}.${key} zeigt ClinicSlotHub`);
+    }
+    // Blog-Untertitel trägt die öffentliche Marke.
+    assert.ok((m.blog?.subtitle ?? "").includes("Slotfill"), `${loc}: blog.subtitle ohne Slotfill`);
+  }
+});
+
+// ─── 19. Secondary Old Claim Guard ────────────────────────────────────────────
+
+test("Secondary Old Claim Guard: keine Trial-/Twilio-/Alt-Claims in Pricing/Blog-Untertitel", () => {
+  const banned = ["try free for 14 days", "try clinic pro", "try starter", "14-day free trial", "14 tage kostenlos", "fill appointment slots automatically", "soft launch"];
+  for (const loc of locales) {
+    const m = msg(loc);
+    const pricingBlob = JSON.stringify(m.pricing ?? {}).toLowerCase();
+    const blogSub = (m.blog?.subtitle ?? "").toLowerCase();
+    for (const b of banned) {
+      assert.equal(pricingBlob.includes(b), false, `${loc}: Pricing enthält "${b}"`);
+      assert.equal(blogSub.includes(b), false, `${loc}: blog.subtitle enthält "${b}"`);
+    }
+  }
+});
+
+// ─── 20. Pricing Confusion Guard ──────────────────────────────────────────────
+
+test("Pricing Confusion Guard: Pricing für Praxen/Kliniken, kein Patientenpreis", () => {
+  for (const loc of locales) {
+    const p = msg(loc).pricing ?? {};
+    // Plan-CTA ist Praxiszugang-orientiert (nicht 'Try ...').
+    const cta = (p.ctaStarter ?? "").toLowerCase();
+    assert.ok(/clinic|clínic|cliniqu|prax|klinik|consult/.test(cta), `${loc}: pricing.ctaStarter nicht praxisorientiert`);
+    assert.equal(/try /.test(cta), false, `${loc}: pricing.ctaStarter enthält Trial-Sprache`);
+    // Audience-Marker (pricing.trial) adressiert Praxen/Kliniken.
+    const tr = (p.trial ?? "").toLowerCase();
+    assert.ok(/clinic|clínic|cliniqu|prax|klinik|consult/.test(tr), `${loc}: pricing.trial markiert nicht Praxen/Kliniken`);
+  }
+});
+
+// ─── 21. Email Branding Guard ─────────────────────────────────────────────────
+
+test("Email Branding Guard: Templates nutzen eine Brand-Einzelquelle, keine Versandaktivierung", () => {
+  const tpl = read("lib/email/templates.ts");
+  // Marke kommt aus lib/brand (BRAND_NAME/BRAND_TEAM_NAME) — eine konsistente Quelle.
+  assert.ok(tpl.includes("BRAND_NAME") && tpl.includes("BRAND_TEAM_NAME"), "Email-Templates nutzen keine Brand-Einzelquelle");
+  // Keine Aktivierung von Versanddiensten im Template selbst.
+  assert.equal(/nodemailer|new Resend\(|sgMail|createTransport/.test(tpl), false, "Email-Template aktiviert Versandlogik");
+});
+
+// ─── 22. Public Legal Consistency Guard ───────────────────────────────────────
+
+test("Public Legal Consistency Guard: nicht aktivierte Dienste nicht als aktiv dargestellt", () => {
+  for (const loc of locales) {
+    const p = msg(loc).pricing ?? {};
+    // Stripe wird ehrlich als (noch) nicht aktiv dargestellt.
+    const s = (p.stripeNotLive ?? "").toLowerCase();
+    assert.ok(s.length > 0, `${loc}: pricing.stripeNotLive fehlt`);
+    assert.ok(/not yet|noch nicht|pas encore|todav|aún no|ainda n/.test(s), `${loc}: stripeNotLive stellt Stripe nicht als inaktiv dar`);
+    // SMS/WhatsApp werden als optional/provider-abhängig dargestellt, nicht als aktiver Versand.
+    const note = (p.providerCostNote ?? "").toLowerCase();
+    if (note) assert.ok(/provider|anbieter|fournisseur|proveedor|fornecedor|twilio/.test(note), `${loc}: providerCostNote ohne Provider-Kontext`);
+  }
+});
+
 // ─── 5. Medical Safety Guard ──────────────────────────────────────────────────
 
 test("Medical Safety Guard: keine medizinischen/Trial-/Automatisierungs-Versprechen", () => {

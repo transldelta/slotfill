@@ -48,8 +48,8 @@ const PLAN_CONTENT: Record<string, Record<string, PlanMeta>> = {
         "Einfache Warteliste",
         "Basis-Patientenverwaltung",
         "Vorbereitete E-Mail-Benachrichtigungen",
-        "14 Tage kostenlos testen",
-        "Keine Kreditkarte erforderlich",
+        "Die Praxis behält die Kontrolle",
+        "Kein Patienten-Login nötig",
       ],
     },
     professional: {
@@ -95,8 +95,8 @@ const PLAN_CONTENT: Record<string, Record<string, PlanMeta>> = {
         "Basic waitlist management",
         "Patient management",
         "Prepared email notifications",
-        "14-day free trial",
-        "No credit card required",
+        "Your clinic stays in control",
+        "No patient login required",
       ],
     },
     professional: {

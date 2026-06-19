@@ -6,8 +6,10 @@ import { STATIC_BLOG_POSTS } from "@/lib/blog-data";
 
 const baseUrl = CANONICAL_URL;
 
-// Öffentliche Seiten, die für jede Locale generiert werden
-const PUBLIC_PATHS = ["/", "/pricing", "/blog", "/kontakt", "/launch", "/public-launch", "/share"];
+// Öffentliche Seiten, die für jede Locale generiert werden.
+// Alte Kampagnen-Routen (/launch, /public-launch, /share) sind nicht mehr Teil
+// der Slotfill-Positionierung und werden nicht indexiert.
+const PUBLIC_PATHS = ["/", "/pricing", "/blog", "/kontakt"];
 
 // Statische Slug-Liste als Fallback (immer aktuell, da aus blog-data importiert)
 const STATIC_SLUGS = STATIC_BLOG_POSTS.map((p) => p.slug);

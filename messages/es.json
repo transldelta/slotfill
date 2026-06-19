@@ -35,7 +35,7 @@
     "thisWeek": "Esta semana",
     "thisMonth": "Este mes",
     "welcomeBack": "Bienvenido/a de nuevo",
-    "welcomeIntro": "¡Bienvenido/a a ClinicSlotHub! Agrega tus primeros pacientes para comenzar.",
+    "welcomeIntro": "¡Bienvenido/a a Slotfill! Agrega tus primeros pacientes para comenzar.",
     "totalPatients": "Total de pacientes",
     "waitlistCount": "En lista de espera",
     "appointmentsToday": "Citas hoy",
@@ -68,7 +68,7 @@
     "status": "Estado"
   },
   "sidebar": {
-    "brand": "ClinicSlotHub",
+    "brand": "Slotfill",
     "toggle": "Alternar menú"
   },
   "emptyState": {
@@ -334,9 +334,9 @@
   "pricing": {
     "title": "Precios",
     "subtitle": "Elige el plan adecuado para tu consultorio",
-    "trial": "14 días de prueba gratuita",
+    "trial": "Para clínicas y consultorios",
     "monthly": "/mes",
-    "ctaStarter": "Probar Starter",
+    "ctaStarter": "Solicitar acceso para clínicas",
     "ctaProfessional": "Probar Professional",
     "ctaPraxisPlus": "Probar Consultorio Plus",
     "features": "Funciones incluidas",
@@ -356,18 +356,19 @@
       "unlimitedPatients": "Pacientes ilimitados",
       "prioritySupport": "Soporte prioritario"
     },
-    "trialInfo": "Prueba gratis 14 días – después se requiere un plan de pago.",
-    "trialNoCreditCard": "No se requiere tarjeta de crédito para la prueba.",
-    "trialNoSms": "En la prueba no se envían SMS ni WhatsApp reales sin configuración deliberada del proveedor.",
-    "providerCostNote": "Los SMS y WhatsApp se gestionan a través de proveedores externos (p. ej. Twilio). Estos costes del proveedor no están incluidos automáticamente en el precio de ClinicSlotHub.",
-    "ctaClinicPro": "Probar Clinic Pro",
+    "trialInfo": "Precios para clínicas y consultorios — confirmados antes de la activación. No se procesa ningún pago en este sitio web.",
+    "trialNoCreditCard": "No se procesa ningún pago en este sitio web.",
+    "trialNoSms": "No se envían SMS ni WhatsApp reales de forma predeterminada sin una configuración deliberada de proveedor.",
+    "providerCostNote": "Los SMS y WhatsApp se gestionan a través de proveedores externos (p. ej. Twilio). Estos costes del proveedor no están incluidos automáticamente en el precio de Slotfill.",
+    "ctaClinicPro": "Solicitar acceso para clínicas",
     "ctaEnterprise": "Contáctenos",
     "enterpriseName": "Enterprise",
     "enterprisePriceLabel": "Precio bajo consulta",
     "popularBadge": "Recomendado",
     "valueProposition": "Con una sola cita rellenada puede justificarse el coste mensual.",
     "stripeNotLive": "Stripe está integrado pero aún no activo. Las reservas se gestionan actualmente a través de nuestra página de contacto.",
-    "priceNote": "Los precios pueden variar según el país o mercado."
+    "priceNote": "Los precios pueden variar según el país o mercado.",
+    "ctaClinicPlus": "Solicitar acceso para clínicas"
   },
   "subscription": {
     "title": "Tu suscripción",
@@ -468,7 +469,7 @@
   },
   "blog": {
     "title": "Blog",
-    "subtitle": "Consejos y novedades sobre ClinicSlotHub y la organización de consultorios.",
+    "subtitle": "Consejos y novedades sobre Slotfill y la organización de consultorios.",
     "empty": "Aún no hay publicaciones.",
     "readMore": "Leer más",
     "back": "Volver al blog",
@@ -516,7 +517,7 @@
   },
   "onboarding": {
     "title": "Primeros pasos",
-    "subtitle": "Configura ClinicSlotHub paso a paso.",
+    "subtitle": "Configura Slotfill paso a paso.",
     "start": "Iniciar incorporación",
     "completed": "Completado",
     "open": "Pendiente",
@@ -549,7 +550,7 @@
     "title": "Centro de confianza",
     "subtitle": "Notas de protección de datos, estado de notificaciones e información de seguridad.",
     "privacy": "Notas de protección de datos",
-    "privacy1": "ClinicSlotHub almacena datos del consultorio, pacientes, citas y estado de notificaciones.",
+    "privacy1": "Slotfill almacena datos del consultorio, pacientes, citas y estado de notificaciones.",
     "privacy2": "No se muestran secretos en el navegador.",
     "privacy3": "Los datos de pacientes solo deben ingresarse con un propósito legítimo.",
     "privacy4": "El consultorio debe respetar el consentimiento para notificaciones.",
@@ -573,7 +574,7 @@
   },
   "help": {
     "title": "Ayuda",
-    "subtitle": "Respuestas a las preguntas más importantes sobre el uso de ClinicSlotHub.",
+    "subtitle": "Respuestas a las preguntas más importantes sobre el uso de Slotfill.",
     "quickstart": "Inicio rápido",
     "qs1": "Agregar paciente",
     "qs2": "Agregar a lista de espera",

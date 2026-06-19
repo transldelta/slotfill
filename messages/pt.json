@@ -35,7 +35,7 @@
     "thisWeek": "This Week",
     "thisMonth": "This Month",
     "welcomeBack": "Welcome back",
-    "welcomeIntro": "Welcome to ClinicSlotHub! Add your first patients to get started.",
+    "welcomeIntro": "Welcome to Slotfill! Add your first patients to get started.",
     "totalPatients": "Total Patients",
     "waitlistCount": "On Waitlist",
     "appointmentsToday": "Appointments Today",
@@ -68,7 +68,7 @@
     "status": "Status"
   },
   "sidebar": {
-    "brand": "ClinicSlotHub",
+    "brand": "Slotfill",
     "toggle": "Toggle Menu"
   },
   "emptyState": {
@@ -334,9 +334,9 @@
   "pricing": {
     "title": "Preços",
     "subtitle": "Escolha o plano certo para sua clínica",
-    "trial": "14 dias de avaliação gratuita",
+    "trial": "Para clínicas e consultórios",
     "monthly": "/mês",
-    "ctaStarter": "Testar Starter",
+    "ctaStarter": "Solicitar acesso para clínicas",
     "ctaProfessional": "Testar Professional",
     "ctaPraxisPlus": "Testar Clínica Plus",
     "features": "Funcionalidades incluídas",
@@ -356,18 +356,19 @@
       "unlimitedPatients": "Pacientes ilimitados",
       "prioritySupport": "Suporte prioritário"
     },
-    "trialInfo": "Teste grátis por 14 dias – depois é necessário um plano pago.",
-    "trialNoCreditCard": "Sem cartão de crédito para o teste.",
-    "trialNoSms": "No teste não são enviados SMS ou WhatsApp reais sem configuração deliberada do provedor.",
-    "providerCostNote": "SMS e WhatsApp são processados por provedores externos (ex. Twilio). Esses custos de provedor não estão automaticamente incluídos no preço do ClinicSlotHub.",
-    "ctaClinicPro": "Experimentar Clinic Pro",
+    "trialInfo": "Preços para clínicas e consultórios — confirmados antes da ativação. Não é processado nenhum pagamento neste site.",
+    "trialNoCreditCard": "Não é processado nenhum pagamento neste site.",
+    "trialNoSms": "Não são enviados SMS ou WhatsApp reais por padrão sem uma configuração deliberada de fornecedor.",
+    "providerCostNote": "SMS e WhatsApp são processados por provedores externos (ex. Twilio). Esses custos de provedor não estão automaticamente incluídos no preço do Slotfill.",
+    "ctaClinicPro": "Solicitar acesso para clínicas",
     "ctaEnterprise": "Contactar-nos",
     "enterpriseName": "Enterprise",
     "enterprisePriceLabel": "Preço sob consulta",
     "popularBadge": "Recomendado",
     "valueProposition": "Uma única consulta preenchida pode justificar o custo mensal.",
     "stripeNotLive": "O Stripe está integrado mas ainda não está ativo. As reservas são atualmente tratadas através da nossa página de contacto.",
-    "priceNote": "Os preços podem variar consoante o país ou mercado."
+    "priceNote": "Os preços podem variar consoante o país ou mercado.",
+    "ctaClinicPlus": "Solicitar acesso para clínicas"
   },
   "subscription": {
     "title": "Your Subscription",
@@ -468,7 +469,7 @@
   },
   "blog": {
     "title": "Blog",
-    "subtitle": "Dicas e novidades sobre o ClinicSlotHub e a organização de clínicas.",
+    "subtitle": "Dicas e novidades sobre o Slotfill e a organização de clínicas.",
     "empty": "Nenhum artigo publicado ainda.",
     "readMore": "Ler mais",
     "back": "Voltar ao blog",
@@ -516,7 +517,7 @@
   },
   "onboarding": {
     "title": "Getting Started",
-    "subtitle": "Set up ClinicSlotHub step by step.",
+    "subtitle": "Set up Slotfill step by step.",
     "start": "Start Onboarding",
     "completed": "Completed",
     "open": "Open",
@@ -549,7 +550,7 @@
     "title": "Trust Center",
     "subtitle": "Data protection notes, notification status and security information.",
     "privacy": "Data Protection Notes",
-    "privacy1": "ClinicSlotHub stores practice data, patient data, appointments and notification status.",
+    "privacy1": "Slotfill stores practice data, patient data, appointments and notification status.",
     "privacy2": "No secrets are displayed in the browser.",
     "privacy3": "Patient data should only be entered with a legitimate purpose.",
     "privacy4": "Consent for notifications must be observed by the practice.",
@@ -573,7 +574,7 @@
   },
   "help": {
     "title": "Help",
-    "subtitle": "Answers to the most important questions about using ClinicSlotHub.",
+    "subtitle": "Answers to the most important questions about using Slotfill.",
     "quickstart": "Quick Start",
     "qs1": "Add patient",
     "qs2": "Add to waitlist",

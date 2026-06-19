@@ -44,7 +44,7 @@ Three practical steps for an effective waitlist
 
 How digital tools can help
 
-Practice management software can help simplify this process. Instead of manually going through paper lists, suitable patients can be found much faster. Tools like ClinicSlotHub help prepare the right candidates from the waitlist when a slot becomes available, so the practice can respond quickly.
+Practice management software can help simplify this process. Instead of manually going through paper lists, suitable patients can be found much faster. Tools like Slotfill help prepare the right candidates from the waitlist when a slot becomes available, so the practice can respond quickly.
 
 Important: Any contact with patients requires their prior consent and should be handled in a data protection-conscious manner. A legal review is recommended before using digital communication channels.
 
@@ -52,7 +52,7 @@ Summary
 
 A well-maintained waitlist is one of the most effective measures for filling short-notice appointment slots. With a clear structure, regular maintenance and — where needed — digital support, a practice's capacity utilisation can be noticeably improved.
 
-Try ClinicSlotHub free for 14 days and see how waitlist management becomes easier.`,
+Try Slotfill online and see how waitlist management becomes easier.`,
   },
   {
     slug: "terminausfaelle-reduzieren-benachrichtigungen",
@@ -88,9 +88,9 @@ Realistic expectations
 
 Prepared notifications do not solve every gap. Some appointments will remain unfilled regardless. But they increase the chance that a cancellation does not become a complete loss — while also relieving the practice team.
 
-ClinicSlotHub supports exactly this process: when an appointment slot opens up, suitable patients from the waitlist are prepared, and the practice can send a secure link to selected individuals with a single click.
+Slotfill supports exactly this process: when an appointment slot opens up, suitable patients from the waitlist are prepared, and the practice can send a secure link to selected individuals with a single click.
 
-Try it now: Test ClinicSlotHub free for 14 days.`,
+Try it now: Test Slotfill online.`,
   },
   {
     slug: "digitale-warteliste-datenschutz-einwilligung",
@@ -123,17 +123,17 @@ Deletion periods: Patients who have received an appointment or no longer wish to
 
 Processing agreements: If external software is used for the waitlist, a data processing agreement (DPA) must be concluded with the provider.
 
-What ClinicSlotHub provides in this context
+What Slotfill provides in this context
 
-ClinicSlotHub is designed with data protection in mind: patients can only be contacted via digital channels if they have previously consented (opt-in). The standard mode operates without automatic message sending — the practice retains control over who is contacted.
+Slotfill is designed with data protection in mind: patients can only be contacted via digital channels if they have previously consented (opt-in). The standard mode operates without automatic message sending — the practice retains control over who is contacted.
 
-Note: Using ClinicSlotHub does not replace an individual data protection review. Each practice is responsible for independently reviewing the use of software for patient communication.
+Note: Using Slotfill does not replace an individual data protection review. Each practice is responsible for independently reviewing the use of software for patient communication.
 
 Summary
 
 Digital waitlists can significantly relieve practices — if used in a data protection-conscious manner. The key lies in clear consent processes, data minimisation and a reliable provider with a DPA.
 
-Contact us: For questions about ClinicSlotHub and how to use it in your practice, we look forward to hearing from you.`,
+Contact us: For questions about Slotfill and how to use it in your practice, we look forward to hearing from you.`,
   },
 
   // ─── Phase 5: New EN Articles (June 2026) ─────────────────────────────────
@@ -183,7 +183,7 @@ This process can work manually — for small practices, that's often sufficient.
 
 Approach 4: Use digital support selectively
 
-Tools like ClinicSlotHub help to quickly identify suitable patients from the waitlist when a slot opens up. The practice then decides who to contact — the actual decision-making process remains human.
+Tools like Slotfill help to quickly identify suitable patients from the waitlist when a slot opens up. The practice then decides who to contact — the actual decision-making process remains human.
 
 This is not a substitute for a well-thought-out process, but a complement that saves time and reduces errors.
 
@@ -197,7 +197,7 @@ Conclusion
 
 Appointment gaps can never be completely avoided — but they can be significantly reduced through clear processes and an active waitlist. The first step usually is not a tool, but a decision: who is responsible when an appointment falls through?
 
-If you would like to try ClinicSlotHub as a support tool, you can test the platform free for 14 days. We look forward to hearing from you with any questions.`,
+If you would like to try Slotfill as a support tool, you can test the platform online. We look forward to hearing from you with any questions.`,
   },
 
   {
@@ -258,9 +258,9 @@ How long to wait before contacting the next patient? With same-day gaps, time is
 
 How digital tools support this process
 
-ClinicSlotHub is one example of a tool that maps exactly this process digitally: when a slot opens up, suitable candidates from the waitlist are prepared, and the practice can act in a targeted and timely way. The decision of who to contact remains with the practice team.
+Slotfill is one example of a tool that maps exactly this process digitally: when a slot opens up, suitable candidates from the waitlist are prepared, and the practice can act in a targeted and timely way. The decision of who to contact remains with the practice team.
 
-Important for all practices using digital waitlist tools: a data processing agreement (DPA) with the provider is required when processing personal patient data. ClinicSlotHub provides a DPA.
+Important for all practices using digital waitlist tools: a data processing agreement (DPA) with the provider is required when processing personal patient data. Slotfill provides a DPA.
 
 Conclusion
 
@@ -321,7 +321,7 @@ Some systems offer automatic appointment confirmation — this presupposes that 
 
 The default should always be manual review. Automatic confirmation is an extension, not a default setting.
 
-ClinicSlotHub is built on this principle: automatic confirmation is disabled by default and must be deliberately activated by the practice. This way, the team retains control.
+Slotfill is built on this principle: automatic confirmation is disabled by default and must be deliberately activated by the practice. This way, the team retains control.
 
 Step 5: Testing before going live
 
@@ -338,7 +338,7 @@ Conclusion
 
 Online appointment requests are a useful tool — when set up carefully. The go-live should not be rushed. Taking the time to clarify data protection, required fields and internal processes in advance saves rework later.
 
-If you want to set up ClinicSlotHub for your practice, we are available for questions. Please feel free to contact us via the contact form.`,
+If you want to set up Slotfill for your practice, we are available for questions. Please feel free to contact us via the contact form.`,
   },
 
   {
@@ -393,9 +393,9 @@ Patients appreciate clear statements: "We respond within 24 hours." This presupp
 
 Unrealistic promises ("immediately") lead to disappointment. Realistically communicated response times ("within one business day") build trust.
 
-How ClinicSlotHub supports this process
+How Slotfill supports this process
 
-ClinicSlotHub offers a structured online form for appointment requests: patients enter their name, email, desired time period and concern — and actively consent to the privacy notice. The practice sees all requests in the admin area and can confirm manually or (if desired and activated) automatically.
+Slotfill offers a structured online form for appointment requests: patients enter their name, email, desired time period and concern — and actively consent to the privacy notice. The practice sees all requests in the admin area and can confirm manually or (if desired and activated) automatically.
 
 The system is not a substitute for a clearly defined internal process model — but it gives the practice a structured digital tool to work with.
 
@@ -403,7 +403,7 @@ Conclusion
 
 Clear appointment request management starts not with software, but with a structured process. Knowing who is responsible, what information is needed and how quickly a response will come makes it possible to then selectively look for digital support.
 
-Interested in trying ClinicSlotHub for your clinic? Get in touch.`,
+Interested in trying Slotfill for your clinic? Get in touch.`,
   },
 
   {
@@ -454,7 +454,7 @@ When a digital tool makes sense
 
 Beyond a certain volume — for example when several staff members need to edit the list simultaneously, or when there are regularly many cancellations — a spreadsheet can reach its limits.
 
-Here, specialised tools like ClinicSlotHub offer advantages: requests come in via a structured online form, are stored centrally, and can be viewed simultaneously by multiple people.
+Here, specialised tools like Slotfill offer advantages: requests come in via a structured online form, are stored centrally, and can be viewed simultaneously by multiple people.
 
 For very small practices with few appointments per week, this may not be necessary yet. But it is good to know that these options exist as practices grow.
 
@@ -468,7 +468,7 @@ Conclusion
 
 A structured waitlist is not a luxury for large clinics — it is a simple, effective tool for every practice. Getting started does not have to be complicated: a clear spreadsheet and a defined process can achieve a great deal.
 
-If you are curious how ClinicSlotHub can support your practice, try the platform for free — or contact us with your questions.`,
+If you are curious how Slotfill can support your practice, try the platform for free — or contact us with your questions.`,
   },
 ];
 
@@ -498,7 +498,7 @@ Tres pasos prácticos para una lista de espera eficaz
 
 Qué papel pueden desempeñar las herramientas digitales
 
-El software de gestión de consultorios puede ayudar a simplificar este proceso. En lugar de revisar manualmente listas en papel, se pueden encontrar pacientes con los criterios adecuados con mayor rapidez. Herramientas como ClinicSlotHub ayudan a preparar los candidatos idóneos de la lista de espera cuando se abre un hueco, para que el consultorio pueda responder rápidamente.
+El software de gestión de consultorios puede ayudar a simplificar este proceso. En lugar de revisar manualmente listas en papel, se pueden encontrar pacientes con los criterios adecuados con mayor rapidez. Herramientas como Slotfill ayudan a preparar los candidatos idóneos de la lista de espera cuando se abre un hueco, para que el consultorio pueda responder rápidamente.
 
 Importante: Cualquier contacto con pacientes requiere su consentimiento previo y debe gestionarse de forma respetuosa con la protección de datos. Se recomienda una revisión legal antes de utilizar canales de comunicación digitales.
 
@@ -506,7 +506,7 @@ Conclusión
 
 Una lista de espera bien mantenida es una de las medidas más eficaces para cubrir huecos de última hora. Con una estructura clara, mantenimiento regular y — cuando sea necesario — apoyo digital, la ocupación de un consultorio puede mejorar notablemente.
 
-Pruebe ClinicSlotHub gratis durante 14 días y compruebe cómo se simplifica la gestión de la lista de espera.`,
+Pruebe Slotfill en línea y compruebe cómo se simplifica la gestión de la lista de espera.`,
   },
   {
     slug: "terminausfaelle-reduzieren-benachrichtigungen",
@@ -542,9 +542,9 @@ Expectativas realistas
 
 Las notificaciones preparadas no resuelven todos los huecos. Algunas citas permanecerán vacías de todos modos. Pero aumentan la probabilidad de que una cancelación no se convierta en una pérdida completa — y al mismo tiempo alivian al equipo del consultorio.
 
-ClinicSlotHub apoya exactamente este proceso: cuando se libera un hueco, se preparan los pacientes adecuados de la lista de espera y el consultorio puede enviar un enlace seguro a las personas seleccionadas con un solo clic.
+Slotfill apoya exactamente este proceso: cuando se libera un hueco, se preparan los pacientes adecuados de la lista de espera y el consultorio puede enviar un enlace seguro a las personas seleccionadas con un solo clic.
 
-Pruébelo ahora: Pruebe ClinicSlotHub gratis durante 14 días.`,
+Pruébelo ahora: Pruebe Slotfill en línea.`,
   },
   {
     slug: "digitale-warteliste-datenschutz-einwilligung",
@@ -577,17 +577,17 @@ Plazos de eliminación: Los pacientes que han obtenido una cita o que ya no dese
 
 Acuerdo de procesamiento de datos: Si se utiliza software externo para la lista de espera, debe celebrarse un acuerdo de procesamiento de datos (DPA) con el proveedor.
 
-Lo que ClinicSlotHub ofrece en este contexto
+Lo que Slotfill ofrece en este contexto
 
-ClinicSlotHub está diseñado de forma respetuosa con la protección de datos: los pacientes solo pueden ser contactados a través de canales digitales si han dado su consentimiento previamente (opt-in). El modo estándar funciona sin envío automático de mensajes — el consultorio mantiene el control sobre quién es contactado.
+Slotfill está diseñado de forma respetuosa con la protección de datos: los pacientes solo pueden ser contactados a través de canales digitales si han dado su consentimiento previamente (opt-in). El modo estándar funciona sin envío automático de mensajes — el consultorio mantiene el control sobre quién es contactado.
 
-Aviso: El uso de ClinicSlotHub no reemplaza una revisión individual de protección de datos. Cada consultorio es responsable de revisar de forma independiente el uso de software para la comunicación con pacientes.
+Aviso: El uso de Slotfill no reemplaza una revisión individual de protección de datos. Cada consultorio es responsable de revisar de forma independiente el uso de software para la comunicación con pacientes.
 
 Conclusión
 
 Las listas de espera digitales pueden aliviar considerablemente a los consultorios — si se utilizan de forma respetuosa con la protección de datos. La clave está en procesos de consentimiento claros, minimización de datos y un proveedor de confianza con DPA.
 
-Contáctenos: Para preguntas sobre ClinicSlotHub y su uso en su consultorio, estaremos encantados de recibir su mensaje.`,
+Contáctenos: Para preguntas sobre Slotfill y su uso en su consultorio, estaremos encantados de recibir su mensaje.`,
   },
 ];
 
@@ -617,7 +617,7 @@ Trois étapes pratiques pour une liste d'attente efficace
 
 Le rôle que peuvent jouer les outils numériques
 
-Les logiciels de gestion de cabinet peuvent aider à simplifier ce processus. Plutôt que de parcourir manuellement des listes papier, il est possible d'identifier bien plus rapidement les patients correspondant aux critères. Des outils comme ClinicSlotHub aident à préparer les candidats adaptés depuis la liste d'attente lorsqu'un créneau devient disponible, afin que le cabinet puisse réagir rapidement.
+Les logiciels de gestion de cabinet peuvent aider à simplifier ce processus. Plutôt que de parcourir manuellement des listes papier, il est possible d'identifier bien plus rapidement les patients correspondant aux critères. Des outils comme Slotfill aident à préparer les candidats adaptés depuis la liste d'attente lorsqu'un créneau devient disponible, afin que le cabinet puisse réagir rapidement.
 
 Important : Tout contact avec les patients nécessite leur consentement préalable et doit être géré de manière respectueuse de la protection des données. Un examen juridique est recommandé avant d'utiliser des canaux de communication numériques.
 
@@ -625,7 +625,7 @@ Conclusion
 
 Une liste d'attente bien tenue est l'une des mesures les plus efficaces pour combler les créneaux libérés à court terme. Avec une structure claire, une mise à jour régulière et — si nécessaire — un support numérique, le taux d'occupation d'un cabinet peut être sensiblement amélioré.
 
-Essayez ClinicSlotHub gratuitement pendant 14 jours et découvrez comment la gestion de la liste d'attente devient plus simple.`,
+Essayez Slotfill en ligne et découvrez comment la gestion de la liste d'attente devient plus simple.`,
   },
   {
     slug: "terminausfaelle-reduzieren-benachrichtigungen",
@@ -661,9 +661,9 @@ Des attentes réalistes
 
 Les notifications préparées ne résolvent pas tous les créneaux vides. Certains rendez-vous resteront inoccupés malgré tout. Mais elles augmentent la probabilité qu'une annulation ne devienne pas une perte totale — tout en soulageant l'équipe du cabinet.
 
-ClinicSlotHub soutient exactement ce processus : lorsqu'un créneau se libère, les patients adaptés sont sélectionnés depuis la liste d'attente et le cabinet peut envoyer un lien sécurisé aux personnes choisies en un seul clic.
+Slotfill soutient exactement ce processus : lorsqu'un créneau se libère, les patients adaptés sont sélectionnés depuis la liste d'attente et le cabinet peut envoyer un lien sécurisé aux personnes choisies en un seul clic.
 
-Essayez-le maintenant : Testez ClinicSlotHub gratuitement pendant 14 jours.`,
+Essayez-le maintenant : Testez Slotfill en ligne.`,
   },
   {
     slug: "digitale-warteliste-datenschutz-einwilligung",
@@ -696,17 +696,17 @@ Délais de suppression : Les patients ayant obtenu un rendez-vous ou ne souhaita
 
 Accord de traitement des données : Si un logiciel externe est utilisé pour la liste d'attente, un accord de traitement des données (ATD) doit être conclu avec le prestataire.
 
-Ce que ClinicSlotHub apporte dans ce contexte
+Ce que Slotfill apporte dans ce contexte
 
-ClinicSlotHub est conçu dans le respect de la protection des données : les patients ne peuvent être contactés via des canaux numériques que s'ils ont préalablement donné leur consentement (opt-in). Le mode standard fonctionne sans envoi automatique de messages — le cabinet garde le contrôle sur qui est contacté.
+Slotfill est conçu dans le respect de la protection des données : les patients ne peuvent être contactés via des canaux numériques que s'ils ont préalablement donné leur consentement (opt-in). Le mode standard fonctionne sans envoi automatique de messages — le cabinet garde le contrôle sur qui est contacté.
 
-Remarque : L'utilisation de ClinicSlotHub ne remplace pas un examen individuel de protection des données. Chaque cabinet est responsable d'examiner de façon autonome l'utilisation de logiciels pour la communication avec les patients.
+Remarque : L'utilisation de Slotfill ne remplace pas un examen individuel de protection des données. Chaque cabinet est responsable d'examiner de façon autonome l'utilisation de logiciels pour la communication avec les patients.
 
 Conclusion
 
 Les listes d'attente numériques peuvent considérablement soulager les cabinets — si elles sont utilisées de manière respectueuse de la protection des données. La clé réside dans des processus de consentement clairs, la minimisation des données et un prestataire fiable disposant d'un ATD.
 
-Contactez-nous : Pour toute question sur ClinicSlotHub et son utilisation dans votre cabinet, nous serons ravis de vous répondre.`,
+Contactez-nous : Pour toute question sur Slotfill et son utilisation dans votre cabinet, nous serons ravis de vous répondre.`,
   },
 ];
 
@@ -736,7 +736,7 @@ Três passos práticos para uma lista de espera eficaz
 
 O papel que as ferramentas digitais podem desempenhar
 
-O software de gestão de consultório pode ajudar a simplificar esse processo. Em vez de revisar manualmente listas em papel, os pacientes com os critérios adequados podem ser encontrados muito mais rapidamente. Ferramentas como o ClinicSlotHub ajudam a preparar os candidatos mais adequados da lista de espera quando um horário fica disponível, para que o consultório possa responder rapidamente.
+O software de gestão de consultório pode ajudar a simplificar esse processo. Em vez de revisar manualmente listas em papel, os pacientes com os critérios adequados podem ser encontrados muito mais rapidamente. Ferramentas como o Slotfill ajudam a preparar os candidatos mais adequados da lista de espera quando um horário fica disponível, para que o consultório possa responder rapidamente.
 
 Importante: Qualquer contato com pacientes exige o consentimento prévio deles e deve ser feito de forma consciente quanto à proteção de dados. Recomenda-se uma revisão jurídica antes de utilizar canais de comunicação digitais.
 
@@ -744,7 +744,7 @@ Conclusão
 
 Uma lista de espera bem mantida é uma das medidas mais eficazes para preencher horários liberados de última hora. Com uma estrutura clara, manutenção regular e — quando necessário — suporte digital, o aproveitamento de um consultório pode melhorar sensivelmente.
 
-Experimente o ClinicSlotHub gratuitamente por 14 dias e veja como a gestão da lista de espera fica mais simples.`,
+Experimente o Slotfill online e veja como a gestão da lista de espera fica mais simples.`,
   },
   {
     slug: "terminausfaelle-reduzieren-benachrichtigungen",
@@ -780,9 +780,9 @@ Expectativas realistas
 
 Notificações preparadas não resolvem todos os horários vazios. Algumas consultas permanecerão sem preenchimento de qualquer forma. Mas aumentam a probabilidade de que um cancelamento não se torne uma perda total — ao mesmo tempo em que aliviam a equipe do consultório.
 
-O ClinicSlotHub apoia exatamente esse processo: quando um horário se libera, os pacientes adequados da lista de espera são preparados e o consultório pode enviar um link seguro às pessoas selecionadas com um único clique.
+O Slotfill apoia exatamente esse processo: quando um horário se libera, os pacientes adequados da lista de espera são preparados e o consultório pode enviar um link seguro às pessoas selecionadas com um único clique.
 
-Experimente agora: Teste o ClinicSlotHub gratuitamente por 14 dias.`,
+Experimente agora: Teste o Slotfill online.`,
   },
   {
     slug: "digitale-warteliste-datenschutz-einwilligung",
@@ -815,17 +815,17 @@ Prazos de exclusão: Pacientes que obtiveram uma consulta ou que não desejam ma
 
 Contrato de processamento de dados: Se for utilizado software externo para a lista de espera, um contrato de processamento de dados (CPD) deve ser celebrado com o fornecedor.
 
-O que o ClinicSlotHub oferece neste contexto
+O que o Slotfill oferece neste contexto
 
-O ClinicSlotHub foi desenvolvido de forma consciente quanto à proteção de dados: os pacientes só podem ser contactados por canais digitais se tiverem dado o seu consentimento previamente (opt-in). O modo padrão funciona sem envio automático de mensagens — o consultório mantém o controle sobre quem é contactado.
+O Slotfill foi desenvolvido de forma consciente quanto à proteção de dados: os pacientes só podem ser contactados por canais digitais se tiverem dado o seu consentimento previamente (opt-in). O modo padrão funciona sem envio automático de mensagens — o consultório mantém o controle sobre quem é contactado.
 
-Aviso: O uso do ClinicSlotHub não substitui uma avaliação individual de proteção de dados. Cada consultório é responsável por revisar de forma independente o uso de software para comunicação com pacientes.
+Aviso: O uso do Slotfill não substitui uma avaliação individual de proteção de dados. Cada consultório é responsável por revisar de forma independente o uso de software para comunicação com pacientes.
 
 Conclusão
 
 As listas de espera digitais podem aliviar consideravelmente os consultórios — se utilizadas de forma consciente quanto à proteção de dados. A chave está em processos de consentimento claros, minimização de dados e um fornecedor confiável com CPD.
 
-Entre em contato: Para dúvidas sobre o ClinicSlotHub e seu uso em seu consultório, aguardamos sua mensagem.`,
+Entre em contato: Para dúvidas sobre o Slotfill e seu uso em seu consultório, aguardamos sua mensagem.`,
   },
 ];
 
@@ -855,7 +855,7 @@ const AR_POSTS: StaticPost[] = [
 
 الدور الذي يمكن أن تؤديه الأدوات الرقمية
 
-يمكن لبرامج إدارة العيادات أن تساعد في تبسيط هذه العملية. بدلاً من البحث يدوياً في قوائم ورقية، يمكن العثور على المرضى المناسبين بسرعة أكبر. تساعد أدوات مثل ClinicSlotHub في تهيئة المرشحين المناسبين من قائمة الانتظار عند فتح موعد، مما يتيح للعيادة الاستجابة السريعة.
+يمكن لبرامج إدارة العيادات أن تساعد في تبسيط هذه العملية. بدلاً من البحث يدوياً في قوائم ورقية، يمكن العثور على المرضى المناسبين بسرعة أكبر. تساعد أدوات مثل Slotfill في تهيئة المرشحين المناسبين من قائمة الانتظار عند فتح موعد، مما يتيح للعيادة الاستجابة السريعة.
 
 ملاحظة مهمة: يستلزم التواصل مع المرضى موافقتهم المسبقة ويجب أن يتم بطريقة تراعي حماية البيانات. يُنصح بمراجعة قانونية قبل استخدام قنوات التواصل الرقمي.
 
@@ -863,7 +863,7 @@ const AR_POSTS: StaticPost[] = [
 
 قائمة الانتظار المنظمة هي من أكثر الإجراءات فعالية لملء الفجوات المفاجئة في الجدول الزمني. مع هيكل واضح وتحديث منتظم — وعند الحاجة — دعم رقمي، يمكن تحسين معدل استغلال طاقة العيادة بشكل ملحوظ.
 
-جرّب ClinicSlotHub مجاناً لمدة 14 يوماً وانظر كيف تصبح إدارة قائمة الانتظار أسهل.`,
+جرّب Slotfill مجاناً لمدة 14 يوماً وانظر كيف تصبح إدارة قائمة الانتظار أسهل.`,
   },
   {
     slug: "terminausfaelle-reduzieren-benachrichtigungen",
@@ -899,9 +899,9 @@ const AR_POSTS: StaticPost[] = [
 
 الإشعارات المُعدّة مسبقاً لا تحل كل الفجوات. بعض المواعيد ستبقى شاغرة على أي حال. لكنها تزيد من احتمالية ألا يتحول الإلغاء إلى خسارة كاملة — مع تخفيف العبء عن فريق العيادة في الوقت نفسه.
 
-يدعم ClinicSlotHub هذه العملية تحديداً: عند فتح موعد شاغر، يُعدّ المرضى المناسبون من قائمة الانتظار، ويمكن للعيادة إرسال رابط آمن للأشخاص المختارين بنقرة واحدة.
+يدعم Slotfill هذه العملية تحديداً: عند فتح موعد شاغر، يُعدّ المرضى المناسبون من قائمة الانتظار، ويمكن للعيادة إرسال رابط آمن للأشخاص المختارين بنقرة واحدة.
 
-جرّبه الآن: اختبر ClinicSlotHub مجاناً لمدة 14 يوماً.`,
+جرّبه الآن: اختبر Slotfill مجاناً لمدة 14 يوماً.`,
   },
   {
     slug: "digitale-warteliste-datenschutz-einwilligung",
@@ -934,17 +934,17 @@ const AR_POSTS: StaticPost[] = [
 
 اتفاقية معالجة البيانات: عند استخدام برامج خارجية لإدارة قائمة الانتظار، يجب إبرام اتفاقية معالجة بيانات مع مزود الخدمة.
 
-ما يقدمه ClinicSlotHub في هذا السياق
+ما يقدمه Slotfill في هذا السياق
 
-صُمّم ClinicSlotHub بوعي تجاه حماية البيانات: لا يمكن التواصل مع المرضى عبر القنوات الرقمية إلا إذا وافقوا على ذلك مسبقاً (الاشتراك الاختياري). يعمل الوضع الافتراضي دون إرسال رسائل آلية — تحتفظ العيادة بالتحكم الكامل في من يتم التواصل معه.
+صُمّم Slotfill بوعي تجاه حماية البيانات: لا يمكن التواصل مع المرضى عبر القنوات الرقمية إلا إذا وافقوا على ذلك مسبقاً (الاشتراك الاختياري). يعمل الوضع الافتراضي دون إرسال رسائل آلية — تحتفظ العيادة بالتحكم الكامل في من يتم التواصل معه.
 
-تنبيه: لا يُغني استخدام ClinicSlotHub عن مراجعة حماية البيانات الفردية. كل عيادة مسؤولة عن مراجعة استخدام البرامج للتواصل مع المرضى بشكل مستقل.
+تنبيه: لا يُغني استخدام Slotfill عن مراجعة حماية البيانات الفردية. كل عيادة مسؤولة عن مراجعة استخدام البرامج للتواصل مع المرضى بشكل مستقل.
 
 خلاصة
 
 يمكن لقوائم الانتظار الرقمية تخفيف العبء عن العيادات بشكل كبير — إذا استُخدمت بوعي تجاه حماية البيانات. المفتاح يكمن في عمليات موافقة واضحة، وتقليل البيانات إلى الحد الأدنى، ومزود موثوق به يمتلك اتفاقية معالجة بيانات.
 
-تواصل معنا: لأي أسئلة حول ClinicSlotHub وكيفية استخدامه في عيادتك، يسعدنا تلقي رسالتك.`,
+تواصل معنا: لأي أسئلة حول Slotfill وكيفية استخدامه في عيادتك، يسعدنا تلقي رسالتك.`,
   },
 ];
 
@@ -974,7 +974,7 @@ const ZH_POSTS: StaticPost[] = [
 
 数字化工具能发挥什么作用
 
-诊所管理软件可以帮助简化这一流程。无需手动翻阅纸质名单，可以更快地找到符合条件的患者。ClinicSlotHub等工具可以在出现预约空档时从候诊名单中准备好合适的候选人，帮助诊所快速响应。
+诊所管理软件可以帮助简化这一流程。无需手动翻阅纸质名单，可以更快地找到符合条件的患者。Slotfill等工具可以在出现预约空档时从候诊名单中准备好合适的候选人，帮助诊所快速响应。
 
 重要提示：联系患者需要获得其事先同意，且应以符合数据保护意识的方式进行。建议在使用数字通讯渠道前进行法律审查。
 
@@ -982,7 +982,7 @@ const ZH_POSTS: StaticPost[] = [
 
 维护良好的候诊名单是填补临时预约空档最有效的措施之一。通过清晰的结构、定期维护——以及必要时的数字化支持——诊所的预约使用率可以显著提升。
 
-免费试用ClinicSlotHub 14天，看看候诊名单管理如何变得更简单。`,
+免费试用Slotfill 14天，看看候诊名单管理如何变得更简单。`,
   },
   {
     slug: "terminausfaelle-reduzieren-benachrichtigungen",
@@ -1018,9 +1018,9 @@ const ZH_POSTS: StaticPost[] = [
 
 预先准备的通知并不能解决所有空档问题。有些预约仍然可能无法填补。但它们增加了取消预约不会造成完全损失的可能性——同时也减轻了诊所团队的负担。
 
-ClinicSlotHub正是为支持这一流程而设计：当出现预约空档时，从候诊名单中准备好合适的患者，诊所只需一键即可向选定的人发送安全链接。
+Slotfill正是为支持这一流程而设计：当出现预约空档时，从候诊名单中准备好合适的患者，诊所只需一键即可向选定的人发送安全链接。
 
-立即体验：免费试用ClinicSlotHub 14天。`,
+立即体验：免费试用Slotfill 14天。`,
   },
   {
     slug: "digitale-warteliste-datenschutz-einwilligung",
@@ -1053,17 +1053,17 @@ ClinicSlotHub正是为支持这一流程而设计：当出现预约空档时，�
 
 数据处理协议：如果使用外部软件管理候诊名单，必须与服务提供商签订数据处理协议（DPA）。
 
-ClinicSlotHub在此提供的支持
+Slotfill在此提供的支持
 
-ClinicSlotHub的设计注重数据保护意识：只有在患者事先同意（选择加入）的情况下，才能通过数字渠道与其联系。标准模式不进行自动消息发送——诊所完全掌控联系对象的决定权。
+Slotfill的设计注重数据保护意识：只有在患者事先同意（选择加入）的情况下，才能通过数字渠道与其联系。标准模式不进行自动消息发送——诊所完全掌控联系对象的决定权。
 
-注意：使用ClinicSlotHub不能替代个人数据保护审查。每个诊所均有责任独立审查用于患者通讯的软件使用情况。
+注意：使用Slotfill不能替代个人数据保护审查。每个诊所均有责任独立审查用于患者通讯的软件使用情况。
 
 总结
 
 数字候诊名单可以显著减轻诊所负担——前提是以注重数据保护意识的方式使用。关键在于清晰的同意流程、数据最小化以及拥有数据处理协议的可靠服务提供商。
 
-联系我们：如有关于ClinicSlotHub及其在您诊所应用的问题，欢迎随时与我们联系。`,
+联系我们：如有关于Slotfill及其在您诊所应用的问题，欢迎随时与我们联系。`,
   },
 ];
 
@@ -1093,7 +1093,7 @@ const HI_POSTS: StaticPost[] = [
 
 डिजिटल टूल क्या भूमिका निभा सकते हैं
 
-प्रैक्टिस मैनेजमेंट सॉफ्टवेयर इस प्रक्रिया को सरल बनाने में मदद कर सकता है। कागजी सूचियां मैन्युअल रूप से देखने की बजाय, उपयुक्त मानदंड वाले मरीज तेजी से मिल सकते हैं। ClinicSlotHub जैसे टूल स्लॉट उपलब्ध होने पर प्रतीक्षा सूची से उपयुक्त उम्मीदवार तैयार करने में मदद करते हैं।
+प्रैक्टिस मैनेजमेंट सॉफ्टवेयर इस प्रक्रिया को सरल बनाने में मदद कर सकता है। कागजी सूचियां मैन्युअल रूप से देखने की बजाय, उपयुक्त मानदंड वाले मरीज तेजी से मिल सकते हैं। Slotfill जैसे टूल स्लॉट उपलब्ध होने पर प्रतीक्षा सूची से उपयुक्त उम्मीदवार तैयार करने में मदद करते हैं।
 
 महत्वपूर्ण: मरीजों से किसी भी संपर्क के लिए उनकी पूर्व सहमति आवश्यक है और डेटा सुरक्षा के प्रति जागरूक तरीके से किया जाना चाहिए। डिजिटल संचार चैनलों का उपयोग करने से पहले कानूनी समीक्षा की सिफारिश की जाती है।
 
@@ -1101,7 +1101,7 @@ const HI_POSTS: StaticPost[] = [
 
 अच्छी तरह से बनाए रखी गई प्रतीक्षा सूची अल्प सूचना पर खाली स्लॉट भरने के सबसे प्रभावी उपायों में से एक है। स्पष्ट संरचना, नियमित देखभाल और — जब आवश्यक हो — डिजिटल सहायता से प्रैक्टिस की भरण क्षमता में उल्लेखनीय सुधार हो सकता है।
 
-ClinicSlotHub को 14 दिनों के लिए मुफ्त आजमाएं और देखें कि प्रतीक्षा सूची प्रबंधन कैसे आसान हो जाता है।`,
+Slotfill को 14 दिनों के लिए मुफ्त आजमाएं और देखें कि प्रतीक्षा सूची प्रबंधन कैसे आसान हो जाता है।`,
   },
   {
     slug: "terminausfaelle-reduzieren-benachrichtigungen",
@@ -1133,9 +1133,9 @@ ClinicSlotHub को 14 दिनों के लिए मुफ्त आज�
 
 स्पष्ट संचार: सूचना स्पष्ट और सरल भाषा में होनी चाहिए। मरीज को पता होना चाहिए कि क्या उम्मीद करनी है, कैसे प्रतिक्रिया देनी है और अपॉइंटमेंट कब तक उपलब्ध है।
 
-ClinicSlotHub इसी प्रक्रिया का समर्थन करता है: अपॉइंटमेंट स्लॉट खुलने पर, प्रतीक्षा सूची से उपयुक्त मरीज तैयार किए जाते हैं और प्रैक्टिस एक क्लिक से चुने गए लोगों को सुरक्षित लिंक भेज सकती है।
+Slotfill इसी प्रक्रिया का समर्थन करता है: अपॉइंटमेंट स्लॉट खुलने पर, प्रतीक्षा सूची से उपयुक्त मरीज तैयार किए जाते हैं और प्रैक्टिस एक क्लिक से चुने गए लोगों को सुरक्षित लिंक भेज सकती है।
 
-अभी आज़माएं: ClinicSlotHub को 14 दिनों के लिए मुफ्त टेस्ट करें।`,
+अभी आज़माएं: Slotfill को 14 दिनों के लिए मुफ्त टेस्ट करें।`,
   },
   {
     slug: "digitale-warteliste-datenschutz-einwilligung",
@@ -1166,13 +1166,13 @@ ClinicSlotHub इसी प्रक्रिया का समर्थन �
 
 हटाने की समय-सीमा: जिन मरीजों को अपॉइंटमेंट मिल गया है या जो अब सूची में नहीं रहना चाहते, उन्हें समय पर डिजिटल प्रतीक्षा सूची से हटाया जाना चाहिए।
 
-ClinicSlotHub इस संदर्भ में क्या प्रदान करता है
+Slotfill इस संदर्भ में क्या प्रदान करता है
 
-ClinicSlotHub को डेटा सुरक्षा के प्रति जागरूक तरीके से डिजाइन किया गया है: मरीजों से केवल तभी डिजिटल चैनलों के माध्यम से संपर्क किया जा सकता है जब उन्होंने पहले सहमति दी हो (ऑप्ट-इन)। स्टैंडर्ड मोड बिना स्वचालित संदेश भेजे काम करता है — प्रैक्टिस यह नियंत्रित करती है कि किससे संपर्क किया जाए।
+Slotfill को डेटा सुरक्षा के प्रति जागरूक तरीके से डिजाइन किया गया है: मरीजों से केवल तभी डिजिटल चैनलों के माध्यम से संपर्क किया जा सकता है जब उन्होंने पहले सहमति दी हो (ऑप्ट-इन)। स्टैंडर्ड मोड बिना स्वचालित संदेश भेजे काम करता है — प्रैक्टिस यह नियंत्रित करती है कि किससे संपर्क किया जाए।
 
-नोट: ClinicSlotHub का उपयोग व्यक्तिगत डेटा सुरक्षा समीक्षा का विकल्प नहीं है।
+नोट: Slotfill का उपयोग व्यक्तिगत डेटा सुरक्षा समीक्षा का विकल्प नहीं है।
 
-हमसे संपर्क करें: ClinicSlotHub के बारे में या अपनी प्रैक्टिस में इसके उपयोग के संबंध में किसी भी प्रश्न के लिए, हम आपके संदेश का स्वागत करते हैं।`,
+हमसे संपर्क करें: Slotfill के बारे में या अपनी प्रैक्टिस में इसके उपयोग के संबंध में किसी भी प्रश्न के लिए, हम आपके संदेश का स्वागत करते हैं।`,
   },
 ];
 
@@ -1200,11 +1200,11 @@ const BN_POSTS: StaticPost[] = [
 
 ৩. স্পষ্ট অগ্রাধিকার নির্ধারণ করুন: জরুরি চিকিৎসার প্রয়োজন আছে এমন রোগীদের অগ্রাধিকার দিন।
 
-ClinicSlotHub-এর মতো টুলগুলো প্রতীক্ষা সূচি থেকে উপযুক্ত প্রার্থীদের প্রস্তুত করতে সাহায্য করে যখন একটি স্লট পাওয়া যায়।
+Slotfill-এর মতো টুলগুলো প্রতীক্ষা সূচি থেকে উপযুক্ত প্রার্থীদের প্রস্তুত করতে সাহায্য করে যখন একটি স্লট পাওয়া যায়।
 
 গুরুত্বপূর্ণ: রোগীদের সাথে যেকোনো যোগাযোগের জন্য তাদের পূর্বসম্মতি প্রয়োজন এবং তা তথ্য সুরক্ষার প্রতি সচেতনভাবে করতে হবে।
 
-ClinicSlotHub ১৪ দিনের জন্য বিনামূল্যে পরীক্ষা করুন।`,
+Slotfill ১৪ দিনের জন্য বিনামূল্যে পরীক্ষা করুন।`,
   },
   {
     slug: "terminausfaelle-reduzieren-benachrichtigungen",
@@ -1221,9 +1221,9 @@ ClinicSlotHub ১৪ দিনের জন্য বিনামূল্যে
 
 একটি ভিন্ন পদ্ধতি: সরাসরি কল করার পরিবর্তে, উপযুক্ত অপেক্ষমাণ রোগীদের জন্য একটি ব্যক্তিগতকৃত নিরাপদ লিংক প্রস্তুত করা হয়। এই লিংকের মাধ্যমে রোগীরা নিজেরাই সিদ্ধান্ত নিতে পারেন — ফোনে অপেক্ষা ছাড়াই।
 
-ClinicSlotHub ঠিক এই প্রক্রিয়াকে সমর্থন করে: যখন একটি স্লট খালি হয়, উপযুক্ত রোগীদের প্রস্তুত করা হয় এবং প্র্যাকটিস এক ক্লিকে নির্বাচিত ব্যক্তিদের নিরাপদ লিংক পাঠাতে পারে।
+Slotfill ঠিক এই প্রক্রিয়াকে সমর্থন করে: যখন একটি স্লট খালি হয়, উপযুক্ত রোগীদের প্রস্তুত করা হয় এবং প্র্যাকটিস এক ক্লিকে নির্বাচিত ব্যক্তিদের নিরাপদ লিংক পাঠাতে পারে।
 
-এখনই চেষ্টা করুন: ClinicSlotHub ১৪ দিনের জন্য বিনামূল্যে পরীক্ষা করুন।`,
+এখনই চেষ্টা করুন: Slotfill ১৪ দিনের জন্য বিনামূল্যে পরীক্ষা করুন।`,
   },
   {
     slug: "digitale-warteliste-datenschutz-einwilligung",
@@ -1242,9 +1242,9 @@ ClinicSlotHub ঠিক এই প্রক্রিয়াকে সমর্
 
 অনেক ক্ষেত্রে প্রক্রিয়াকরণ একটি চুক্তির উপর ভিত্তি করে হতে পারে। অন্যান্য ক্ষেত্রে, বিশেষ করে ডিজিটাল চ্যানেলের মাধ্যমে যোগাযোগের জন্য, রোগীর সুস্পষ্ট সম্মতি প্রয়োজন।
 
-ClinicSlotHub তথ্য সুরক্ষার প্রতি সচেতনভাবে ডিজাইন করা হয়েছে: রোগীরা কেবল তখনই ডিজিটাল চ্যানেলের মাধ্যমে যোগাযোগ করা যায় যখন তারা পূর্বে সম্মতি দিয়েছেন (অপ্ট-ইন)। স্ট্যান্ডার্ড মোড স্বয়ংক্রিয় বার্তা পাঠানো ছাড়াই কাজ করে।
+Slotfill তথ্য সুরক্ষার প্রতি সচেতনভাবে ডিজাইন করা হয়েছে: রোগীরা কেবল তখনই ডিজিটাল চ্যানেলের মাধ্যমে যোগাযোগ করা যায় যখন তারা পূর্বে সম্মতি দিয়েছেন (অপ্ট-ইন)। স্ট্যান্ডার্ড মোড স্বয়ংক্রিয় বার্তা পাঠানো ছাড়াই কাজ করে।
 
-আমাদের সাথে যোগাযোগ করুন: ClinicSlotHub সম্পর্কে যেকোনো প্রশ্নের জন্য আমরা আপনার বার্তার অপেক্ষায় আছি।`,
+আমাদের সাথে যোগাযোগ করুন: Slotfill সম্পর্কে যেকোনো প্রশ্নের জন্য আমরা আপনার বার্তার অপেক্ষায় আছি।`,
   },
 ];
 
@@ -1272,11 +1272,11 @@ const RU_POSTS: StaticPost[] = [
 
 3. Устанавливайте чёткие приоритеты: пациенты с неотложной потребностью в лечении должны быть в приоритете.
 
-Инструменты вроде ClinicSlotHub помогают подбирать подходящих кандидатов из листа ожидания при появлении свободного слота.
+Инструменты вроде Slotfill помогают подбирать подходящих кандидатов из листа ожидания при появлении свободного слота.
 
 Важно: любой контакт с пациентами требует их предварительного согласия и должен осуществляться с соблюдением требований защиты данных. Перед использованием цифровых каналов коммуникации рекомендуется юридическая проверка.
 
-Попробуйте ClinicSlotHub бесплатно в течение 14 дней и убедитесь, насколько проще стало управление листом ожидания.`,
+Попробуйте Slotfill бесплатно в течение 14 дней и убедитесь, насколько проще стало управление листом ожидания.`,
   },
   {
     slug: "terminausfaelle-reduzieren-benachrichtigungen",
@@ -1293,9 +1293,9 @@ const RU_POSTS: StaticPost[] = [
 
 Другой подход: вместо прямого звонка для подходящих пациентов из листа ожидания готовится персональная безопасная ссылка. Через неё пациенты сами решают, хотят ли они записаться на освободившееся время — в своём темпе, без телефонного ожидания.
 
-ClinicSlotHub поддерживает именно этот процесс: при появлении свободного слота подходящие пациенты подбираются из листа ожидания, и учреждение может одним кликом отправить безопасную ссылку выбранным лицам.
+Slotfill поддерживает именно этот процесс: при появлении свободного слота подходящие пациенты подбираются из листа ожидания, и учреждение может одним кликом отправить безопасную ссылку выбранным лицам.
 
-Попробуйте сейчас: тестируйте ClinicSlotHub бесплатно 14 дней.`,
+Попробуйте сейчас: тестируйте Slotfill бесплатно 14 дней.`,
   },
   {
     slug: "digitale-warteliste-datenschutz-einwilligung",
@@ -1318,15 +1318,15 @@ ClinicSlotHub поддерживает именно этот процесс: п�
 
 Минимизация данных: собирайте только необходимые данные. Ограничение цели: данные можно использовать только в той цели, для которой они были собраны. Своевременное удаление: пациентов, получивших запись или покинувших лист, следует своевременно удалять.
 
-ClinicSlotHub разработан с учётом требований защиты данных: пациенты могут быть связаны через цифровые каналы только при наличии предварительного согласия (opt-in). Стандартный режим работает без автоматической отправки сообщений.
+Slotfill разработан с учётом требований защиты данных: пациенты могут быть связаны через цифровые каналы только при наличии предварительного согласия (opt-in). Стандартный режим работает без автоматической отправки сообщений.
 
-Примечание: использование ClinicSlotHub не заменяет индивидуальную проверку защиты данных.
+Примечание: использование Slotfill не заменяет индивидуальную проверку защиты данных.
 
-Свяжитесь с нами: по вопросам о ClinicSlotHub и его использовании в вашем учреждении мы рады вашему сообщению.`,
+Свяжитесь с нами: по вопросам о Slotfill и его использовании в вашем учреждении мы рады вашему сообщению.`,
   },
 ];
 
-// ─── Global Soft Launch Article (alle Locales) ────────────────────────────────
+// ─── Global Start Article (alle Locales) ────────────────────────────────
 // Slug: clinicslothub-global-soft-launch
 // Hinzugefügt: Juni 2026
 
@@ -1337,16 +1337,16 @@ const LAUNCH_DATE = "2026-06-10T08:00:00.000Z";
 
 const EN_LAUNCH: StaticPost = {
   slug: LAUNCH_SLUG,
-  title: "ClinicSlotHub is now publicly available — global soft launch",
-  excerpt: "ClinicSlotHub, the multilingual appointment and waitlist management platform for clinics and healthcare providers, has entered public soft launch. Free to try, no credit card required.",
+  title: "Slotfill is now publicly available — global launch",
+  excerpt: "Slotfill, the multilingual appointment and waitlist management platform for clinics and healthcare providers, has entered public launch. Online appointment booking for clinics and practices.",
   published_at: LAUNCH_DATE,
-  content: `ClinicSlotHub is now publicly available.
+  content: `Slotfill is now publicly available.
 
-After months of development and internal testing, the platform is entering its global public soft launch phase. The goal: to give practices, clinics, therapy centers, and healthcare providers worldwide access to a digital tool that makes appointment request and waitlist management easier — without expensive integrations, without complex setup, and without a paper-based process.
+After months of development and internal testing, the platform is entering its global public launch phase. The goal: to give practices, clinics, therapy centers, and healthcare providers worldwide access to a digital tool that makes appointment request and waitlist management easier — without expensive integrations, without complex setup, and without a paper-based process.
 
-What is ClinicSlotHub?
+What is Slotfill?
 
-ClinicSlotHub is a browser-based SaaS platform that helps medical and therapeutic practices manage their waiting lists digitally. When a cancellation occurs, the practice can quickly identify which patients on the waitlist are suitable and notify them — by email, and optionally via SMS or WhatsApp if a messaging provider is configured.
+Slotfill is a browser-based SaaS platform that helps medical and therapeutic practices manage their waiting lists digitally. When a cancellation occurs, the practice can quickly identify which patients on the waitlist are suitable and notify them — by email, and optionally via SMS or WhatsApp if a messaging provider is configured.
 
 The platform is available in 10 languages: German, English, French, Spanish, Portuguese, Chinese, Hindi, Arabic, Bengali, and Russian.
 
@@ -1362,15 +1362,15 @@ The following features are live and functional:
 – Privacy-conscious design: no tracking, no mass messaging without consent
 – Full legal pages: Imprint, Privacy Policy, T&Cs, DPA
 
-Current status: soft launch
+Current status: available
 
-There are no paying customers yet. The platform is in public soft launch. Practices that register now are early adopters — and their feedback will directly shape the next development priorities.
+There are no paying customers yet. The platform is in public launch. Practices that register now are early adopters — and their feedback will directly shape the next development priorities.
 
-Stripe (payment processing) is technically integrated but not yet activated. During the soft launch period, the trial is free. No credit card is required.
+Stripe (payment processing) is technically integrated but not yet activated. No payment is processed on this website.
 
 For whom is this platform?
 
-ClinicSlotHub is designed for:
+Slotfill is designed for:
 – General practitioners and specialist practices
 – Physiotherapy, speech therapy, occupational therapy, psychotherapy practices
 – Dental practices
@@ -1378,29 +1378,29 @@ ClinicSlotHub is designed for:
 
 The platform is designed for international use. Local legal and data protection requirements — including data processing agreements where required — should be reviewed before productive use with real patient data.
 
-Try it free
+Request access
 
 Registration is fully self-service. No invitation, no approval process:
 – Visit clinicslothub.com
 – Click "Register"
 – Confirm your email
-– Start your 14-day trial
+– Request access
 
 Questions or feedback: transl.delta@gmail.com`,
 };
 
 const FR_LAUNCH: StaticPost = {
   slug: LAUNCH_SLUG,
-  title: "ClinicSlotHub est maintenant disponible — lancement public mondial",
-  excerpt: "ClinicSlotHub, la plateforme multilingue de gestion des rendez-vous et des listes d'attente pour cliniques et professionnels de santé, entre en phase de lancement public. Essai gratuit, sans carte bancaire.",
+  title: "Slotfill est maintenant disponible — lancement public mondial",
+  excerpt: "Slotfill, la plateforme multilingue de gestion des rendez-vous et des listes d'attente pour cliniques et professionnels de santé, entre en phase de lancement public. En ligne.",
   published_at: LAUNCH_DATE,
-  content: `ClinicSlotHub est maintenant disponible publiquement.
+  content: `Slotfill est maintenant disponible publiquement.
 
 Après plusieurs mois de développement et de tests internes, la plateforme entre dans sa phase de lancement public mondial. L'objectif : donner aux cabinets médicaux, cliniques, centres de soins et professionnels de santé du monde entier accès à un outil numérique qui simplifie la gestion des demandes de rendez-vous et des listes d'attente.
 
-Qu'est-ce que ClinicSlotHub ?
+Qu'est-ce que Slotfill ?
 
-ClinicSlotHub est une plateforme SaaS basée sur navigateur qui aide les cabinets médicaux et thérapeutiques à gérer leurs listes d'attente de façon numérique. Lorsqu'une annulation survient, le cabinet peut rapidement identifier les patients appropriés sur la liste d'attente et les notifier — par e-mail, et optionnellement par SMS ou WhatsApp si un fournisseur de messagerie est configuré.
+Slotfill est une plateforme SaaS basée sur navigateur qui aide les cabinets médicaux et thérapeutiques à gérer leurs listes d'attente de façon numérique. Lorsqu'une annulation survient, le cabinet peut rapidement identifier les patients appropriés sur la liste d'attente et les notifier — par e-mail, et optionnellement par SMS ou WhatsApp si un fournisseur de messagerie est configuré.
 
 La plateforme est disponible en 10 langues : allemand, anglais, français, espagnol, portugais, chinois, hindi, arabe, bengali et russe.
 
@@ -1415,105 +1415,105 @@ Les fonctionnalités suivantes sont opérationnelles :
 – Interface patient multilingue en 10 langues
 – Conception respectueuse de la vie privée : pas de tracking, pas d'envoi en masse sans consentement
 
-Statut actuel : soft launch
+Statut actuel : disponible
 
 Il n'y a pas encore de clients payants. La plateforme est en lancement public. Les cabinets qui s'inscrivent maintenant sont des early adopters dont les retours orienteront les prochaines priorités de développement.
 
-Stripe est intégré techniquement mais pas encore activé. L'essai est gratuit, sans carte bancaire.
+Stripe est intégré techniquement mais pas encore activé. Aucun paiement n'est traité sur ce site.
 
 Pour qui ?
 
-ClinicSlotHub est conçu pour : médecins généralistes et spécialistes, kinésithérapeutes, orthophonistes, psychothérapeutes, dentistes, petites cliniques et professionnels de santé.
+Slotfill est conçu pour : médecins généralistes et spécialistes, kinésithérapeutes, orthophonistes, psychothérapeutes, dentistes, petites cliniques et professionnels de santé.
 
 La plateforme est conçue pour un usage international. Les exigences légales et de protection des données locales doivent être vérifiées avant toute utilisation productive avec de vraies données patients.
 
-Essayez gratuitement
+Demander l'accès
 
-Inscription en libre-service sur clinicslothub.com — 14 jours gratuits, sans carte bancaire.
+Inscription en libre-service sur clinicslothub.com — sur demande.
 
 Questions ou retours : transl.delta@gmail.com`,
 };
 
 const ES_LAUNCH: StaticPost = {
   slug: LAUNCH_SLUG,
-  title: "ClinicSlotHub ya está disponible — lanzamiento público global",
-  excerpt: "ClinicSlotHub, la plataforma multilingüe de gestión de citas y listas de espera para clínicas y proveedores de salud, entra en fase de lanzamiento público. Prueba gratuita, sin tarjeta de crédito.",
+  title: "Slotfill ya está disponible — lanzamiento público global",
+  excerpt: "Slotfill, la plataforma multilingüe de gestión de citas y listas de espera para clínicas y proveedores de salud, entra en fase de lanzamiento público. Reserva de citas en línea para clínicas.",
   published_at: LAUNCH_DATE,
-  content: `ClinicSlotHub ya está disponible públicamente.
+  content: `Slotfill ya está disponible públicamente.
 
 Tras meses de desarrollo y pruebas internas, la plataforma entra en su fase de lanzamiento público global. El objetivo: dar a consultorios médicos, clínicas, centros de salud y proveedores de atención sanitaria de todo el mundo acceso a una herramienta digital que simplifica la gestión de solicitudes de citas y listas de espera.
 
-¿Qué es ClinicSlotHub?
+¿Qué es Slotfill?
 
-ClinicSlotHub es una plataforma SaaS basada en navegador que ayuda a consultorios médicos y terapéuticos a gestionar sus listas de espera de forma digital. Cuando ocurre una cancelación, el consultorio puede identificar rápidamente qué pacientes de la lista son adecuados y notificarlos por correo electrónico, y opcionalmente por SMS o WhatsApp.
+Slotfill es una plataforma SaaS basada en navegador que ayuda a consultorios médicos y terapéuticos a gestionar sus listas de espera de forma digital. Cuando ocurre una cancelación, el consultorio puede identificar rápidamente qué pacientes de la lista son adecuados y notificarlos por correo electrónico, y opcionalmente por SMS o WhatsApp.
 
 La plataforma está disponible en 10 idiomas: alemán, inglés, francés, español, portugués, chino, hindi, árabe, bengalí y ruso.
 
-Estado actual: soft launch
+Estado actual: disponible
 
 Todavía no hay clientes de pago. La plataforma está en lanzamiento público. Los consultorios que se registren ahora son early adopters cuyos comentarios orientarán las próximas prioridades de desarrollo.
 
-Stripe está integrado técnicamente pero aún no activado. El período de prueba es gratuito, sin tarjeta de crédito.
+Stripe está integrado técnicamente pero aún no activado. No se procesa ningún pago en este sitio web.
 
 Para quién
 
-ClinicSlotHub está diseñado para: médicos generales y especialistas, fisioterapeutas, logopedas, psicoterapeutas, dentistas, clínicas pequeñas y proveedores de atención sanitaria.
+Slotfill está diseñado para: médicos generales y especialistas, fisioterapeutas, logopedas, psicoterapeutas, dentistas, clínicas pequeñas y proveedores de atención sanitaria.
 
 La plataforma está diseñada para uso internacional. Los requisitos legales y de protección de datos locales deben revisarse antes del uso productivo con datos reales de pacientes.
 
-Pruébalo gratis
+Solicite acceso
 
-Registro de autoservicio en clinicslothub.com — 14 días gratis, sin tarjeta de crédito.
+Registro de autoservicio en clinicslothub.com — en línea.
 
 Preguntas o comentarios: transl.delta@gmail.com`,
 };
 
 const PT_LAUNCH: StaticPost = {
   slug: LAUNCH_SLUG,
-  title: "ClinicSlotHub já está disponível — lançamento público global",
-  excerpt: "ClinicSlotHub, a plataforma multilíngue de gestão de consultas e listas de espera para clínicas e prestadores de saúde, entra em fase de lançamento público. Teste gratuito, sem cartão de crédito.",
+  title: "Slotfill já está disponível — lançamento público global",
+  excerpt: "Slotfill, a plataforma multilíngue de gestão de consultas e listas de espera para clínicas e prestadores de saúde, entra em fase de lançamento público. Online.",
   published_at: LAUNCH_DATE,
-  content: `ClinicSlotHub já está disponível publicamente.
+  content: `Slotfill já está disponível publicamente.
 
 Após meses de desenvolvimento e testes internos, a plataforma entra na sua fase de lançamento público global. O objetivo: dar a consultórios médicos, clínicas, centros de saúde e prestadores de serviços de saúde de todo o mundo acesso a uma ferramenta digital que simplifica a gestão de pedidos de consultas e listas de espera.
 
-O que é o ClinicSlotHub?
+O que é o Slotfill?
 
-ClinicSlotHub é uma plataforma SaaS baseada em navegador que ajuda consultórios médicos e terapêuticos a gerir as suas listas de espera de forma digital. Quando ocorre um cancelamento, o consultório pode rapidamente identificar quais pacientes da lista são adequados e notificá-los por e-mail, e opcionalmente por SMS ou WhatsApp.
+Slotfill é uma plataforma SaaS baseada em navegador que ajuda consultórios médicos e terapêuticos a gerir as suas listas de espera de forma digital. Quando ocorre um cancelamento, o consultório pode rapidamente identificar quais pacientes da lista são adequados e notificá-los por e-mail, e opcionalmente por SMS ou WhatsApp.
 
 A plataforma está disponível em 10 idiomas: alemão, inglês, francês, espanhol, português, chinês, hindi, árabe, bengali e russo.
 
-Estado atual: soft launch
+Estado atual: disponível
 
 Ainda não há clientes pagantes. A plataforma está em lançamento público. Os consultórios que se registarem agora são early adopters cujo feedback orientará as próximas prioridades de desenvolvimento.
 
-Stripe está integrado tecnicamente mas ainda não ativado. O período de teste é gratuito, sem cartão de crédito.
+Stripe está integrado tecnicamente mas ainda não ativado. Não é processado nenhum pagamento neste site.
 
 Para quem
 
-ClinicSlotHub é destinado a: clínicos gerais e especialistas, fisioterapeutas, terapeutas da fala, psicoterapeutas, dentistas, pequenas clínicas e prestadores de cuidados de saúde.
+Slotfill é destinado a: clínicos gerais e especialistas, fisioterapeutas, terapeutas da fala, psicoterapeutas, dentistas, pequenas clínicas e prestadores de cuidados de saúde.
 
 A plataforma foi concebida para uso internacional. Os requisitos legais e de proteção de dados locais devem ser verificados antes da utilização produtiva com dados reais de pacientes.
 
-Experimente gratuitamente
+Solicite acesso
 
-Registo self-service em clinicslothub.com — 14 dias gratuitos, sem cartão de crédito.
+Registo self-service em clinicslothub.com — sob pedido.
 
 Perguntas ou feedback: transl.delta@gmail.com`,
 };
 
 const ZH_LAUNCH: StaticPost = {
   slug: LAUNCH_SLUG,
-  title: "ClinicSlotHub 正式全球公开软启动",
-  excerpt: "ClinicSlotHub——面向诊所和医疗机构的多语言预约与候补名单管理平台，现已进入全球公开软启动阶段。免费试用，无需信用卡。",
+  title: "Slotfill 正式全球公开软启动",
+  excerpt: "Slotfill——面向诊所和医疗机构的多语言预约与候补名单管理平台，现已进入全球公开软启动阶段。免费试用，无需信用卡。",
   published_at: LAUNCH_DATE,
-  content: `ClinicSlotHub 现已公开上线。
+  content: `Slotfill 现已公开上线。
 
 经过数月的开发与内部测试，平台正式进入全球公开软启动阶段。目标：为全球各地的诊所、医疗机构、治疗中心和医疗服务提供者提供一款数字化工具，简化预约请求和候补名单管理流程。
 
-什么是 ClinicSlotHub？
+什么是 Slotfill？
 
-ClinicSlotHub 是一款基于浏览器的 SaaS 平台，帮助医疗和治疗机构以数字化方式管理候补名单。当出现取消预约时，机构可快速识别候补名单中合适的患者并通过电子邮件进行通知，如配置了消息服务提供商，也可通过短信或 WhatsApp 发送通知。
+Slotfill 是一款基于浏览器的 SaaS 平台，帮助医疗和治疗机构以数字化方式管理候补名单。当出现取消预约时，机构可快速识别候补名单中合适的患者并通过电子邮件进行通知，如配置了消息服务提供商，也可通过短信或 WhatsApp 发送通知。
 
 平台支持 10 种语言：德语、英语、法语、西班牙语、葡萄牙语、中文、印地语、阿拉伯语、孟加拉语和俄语。
 
@@ -1536,7 +1536,7 @@ Stripe 已在技术层面集成，但尚未激活。试用期间完全免费，�
 
 适用对象
 
-ClinicSlotHub 面向：全科医生及专科诊所、物理治疗机构、言语治疗机构、心理治疗机构、牙科诊所、小型医院及医疗服务提供者。
+Slotfill 面向：全科医生及专科诊所、物理治疗机构、言语治疗机构、心理治疗机构、牙科诊所、小型医院及医疗服务提供者。
 
 平台专为国际使用设计。在正式投入使用并处理真实患者数据之前，请审查当地适用的法律和数据保护要求。
 
@@ -1549,16 +1549,16 @@ ClinicSlotHub 面向：全科医生及专科诊所、物理治疗机构、言语
 
 const HI_LAUNCH: StaticPost = {
   slug: LAUNCH_SLUG,
-  title: "ClinicSlotHub अब सार्वजनिक रूप से उपलब्ध है — वैश्विक सॉफ्ट लॉन्च",
-  excerpt: "ClinicSlotHub — क्लिनिक और स्वास्थ्य सेवा प्रदाताओं के लिए बहुभाषी अपॉइंटमेंट और वेटलिस्ट प्रबंधन प्लेटफ़ॉर्म — अब सार्वजनिक सॉफ्ट लॉन्च में प्रवेश कर चुका है। मुफ्त ट्रायल, कोई क्रेडिट कार्ड नहीं।",
+  title: "Slotfill अब सार्वजनिक रूप से उपलब्ध है — वैश्विक सॉफ्ट लॉन्च",
+  excerpt: "Slotfill — क्लिनिक और स्वास्थ्य सेवा प्रदाताओं के लिए बहुभाषी अपॉइंटमेंट और वेटलिस्ट प्रबंधन प्लेटफ़ॉर्म — अब सार्वजनिक सॉफ्ट लॉन्च में प्रवेश कर चुका है। मुफ्त ट्रायल, कोई क्रेडिट कार्ड नहीं।",
   published_at: LAUNCH_DATE,
-  content: `ClinicSlotHub अब सार्वजनिक रूप से उपलब्ध है।
+  content: `Slotfill अब सार्वजनिक रूप से उपलब्ध है।
 
 कई महीनों के विकास और आंतरिक परीक्षण के बाद, प्लेटफ़ॉर्म वैश्विक सार्वजनिक सॉफ्ट लॉन्च चरण में प्रवेश कर रहा है। लक्ष्य: दुनिया भर के क्लिनिक, मेडिकल प्रैक्टिस, थेरेपी सेंटर और स्वास्थ्य सेवा प्रदाताओं को एक डिजिटल उपकरण तक पहुंच देना जो अपॉइंटमेंट अनुरोध और वेटलिस्ट प्रबंधन को सरल बनाता है।
 
-ClinicSlotHub क्या है?
+Slotfill क्या है?
 
-ClinicSlotHub एक ब्राउज़र-आधारित SaaS प्लेटफ़ॉर्म है जो मेडिकल और थेरेप्यूटिक प्रैक्टिस को अपनी वेटलिस्ट डिजिटल रूप से प्रबंधित करने में मदद करता है। जब कोई अपॉइंटमेंट रद्द होता है, तो प्रैक्टिस जल्दी से वेटलिस्ट में उपयुक्त मरीजों की पहचान करके उन्हें ई-मेल द्वारा सूचित कर सकती है, और वैकल्पिक रूप से SMS या WhatsApp द्वारा भी।
+Slotfill एक ब्राउज़र-आधारित SaaS प्लेटफ़ॉर्म है जो मेडिकल और थेरेप्यूटिक प्रैक्टिस को अपनी वेटलिस्ट डिजिटल रूप से प्रबंधित करने में मदद करता है। जब कोई अपॉइंटमेंट रद्द होता है, तो प्रैक्टिस जल्दी से वेटलिस्ट में उपयुक्त मरीजों की पहचान करके उन्हें ई-मेल द्वारा सूचित कर सकती है, और वैकल्पिक रूप से SMS या WhatsApp द्वारा भी।
 
 प्लेटफ़ॉर्म 10 भाषाओं में उपलब्ध है: जर्मन, अंग्रेजी, फ्रेंच, स्पेनिश, पुर्तगाली, चीनी, हिंदी, अरबी, बंगाली और रूसी।
 
@@ -1570,7 +1570,7 @@ Stripe तकनीकी रूप से एकीकृत है लेक�
 
 किसके लिए?
 
-ClinicSlotHub के लिए डिज़ाइन किया गया है: सामान्य चिकित्सक और विशेषज्ञ प्रैक्टिस, फिजियोथेरेपी, स्पीच थेरेपी, मनोचिकित्सा प्रैक्टिस, दंत चिकित्सा क्लिनिक, छोटे अस्पताल और स्वास्थ्य सेवा प्रदाता।
+Slotfill के लिए डिज़ाइन किया गया है: सामान्य चिकित्सक और विशेषज्ञ प्रैक्टिस, फिजियोथेरेपी, स्पीच थेरेपी, मनोचिकित्सा प्रैक्टिस, दंत चिकित्सा क्लिनिक, छोटे अस्पताल और स्वास्थ्य सेवा प्रदाता।
 
 प्लेटफ़ॉर्म अंतर्राष्ट्रीय उपयोग के लिए डिज़ाइन किया गया है। वास्तविक रोगी डेटा के साथ उत्पादक उपयोग से पहले स्थानीय कानूनी और डेटा सुरक्षा आवश्यकताओं की समीक्षा करें।
 
@@ -1583,16 +1583,16 @@ clinicslothub.com पर सेल्फ-सर्विस पंजीकर�
 
 const AR_LAUNCH: StaticPost = {
   slug: LAUNCH_SLUG,
-  title: "ClinicSlotHub متاح الآن — الإطلاق العالمي التجريبي العام",
-  excerpt: "ClinicSlotHub، منصة إدارة المواعيد وقوائم الانتظار متعددة اللغات للعيادات ومقدمي الرعاية الصحية، تدخل مرحلة الإطلاق العام. تجربة مجانية بدون بطاقة ائتمان.",
+  title: "Slotfill متاح الآن — الإطلاق العالمي التجريبي العام",
+  excerpt: "Slotfill، منصة إدارة المواعيد وقوائم الانتظار متعددة اللغات للعيادات ومقدمي الرعاية الصحية، تدخل مرحلة الإطلاق العام. تجربة مجانية بدون بطاقة ائتمان.",
   published_at: LAUNCH_DATE,
-  content: `ClinicSlotHub متاح الآن للعموم.
+  content: `Slotfill متاح الآن للعموم.
 
 بعد أشهر من التطوير والاختبار الداخلي، تدخل المنصة مرحلة الإطلاق العام العالمي. الهدف: منح العيادات والمراكز الطبية ومراكز العلاج ومقدمي الرعاية الصحية حول العالم أداة رقمية تُبسّط إدارة طلبات المواعيد وقوائم الانتظار.
 
-ما هو ClinicSlotHub؟
+ما هو Slotfill؟
 
-ClinicSlotHub منصة SaaS مستندة إلى المتصفح تساعد العيادات والمراكز العلاجية على إدارة قوائم الانتظار رقمياً. عند حدوث إلغاء، يمكن للعيادة تحديد المرضى المناسبين في قائمة الانتظار وإخطارهم عبر البريد الإلكتروني، وبشكل اختياري عبر الرسائل القصيرة أو WhatsApp.
+Slotfill منصة SaaS مستندة إلى المتصفح تساعد العيادات والمراكز العلاجية على إدارة قوائم الانتظار رقمياً. عند حدوث إلغاء، يمكن للعيادة تحديد المرضى المناسبين في قائمة الانتظار وإخطارهم عبر البريد الإلكتروني، وبشكل اختياري عبر الرسائل القصيرة أو WhatsApp.
 
 المنصة متاحة بـ 10 لغات: الألمانية، الإنجليزية، الفرنسية، الإسبانية، البرتغالية، الصينية، الهندية، العربية، البنغالية والروسية.
 
@@ -1604,7 +1604,7 @@ Stripe مُدمج تقنياً لكنه لم يُفعَّل بعد. الفترة
 
 لمن؟
 
-ClinicSlotHub مُصمَّم لـ: الأطباء العامين والمتخصصين، العلاج الطبيعي، علاج النطق، العلاج النفسي، طب الأسنان، العيادات الصغيرة ومقدمي الرعاية الصحية.
+Slotfill مُصمَّم لـ: الأطباء العامين والمتخصصين، العلاج الطبيعي، علاج النطق، العلاج النفسي، طب الأسنان، العيادات الصغيرة ومقدمي الرعاية الصحية.
 
 المنصة مُصمَّمة للاستخدام الدولي. يجب مراجعة المتطلبات القانونية ومتطلبات حماية البيانات المحلية قبل الاستخدام الإنتاجي مع بيانات المرضى الحقيقية.
 
@@ -1617,16 +1617,16 @@ ClinicSlotHub مُصمَّم لـ: الأطباء العامين والمتخص�
 
 const BN_LAUNCH: StaticPost = {
   slug: LAUNCH_SLUG,
-  title: "ClinicSlotHub এখন পাবলিকলি উপলব্ধ — বৈশ্বিক সফট লঞ্চ",
-  excerpt: "ClinicSlotHub — ক্লিনিক এবং স্বাস্থ্যসেবা প্রদানকারীদের জন্য বহুভাষিক অ্যাপয়েন্টমেন্ট ও ওয়েটলিস্ট ব্যবস্থাপনা প্ল্যাটফর্ম — এখন পাবলিক সফট লঞ্চে প্রবেশ করেছে। বিনামূল্যে ট্রায়াল, কোনো ক্রেডিট কার্ড নেই।",
+  title: "Slotfill এখন পাবলিকলি উপলব্ধ — বৈশ্বিক সফট লঞ্চ",
+  excerpt: "Slotfill — ক্লিনিক এবং স্বাস্থ্যসেবা প্রদানকারীদের জন্য বহুভাষিক অ্যাপয়েন্টমেন্ট ও ওয়েটলিস্ট ব্যবস্থাপনা প্ল্যাটফর্ম — এখন পাবলিক সফট লঞ্চে প্রবেশ করেছে। বিনামূল্যে ট্রায়াল, কোনো ক্রেডিট কার্ড নেই।",
   published_at: LAUNCH_DATE,
-  content: `ClinicSlotHub এখন পাবলিকলি উপলব্ধ।
+  content: `Slotfill এখন পাবলিকলি উপলব্ধ।
 
 কয়েক মাসের উন্নয়ন ও অভ্যন্তরীণ পরীক্ষার পর, প্ল্যাটফর্মটি বৈশ্বিক পাবলিক সফট লঞ্চ পর্যায়ে প্রবেশ করছে। লক্ষ্য: বিশ্বব্যাপী ক্লিনিক, মেডিকেল প্র্যাকটিস, থেরাপি সেন্টার এবং স্বাস্থ্যসেবা প্রদানকারীদের একটি ডিজিটাল টুল ব্যবহারের সুযোগ দেওয়া যা অ্যাপয়েন্টমেন্ট অনুরোধ ও ওয়েটলিস্ট ব্যবস্থাপনা সহজ করে।
 
-ClinicSlotHub কী?
+Slotfill কী?
 
-ClinicSlotHub একটি ব্রাউজার-ভিত্তিক SaaS প্ল্যাটফর্ম যা মেডিকেল এবং থেরাপিউটিক প্র্যাকটিসকে ডিজিটালভাবে ওয়েটলিস্ট পরিচালনায় সহায়তা করে। বাতিলের ঘটনায়, প্র্যাকটিস দ্রুত ওয়েটলিস্টে উপযুক্ত রোগীদের চিহ্নিত করে ইমেইলে জানাতে পারে, এবং ঐচ্ছিকভাবে SMS বা WhatsApp এর মাধ্যমেও।
+Slotfill একটি ব্রাউজার-ভিত্তিক SaaS প্ল্যাটফর্ম যা মেডিকেল এবং থেরাপিউটিক প্র্যাকটিসকে ডিজিটালভাবে ওয়েটলিস্ট পরিচালনায় সহায়তা করে। বাতিলের ঘটনায়, প্র্যাকটিস দ্রুত ওয়েটলিস্টে উপযুক্ত রোগীদের চিহ্নিত করে ইমেইলে জানাতে পারে, এবং ঐচ্ছিকভাবে SMS বা WhatsApp এর মাধ্যমেও।
 
 প্ল্যাটফর্মটি ১০টি ভাষায় পাওয়া যায়: জার্মান, ইংরেজি, ফরাসি, স্প্যানিশ, পর্তুগিজ, চীনা, হিন্দি, আরবি, বাংলা এবং রাশিয়ান।
 
@@ -1638,7 +1638,7 @@ Stripe প্রযুক্তিগতভাবে একীভূত কি�
 
 কার জন্য?
 
-ClinicSlotHub ডিজাইন করা হয়েছে: সাধারণ চিকিৎসক ও বিশেষজ্ঞ প্র্যাকটিস, ফিজিওথেরাপি, স্পিচ থেরাপি, মনোচিকিৎসা প্র্যাকটিস, ডেন্টাল ক্লিনিক, ছোট হাসপাতাল এবং স্বাস্থ্যসেবা প্রদানকারীদের জন্য।
+Slotfill ডিজাইন করা হয়েছে: সাধারণ চিকিৎসক ও বিশেষজ্ঞ প্র্যাকটিস, ফিজিওথেরাপি, স্পিচ থেরাপি, মনোচিকিৎসা প্র্যাকটিস, ডেন্টাল ক্লিনিক, ছোট হাসপাতাল এবং স্বাস্থ্যসেবা প্রদানকারীদের জন্য।
 
 প্ল্যাটফর্মটি আন্তর্জাতিক ব্যবহারের জন্য ডিজাইন করা হয়েছে। প্রকৃত রোগীর ডেটা দিয়ে উৎপাদনশীল ব্যবহারের আগে স্থানীয় আইনি ও ডেটা সুরক্ষা প্রয়োজনীয়তা পর্যালোচনা করুন।
 
@@ -1651,16 +1651,16 @@ clinicslothub.com-এ সেলফ-সার্ভিস রেজিস্ট�
 
 const RU_LAUNCH: StaticPost = {
   slug: LAUNCH_SLUG,
-  title: "ClinicSlotHub теперь доступен публично — глобальный мягкий запуск",
-  excerpt: "ClinicSlotHub — многоязычная платформа управления записями и листами ожидания для клиник и поставщиков медицинских услуг — входит в фазу публичного мягкого запуска. Бесплатный пробный период, без кредитной карты.",
+  title: "Slotfill теперь доступен публично — глобальный мягкий запуск",
+  excerpt: "Slotfill — многоязычная платформа управления записями и листами ожидания для клиник и поставщиков медицинских услуг — входит в фазу публичного мягкого запуска. Бесплатный пробный период, без кредитной карты.",
   published_at: LAUNCH_DATE,
-  content: `ClinicSlotHub теперь доступен публично.
+  content: `Slotfill теперь доступен публично.
 
 После нескольких месяцев разработки и внутреннего тестирования платформа входит в фазу глобального публичного мягкого запуска. Цель: предоставить клиникам, медицинским кабинетам, терапевтическим центрам и поставщикам медицинских услуг по всему миру доступ к цифровому инструменту, упрощающему управление запросами на приём и листами ожидания.
 
-Что такое ClinicSlotHub?
+Что такое Slotfill?
 
-ClinicSlotHub — браузерная SaaS-платформа, которая помогает медицинским и терапевтическим практикам вести листы ожидания в цифровом формате. При отмене записи практика может быстро определить подходящих пациентов из листа ожидания и уведомить их по электронной почте, а при наличии настроенного провайдера — также через SMS или WhatsApp.
+Slotfill — браузерная SaaS-платформа, которая помогает медицинским и терапевтическим практикам вести листы ожидания в цифровом формате. При отмене записи практика может быстро определить подходящих пациентов из листа ожидания и уведомить их по электронной почте, а при наличии настроенного провайдера — также через SMS или WhatsApp.
 
 Платформа доступна на 10 языках: немецком, английском, французском, испанском, португальском, китайском, хинди, арабском, бенгальском и русском.
 
@@ -1672,7 +1672,7 @@ Stripe технически интегрирован, но ещё не акти�
 
 Для кого?
 
-ClinicSlotHub предназначен для: врачей общей практики и специалистов, физиотерапевтических, логопедических, психотерапевтических кабинетов, стоматологических клиник, небольших больниц и поставщиков медицинских услуг.
+Slotfill предназначен для: врачей общей практики и специалистов, физиотерапевтических, логопедических, психотерапевтических кабинетов, стоматологических клиник, небольших больниц и поставщиков медицинских услуг.
 
 Платформа разработана для международного использования. Перед продуктивным использованием с реальными данными пациентов необходимо ознакомиться с местными правовыми и требованиями по защите данных.
 

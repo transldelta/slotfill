@@ -47,7 +47,7 @@ Drei praktische Schritte für eine effektive Warteliste
 
 Welche Rolle digitale Tools spielen können
 
-Digitale Praxissoftware kann helfen, diesen Prozess zu vereinfachen. Statt manuell durch Papierlisten zu blättern, lassen sich Patienten mit passenden Kriterien schneller finden. Tools wie ClinicSlotHub unterstützen dabei, bei einer Terminlücke geeignete Kandidaten aus der Warteliste vorzubereiten, sodass die Praxis schnell reagieren kann.
+Digitale Praxissoftware kann helfen, diesen Prozess zu vereinfachen. Statt manuell durch Papierlisten zu blättern, lassen sich Patienten mit passenden Kriterien schneller finden. Tools wie Slotfill unterstützen dabei, bei einer Terminlücke geeignete Kandidaten aus der Warteliste vorzubereiten, sodass die Praxis schnell reagieren kann.
 
 Wichtig: Jede Kontaktaufnahme mit Patienten erfordert ihre Einwilligung und sollte datenschutzbewusst gestaltet sein. Vor dem Einsatz digitaler Kommunikationswege empfiehlt sich eine rechtliche Prüfung.
 
@@ -55,7 +55,7 @@ Fazit
 
 Eine gut gepflegte Warteliste ist eine der wirkungsvollsten Maßnahmen, um kurzfristige Terminlücken zu schließen. Mit klarer Struktur, regelmäßiger Pflege und – bei Bedarf – digitaler Unterstützung lässt sich die Auslastung einer Praxis spürbar verbessern.
 
-ClinicSlotHub kostenlos testen: Jetzt 14 Tage testen und sehen, wie die Wartelisten-Verwaltung einfacher wird.`,
+Slotfill online testen: Jetzt ausprobieren und sehen, wie die Wartelisten-Verwaltung einfacher wird.`,
   },
 
   {
@@ -94,9 +94,9 @@ Realistische Erwartungen
 
 Vorbereitete Benachrichtigungen lösen nicht jede Lücke. Mancher Termin bleibt trotzdem offen. Aber sie erhöhen die Chance, dass eine Absage nicht zu einem kompletten Ausfall wird – und entlasten gleichzeitig das Praxisteam.
 
-ClinicSlotHub unterstützt genau diesen Prozess: Bei einer Terminlücke werden passende Patienten aus der Warteliste vorbereitet, und die Praxis kann mit einem Klick einen sicheren Link an ausgewählte Personen versenden.
+Slotfill unterstützt genau diesen Prozess: Bei einer Terminlücke werden passende Patienten aus der Warteliste vorbereitet, und die Praxis kann mit einem Klick einen sicheren Link an ausgewählte Personen versenden.
 
-Jetzt ausprobieren: Testen Sie ClinicSlotHub 14 Tage kostenlos.`,
+Jetzt ausprobieren: Testen Sie Slotfill online.`,
   },
 
   {
@@ -132,17 +132,17 @@ Löschfristen: Patienten, die einen Termin erhalten haben oder nicht mehr auf de
 
 Auftragsverarbeitung: Wenn eine externe Software für die Warteliste genutzt wird, muss ein Auftragsverarbeitungsvertrag (AVV) mit dem Anbieter abgeschlossen werden.
 
-Was ClinicSlotHub in diesem Kontext leistet
+Was Slotfill in diesem Kontext leistet
 
-ClinicSlotHub ist als datenschutzbewusstes Tool konzipiert: Patienten können nur dann über digitale Kanäle kontaktiert werden, wenn sie zuvor eingewilligt haben (opt-in). Der Standardmodus arbeitet ohne automatischen Nachrichtenversand – die Praxis behält die Kontrolle darüber, wer kontaktiert wird.
+Slotfill ist als datenschutzbewusstes Tool konzipiert: Patienten können nur dann über digitale Kanäle kontaktiert werden, wenn sie zuvor eingewilligt haben (opt-in). Der Standardmodus arbeitet ohne automatischen Nachrichtenversand – die Praxis behält die Kontrolle darüber, wer kontaktiert wird.
 
-Hinweis: Die Verwendung von ClinicSlotHub ersetzt keine individuelle datenschutzrechtliche Prüfung. Jede Praxis ist verpflichtet, den Einsatz von Software für die Patientenkommunikation eigenverantwortlich zu prüfen.
+Hinweis: Die Verwendung von Slotfill ersetzt keine individuelle datenschutzrechtliche Prüfung. Jede Praxis ist verpflichtet, den Einsatz von Software für die Patientenkommunikation eigenverantwortlich zu prüfen.
 
 Fazit
 
 Digitale Wartelisten können Praxen erheblich entlasten – wenn sie datenschutzbewusst eingesetzt werden. Der Schlüssel liegt in klaren Einwilligungsprozessen, Datensparsamkeit und einem verlässlichen Anbieter mit AVV.
 
-Kontakt aufnehmen: Bei Fragen zu ClinicSlotHub und dem Einsatz in Ihrer Praxis freuen wir uns auf Ihre Nachricht.`,
+Kontakt aufnehmen: Bei Fragen zu Slotfill und dem Einsatz in Ihrer Praxis freuen wir uns auf Ihre Nachricht.`,
   },
 
   // ─── Phase 5: Neue SEO-Artikel (Juni 2026) ────────────────────────────────
@@ -192,7 +192,7 @@ Dieser Prozess kann manuell funktionieren – bei kleinen Praxen reicht das oft 
 
 Ansatz 4: Digitale Unterstützung gezielt einsetzen
 
-Tools wie ClinicSlotHub helfen dabei, bei einer Terminlücke passende Patienten aus der Warteliste schnell zu identifizieren und vorzubereiten. Die Praxis entscheidet dann, wen sie kontaktiert – der eigentliche Entscheidungsprozess bleibt menschlich.
+Tools wie Slotfill helfen dabei, bei einer Terminlücke passende Patienten aus der Warteliste schnell zu identifizieren und vorzubereiten. Die Praxis entscheidet dann, wen sie kontaktiert – der eigentliche Entscheidungsprozess bleibt menschlich.
 
 Das ist kein Ersatz für einen durchdachten Prozess, aber eine Ergänzung, die Zeit spart und Fehler reduziert.
 
@@ -206,7 +206,7 @@ Fazit
 
 Terminlücken lassen sich nie vollständig vermeiden – aber durch klare Prozesse und eine aktive Warteliste deutlich reduzieren. Der erste Schritt ist meistens kein Tool, sondern eine Entscheidung: Wer ist zuständig, wenn ein Termin ausfällt?
 
-Wenn Sie ClinicSlotHub als Unterstützung ausprobieren möchten, können Sie die Plattform 14 Tage kostenlos testen. Bei Fragen freuen wir uns auf Ihre Nachricht.`,
+Wenn Sie Slotfill als Unterstützung ausprobieren möchten, können Sie die Plattform online testen. Bei Fragen freuen wir uns auf Ihre Nachricht.`,
   },
 
   {
@@ -267,9 +267,9 @@ Wie lange warten, bevor man den nächsten Patienten kontaktiert? Bei kurzfristig
 
 Wie digitale Tools diesen Prozess unterstützen
 
-ClinicSlotHub ist ein Beispiel für ein Tool, das genau diesen Prozess digital abbildet: Bei einer Lücke werden passende Kandidaten aus der Warteliste vorbereitet, und die Praxis kann gezielt und schnell handeln. Die Entscheidung, wer kontaktiert wird, liegt weiterhin beim Praxisteam.
+Slotfill ist ein Beispiel für ein Tool, das genau diesen Prozess digital abbildet: Bei einer Lücke werden passende Kandidaten aus der Warteliste vorbereitet, und die Praxis kann gezielt und schnell handeln. Die Entscheidung, wer kontaktiert wird, liegt weiterhin beim Praxisteam.
 
-Wichtig für alle Praxen, die digitale Wartelisten-Tools einsetzen: Der Abschluss eines Auftragsverarbeitungsvertrags (AVV) mit dem Anbieter ist bei der Verarbeitung personenbezogener Patientendaten erforderlich. ClinicSlotHub stellt einen AVV bereit.
+Wichtig für alle Praxen, die digitale Wartelisten-Tools einsetzen: Der Abschluss eines Auftragsverarbeitungsvertrags (AVV) mit dem Anbieter ist bei der Verarbeitung personenbezogener Patientendaten erforderlich. Slotfill stellt einen AVV bereit.
 
 Fazit
 
@@ -330,7 +330,7 @@ Manche Systeme bieten automatische Terminbestätigung – das setzt voraus, dass
 
 Standard sollte immer die manuelle Prüfung sein. Automatische Bestätigung ist eine Erweiterung, keine Grundeinstellung.
 
-ClinicSlotHub ist nach diesem Prinzip aufgebaut: Automatische Bestätigung ist standardmäßig deaktiviert und muss von der Praxis bewusst aktiviert werden. So behält das Team die Kontrolle.
+Slotfill ist nach diesem Prinzip aufgebaut: Automatische Bestätigung ist standardmäßig deaktiviert und muss von der Praxis bewusst aktiviert werden. So behält das Team die Kontrolle.
 
 Schritt 5: Testen vor dem Produktivstart
 
@@ -347,7 +347,7 @@ Fazit
 
 Online-Terminanfragen sind ein sinnvolles Werkzeug – wenn sie sorgfältig eingerichtet sind. Der Produktivstart sollte nicht überstürzt werden. Wer sich die Zeit nimmt, Datenschutz, Pflichtfelder und interne Prozesse im Vorfeld zu klären, erspart sich später Nacharbeit.
 
-Wenn Sie ClinicSlotHub für Ihre Praxis einrichten möchten, stehen wir für Fragen zur Verfügung. Kontaktieren Sie uns gerne über das Kontaktformular.`,
+Wenn Sie Slotfill für Ihre Praxis einrichten möchten, stehen wir für Fragen zur Verfügung. Kontaktieren Sie uns gerne über das Kontaktformular.`,
   },
 
   {
@@ -402,9 +402,9 @@ Patienten schätzen klare Aussagen: "Wir antworten innerhalb von 24 Stunden." Da
 
 Unrealistische Versprechen ("sofort") führen zu Enttäuschungen. Realistisch kommunizierte Reaktionszeiten ("innerhalb eines Werktages") schaffen Vertrauen.
 
-Wie ClinicSlotHub diesen Prozess unterstützt
+Wie Slotfill diesen Prozess unterstützt
 
-ClinicSlotHub bietet ein strukturiertes Online-Formular für Terminanfragen: Patienten geben Name, E-Mail, gewünschten Zeitraum und Anliegen an – und stimmen dem Datenschutzhinweis aktiv zu. Die Praxis sieht alle Anfragen im Admin-Bereich und kann manuell oder (wenn gewünscht und aktiviert) automatisch bestätigen.
+Slotfill bietet ein strukturiertes Online-Formular für Terminanfragen: Patienten geben Name, E-Mail, gewünschten Zeitraum und Anliegen an – und stimmen dem Datenschutzhinweis aktiv zu. Die Praxis sieht alle Anfragen im Admin-Bereich und kann manuell oder (wenn gewünscht und aktiviert) automatisch bestätigen.
 
 Das System ist kein Ersatz für ein klar definiertes internes Prozessmodell – aber es gibt der Praxis ein strukturiertes digitales Werkzeug an die Hand.
 
@@ -412,7 +412,7 @@ Fazit
 
 Klare Terminanfragen-Verwaltung beginnt nicht mit Software, sondern mit einem strukturierten Prozess. Wer weiß, wer zuständig ist, welche Informationen gebraucht werden und wie schnell geantwortet wird, kann dann gezielt nach digitaler Unterstützung suchen.
 
-Haben Sie Interesse daran, ClinicSlotHub für Ihre Klinik auszuprobieren? Kontaktieren Sie uns.`,
+Haben Sie Interesse daran, Slotfill für Ihre Klinik auszuprobieren? Kontaktieren Sie uns.`,
   },
 
   {
@@ -463,7 +463,7 @@ Wann ein digitales Tool sinnvoll ist
 
 Ab einem gewissen Volumen – etwa wenn mehrere Mitarbeiter gleichzeitig die Liste bearbeiten oder wenn regelmäßig viele Absagen anfallen – kann eine Tabelle an ihre Grenzen stoßen.
 
-Hier bieten spezialisierte Tools wie ClinicSlotHub Vorteile: Anfragen kommen über ein strukturiertes Online-Formular ein, werden zentral gespeichert und können von mehreren Personen gleichzeitig eingesehen werden.
+Hier bieten spezialisierte Tools wie Slotfill Vorteile: Anfragen kommen über ein strukturiertes Online-Formular ein, werden zentral gespeichert und können von mehreren Personen gleichzeitig eingesehen werden.
 
 Für sehr kleine Praxen mit wenigen Terminen pro Woche ist das möglicherweise noch nicht nötig. Aber es ist gut zu wissen, dass es diese Optionen gibt, wenn man irgendwann wächst.
 
@@ -477,7 +477,7 @@ Fazit
 
 Eine strukturierte Warteliste ist kein Luxus für große Kliniken – sie ist ein einfaches, wirkungsvolles Instrument für jede Praxis. Der Einstieg muss nicht kompliziert sein: Mit einer klaren Tabelle und einem definierten Prozess lässt sich viel erreichen.
 
-Wenn Sie neugierig sind, wie ClinicSlotHub Ihre Praxis unterstützen kann, testen Sie die Plattform kostenlos – oder kontaktieren Sie uns mit Ihren Fragen.`,
+Wenn Sie neugierig sind, wie Slotfill Ihre Praxis unterstützen kann, testen Sie die Plattform online – oder kontaktieren Sie uns mit Ihren Fragen.`,
   },
 ];
 
@@ -490,16 +490,16 @@ export function getStaticPost(slug: string): StaticPost | null {
 // Direkte Ergänzung nach Array-Deklaration um Hoisting zu vermeiden.
 STATIC_BLOG_POSTS.push({
   slug: "clinicslothub-global-soft-launch",
-  title: "ClinicSlotHub ist jetzt öffentlich gestartet – globaler Soft Launch",
-  excerpt: "ClinicSlotHub, die mehrsprachige Plattform für Terminanfragen und Wartelisten in Praxen, Kliniken und bei Healthcare Providern, ist jetzt öffentlich verfügbar. 14 Tage kostenlos testen, keine Kreditkarte.",
+  title: "Slotfill ist jetzt öffentlich gestartet – globaler Start",
+  excerpt: "Slotfill, die mehrsprachige Plattform für Terminanfragen und Wartelisten in Praxen, Kliniken und bei Healthcare Providern, ist jetzt öffentlich verfügbar. Online-Terminbuchung für Praxen.",
   published_at: "2026-06-10T08:00:00.000Z",
-  content: `ClinicSlotHub ist jetzt öffentlich verfügbar.
+  content: `Slotfill ist jetzt öffentlich verfügbar.
 
-Nach mehreren Monaten Entwicklung und internen Tests startet die Plattform in den globalen öffentlichen Soft Launch. Ziel: Praxen, Kliniken, Therapiezentren und Healthcare Providern weltweit Zugang zu einem digitalen Werkzeug zu geben, das die Verwaltung von Terminanfragen und Wartelisten einfacher macht – ohne teure Integrationen, ohne kompliziertes Setup und ohne manuelle Zettelwirtschaft.
+Nach mehreren Monaten Entwicklung und internen Tests startet die Plattform in den globalen öffentlichen Start. Ziel: Praxen, Kliniken, Therapiezentren und Healthcare Providern weltweit Zugang zu einem digitalen Werkzeug zu geben, das die Verwaltung von Terminanfragen und Wartelisten einfacher macht – ohne teure Integrationen, ohne kompliziertes Setup und ohne manuelle Zettelwirtschaft.
 
-Was ist ClinicSlotHub?
+Was ist Slotfill?
 
-ClinicSlotHub ist eine browserbasierte SaaS-Plattform, die Praxen und medizinische Einrichtungen dabei unterstützt, Wartelisten digital zu verwalten. Wenn eine Terminabsage eingeht, kann die Praxis schnell geeignete Patienten aus der Warteliste identifizieren und per E-Mail benachrichtigen – und optional per SMS oder WhatsApp, wenn ein Messaging-Provider konfiguriert ist.
+Slotfill ist eine browserbasierte SaaS-Plattform, die Praxen und medizinische Einrichtungen dabei unterstützt, Wartelisten digital zu verwalten. Wenn eine Terminabsage eingeht, kann die Praxis schnell geeignete Patienten aus der Warteliste identifizieren und per E-Mail benachrichtigen – und optional per SMS oder WhatsApp, wenn ein Messaging-Provider konfiguriert ist.
 
 Die Plattform ist in 10 Sprachen verfügbar: Deutsch, Englisch, Französisch, Spanisch, Portugiesisch, Chinesisch, Hindi, Arabisch, Bengalisch und Russisch.
 
@@ -515,19 +515,19 @@ Folgende Funktionen sind live und in Betrieb:
 – Datenschutzbewusstes Design: kein Tracking, kein Massenversand ohne Einwilligung
 – Vollständige Legal-Seiten: Impressum, Datenschutz, AGB, AVV
 
-Aktueller Status: Soft Launch
+Aktueller Status: verfügbar
 
-Es gibt noch keine zahlenden Kunden. Die Plattform befindet sich im öffentlichen Soft Launch. Praxen, die sich jetzt registrieren, sind Early Adopter – ihr Feedback wird die nächsten Entwicklungsprioritäten direkt beeinflussen.
+Es gibt noch keine zahlenden Kunden. Die Plattform befindet sich öffentlich verfügbar. Praxen, die sich jetzt registrieren, sind Early Adopter – ihr Feedback wird die nächsten Entwicklungsprioritäten direkt beeinflussen.
 
-Stripe ist technisch integriert, aber noch nicht aktiviert. Die Trial-Phase ist kostenlos, keine Kreditkarte nötig.
+Stripe ist technisch integriert, aber noch nicht aktiviert. Es wird keine Zahlung auf dieser Website verarbeitet.
 
 Für wen?
 
-ClinicSlotHub richtet sich an Praxen und Einrichtungen jeder Art: Allgemeinmedizin, Fachärzte, Physiotherapie, Logopädie, Ergotherapie, Psychotherapie, Zahnmedizin, kleine Kliniken und Healthcare Provider.
+Slotfill richtet sich an Praxen und Einrichtungen jeder Art: Allgemeinmedizin, Fachärzte, Physiotherapie, Logopädie, Ergotherapie, Psychotherapie, Zahnmedizin, kleine Kliniken und Healthcare Provider.
 
 Die Plattform ist für internationale Nutzung ausgelegt. Für den produktiven Einsatz mit echten Patientendaten empfiehlt sich vorab die Prüfung der lokalen rechtlichen und datenschutzrechtlichen Anforderungen.
 
-Kostenlos testen
+Online ausprobieren
 
 Die Registrierung ist vollständig selbstservice. Kein Invite, kein Admin-Approval:
 – clinicslothub.com aufrufen

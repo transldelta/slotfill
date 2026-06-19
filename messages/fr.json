@@ -522,6 +522,7 @@
     "pricingOnRequest": "Prix sur demande — selon le marché, le pays et la taille de l’établissement",
     "pricingMoneyNote": "Les patients ne paient pas sur ce site. Slotfill est un accès SaaS pour les cliniques, cabinets et centres de santé. Les tarifs et l’activation sont vérifiés avant toute utilisation en production.",
     "pricingSeeAll": "Voir toutes les formules et tarifs",
+    "planPopular": "Recommandé",
     "planStarterDesc": "Pour les petits cabinets qui veulent tester les demandes de rendez-vous en ligne.",
     "planStarterCta": "Demander un accès cabinet",
     "planStarterF1": "Une page de réservation cabinet/démo",

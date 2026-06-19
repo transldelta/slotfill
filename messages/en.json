@@ -523,6 +523,7 @@
     "pricingOnRequest": "Price on request — depending on market, country and organization size",
     "pricingMoneyNote": "Patients do not pay on this website. Slotfill is a SaaS access product for clinics, practices and healthcare centers. Pricing and activation are reviewed before production use.",
     "pricingSeeAll": "See all packages & pricing",
+    "planPopular": "Recommended",
     "planStarterDesc": "For small practices that want to test online appointment requests.",
     "planStarterCta": "Request practice access",
     "planStarterF1": "One practice/demo booking page",

@@ -522,6 +522,7 @@
     "pricingOnRequest": "Preço sob consulta — consoante o mercado, o país e a dimensão do estabelecimento",
     "pricingMoneyNote": "Os pacientes não pagam neste site. O Slotfill é um acesso SaaS para clínicas, consultórios e centros de saúde. Os preços e a ativação são analisados antes do uso em produção.",
     "pricingSeeAll": "Ver todos os pacotes e preços",
+    "planPopular": "Recomendado",
     "planStarterDesc": "Para consultórios pequenos que querem testar os pedidos de consulta online.",
     "planStarterCta": "Solicitar acesso para o consultório",
     "planStarterF1": "Uma página de marcações de consultório/demo",

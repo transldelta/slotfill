@@ -569,7 +569,7 @@ export default async function LocaleLandingPage({
             <div
               key={plan.name}
               className={`relative flex flex-col rounded-2xl border p-7 shadow-sm transition-all duration-200 hover:shadow-md ${
-                plan.highlight ? "ring-2" : ""
+                plan.highlight ? "ring-2 lg:-translate-y-1.5" : ""
               }`}
               style={{
                 backgroundColor: "var(--color-surface)",
@@ -577,6 +577,14 @@ export default async function LocaleLandingPage({
                 ...(plan.highlight ? { boxShadow: "0 0 0 1px var(--color-primary)" } : {}),
               }}
             >
+              {plan.highlight && (
+                <span
+                  className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-3 py-0.5 text-xs font-semibold text-white"
+                  style={{ background: "var(--gradient-brand)" }}
+                >
+                  {t("planPopular")}
+                </span>
+              )}
               <div className="flex items-center gap-3">
                 <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-white" style={{ background: "var(--gradient-brand)" }}>
                   <plan.icon className="h-5 w-5" />

@@ -414,7 +414,8 @@
     "bookAppointment": "Réserver",
     "feedback": "Commentaires",
     "forClinics": "Pour les cliniques",
-    "demoClinic": "Clinique démo"
+    "demoClinic": "Clinique démo",
+    "faq": "FAQ"
   },
   "landing": {
     "heroTitle": "Réservez des rendez-vous médicaux en ligne et gérez plus facilement les demandes de rendez-vous.",
@@ -535,7 +536,19 @@
     "planClinicCta": "Demander la formule Clinic",
     "planClinicF1": "Plusieurs domaines ou services",
     "planClinicF2": "Gestion avancée des demandes",
-    "planClinicF3": "Vérification d’activation individuelle"
+    "planClinicF3": "Vérification d’activation individuelle",
+    "faqTitle": "Questions fréquentes",
+    "faqSubtitle": "Des réponses claires sur le fonctionnement de Slotfill et à qui il s’adresse.",
+    "faq1Q": "Qui paie pour Slotfill ?",
+    "faq1A": "Les cabinets, cliniques et centres de santé. Les patients ne paient pas sur ce site.",
+    "faq2Q": "Slotfill est-il un service d’urgence ?",
+    "faq2A": "Non. Slotfill n’est pas destiné aux urgences ni aux conseils médicaux. En cas d’urgence, contactez directement les secours locaux.",
+    "faq3Q": "Les rendez-vous sont-ils confirmés automatiquement ?",
+    "faq3A": "Non. Le cabinet peut examiner les demandes et confirmer les rendez-vous manuellement.",
+    "faq4Q": "À quels marchés Slotfill s’adresse-t-il ?",
+    "faq4A": "Slotfill est destiné uniquement à certains marchés internationaux sélectionnés. La disponibilité et la vérification juridique ont lieu avant l’activation.",
+    "faq5Q": "Un cabinet peut-il être actif immédiatement ?",
+    "faq5A": "Non. L’activation suit une vérification du marché, de l’établissement et des exigences juridiques."
   },
   "blog": {
     "title": "Blog",

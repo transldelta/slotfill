@@ -415,7 +415,8 @@
     "bookAppointment": "Termin buchen",
     "feedback": "Feedback",
     "forClinics": "Für Praxen",
-    "demoClinic": "Demo-Praxis"
+    "demoClinic": "Demo-Praxis",
+    "faq": "FAQ"
   },
   "landing": {
     "heroTitle": "Arzttermine online buchen und Terminanfragen einfacher verwalten.",
@@ -536,7 +537,19 @@
     "planClinicCta": "Clinic-Paket anfragen",
     "planClinicF1": "Mehrere Bereiche oder Abteilungen",
     "planClinicF2": "Erweiterte Anfrageverwaltung",
-    "planClinicF3": "Individuelle Aktivierungsprüfung"
+    "planClinicF3": "Individuelle Aktivierungsprüfung",
+    "faqTitle": "Häufige Fragen",
+    "faqSubtitle": "Klare Antworten dazu, wie Slotfill funktioniert und für wen es gedacht ist.",
+    "faq1Q": "Wer zahlt für Slotfill?",
+    "faq1A": "Praxen, Kliniken und Gesundheitszentren. Patienten zahlen nicht auf dieser Website.",
+    "faq2Q": "Ist Slotfill ein Notfalldienst?",
+    "faq2A": "Nein. Slotfill ist nicht für Notfälle oder medizinische Beratung gedacht.",
+    "faq3Q": "Werden Termine automatisch bestätigt?",
+    "faq3A": "Nein. Die Praxis kann Anfragen prüfen und Termine manuell bestätigen.",
+    "faq4Q": "Für welche Märkte ist Slotfill gedacht?",
+    "faq4A": "Slotfill ist nur für ausgewählte internationale Märkte vorgesehen. Verfügbarkeit und rechtliche Prüfung erfolgen vor der Aktivierung.",
+    "faq5Q": "Kann eine Praxis sofort online gehen?",
+    "faq5A": "Nein. Die Aktivierung erfolgt nach Prüfung von Markt, Einrichtung und rechtlichen Anforderungen."
   },
   "blog": {
     "title": "Blog",

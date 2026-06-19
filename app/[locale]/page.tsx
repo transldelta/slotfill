@@ -149,6 +149,15 @@ export default async function LocaleLandingPage({
   // What Slotfill sells — SaaS access points for providers.
   const sellPoints = [t("sell1"), t("sell2"), t("sell3"), t("sell4"), t("sell5"), t("sell6")];
 
+  // FAQ — trust-building answers, no client JS (native details/summary).
+  const faqs = [
+    { q: t("faq1Q"), a: t("faq1A") },
+    { q: t("faq2Q"), a: t("faq2A") },
+    { q: t("faq3Q"), a: t("faq3A") },
+    { q: t("faq4Q"), a: t("faq4A") },
+    { q: t("faq5Q"), a: t("faq5A") },
+  ];
+
   // Pricing packages — names match the static /pricing page (Starter/Practice/Clinic).
   // No fixed amounts here; CTA → contact / practice-access request. No payment provider.
   const pricingPlans = [
@@ -196,7 +205,7 @@ export default async function LocaleLandingPage({
         }}
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <SlotFillLogo href={`/${locale}`} size={34} />
+          <SlotFillLogo href={`/${locale}`} size={34} hideWordmarkOnMobile />
           <nav className="flex items-center gap-1 text-sm">
             <a
               href="#how-patients"
@@ -222,9 +231,15 @@ export default async function LocaleLandingPage({
             >
               {tNav("demoClinic")}
             </Link>
+            <a
+              href="#faq"
+              className="hidden rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:inline"
+            >
+              {tNav("faq")}
+            </a>
             <Link
               href="/auth/login"
-              className="rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
+              className="hidden rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:inline"
             >
               {tNav("login")}
             </Link>
@@ -248,10 +263,10 @@ export default async function LocaleLandingPage({
               <span className="h-1.5 w-1.5 animate-pulse rounded-full" style={{ backgroundColor: "var(--color-accent)" }} />
               {t("heroBadge")}
             </div>
-            <h1 className="text-3xl font-extrabold leading-[1.08] tracking-tight text-slate-900 dark:text-slate-100 sm:text-5xl lg:text-[3.4rem]">
+            <h1 className="text-balance text-[1.9rem] font-extrabold leading-[1.14] tracking-tight text-slate-900 dark:text-slate-100 sm:text-[2.5rem] lg:text-[3rem]">
               {t("heroTitle")}
             </h1>
-            <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-slate-600 dark:text-slate-300 lg:mx-0">
+            <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-slate-600 dark:text-slate-300 sm:text-lg lg:mx-0">
               {t("heroSubtitle")}
             </p>
             <div className="mt-9 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center lg:justify-start">
@@ -296,20 +311,23 @@ export default async function LocaleLandingPage({
               sizes="(min-width: 1024px) 50vw, 100vw"
               className="aspect-[4/5] w-full shadow-xl sm:aspect-[5/4] lg:aspect-[4/5]"
             >
-              {/* Floating availability card — real content, no fake OS chrome */}
-              <div className="absolute right-3 top-3 z-10 w-44 rounded-2xl border bg-white/95 p-3 shadow-lg backdrop-blur dark:bg-slate-900/90" style={{ borderColor: "var(--color-border)" }}>
+              {/* Floating availability card — real booking preview, no fake OS chrome */}
+              <div className="absolute right-3 top-3 z-10 w-56 rounded-2xl border bg-white/95 p-4 shadow-2xl ring-1 ring-black/5 backdrop-blur dark:bg-slate-900/90 sm:w-60" style={{ borderColor: "var(--color-border)" }}>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-slate-900 dark:text-slate-100">{t("previewClinic")}</span>
+                  <span className="inline-flex items-center gap-1.5 text-sm font-bold text-slate-900 dark:text-slate-100">
+                    <span className="h-2 w-2 rounded-full" style={{ background: "var(--gradient-brand)" }} />
+                    {t("previewClinic")}
+                  </span>
                   <span className="inline-flex items-center gap-1 text-[10px] font-medium text-slate-500 dark:text-slate-400">
                     <Clock className="h-3 w-3" style={{ color: "var(--color-accent)" }} />
                     {t("previewToday")}
                   </span>
                 </div>
-                <div className="mt-2 space-y-1.5">
+                <div className="mt-3 space-y-2">
                   {["09:00", "10:30"].map((tm) => (
-                    <div key={tm} className="flex items-center justify-between rounded-lg border px-2.5 py-1.5" style={{ borderColor: "var(--color-border)" }}>
-                      <span className="text-xs font-semibold tabular-nums text-slate-800 dark:text-slate-200">{tm}</span>
-                      <span className="inline-flex items-center gap-1 text-[10px] font-medium" style={{ color: "var(--color-accent)" }}>
+                    <div key={tm} className="flex items-center justify-between rounded-lg border px-3 py-2" style={{ borderColor: "var(--color-border)" }}>
+                      <span className="text-[13px] font-semibold tabular-nums text-slate-800 dark:text-slate-200">{tm}</span>
+                      <span className="inline-flex items-center gap-1 text-[11px] font-semibold" style={{ color: "var(--color-accent)" }}>
                         <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "var(--color-accent)" }} />
                         {t("previewAvailable")}
                       </span>
@@ -317,7 +335,7 @@ export default async function LocaleLandingPage({
                   ))}
                 </div>
                 {/* Honest status: a request waits for the practice to confirm — no guarantee. */}
-                <div className="mt-2 flex items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 text-[10px]" style={{ backgroundColor: "var(--color-surface-2)" }}>
+                <div className="mt-3 flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-[11px]" style={{ backgroundColor: "var(--color-surface-2)" }}>
                   <span className="font-medium text-slate-600 dark:text-slate-300">{t("previewRequest")}</span>
                   <span className="text-slate-400 dark:text-slate-500">{t("previewPending")}</span>
                 </div>
@@ -645,6 +663,30 @@ export default async function LocaleLandingPage({
           </div>
         </section>
       </div>
+
+      {/* ─── FAQ — trust-building, native accordion (no client JS) ─── */}
+      <section id="faq" className="mx-auto max-w-3xl scroll-mt-20 px-4 py-16 sm:py-20">
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">{t("faqTitle")}</h2>
+          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">{t("faqSubtitle")}</p>
+        </div>
+        <div className="mt-10 space-y-3">
+          {faqs.map((f, i) => (
+            <details
+              key={f.q}
+              className="group rounded-2xl border bg-white px-5 py-4 transition open:shadow-sm dark:bg-slate-900"
+              style={{ borderColor: "var(--color-border)" }}
+              {...(i === 0 ? { open: true } : {})}
+            >
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-[15px] font-semibold text-slate-900 dark:text-slate-100">
+                {f.q}
+                <ArrowRight className="h-4 w-4 shrink-0 rotate-90 text-slate-400 transition group-open:-rotate-90" />
+              </summary>
+              <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
 
       {/* ─── CTA ─── */}
       <section

@@ -414,7 +414,8 @@
     "bookAppointment": "Reservar cita",
     "feedback": "Comentarios",
     "forClinics": "Para clínicas",
-    "demoClinic": "Clínica demo"
+    "demoClinic": "Clínica demo",
+    "faq": "FAQ"
   },
   "landing": {
     "heroTitle": "Reserve citas médicas en línea y gestione las solicitudes de cita más fácilmente.",
@@ -535,7 +536,19 @@
     "planClinicCta": "Solicitar el paquete Clinic",
     "planClinicF1": "Varias áreas o departamentos",
     "planClinicF2": "Gestión avanzada de solicitudes",
-    "planClinicF3": "Revisión de activación individual"
+    "planClinicF3": "Revisión de activación individual",
+    "faqTitle": "Preguntas frecuentes",
+    "faqSubtitle": "Respuestas claras sobre cómo funciona Slotfill y para quién es.",
+    "faq1Q": "¿Quién paga por Slotfill?",
+    "faq1A": "Consultas, clínicas y centros de salud. Los pacientes no pagan en este sitio web.",
+    "faq2Q": "¿Es Slotfill un servicio de urgencias?",
+    "faq2A": "No. Slotfill no está pensado para urgencias ni para asesoramiento médico. Si es urgente, contacta directamente con los servicios locales.",
+    "faq3Q": "¿Las citas se confirman automáticamente?",
+    "faq3A": "No. La consulta puede revisar las solicitudes y confirmar las citas manualmente.",
+    "faq4Q": "¿Para qué mercados es Slotfill?",
+    "faq4A": "Slotfill está pensado solo para mercados internacionales seleccionados. La disponibilidad y la revisión legal se realizan antes de la activación.",
+    "faq5Q": "¿Puede una consulta activarse de inmediato?",
+    "faq5A": "No. La activación se realiza tras revisar el mercado, el centro y los requisitos legales."
   },
   "blog": {
     "title": "Blog",

@@ -415,7 +415,8 @@
     "bookAppointment": "Book appointment",
     "feedback": "Feedback",
     "forClinics": "For clinics",
-    "demoClinic": "Demo clinic"
+    "demoClinic": "Demo clinic",
+    "faq": "FAQ"
   },
   "landing": {
     "heroTitle": "Book doctor appointments online and manage appointment requests more easily.",
@@ -536,7 +537,19 @@
     "planClinicCta": "Request Clinic plan",
     "planClinicF1": "Multiple areas or departments",
     "planClinicF2": "Advanced request management",
-    "planClinicF3": "Individual activation review"
+    "planClinicF3": "Individual activation review",
+    "faqTitle": "Frequently asked questions",
+    "faqSubtitle": "Clear answers about how Slotfill works and who it is for.",
+    "faq1Q": "Who pays for Slotfill?",
+    "faq1A": "Practices, clinics and healthcare centers. Patients do not pay on this website.",
+    "faq2Q": "Is Slotfill for urgent or acute cases?",
+    "faq2A": "No. Slotfill is not intended for urgent situations or clinical advice. For anything time-critical, contact your local care services directly.",
+    "faq3Q": "Are appointments confirmed automatically?",
+    "faq3A": "No. The practice can review requests and confirm appointments manually.",
+    "faq4Q": "Which markets is Slotfill for?",
+    "faq4A": "Slotfill is intended only for selected international markets. Availability and legal review take place before activation.",
+    "faq5Q": "Can a practice go live immediately?",
+    "faq5A": "No. Activation follows a review of market, organization and legal requirements."
   },
   "blog": {
     "title": "Blog",

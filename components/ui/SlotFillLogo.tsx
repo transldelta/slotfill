@@ -8,6 +8,8 @@ interface SlotFillLogoProps {
   size?: number;
   /** Show the product name wordmark next to the icon. Default: true. */
   showWordmark?: boolean;
+  /** Hide the wordmark below the `sm` breakpoint (icon-only on mobile). */
+  hideWordmarkOnMobile?: boolean;
   className?: string;
 }
 
@@ -27,6 +29,7 @@ export function SlotFillLogo({
   href = "/",
   size = 36,
   showWordmark = true,
+  hideWordmarkOnMobile = false,
   className = "",
 }: SlotFillLogoProps) {
   const iconSize = Math.max(24, Math.round(size * 0.85));
@@ -62,13 +65,12 @@ export function SlotFillLogo({
 
       {showWordmark && (
         <span
-          className="font-semibold tracking-tight leading-none"
+          className={`font-bold leading-none text-slate-900 dark:text-white ${
+            hideWordmarkOnMobile ? "hidden sm:inline-block" : "inline-block"
+          }`}
           style={{
-            fontSize: `${Math.round(size * 0.52)}px`,
-            background: "linear-gradient(135deg, #1e40af 0%, #4f46e5 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
+            fontSize: `${Math.round(size * 0.5)}px`,
+            letterSpacing: "-0.015em",
           }}
         >
           {PUBLIC_BRAND_NAME}

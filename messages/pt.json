@@ -414,7 +414,8 @@
     "bookAppointment": "Marcar consulta",
     "feedback": "Feedback",
     "forClinics": "Para clínicas",
-    "demoClinic": "Clínica demo"
+    "demoClinic": "Clínica demo",
+    "faq": "FAQ"
   },
   "landing": {
     "heroTitle": "Marque consultas médicas online e faça a gestão dos pedidos de consulta mais facilmente.",
@@ -535,7 +536,19 @@
     "planClinicCta": "Solicitar o pacote Clinic",
     "planClinicF1": "Várias áreas ou departamentos",
     "planClinicF2": "Gestão avançada de pedidos",
-    "planClinicF3": "Análise de ativação individual"
+    "planClinicF3": "Análise de ativação individual",
+    "faqTitle": "Perguntas frequentes",
+    "faqSubtitle": "Respostas claras sobre como o Slotfill funciona e para quem é.",
+    "faq1Q": "Quem paga pelo Slotfill?",
+    "faq1A": "Consultórios, clínicas e centros de saúde. Os pacientes não pagam neste site.",
+    "faq2Q": "O Slotfill é um serviço de urgência?",
+    "faq2A": "Não. O Slotfill não se destina a urgências nem a aconselhamento médico. Em caso de urgência, contacte diretamente os serviços locais.",
+    "faq3Q": "As consultas são confirmadas automaticamente?",
+    "faq3A": "Não. O consultório pode analisar os pedidos e confirmar as consultas manualmente.",
+    "faq4Q": "Para que mercados é o Slotfill?",
+    "faq4A": "O Slotfill destina-se apenas a mercados internacionais selecionados. A disponibilidade e a análise jurídica ocorrem antes da ativação.",
+    "faq5Q": "Um consultório pode ficar ativo de imediato?",
+    "faq5A": "Não. A ativação ocorre após a análise do mercado, do estabelecimento e dos requisitos legais."
   },
   "blog": {
     "title": "Blog",

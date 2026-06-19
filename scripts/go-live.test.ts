@@ -525,19 +525,21 @@ test("Go-Live: A4 – KNOWN_CONTENT enthält TRUST_SECTION_ADDED → A4 ist read
   );
 });
 
-test("Go-Live: Aufgabe 4 – trialNoMessages im Hero der Startseite", () => {
+test("Go-Live: Aufgabe 4 – ehrliche Patienten-Journey im Hero der Startseite", () => {
   const { readFileSync } = require("fs");
   const content: string = readFileSync(
     resolve(process.cwd(), "app/[locale]/page.tsx"),
     "utf8",
   );
+  // Messaging-Ehrlichkeit: Der Hero verspricht keine garantierte/sofortige Bestätigung,
+  // sondern zeigt die 3-Schritte-Anfrage und einen "Bestätigung ausstehend"-Status.
   assert.ok(
-    content.includes("trialNoMessages"),
-    'app/[locale]/page.tsx: trialNoMessages fehlt – Messaging-Ehrlichkeit im Hero fehlt',
+    content.includes('t("journey3")'),
+    'app/[locale]/page.tsx: Patienten-Journey (journey3 – Bestätigung der Praxis) fehlt im Hero',
   );
   assert.ok(
-    content.includes("trialNote"),
-    'app/[locale]/page.tsx: trialNote fehlt',
+    content.includes('t("previewPending")'),
+    'app/[locale]/page.tsx: ehrlicher "Bestätigung ausstehend"-Status fehlt im Hero',
   );
 });
 

@@ -414,8 +414,8 @@
     "feedback": "Feedback"
   },
   "landing": {
-    "heroTitle": "Marque consultas clínicas online.",
-    "heroSubtitle": "O Slotfill ajuda os pacientes a solicitar consultas disponíveis de forma simples e clara.",
+    "heroTitle": "Marque uma consulta médica online.",
+    "heroSubtitle": "Encontre horários disponíveis, escolha uma opção e envie o seu pedido à clínica.",
     "ctaPrimary": "Marcar consulta",
     "ctaSecondary": "Ver clínica de demonstração",
     "comparePrices": "Comparar preços",
@@ -446,7 +446,16 @@
     "onlineBookingBullet1": "Name, email, preferred time and reason",
     "onlineBookingBullet2": "Privacy notice as required field",
     "onlineBookingBullet3": "No automatic confirmation without practice approval",
-    "onlineBookingButton": "Request Appointment →"
+    "onlineBookingButton": "Request Appointment →",
+    "journey1": "Escolher um horário",
+    "journey2": "Enviar o pedido",
+    "journey3": "Aguardar a confirmação da clínica",
+    "pricingForClinics": "Para clínicas e consultórios",
+    "previewClinic": "Clínica de demonstração",
+    "previewToday": "Hoje",
+    "previewAvailable": "Disponível",
+    "previewRequest": "Pedido de consulta",
+    "previewPending": "Confirmação da clínica pendente"
   },
   "blog": {
     "title": "Blog",

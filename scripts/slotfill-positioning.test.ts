@@ -57,7 +57,7 @@ test("Slotfill Brand Guard: öffentliche Marke ist Slotfill, nicht ClinicSlotHub
 
 test("Patient Booking Positioning Guard: Slotfill = Online-Terminbuchung", () => {
   const en = msg("en");
-  assert.ok(en.landing.heroTitle.toLowerCase().includes("book clinic appointments online"), "EN heroTitle fehlt Patienten-Buchungsbotschaft");
+  assert.ok(en.landing.heroTitle.toLowerCase().includes("book doctor appointments online"), "EN heroTitle fehlt Patienten-Buchungsbotschaft");
   assert.ok(en.landing.ctaPrimary.toLowerCase().includes("book appointment"), "EN ctaPrimary ist nicht 'Book appointment'");
   assert.ok((en.nav.bookAppointment || "").toLowerCase().includes("book appointment"), "nav.bookAppointment fehlt");
   // Anfragelogik (kein Garantie-/Auto-Versprechen): Online-Booking-Sektion spricht von Anfrage + Bestätigung durch die Klinik.
@@ -169,6 +169,68 @@ test("Duplicate Logic Guard: ein Produkt, eine Haupt-H1, keine Board+Booking-Mis
   for (const board of ["today board", "walk-in queue", "one board for today", "scheduling os"]) {
     assert.equal(home.includes(board), false, `konkurrierende Board-Positionierung: "${board}"`);
   }
+});
+
+// ─── 12. Natural Patient Copy Guard ───────────────────────────────────────────
+
+test("Natural Patient Copy Guard: natürliche Patienten-Hauptbotschaft je Sprache", () => {
+  const expect: Record<string, string> = {
+    en: "book doctor appointments online",
+    de: "arzttermine online buchen",
+    fr: "rendez-vous médical",
+    es: "cita médica",
+    pt: "consulta médica",
+  };
+  for (const [loc, frag] of Object.entries(expect)) {
+    assert.ok(msg(loc).landing.heroTitle.toLowerCase().includes(frag), `${loc}: heroTitle ohne "${frag}"`);
+  }
+});
+
+// ─── 13. Patient Journey Guard ────────────────────────────────────────────────
+
+test("Patient Journey Guard: 3 sichtbare Schritte (auswählen → senden → Bestätigung)", () => {
+  for (const loc of locales) {
+    const l = msg(loc).landing;
+    for (const k of ["journey1", "journey2", "journey3"]) {
+      assert.ok((l[k] ?? "").trim().length > 2, `${loc}: ${k} fehlt`);
+    }
+  }
+  const en = msg("en").landing;
+  assert.ok(en.journey1.toLowerCase().includes("choose a time"), "EN journey1");
+  assert.ok(en.journey2.toLowerCase().includes("send your request"), "EN journey2");
+  assert.ok(en.journey3.toLowerCase().includes("clinic confirmation"), "EN journey3");
+  const de = msg("de").landing;
+  assert.ok(de.journey1.includes("Termin auswählen"), "DE journey1");
+  assert.ok(de.journey2.includes("Anfrage senden"), "DE journey2");
+  assert.ok(de.journey3.includes("Bestätigung der Praxis"), "DE journey3");
+  const home = read(PAGE);
+  assert.ok(home.includes('t("journey1")') && home.includes('t("journey3")'), "Homepage rendert Journey nicht");
+});
+
+// ─── 14. Pricing Scope Guard ──────────────────────────────────────────────────
+
+test("Pricing Scope Guard: Pricing klar als Klinik-/Praxis-Sache markiert", () => {
+  const en = (msg("en").landing.pricingForClinics ?? "").toLowerCase();
+  assert.ok(en.includes("clinic") && en.includes("practice"), "EN pricingForClinics fehlt/unklar");
+  for (const loc of locales) {
+    assert.ok((msg(loc).landing.pricingForClinics ?? "").trim().length > 2, `${loc}: pricingForClinics fehlt`);
+  }
+  assert.ok(read(PAGE).includes('t("pricingForClinics")'), "Homepage zeigt Pricing-Scope-Hinweis nicht");
+});
+
+// ─── 15. Visual Hero Guard ────────────────────────────────────────────────────
+
+test("Visual Hero Guard: anonyme Termin-Vorschaukarte im Hero (keine echten Daten)", () => {
+  const en = msg("en").landing;
+  for (const k of ["previewClinic", "previewToday", "previewAvailable", "previewRequest", "previewPending"]) {
+    assert.ok((en[k] ?? "").trim().length > 1, `EN ${k} fehlt`);
+  }
+  assert.ok(en.previewAvailable.toLowerCase().includes("available"), "previewAvailable");
+  assert.ok(en.previewRequest.toLowerCase().includes("appointment request"), "previewRequest");
+  assert.ok(en.previewPending.toLowerCase().includes("clinic confirmation pending"), "previewPending");
+  const home = read(PAGE);
+  assert.ok(home.includes('t("previewClinic")') && home.includes('"09:00"') && home.includes('"10:30"'), "Hero-Vorschaukarte fehlt");
+  assert.equal(/Sarah|Ahmed|Maria|Fatima|Mohammed|diagnosis|symptom/i.test(home), false, "mögliche PII/Diagnose im Homepage-Quelltext");
 });
 
 // ─── 5. Medical Safety Guard ──────────────────────────────────────────────────

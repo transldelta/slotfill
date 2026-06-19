@@ -415,8 +415,8 @@
     "feedback": "Feedback"
   },
   "landing": {
-    "heroTitle": "Book clinic appointments online.",
-    "heroSubtitle": "Slotfill helps patients request available clinic appointments in a simple, clear flow.",
+    "heroTitle": "Book doctor appointments online.",
+    "heroSubtitle": "Find available appointment times, choose a slot and send a request to the clinic.",
     "ctaPrimary": "Book appointment",
     "ctaSecondary": "View demo clinic",
     "comparePrices": "Compare Prices",
@@ -447,7 +447,16 @@
     "onlineBookingBullet1": "Name, email, preferred time window and request reason",
     "onlineBookingBullet2": "Mandatory privacy notice checkbox",
     "onlineBookingBullet3": "No automatic confirmation without clinic approval",
-    "onlineBookingButton": "Submit appointment request →"
+    "onlineBookingButton": "Submit appointment request →",
+    "journey1": "Choose a time",
+    "journey2": "Send your request",
+    "journey3": "Wait for clinic confirmation",
+    "pricingForClinics": "For clinics and practices",
+    "previewClinic": "Demo Clinic",
+    "previewToday": "Today",
+    "previewAvailable": "Available",
+    "previewRequest": "Appointment request",
+    "previewPending": "Clinic confirmation pending"
   },
   "blog": {
     "title": "Blog",

@@ -204,9 +204,62 @@ export default async function LocaleLandingPage({
             {t("ctaSecondary")}
           </Link>
         </div>
-        <p className="mt-4 text-xs text-slate-400 dark:text-slate-500">
-          {t("trialNote")} &nbsp;·&nbsp; {t("trialNoMessages")}
-        </p>
+        {/* Patient journey — 3 simple steps */}
+        <div className="mx-auto mt-12 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
+          {[t("journey1"), t("journey2"), t("journey3")].map((step, i) => (
+            <div
+              key={step}
+              className="flex items-center gap-3 rounded-xl border bg-white px-4 py-3 text-left dark:bg-slate-900"
+              style={{ borderColor: "var(--color-border)" }}
+            >
+              <span
+                className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
+                style={{ background: "var(--gradient-brand)" }}
+              >
+                {i + 1}
+              </span>
+              <span className="text-sm text-slate-700 dark:text-slate-300">{step}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Hero preview card — anonymized demo, no real patient data */}
+        <div
+          className="mx-auto mt-8 max-w-sm rounded-2xl border bg-white p-4 text-left shadow-sm dark:bg-slate-900"
+          style={{ borderColor: "var(--color-border)" }}
+        >
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">{t("previewClinic")}</span>
+            <span
+              className="rounded-full px-2.5 py-0.5 text-xs font-medium"
+              style={{ backgroundColor: "var(--color-surface-2)", color: "var(--color-muted)" }}
+            >
+              {t("previewToday")}
+            </span>
+          </div>
+          <div className="mt-3 space-y-2">
+            {["09:00", "10:30"].map((tm) => (
+              <div
+                key={tm}
+                className="flex items-center justify-between rounded-lg border px-3 py-2"
+                style={{ borderColor: "var(--color-border)" }}
+              >
+                <span className="text-sm font-semibold tabular-nums text-slate-800 dark:text-slate-200">{tm}</span>
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium" style={{ color: "var(--color-accent)" }}>
+                  <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "var(--color-accent)" }} />
+                  {t("previewAvailable")}
+                </span>
+              </div>
+            ))}
+          </div>
+          <div
+            className="mt-3 flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-xs"
+            style={{ backgroundColor: "var(--color-surface-2)" }}
+          >
+            <span className="font-medium text-slate-600 dark:text-slate-300">{t("previewRequest")}</span>
+            <span className="text-slate-400 dark:text-slate-500">{t("previewPending")}</span>
+          </div>
+        </div>
       </section>
       </div>
 
@@ -353,6 +406,8 @@ export default async function LocaleLandingPage({
             {t("comparePrices")}
           </Link>
         </div>
+        {/* Pricing richtet sich an Praxen/Kliniken, nicht an Patienten */}
+        <p className="mt-4 text-xs text-white/70">{t("pricingForClinics")}</p>
       </section>
 
       {/* Footer */}

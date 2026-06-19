@@ -414,8 +414,8 @@
     "feedback": "Commentaires"
   },
   "landing": {
-    "heroTitle": "Réservez des rendez-vous en clinique en ligne.",
-    "heroSubtitle": "Slotfill aide les patients à demander des rendez-vous disponibles dans un parcours simple et clair.",
+    "heroTitle": "Réservez un rendez-vous médical en ligne.",
+    "heroSubtitle": "Trouvez un créneau disponible, choisissez un horaire et envoyez votre demande à la clinique.",
     "ctaPrimary": "Réserver un rendez-vous",
     "ctaSecondary": "Voir la clinique de démonstration",
     "comparePrices": "Comparer les tarifs",
@@ -446,7 +446,16 @@
     "onlineBookingBullet1": "Name, email, preferred time and reason",
     "onlineBookingBullet2": "Privacy notice as required field",
     "onlineBookingBullet3": "No automatic confirmation without practice approval",
-    "onlineBookingButton": "Request Appointment →"
+    "onlineBookingButton": "Request Appointment →",
+    "journey1": "Choisir un créneau",
+    "journey2": "Envoyer la demande",
+    "journey3": "Attendre la confirmation de la clinique",
+    "pricingForClinics": "Pour les cliniques et cabinets",
+    "previewClinic": "Clinique de démonstration",
+    "previewToday": "Aujourd'hui",
+    "previewAvailable": "Disponible",
+    "previewRequest": "Demande de rendez-vous",
+    "previewPending": "Confirmation de la clinique en attente"
   },
   "blog": {
     "title": "Blog",

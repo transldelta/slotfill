@@ -415,8 +415,8 @@
     "feedback": "Feedback"
   },
   "landing": {
-    "heroTitle": "Kliniktermine online buchen.",
-    "heroSubtitle": "Slotfill hilft Patienten, verfügbare Termine einfach und klar anzufragen.",
+    "heroTitle": "Arzttermine online buchen.",
+    "heroSubtitle": "Finden Sie verfügbare Termine, wählen Sie eine passende Zeit und senden Sie Ihre Anfrage an die Praxis.",
     "ctaPrimary": "Termin buchen",
     "ctaSecondary": "Demo-Praxis ansehen",
     "comparePrices": "Preise vergleichen",
@@ -447,7 +447,16 @@
     "onlineBookingBullet1": "Name, E-Mail, gewünschter Zeitraum und Anliegen",
     "onlineBookingBullet2": "Datenschutzhinweis als Pflichtfeld",
     "onlineBookingBullet3": "Keine automatische Bestätigung ohne Praxis-Freigabe",
-    "onlineBookingButton": "Terminanfrage stellen →"
+    "onlineBookingButton": "Terminanfrage stellen →",
+    "journey1": "Termin auswählen",
+    "journey2": "Anfrage senden",
+    "journey3": "Bestätigung der Praxis erhalten",
+    "pricingForClinics": "Für Praxen und Kliniken",
+    "previewClinic": "Demo-Praxis",
+    "previewToday": "Heute",
+    "previewAvailable": "Verfügbar",
+    "previewRequest": "Terminanfrage",
+    "previewPending": "Bestätigung der Praxis ausstehend"
   },
   "blog": {
     "title": "Blog",

@@ -414,8 +414,8 @@
     "feedback": "Comentarios"
   },
   "landing": {
-    "heroTitle": "Reserve citas médicas en línea.",
-    "heroSubtitle": "Slotfill ayuda a los pacientes a solicitar citas disponibles en un proceso simple y claro.",
+    "heroTitle": "Reserve una cita médica en línea.",
+    "heroSubtitle": "Encuentre horarios disponibles, elija una cita y envíe su solicitud a la clínica.",
     "ctaPrimary": "Reservar cita",
     "ctaSecondary": "Ver clínica demo",
     "comparePrices": "Comparar precios",
@@ -446,7 +446,16 @@
     "onlineBookingBullet1": "Name, email, preferred time and reason",
     "onlineBookingBullet2": "Privacy notice as required field",
     "onlineBookingBullet3": "No automatic confirmation without practice approval",
-    "onlineBookingButton": "Request Appointment →"
+    "onlineBookingButton": "Request Appointment →",
+    "journey1": "Elegir un horario",
+    "journey2": "Enviar la solicitud",
+    "journey3": "Esperar la confirmación de la clínica",
+    "pricingForClinics": "Para clínicas y consultorios",
+    "previewClinic": "Clínica demo",
+    "previewToday": "Hoy",
+    "previewAvailable": "Disponible",
+    "previewRequest": "Solicitud de cita",
+    "previewPending": "Confirmación de la clínica pendiente"
   },
   "blog": {
     "title": "Blog",

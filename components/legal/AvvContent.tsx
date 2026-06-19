@@ -27,7 +27,10 @@ export function AvvContent({
         {c.backLabel}
       </Link>
 
-      <h1 className="mt-2 text-3xl font-bold text-slate-900 dark:text-slate-100">
+      <h1
+        lang={locale}
+        className="mt-2 hyphens-auto break-words text-3xl font-bold text-slate-900 dark:text-slate-100"
+      >
         {c.avvTitle}
       </h1>
       <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">

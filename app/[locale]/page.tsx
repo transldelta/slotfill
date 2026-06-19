@@ -13,6 +13,9 @@ import {
   Smile,
   ArrowRight,
   Clock,
+  Zap,
+  TrendingUp,
+  Check,
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { headers } from "next/headers";
@@ -143,6 +146,38 @@ export default async function LocaleLandingPage({
   const trustPoints = [t("trustPoint1"), t("trustPoint2"), t("trustPoint3"), t("trustPoint4")];
   const safetyPoints = [t("safety1"), t("safety2"), t("safety3")];
 
+  // What Slotfill sells — SaaS access points for providers.
+  const sellPoints = [t("sell1"), t("sell2"), t("sell3"), t("sell4"), t("sell5"), t("sell6")];
+
+  // Pricing packages — names match the static /pricing page (Starter/Practice/Clinic).
+  // No fixed amounts here; CTA → contact / practice-access request. No payment provider.
+  const pricingPlans = [
+    {
+      name: "Starter",
+      icon: Zap,
+      desc: t("planStarterDesc"),
+      cta: t("planStarterCta"),
+      features: [t("planStarterF1"), t("planStarterF2"), t("planStarterF3")],
+      highlight: false,
+    },
+    {
+      name: "Practice",
+      icon: TrendingUp,
+      desc: t("planPracticeDesc"),
+      cta: t("planPracticeCta"),
+      features: [t("planPracticeF1"), t("planPracticeF2"), t("planPracticeF3")],
+      highlight: true,
+    },
+    {
+      name: "Clinic",
+      icon: Building2,
+      desc: t("planClinicDesc"),
+      cta: t("planClinicCta"),
+      features: [t("planClinicF1"), t("planClinicF2"), t("planClinicF3")],
+      highlight: false,
+    },
+  ];
+
   const schemaOrg = buildSchemaOrg(locale);
 
   return (
@@ -174,6 +209,12 @@ export default async function LocaleLandingPage({
               className="hidden rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:inline"
             >
               {tNav("forClinics")}
+            </a>
+            <a
+              href="#pricing"
+              className="hidden rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:inline"
+            >
+              {tNav("pricing")}
             </a>
             <Link
               href="/book/testpraxis-delta"
@@ -472,6 +513,82 @@ export default async function LocaleLandingPage({
               <span className="text-[15px] font-medium text-slate-700 dark:text-slate-200">{c}</span>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ─── WHAT SLOTFILL SELLS — clear SaaS offer ─── */}
+      <div className="w-full bg-slate-50/70 dark:bg-white/[0.02]">
+        <section className="mx-auto max-w-5xl px-4 py-16 sm:py-20">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em]" style={{ color: "var(--color-accent)" }}>
+              {tNav("forClinics")}
+            </p>
+            <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">{t("sellTitle")}</h2>
+            <p className="mt-3 text-base text-slate-600 dark:text-slate-300">{t("sellSubline")}</p>
+          </div>
+          <div className="mx-auto mt-10 grid max-w-3xl gap-x-10 gap-y-4 sm:grid-cols-2">
+            {sellPoints.map((s) => (
+              <div key={s} className="flex items-start gap-3">
+                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0" style={{ color: "var(--color-accent)" }} />
+                <span className="text-[15px] font-medium text-slate-700 dark:text-slate-200">{s}</span>
+              </div>
+            ))}
+          </div>
+          <p className="mx-auto mt-8 max-w-2xl text-center text-sm font-medium text-slate-500 dark:text-slate-400">
+            {t("sellNote")}
+          </p>
+        </section>
+      </div>
+
+      {/* ─── PRICING TEASER — packages for providers, no patient payment ─── */}
+      <section id="pricing" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-16 sm:py-20">
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">{t("pricingTitle")}</h2>
+          <p className="mt-3 text-base text-slate-600 dark:text-slate-300">{t("pricingSubline")}</p>
+        </div>
+        <div className="mt-10 grid gap-6 lg:grid-cols-3">
+          {pricingPlans.map((plan) => (
+            <div
+              key={plan.name}
+              className={`relative flex flex-col rounded-2xl border p-7 shadow-sm transition-all duration-200 hover:shadow-md ${
+                plan.highlight ? "ring-2" : ""
+              }`}
+              style={{
+                backgroundColor: "var(--color-surface)",
+                borderColor: plan.highlight ? "var(--color-primary)" : "var(--color-border)",
+                ...(plan.highlight ? { boxShadow: "0 0 0 1px var(--color-primary)" } : {}),
+              }}
+            >
+              <div className="flex items-center gap-3">
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-white" style={{ background: "var(--gradient-brand)" }}>
+                  <plan.icon className="h-5 w-5" />
+                </span>
+                <span className="text-lg font-bold text-slate-900 dark:text-slate-100">{plan.name}</span>
+              </div>
+              <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">{plan.desc}</p>
+              <p className="mt-4 text-sm font-semibold text-slate-900 dark:text-slate-100">{t("pricingOnRequest")}</p>
+              <ul className="mt-4 flex-1 space-y-2.5 text-sm">
+                {plan.features.map((f) => (
+                  <li key={f} className="flex items-start gap-2.5">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0" style={{ color: "var(--color-accent)" }} />
+                    <span className="text-slate-700 dark:text-slate-300">{f}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link href={`/${locale}/kontakt`} className="btn-brand mt-7 w-full px-5 py-2.5 text-sm">
+                {plan.cta}
+              </Link>
+            </div>
+          ))}
+        </div>
+        {/* See full pricing page + money logic */}
+        <div className="mt-8 flex flex-col items-center gap-4">
+          <Link href={`/${locale}/pricing`} className="btn-outline-brand px-6 py-2.5 text-sm">
+            {t("pricingSeeAll")} <ArrowRight className="ml-1.5 h-4 w-4" />
+          </Link>
+          <p className="mx-auto max-w-2xl text-center text-xs text-slate-500 dark:text-slate-400">
+            {t("pricingMoneyNote")}
+          </p>
         </div>
       </section>
 

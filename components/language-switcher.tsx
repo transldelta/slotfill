@@ -7,27 +7,17 @@ import { locales, type Locale } from "@/i18n/routing";
 const LANGUAGE_NAMES: Record<Locale, string> = {
   de: "Deutsch",
   en: "English",
-  zh: "中文",
-  hi: "हिन्दी",
-  es: "Español",
-  ar: "العربية",
   fr: "Français",
+  es: "Español",
   pt: "Português",
-  bn: "বাংলা",
-  ru: "Русский",
 };
 
 const LANGUAGE_LABELS: Record<Locale, string> = {
   de: "DE",
   en: "EN",
-  zh: "ZH",
-  hi: "HI",
-  es: "ES",
-  ar: "AR",
   fr: "FR",
+  es: "ES",
   pt: "PT",
-  bn: "BN",
-  ru: "RU",
 };
 
 type Props = {

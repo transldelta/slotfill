@@ -14,7 +14,7 @@ import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { PUBLIC_BRAND_NAME } from "../lib/brand";
-import { locales } from "../i18n/routing";
+import { locales, RETIRED_LOCALES } from "../i18n/routing";
 
 const ROOT = process.cwd();
 const read = (p: string) => readFileSync(join(ROOT, p), "utf8");
@@ -76,9 +76,9 @@ test("Booking Route Guard: /book/[slug] + /termin-buchen vorhanden und verlinkt"
   assert.ok(home.includes("/book/testpraxis-delta"), "Homepage verlinkt die Demo-Praxis /book/testpraxis-delta nicht");
 });
 
-// ─── 4. No Board/OS Guard ─────────────────────────────────────────────────────
+// ─── 4. No Old Pivot Guard ────────────────────────────────────────────────────
 
-test("No Board/OS Guard: keine Scheduling-OS-/Board-Texte öffentlich", () => {
+test("No Old Pivot Guard: keine Scheduling-OS-/Board-/Visibility-/Emerging-Reste öffentlich", () => {
   const forbidden = [
     "one board for today",
     "run the clinic day",
@@ -88,12 +88,86 @@ test("No Board/OS Guard: keine Scheduling-OS-/Board-Texte öffentlich", () => {
     "how clinicslothub makes money",
     "modern clinic scheduling os",
     "interactive board",
+    "visibility engine",
+    "treatment areas",
+    "medical tourism",
+    "emerging markets",
+    "soft launch",
+    "try for free",
+    "14-day free trial",
   ];
   const srcs = [read(PAGE).toLowerCase(), read(LAYOUT).toLowerCase(), ...locales.map(landingBlob)];
   for (const s of srcs) {
     for (const bad of forbidden) {
-      assert.equal(s.includes(bad), false, `Board/OS-Text öffentlich gefunden: "${bad}"`);
+      assert.equal(s.includes(bad), false, `Alt-Pivot-Text öffentlich gefunden: "${bad}"`);
     }
+  }
+});
+
+// ─── 7. Allowed Locale Guard ──────────────────────────────────────────────────
+
+test("Allowed Locale Guard: nur EN/DE/FR/ES/PT aktiv, stillgelegte → 308 /en", () => {
+  assert.deepEqual([...locales].slice().sort(), ["de", "en", "es", "fr", "pt"]);
+  for (const r of RETIRED_LOCALES) {
+    assert.equal((locales as readonly string[]).includes(r), false, `stillgelegte Locale noch aktiv: ${r}`);
+  }
+  const mw = read("middleware.ts");
+  assert.ok(mw.includes("RETIRED_LOCALES"), "Middleware kennt RETIRED_LOCALES nicht");
+  assert.ok(/status:\s*308/.test(mw) && mw.includes('"/en"'), "Middleware leitet stillgelegte Locales nicht per 308 auf /en");
+});
+
+// ─── 8. Language Switcher Guard ───────────────────────────────────────────────
+
+test("Language Switcher Guard: zeigt nur die 5 aktiven Sprachen", () => {
+  const src = read("components/language-switcher.tsx");
+  for (const name of ["Deutsch", "English", "Français", "Español", "Português"]) {
+    assert.ok(src.includes(name), `Sprache fehlt im Switcher: ${name}`);
+  }
+  for (const gone of ["中文", "हिन्दी", "العربية", "বাংলা", "Русский"]) {
+    assert.equal(src.includes(gone), false, `stillgelegte Sprache noch im Switcher: ${gone}`);
+  }
+});
+
+// ─── 9. Sitemap Locale Guard ──────────────────────────────────────────────────
+
+test("Sitemap Locale Guard: Sitemap nutzt nur die aktiven Locales", () => {
+  const sm = read("app/sitemap.ts");
+  assert.ok(sm.includes("locales"), "Sitemap nutzt routing.locales nicht");
+  for (const r of ["ar", "hi", "bn", "ru", "zh"]) {
+    assert.equal(new RegExp(`["'/]${r}["'/]`).test(sm), false, `Sitemap hardcodet stillgelegte Locale: ${r}`);
+  }
+});
+
+// ─── 10. Copy Quality Guard ───────────────────────────────────────────────────
+
+test("Copy Quality Guard: keine Platzhalter/TODO, zentrale CTAs gefüllt, FR/ES/PT/DE eigenständig", () => {
+  for (const loc of locales) {
+    const m = msg(loc);
+    const blob = landingBlob(loc);
+    for (const ph of ["lorem ipsum", "coming soon"]) {
+      assert.equal(blob.includes(ph), false, `${loc}: Platzhalter "${ph}"`);
+    }
+    assert.equal(/\bTODO\b/.test(JSON.stringify(m.landing ?? {})), false, `${loc}: TODO-Marker`);
+    for (const k of ["heroTitle", "ctaPrimary", "ctaSecondary"]) {
+      assert.ok((m.landing?.[k] ?? "").trim().length > 2, `${loc}: landing.${k} leer/zu kurz`);
+    }
+  }
+  // Eigenständige Hero-Übersetzung (keine reine EN-Kopie).
+  const en = msg("en").landing.heroTitle;
+  for (const loc of ["de", "fr", "es", "pt"]) {
+    assert.notEqual(msg(loc).landing.heroTitle, en, `${loc}: heroTitle identisch mit EN`);
+  }
+});
+
+// ─── 11. Duplicate Logic Guard ────────────────────────────────────────────────
+
+test("Duplicate Logic Guard: ein Produkt, eine Haupt-H1, keine Board+Booking-Mischung", () => {
+  const raw = read(PAGE);
+  const h1 = (raw.match(/<h1[\s>]/g) ?? []).length;
+  assert.ok(h1 <= 1, `mehr als eine <h1> auf der Homepage (${h1})`);
+  const home = raw.toLowerCase();
+  for (const board of ["today board", "walk-in queue", "one board for today", "scheduling os"]) {
+    assert.equal(home.includes(board), false, `konkurrierende Board-Positionierung: "${board}"`);
   }
 });
 

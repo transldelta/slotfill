@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import createIntlMiddleware from "next-intl/middleware";
-import { routing } from "@/i18n/routing";
+import { routing, RETIRED_LOCALES } from "@/i18n/routing";
 
 // ── next-intl Middleware für öffentliche Locale-Routen ────────────────────────
 // Erkennt /de, /en, /es usw., setzt Locale-Header für getRequestConfig,
@@ -53,6 +53,15 @@ export async function middleware(request: NextRequest) {
   // 1. API- und Auth-Routen: direkt durchlassen, keine Änderung
   if (PASSTHROUGH.some((p) => pathname.startsWith(p))) {
     return NextResponse.next();
+  }
+
+  // 1a. Stillgelegte Sprachen (ar, hi, bn, ru, zh) → 308 auf /en ───────────────
+  //     Nicht mehr öffentlich aktiv. Ziel ist immer /en (selbst aktiv) → kein Loop.
+  const retiredSeg = pathname.replace(/^\/+/, "").split("/")[0];
+  if ((RETIRED_LOCALES as readonly string[]).includes(retiredSeg)) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/en" + pathname.slice(retiredSeg.length + 1);
+    return NextResponse.redirect(url, { status: 308 });
   }
 
   // 2. /admin und /dashboard: Supabase-Auth-Check (Login-Pflicht)

@@ -23,20 +23,26 @@ test('i18n: pt-BR,pt;q=0.8 → pt', () => {
   assert.equal(detectLocaleFromAcceptLanguage('pt-BR,pt;q=0.8'), 'pt');
 });
 
-test('i18n: zh-CN,zh;q=0.8 → zh', () => {
-  assert.equal(detectLocaleFromAcceptLanguage('zh-CN,zh;q=0.8'), 'zh');
+// Stillgelegte Sprachen (zh, hi, bn, ru) sind nicht mehr öffentlich aktiv →
+// Accept-Language fällt auf die defaultLocale (de) zurück.
+test('i18n: zh-CN,zh;q=0.8 → de (stillgelegt)', () => {
+  assert.equal(detectLocaleFromAcceptLanguage('zh-CN,zh;q=0.8'), 'de');
 });
 
-test('i18n: hi-IN,hi;q=0.8 → hi', () => {
-  assert.equal(detectLocaleFromAcceptLanguage('hi-IN,hi;q=0.8'), 'hi');
+test('i18n: hi-IN,hi;q=0.8 → de (stillgelegt)', () => {
+  assert.equal(detectLocaleFromAcceptLanguage('hi-IN,hi;q=0.8'), 'de');
 });
 
-test('i18n: bn-BD,bn;q=0.8 → bn', () => {
-  assert.equal(detectLocaleFromAcceptLanguage('bn-BD,bn;q=0.8'), 'bn');
+test('i18n: bn-BD,bn;q=0.8 → de (stillgelegt)', () => {
+  assert.equal(detectLocaleFromAcceptLanguage('bn-BD,bn;q=0.8'), 'de');
 });
 
-test('i18n: ru-RU,ru;q=0.8 → ru', () => {
-  assert.equal(detectLocaleFromAcceptLanguage('ru-RU,ru;q=0.8'), 'ru');
+test('i18n: ru-RU,ru;q=0.8 → de (stillgelegt)', () => {
+  assert.equal(detectLocaleFromAcceptLanguage('ru-RU,ru;q=0.8'), 'de');
+});
+
+test('i18n: fr-FR,fr;q=0.8 → fr', () => {
+  assert.equal(detectLocaleFromAcceptLanguage('fr-FR,fr;q=0.8'), 'fr');
 });
 
 test('i18n: unbekannter Header → de (defaultLocale)', () => {
@@ -49,18 +55,22 @@ test('i18n: null → de (defaultLocale)', () => {
 
 // ── Locale-Konfiguration ────────────────────────────────────────────────────
 
-test('i18n: genau 10 Locales', () => {
-  assert.equal(locales.length, 10);
+test('i18n: genau 5 öffentliche Locales', () => {
+  assert.equal(locales.length, 5);
 });
 
 test('i18n: de ist defaultLocale', () => {
   assert.equal(defaultLocale, 'de');
 });
 
-test('i18n: alle erwarteten Locales vorhanden', () => {
-  const expected = ['de', 'en', 'zh', 'hi', 'es', 'ar', 'fr', 'pt', 'bn', 'ru'];
+test('i18n: nur EN/DE/FR/ES/PT sind aktiv', () => {
+  const expected = ['de', 'en', 'fr', 'es', 'pt'];
   for (const l of expected) {
     assert.ok(locales.includes(l as never), `Locale fehlt: ${l}`);
+  }
+  // Stillgelegte Sprachen dürfen nicht mehr aktiv sein.
+  for (const l of ['ar', 'hi', 'bn', 'ru', 'zh']) {
+    assert.equal(locales.includes(l as never), false, `stillgelegte Locale noch aktiv: ${l}`);
   }
 });
 

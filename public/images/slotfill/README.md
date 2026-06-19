@@ -28,7 +28,10 @@ gerendert. Es wird **kein** Bild angefragt (keine 404, keine Console-Errors).
 | `clinic-team.png`              | Use Case Klinik / Team / Verwaltung                         | 1:1        | 900 px        |
 | `dental-consultation.png`      | Use Case Zahnmedizin – Zahnarztberatung                     | 4:3        | 900 px        |
 | `therapy-session.png`          | Use Case Therapiezentrum – Therapie-/Reha-Szene             | 4:3        | 900 px        |
+| `diagnostic-center.png`        | Use Case Diagnostikzentrum – Untersuchungsumgebung          | 4:3        | 900 px        |
 | `healthcare-trust.png`         | Trust / Safety – vertrauensvolles Arzt-Patient-Gespräch     | 3:2        | 1200 px       |
+
+Status: Fotos sind eingebunden (`enabled: true` in `lib/slotfill-images.ts`).
 
 Empfehlung: optimierte JPGs (< 300 KB), warme/ruhige Healthcare-Farben,
 echte Menschen, keine gestellte Stock-Künstlichkeit.

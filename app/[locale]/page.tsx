@@ -130,12 +130,12 @@ export default async function LocaleLandingPage({
   const verticalTiles = [
     { key: "dentalConsultation" as const, icon: Smile, label: t("useCase2"), caption: t("mediaDentist"), tone: "blue" as const },
     { key: "therapySession" as const, icon: HeartPulse, label: t("useCase5"), caption: t("mediaTherapy"), tone: "teal" as const },
-    { key: "clinicTeam" as const, icon: Building2, label: t("useCase3"), caption: t("mediaTeam"), tone: "mixed" as const },
+    { key: "diagnosticCenter" as const, icon: Microscope, label: t("useCase6"), caption: t("mediaDiagnostic"), tone: "mixed" as const },
   ];
   // Remaining verticals shown as quiet inline pills.
   const verticalPills = [
     { icon: Stethoscope, label: t("useCase1") },
-    { icon: Microscope, label: t("useCase6") },
+    { icon: Building2, label: t("useCase3") },
     { icon: Activity, label: t("useCase4") },
   ];
 

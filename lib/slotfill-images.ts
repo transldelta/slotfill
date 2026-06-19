@@ -26,6 +26,7 @@ export type SlotfillImageKey =
   | "clinicTeam"
   | "dentalConsultation"
   | "therapySession"
+  | "diagnosticCenter"
   | "healthcareTrust";
 
 export interface SlotfillImageMeta {
@@ -36,13 +37,14 @@ export interface SlotfillImageMeta {
 }
 
 export const SLOTFILL_IMAGES: Record<SlotfillImageKey, SlotfillImageMeta> = {
-  heroDoctorConsultation: { file: "hero-doctor-consultation.png", enabled: false },
-  patientMobileBooking: { file: "patient-mobile-booking.png", enabled: false },
-  clinicReception: { file: "clinic-reception.png", enabled: false },
-  clinicTeam: { file: "clinic-team.png", enabled: false },
-  dentalConsultation: { file: "dental-consultation.png", enabled: false },
-  therapySession: { file: "therapy-session.png", enabled: false },
-  healthcareTrust: { file: "healthcare-trust.png", enabled: false },
+  heroDoctorConsultation: { file: "hero-doctor-consultation.png", enabled: true },
+  patientMobileBooking: { file: "patient-mobile-booking.png", enabled: true },
+  clinicReception: { file: "clinic-reception.png", enabled: true },
+  clinicTeam: { file: "clinic-team.png", enabled: true },
+  dentalConsultation: { file: "dental-consultation.png", enabled: true },
+  therapySession: { file: "therapy-session.png", enabled: true },
+  diagnosticCenter: { file: "diagnostic-center.png", enabled: true },
+  healthcareTrust: { file: "healthcare-trust.png", enabled: true },
 };
 
 export function slotfillImageSrc(key: SlotfillImageKey): string {

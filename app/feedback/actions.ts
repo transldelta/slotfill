@@ -2,6 +2,8 @@
 
 import { z } from "zod";
 import { createClient } from "@/lib/supabase";
+import { isSpammyText } from "@/lib/form-abuse";
+import { checkFormAbuse } from "@/lib/form-abuse-server";
 import {
   buildFeedbackRecord,
   validateFeedbackSubmission,
@@ -49,6 +51,15 @@ export async function submitFeedback(
   });
 
   if (!parsed.success) {
+    return { code: "VALIDATION_ERROR", message: "Ungültige Eingabe." };
+  }
+
+  // Best-effort Spam-/Bot-Schutz (Honeypot + Time-Trap + Rate-Limit) + Link-/Script-Filter.
+  if (
+    !checkFormAbuse(formData, "feedback").ok ||
+    isSpammyText(parsed.data.feedback_text) ||
+    isSpammyText(parsed.data.customer_name)
+  ) {
     return { code: "VALIDATION_ERROR", message: "Ungültige Eingabe." };
   }
 

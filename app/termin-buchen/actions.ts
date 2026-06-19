@@ -2,6 +2,8 @@
 
 import { z } from "zod";
 import { createClient } from "@/lib/supabase";
+import { isSpammyText } from "@/lib/form-abuse";
+import { checkFormAbuse } from "@/lib/form-abuse-server";
 import {
   buildBookingRecord,
   validateBookingSubmission,
@@ -52,6 +54,11 @@ export type SubmitBookingResult =
 export async function submitBookingRequest(
   formData: FormData,
 ): Promise<SubmitBookingResult> {
+  // Best-effort Spam-/Bot-Schutz (Honeypot + Time-Trap + Rate-Limit), neutral.
+  if (!checkFormAbuse(formData, "booking").ok) {
+    return { code: "VALIDATION_ERROR", message: "Ungültige Eingabe." };
+  }
+
   const parsed = schema.safeParse({
     patient_name: formData.get("patient_name"),
     patient_email: formData.get("patient_email"),
@@ -65,6 +72,15 @@ export async function submitBookingRequest(
   });
 
   if (!parsed.success) {
+    return { code: "VALIDATION_ERROR", message: "Ungültige Eingabe." };
+  }
+
+  // Freitext mit zu vielen Links / HTML-/Script-Mustern neutral ablehnen.
+  if (
+    isSpammyText(parsed.data.note) ||
+    isSpammyText(parsed.data.patient_name) ||
+    isSpammyText(parsed.data.preferred_time)
+  ) {
     return { code: "VALIDATION_ERROR", message: "Ungültige Eingabe." };
   }
 

@@ -23,6 +23,7 @@ import { CalendarClock, CheckCircle2, Info, AlertTriangle } from "lucide-react";
 import toast from "react-hot-toast";
 import { SlotFillLogo } from "@/components/ui/SlotFillLogo";
 import { submitBookingRequest } from "@/app/termin-buchen/actions";
+import { FormAntiSpamFields } from "@/components/ui/FormAntiSpamFields";
 
 // ─── Typen ─────────────────────────────────────────────────────────────────
 
@@ -301,6 +302,7 @@ export default function BookSlugPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+          <FormAntiSpamFields />
           {/* tenant_id der aufgelösten Praxis – kommt aus dem Slug, nicht vom Patient */}
           <input type="hidden" name="tenant_id" value={practice.id} />
 

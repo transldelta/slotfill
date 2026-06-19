@@ -7,6 +7,7 @@ import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { SlotFillLogo } from "@/components/ui/SlotFillLogo";
 import { submitBookingRequest } from "@/app/termin-buchen/actions";
+import { FormAntiSpamFields } from "@/components/ui/FormAntiSpamFields";
 import { getMarketScope } from "@/lib/market-scope";
 
 // ─── Typen ─────────────────────────────────────────────────────────────────
@@ -277,6 +278,7 @@ export default function TerminBuchenPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+          <FormAntiSpamFields />
           {/* Praxis-ID – wird für Auto-Confirm-Zuordnung benötigt */}
           {practiceId && (
             <input type="hidden" name="tenant_id" value={practiceId} />

@@ -8,6 +8,7 @@ import { useParams } from "next/navigation";
 import { CheckCircle2, MessageSquare } from "lucide-react";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { submitContact } from "@/app/kontakt/actions";
+import { FormAntiSpamFields } from "@/components/ui/FormAntiSpamFields";
 import type { Locale } from "@/i18n/routing";
 
 export default function LocaleContactPageClient() {
@@ -85,6 +86,7 @@ export default function LocaleContactPageClient() {
       ) : (
         <form onSubmit={handleSubmit} className="mt-8 space-y-5">
           <input type="hidden" name="locale" value={locale} />
+          <FormAntiSpamFields />
 
           <div className="space-y-1.5">
             <label htmlFor="name" className="text-sm font-semibold text-slate-700 dark:text-slate-200">

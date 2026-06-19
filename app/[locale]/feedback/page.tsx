@@ -7,6 +7,7 @@ import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { SlotFillLogo } from "@/components/ui/SlotFillLogo";
 import { submitFeedback } from "@/app/feedback/actions";
+import { FormAntiSpamFields } from "@/components/ui/FormAntiSpamFields";
 
 const GOOGLE_REVIEW_URL =
   typeof window !== "undefined"
@@ -134,6 +135,7 @@ export default function FeedbackPage() {
         </p>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+          <FormAntiSpamFields />
           {/* Sternebewertung */}
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">

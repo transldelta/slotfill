@@ -2,6 +2,8 @@
 
 import { z } from "zod";
 import { createClient } from "@/lib/supabase";
+import { isSpammyText, FIELD_LIMITS } from "@/lib/form-abuse";
+import { checkFormAbuse } from "@/lib/form-abuse-server";
 import { sendEmail } from "@/lib/email";
 import { contactConfirmationEmail } from "@/lib/email/templates";
 import { sendContactAdminNotification } from "@/lib/admin-notifications";
@@ -10,9 +12,9 @@ import { sendContactAdminNotification } from "@/lib/admin-notifications";
 import { CONTACT_EMAIL } from "@/lib/brand";
 
 const schema = z.object({
-  name: z.string().trim().min(1),
-  email: z.string().trim().email(),
-  message: z.string().trim().min(1),
+  name: z.string().trim().min(1).max(FIELD_LIMITS.name),
+  email: z.string().trim().email().max(FIELD_LIMITS.email),
+  message: z.string().trim().min(1).max(FIELD_LIMITS.message),
   locale: z.string().trim().max(10).optional().default("de"),
 });
 
@@ -33,6 +35,12 @@ const schema = z.object({
 export async function submitContact(
   formData: FormData,
 ): Promise<{ code: "CONTACT_SENT" | "CONTACT_STORED" | "CONTACT_ERROR" }> {
+  // Best-effort Spam-/Bot-Schutz (Honeypot + Time-Trap + Rate-Limit). Neutrale
+  // Ablehnung – kein Hinweis, welche Schicht ausgelöst hat.
+  if (!checkFormAbuse(formData, "contact").ok) {
+    return { code: "CONTACT_ERROR" };
+  }
+
   const parsed = schema.safeParse({
     name: formData.get("name"),
     email: formData.get("email"),
@@ -43,6 +51,11 @@ export async function submitContact(
     return { code: "CONTACT_ERROR" };
   }
   const { name, email, message, locale } = parsed.data;
+
+  // Freitext mit zu vielen Links / HTML-/Script-Mustern neutral ablehnen.
+  if (isSpammyText(message) || isSpammyText(name)) {
+    return { code: "CONTACT_ERROR" };
+  }
 
   // ── 1. Immer in DB speichern ─────────────────────────────────────────────
   const admin = createClient();

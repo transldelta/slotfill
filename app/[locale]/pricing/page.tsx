@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { Check, Zap, TrendingUp, Building2 } from "lucide-react";
-import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import type { Locale } from "@/i18n/routing";
@@ -139,63 +138,31 @@ function getPlanContent(locale: string, planKey: string): PlanMeta | null {
   return loc[planKey] ?? null;
 }
 
+// Statische, sichere Pläne — KEINE DB-/Stripe-Abhängigkeit (verhindert Crashes
+// ohne konfigurierte Umgebung). Preise sind eine vorsichtige Pilot-Orientierung;
+// die Aktivierung erfolgt nur nach Bestätigung, es wird keine Zahlung verarbeitet.
+const STATIC_PLANS: Plan[] = [
+  { id: "starter", plan_key: "starter", name: "Starter", price_monthly: 29 },
+  { id: "professional", plan_key: "professional", name: "Practice", price_monthly: 79 },
+  { id: "praxis_plus", plan_key: "praxis_plus", name: "Clinic", price_monthly: 149 },
+];
+
 export default function LocalePricingPage() {
   const t = useTranslations("pricing");
   const tCommon = useTranslations("common");
-  const tSub = useTranslations("subscription");
   const router = useRouter();
   const params = useParams();
   const locale = (params.locale as string) ?? "de";
 
-  const [plans, setPlans] = useState<Plan[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
   const [pending, setPending] = useState<string | null>(null);
+  const plans = STATIC_PLANS;
+  const loading = false;
+  const error = false;
 
-  useEffect(() => {
-    fetch("/api/plans", { cache: "no-store" })
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data?.code === "PLANS_LOADED") setPlans(data.plans ?? []);
-        else setError(true);
-      })
-      .catch(() => setError(true))
-      .finally(() => setLoading(false));
-  }, []);
-
-  async function startCheckout(planKey: string) {
+  // Kein Stripe, keine Zahlung: Plan-CTA leitet zur Kontakt-/Praxiszugang-Anfrage.
+  function startCheckout(planKey: string) {
     setPending(planKey);
-    try {
-      const res = await fetch("/api/stripe/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ planKey }),
-      });
-
-      if (res.status === 401) {
-        router.push("/auth/login");
-        return;
-      }
-
-      const data = await res.json().catch(() => null);
-      if (data?.code === "CHECKOUT_SESSION_CREATED" && data.url) {
-        window.location.href = data.url;
-        return;
-      }
-      if (data?.code === "STRIPE_PRICE_MISSING") {
-        toast.error(t("stripePriceMissing"));
-        return;
-      }
-      if (data?.code === "STRIPE_NOT_CONFIGURED") {
-        router.push(`/${locale}/kontakt`);
-        return;
-      }
-      toast.error(tSub("checkoutError"));
-    } catch {
-      toast.error(tSub("checkoutError"));
-    } finally {
-      setPending(null);
-    }
+    router.push(`/${locale}/kontakt`);
   }
 
   return (

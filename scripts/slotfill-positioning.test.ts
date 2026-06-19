@@ -516,3 +516,25 @@ test("Booking Notice Guard: Buchungsseite zeigt Selected-Markets-Hinweis", () =>
   const en = getMarketScope("en").bookingNotice.toLowerCase();
   assert.ok(en.includes("selected markets") && en.includes("rejected"), "bookingNotice unklar");
 });
+
+// ─── 31. Pricing Stability Guard (statisch, ohne DB/Stripe) ───────────────────
+
+test("Pricing Stability Guard: keine DB-/Stripe-Abhängigkeit, statische Pläne", () => {
+  const pr = read("app/[locale]/pricing/page.tsx");
+  assert.ok(pr.includes("STATIC_PLANS"), "Pricing nutzt keine statischen Pläne");
+  assert.equal(/fetch\(\s*["']\/api\/plans/.test(pr), false, "Pricing fetcht weiterhin /api/plans (DB-Abhängigkeit)");
+  assert.equal(/\/api\/stripe\/checkout/.test(pr), false, "Pricing ruft Stripe-Checkout auf");
+  // Plan-CTA leitet zur Kontakt-/Praxiszugang-Anfrage.
+  assert.ok(/\/kontakt/.test(pr), "Pricing-CTA leitet nicht zur Kontaktanfrage");
+});
+
+// ─── 32. Healthcare Market Positioning Guard ──────────────────────────────────
+
+test("Healthcare Market Positioning Guard: 'selected international markets', kein 'emerging markets' öffentlich", () => {
+  for (const loc of locales) {
+    const badge = (msg(loc).landing?.heroBadge ?? "").toLowerCase();
+    assert.ok(/selected|ausgewählt|sélectionn|seleccionad|selecionad/.test(badge), `${loc}: heroBadge ohne 'selected markets'`);
+    // 'emerging markets' nicht im öffentlichen Hero-Badge.
+    assert.equal(badge.includes("emerging market"), false, `${loc}: 'emerging markets' im Badge`);
+  }
+});

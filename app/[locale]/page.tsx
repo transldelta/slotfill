@@ -232,10 +232,17 @@ export default async function LocaleLandingPage({
           ))}
         </div>
 
-        {/* Hero previews — anonymized: patient booking + practice dashboard */}
-        <div className="mx-auto mt-10 grid max-w-3xl grid-cols-1 gap-5 text-left sm:grid-cols-2">
+        {/* Hero product preview — anonymized: patient booking + practice dashboard */}
+        <div className="mx-auto mt-10 max-w-3xl overflow-hidden rounded-2xl border bg-white shadow-xl dark:bg-slate-900" style={{ borderColor: "var(--color-border)" }}>
+          <div className="flex items-center gap-2 border-b px-4 py-2.5" style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface-2)" }}>
+            <span className="h-2.5 w-2.5 rounded-full bg-red-400" aria-hidden />
+            <span className="h-2.5 w-2.5 rounded-full bg-amber-400" aria-hidden />
+            <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" aria-hidden />
+            <span className="ml-2 truncate text-xs font-medium text-slate-400 dark:text-slate-500">slotfill</span>
+          </div>
+          <div className="grid grid-cols-1 gap-5 p-5 text-left sm:grid-cols-2">
           {/* Patient booking preview */}
-          <div className="rounded-2xl border bg-white p-5 shadow-md dark:bg-slate-900" style={{ borderColor: "var(--color-border)" }}>
+          <div className="rounded-xl border bg-white p-5 dark:bg-slate-900" style={{ borderColor: "var(--color-border)" }}>
             <div className="flex items-center justify-between">
               <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">{t("previewClinic")}</span>
               <span className="rounded-full px-2.5 py-0.5 text-xs font-medium" style={{ backgroundColor: "var(--color-surface-2)", color: "var(--color-muted)" }}>{t("previewToday")}</span>
@@ -257,7 +264,7 @@ export default async function LocaleLandingPage({
             </div>
           </div>
           {/* Practice dashboard preview */}
-          <div className="rounded-2xl border bg-white p-5 shadow-md dark:bg-slate-900" style={{ borderColor: "var(--color-border)" }}>
+          <div className="rounded-xl border bg-white p-5 dark:bg-slate-900" style={{ borderColor: "var(--color-border)" }}>
             <div className="flex items-center justify-between">
               <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">{t("providerPreviewTitle")}</span>
               <span className="rounded-full px-2.5 py-0.5 text-xs font-semibold text-white" style={{ background: "var(--gradient-brand)" }}>{t("providerPreviewNew")}</span>
@@ -274,6 +281,7 @@ export default async function LocaleLandingPage({
                 </div>
               ))}
             </div>
+          </div>
           </div>
         </div>
       </section>

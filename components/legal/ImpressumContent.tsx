@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getLegalContent, isRtlLocale } from "@/lib/legal-content";
+import { MarketScopeNotice } from "@/components/legal/MarketScopeNotice";
 
 /**
  * Impressum-Inhalt – § 5 DDG (Digitale-Dienste-Gesetz)
@@ -31,6 +32,9 @@ export function ImpressumContent({
       <h1 className="mt-2 text-3xl font-bold text-slate-900 dark:text-slate-100">
         {c.impressumTitle}
       </h1>
+
+      {/* Hinweis zum Leistungsangebot (räumlicher Markt) */}
+      <MarketScopeNotice locale={locale} variant="imprint" />
 
       {/* Maßgeblichkeits-Banner für Nicht-DE */}
       {!isDE && c.authorityNotice && (

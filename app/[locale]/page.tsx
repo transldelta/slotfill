@@ -6,6 +6,11 @@ import {
   ListOrdered,
   ShieldCheck,
   CheckCircle2,
+  Stethoscope,
+  HeartPulse,
+  Building2,
+  Activity,
+  ClipboardList,
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { headers } from "next/headers";
@@ -13,6 +18,7 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { SlotFillLogo } from "@/components/ui/SlotFillLogo";
 import { locales, type Locale } from "@/i18n/routing";
 import { CANONICAL_URL, PUBLIC_BRAND_NAME } from "@/lib/brand";
+import { getMarketScope } from "@/lib/market-scope";
 
 const APP_URL = CANONICAL_URL;
 
@@ -112,6 +118,18 @@ export default async function LocaleLandingPage({
     { icon: ShieldCheck, text: t("clinic4") },
   ];
 
+  const useCases = [
+    { icon: Stethoscope, label: t("useCase1") },
+    { icon: HeartPulse, label: t("useCase2") },
+    { icon: Building2, label: t("useCase3") },
+    { icon: Activity, label: t("useCase4") },
+    { icon: ClipboardList, label: t("useCase5") },
+    { icon: CalendarClock, label: t("useCase6") },
+  ];
+
+  const patientSteps = [t("journey1"), t("journey2"), t("journey3")];
+  const providerSteps = [t("providerStep1"), t("providerStep2"), t("providerStep3"), t("providerStep4")];
+
   const schemaOrg = buildSchemaOrg(locale);
 
   return (
@@ -184,12 +202,15 @@ export default async function LocaleLandingPage({
         <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-300">
           {t("heroSubtitle")}
         </p>
-        <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+        <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
           <Link href={`/${locale}/termin-buchen`} className="btn-brand w-full px-7 py-3.5 text-base sm:w-auto">
             {t("ctaPrimary")}
           </Link>
-          <Link href="/book/testpraxis-delta" className="btn-outline-brand w-full px-7 py-3.5 text-base sm:w-auto">
-            {t("ctaSecondary")}
+          <a href="#for-providers" className="btn-outline-brand w-full px-7 py-3.5 text-base sm:w-auto">
+            {t("ctaForClinics")}
+          </a>
+          <Link href="/book/testpraxis-delta" className="w-full rounded-lg px-7 py-3.5 text-center text-base font-semibold text-slate-700 underline-offset-4 transition hover:underline dark:text-slate-300 sm:w-auto">
+            {t("cta3")}
           </Link>
         </div>
         {/* Patient journey — 3 simple steps */}
@@ -211,41 +232,100 @@ export default async function LocaleLandingPage({
           ))}
         </div>
 
-        {/* Hero preview card — anonymized demo, no real patient data */}
-        <div
-          className="mx-auto mt-8 max-w-md rounded-2xl border bg-white p-5 text-left shadow-md dark:bg-slate-900"
-          style={{ borderColor: "var(--color-border)" }}
-        >
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">{t("previewClinic")}</span>
-            <span
-              className="rounded-full px-2.5 py-0.5 text-xs font-medium"
-              style={{ backgroundColor: "var(--color-surface-2)", color: "var(--color-muted)" }}
+        {/* Hero previews — anonymized: patient booking + practice dashboard */}
+        <div className="mx-auto mt-10 grid max-w-3xl grid-cols-1 gap-5 text-left sm:grid-cols-2">
+          {/* Patient booking preview */}
+          <div className="rounded-2xl border bg-white p-5 shadow-md dark:bg-slate-900" style={{ borderColor: "var(--color-border)" }}>
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">{t("previewClinic")}</span>
+              <span className="rounded-full px-2.5 py-0.5 text-xs font-medium" style={{ backgroundColor: "var(--color-surface-2)", color: "var(--color-muted)" }}>{t("previewToday")}</span>
+            </div>
+            <div className="mt-3 space-y-2">
+              {["09:00", "10:30"].map((tm) => (
+                <div key={tm} className="flex items-center justify-between rounded-lg border px-3 py-2" style={{ borderColor: "var(--color-border)" }}>
+                  <span className="text-sm font-semibold tabular-nums text-slate-800 dark:text-slate-200">{tm}</span>
+                  <span className="inline-flex items-center gap-1.5 text-xs font-medium" style={{ color: "var(--color-accent)" }}>
+                    <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "var(--color-accent)" }} />
+                    {t("previewAvailable")}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div className="mt-3 flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-xs" style={{ backgroundColor: "var(--color-surface-2)" }}>
+              <span className="font-medium text-slate-600 dark:text-slate-300">{t("previewRequest")}</span>
+              <span className="text-slate-400 dark:text-slate-500">{t("previewPending")}</span>
+            </div>
+          </div>
+          {/* Practice dashboard preview */}
+          <div className="rounded-2xl border bg-white p-5 shadow-md dark:bg-slate-900" style={{ borderColor: "var(--color-border)" }}>
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">{t("providerPreviewTitle")}</span>
+              <span className="rounded-full px-2.5 py-0.5 text-xs font-semibold text-white" style={{ background: "var(--gradient-brand)" }}>{t("providerPreviewNew")}</span>
+            </div>
+            <p className="mt-3 text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">{t("providerPreviewRequests")}</p>
+            <div className="mt-2 space-y-2">
+              {["Appointment #1042 · 09:00", "Walk-in #18 · 10:00"].map((row) => (
+                <div key={row} className="flex items-center justify-between gap-2 rounded-lg border px-3 py-2" style={{ borderColor: "var(--color-border)" }}>
+                  <span className="truncate text-[12.5px] font-medium text-slate-700 dark:text-slate-300">{row}</span>
+                  <span className="flex shrink-0 gap-1.5">
+                    <span className="rounded-md bg-emerald-100 px-2 py-0.5 text-[10.5px] font-semibold text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">{t("providerPreviewConfirm")}</span>
+                    <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[10.5px] font-semibold text-slate-500 dark:bg-slate-800 dark:text-slate-400">{t("providerPreviewDecline")}</span>
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+      </div>
+
+      {/* Use cases — healthcare verticals only */}
+      <section className="mx-auto max-w-6xl px-4 py-16">
+        <h2 className="text-center text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">{t("useCasesTitle")}</h2>
+        <p className="mx-auto mt-2 max-w-2xl text-center text-sm text-slate-500 dark:text-slate-400">{t("useCasesSubline")}</p>
+        <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+          {useCases.map((u) => (
+            <div
+              key={u.label}
+              className="flex flex-col items-center gap-3 rounded-2xl border bg-white p-5 text-center shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md dark:bg-slate-900"
+              style={{ borderColor: "var(--color-border)" }}
             >
-              {t("previewToday")}
-            </span>
+              <span className="inline-flex rounded-xl p-2.5 shadow-sm" style={{ background: "var(--gradient-brand)" }}>
+                <u.icon className="h-5 w-5 text-white" />
+              </span>
+              <span className="text-[13px] font-medium leading-tight text-slate-800 dark:text-slate-200">{u.label}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Patient flow + Provider flow */}
+      <div id="for-providers" className="w-full scroll-mt-20 bg-slate-50/60 dark:bg-transparent">
+      <section className="mx-auto max-w-6xl px-4 py-16">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+          {/* Patient flow */}
+          <div className="rounded-2xl border bg-white p-8 shadow-sm dark:bg-slate-900" style={{ borderColor: "var(--color-border)" }}>
+            <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100">{t("patientFlowTitle")}</h3>
+            <ol className="mt-5 space-y-3">
+              {patientSteps.map((step, i) => (
+                <li key={step} className="flex items-center gap-3">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white" style={{ background: "var(--gradient-brand)" }}>{i + 1}</span>
+                  <span className="text-sm text-slate-700 dark:text-slate-300">{step}</span>
+                </li>
+              ))}
+            </ol>
           </div>
-          <div className="mt-3 space-y-2">
-            {["09:00", "10:30"].map((tm) => (
-              <div
-                key={tm}
-                className="flex items-center justify-between rounded-lg border px-3 py-2"
-                style={{ borderColor: "var(--color-border)" }}
-              >
-                <span className="text-sm font-semibold tabular-nums text-slate-800 dark:text-slate-200">{tm}</span>
-                <span className="inline-flex items-center gap-1.5 text-xs font-medium" style={{ color: "var(--color-accent)" }}>
-                  <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "var(--color-accent)" }} />
-                  {t("previewAvailable")}
-                </span>
-              </div>
-            ))}
-          </div>
-          <div
-            className="mt-3 flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-xs"
-            style={{ backgroundColor: "var(--color-surface-2)" }}
-          >
-            <span className="font-medium text-slate-600 dark:text-slate-300">{t("previewRequest")}</span>
-            <span className="text-slate-400 dark:text-slate-500">{t("previewPending")}</span>
+          {/* Provider flow */}
+          <div className="rounded-2xl border p-8 shadow-sm" style={{ borderColor: "var(--color-accent)", backgroundColor: "var(--color-surface)" }}>
+            <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100">{t("providerFlowTitle")}</h3>
+            <ol className="mt-5 space-y-3">
+              {providerSteps.map((step, i) => (
+                <li key={step} className="flex items-center gap-3">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white" style={{ background: "var(--gradient-brand)" }}>{i + 1}</span>
+                  <span className="text-sm text-slate-700 dark:text-slate-300">{step}</span>
+                </li>
+              ))}
+            </ol>
           </div>
         </div>
       </section>
@@ -443,7 +523,8 @@ export default async function LocaleLandingPage({
           </div>
           <div className="mt-6 border-t pt-6 text-xs" style={{ borderColor: "var(--color-border)", color: "var(--color-muted)" }}
             aria-label="Copyright">
-            <p>© {new Date().getFullYear()} {tNav("brand")}. {t("rights")}</p>
+            <p>{getMarketScope(locale).footer}</p>
+            <p className="mt-1">© {new Date().getFullYear()} {tNav("brand")}. {t("rights")}</p>
           </div>
         </div>
       </footer>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getLegalContent, isRtlLocale } from "@/lib/legal-content";
+import { MarketScopeNotice } from "@/components/legal/MarketScopeNotice";
 
 /**
  * AGB-Inhalt – lokalisiert
@@ -36,6 +37,9 @@ export function AgbContent({
         {c.agbTitle}
       </h1>
       <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{c.standDate}</p>
+
+      {/* Räumlicher Leistungsbereich (alle Locales sichtbar) */}
+      <MarketScopeNotice locale={locale} variant="agb" />
 
       {/* Maßgeblichkeits-Banner für Nicht-DE */}
       {!isDE && c.authorityNotice && (

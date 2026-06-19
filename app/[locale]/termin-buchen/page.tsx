@@ -7,6 +7,7 @@ import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { SlotFillLogo } from "@/components/ui/SlotFillLogo";
 import { submitBookingRequest } from "@/app/termin-buchen/actions";
+import { getMarketScope } from "@/lib/market-scope";
 
 // ─── Typen ─────────────────────────────────────────────────────────────────
 
@@ -246,6 +247,11 @@ export default function TerminBuchenPage() {
             </p>
           </div>
         </div>
+
+        {/* Market-Scope-Hinweis (ausgewählte Märkte) */}
+        <p className="mt-4 rounded-lg border px-4 py-2.5 text-xs text-slate-600 dark:text-slate-400" style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface-2)" }}>
+          {getMarketScope(locale).bookingNotice}
+        </p>
 
         {/* Hinweis-Banner */}
         <div

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getLegalContent, isRtlLocale } from "@/lib/legal-content";
+import { MarketScopeNotice } from "@/components/legal/MarketScopeNotice";
 
 /**
  * Datenschutzerklärung-Inhalt – lokalisiert
@@ -31,6 +32,9 @@ export function DatenschutzContent({
         {c.datenschutzTitle}
       </h1>
       <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{c.standDate}</p>
+
+      {/* Hinweis zum räumlichen Anwendungsbereich (alle Locales) */}
+      <MarketScopeNotice locale={locale} variant="privacy" />
 
       {/* Maßgeblichkeits-Banner für Nicht-DE */}
       {!isDE && c.authorityNotice && (

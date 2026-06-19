@@ -15,6 +15,7 @@ import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { PUBLIC_BRAND_NAME } from "../lib/brand";
 import { locales, RETIRED_LOCALES } from "../i18n/routing";
+import { getMarketScope } from "../lib/market-scope";
 
 const ROOT = process.cwd();
 const read = (p: string) => readFileSync(join(ROOT, p), "utf8");
@@ -180,9 +181,9 @@ test("Natural Patient Copy Guard: natürliche Patienten-Hauptbotschaft je Sprach
   const expect: Record<string, string> = {
     en: "book doctor appointments online",
     de: "arzttermine online buchen",
-    fr: "rendez-vous médical",
-    es: "cita médica",
-    pt: "consulta médica",
+    fr: "rendez-vous médic",
+    es: "médic",
+    pt: "médic",
   };
   for (const [loc, frag] of Object.entries(expect)) {
     assert.ok(msg(loc).landing.heroTitle.toLowerCase().includes(frag), `${loc}: heroTitle ohne "${frag}"`);
@@ -415,4 +416,103 @@ test("Button Guard: keine toten CTAs, Book-CTA führt zur Booking-Route", () => 
   // Primärer Buchungs-CTA führt zur Booking-Route, Demo-CTA zur Demo-Praxis.
   assert.ok(home.includes('href={`/${locale}/termin-buchen`}'), "Book-appointment-CTA ohne Booking-Ziel");
   assert.ok(home.includes('href="/book/testpraxis-delta"'), "Demo-Clinic-CTA ohne Ziel");
+});
+
+// ─── 24. Live Error Prevention Guard (kein doppeltes <html>/<body>) ────────────
+
+test("Live Error Prevention Guard: Locale-Layout rendert kein <html>/<body>", () => {
+  // Kommentare entfernen — erklärende Hinweise dürfen die Tags erwähnen.
+  const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:])\/\/.*$/gm, "$1");
+  const layout = strip(read("app/[locale]/layout.tsx"));
+  assert.equal(/<html[\s>]/.test(layout), false, "[locale]/layout.tsx rendert <html> → doppelte Dokument-Tags → Hydration-Crash (#418/#423)");
+  assert.equal(/<body[\s>]/.test(layout), false, "[locale]/layout.tsx rendert <body> → Hydration-Crash");
+  const root = read("app/layout.tsx");
+  assert.ok(/<html[\s>]/.test(root) && /<body[\s>]/.test(root), "Root-Layout muss <html>/<body> rendern");
+});
+
+// ─── 25. Emergency Video Failure Guard ────────────────────────────────────────
+
+test("Emergency Video Failure Guard: Briefing dokumentiert Crash + Vision", () => {
+  const p = "docs/slotfill-emergency-product-briefing.md";
+  assert.ok(existsSync(join(ROOT, p)), "Emergency-Briefing fehlt");
+  const md = read(p).toLowerCase();
+  for (const must of ["client-side exception", "no-go", "healthcare booking saas", "supersaas"]) {
+    assert.ok(md.includes(must), `Briefing fehlt: "${must}"`);
+  }
+});
+
+// ─── 26. Healthcare Vertical Guard ────────────────────────────────────────────
+
+test("Healthcare Vertical Guard: nur Gesundheitsanbieter, keine fremden Branchen", () => {
+  for (const loc of locales) {
+    const blob = landingBlob(loc);
+    assert.ok(/clinic|clínic|cliniqu|praxis|consult|prestador|gesundheit|santé|salud|saúde|health/.test(blob), `${loc}: keine Gesundheits-Vertikale`);
+    for (const bad of ["friseur", "hairdress", "yoga", "sportkurs", "fitness class", "lehrer", "teacher", "restaurant", " hotel", "barber", "salon"]) {
+      assert.equal(blob.includes(bad), false, `${loc}: fremde Branche "${bad}"`);
+    }
+  }
+  const en = landingBlob("en");
+  for (const must of ["doctor", "practice", "clinic", "health center"]) {
+    assert.ok(en.includes(must), `EN Healthcare-Vertikale fehlt: ${must}`);
+  }
+});
+
+// ─── 27. SaaS Completeness Guard ──────────────────────────────────────────────
+
+test("SaaS Completeness Guard: Homepage zeigt vollständigen SaaS-Auftritt", () => {
+  const home = read(PAGE);
+  for (const ref of ["useCasesTitle", "providerFlowTitle", "patientFlowTitle", "clinicsTitle", "providerPreviewTitle", "cta3"]) {
+    assert.ok(home.includes(`t("${ref}")`), `Homepage rendert ${ref} nicht`);
+  }
+  assert.ok(home.includes('id="for-providers"'), "for-providers-Anker fehlt");
+  assert.ok(home.includes("/book/testpraxis-delta"), "Demo-Clinic-Link fehlt");
+  assert.ok(home.includes("/termin-buchen"), "Booking-Link fehlt");
+  assert.ok(home.includes("/auth/login"), "Practice-Login-Link fehlt");
+  assert.ok(home.includes("/pricing"), "Pricing-Link fehlt");
+});
+
+// ─── 28. Visual Product Guard ─────────────────────────────────────────────────
+
+test("Visual Product Guard: Patient- + Provider-Vorschau und Use-Cases sichtbar", () => {
+  const home = read(PAGE);
+  for (const ref of ["previewClinic", "previewAvailable", "providerPreviewTitle", "providerPreviewConfirm", "useCases"]) {
+    assert.ok(home.includes(ref), `Homepage rendert Visual ${ref} nicht`);
+  }
+  assert.equal(/Sarah|Ahmed|Maria|Fatima|Mohammed|diagnosis|symptom/i.test(home), false, "PII/Diagnose im Homepage-Visual");
+});
+
+// ─── 29. Market Scope Guard (Legal-Hinweise + keine Hochregulierungs-Werbung) ──
+
+test("Market Scope Guard: Legal-Markthinweise vorhanden, keine EU/US-Zielmarktwerbung", () => {
+  const ms = getMarketScope("en");
+  const agb = ms.agbBody.join(" ");
+  for (const must of ["European Union", "United States", "Canada", "United Kingdom", "Australia", "New Zealand", "selected international markets"]) {
+    assert.ok(agb.includes(must), `AGB-Marktscope fehlt: ${must}`);
+  }
+  assert.ok(/rejected|not processed/.test(agb), "AGB: keine Ablehnungs-Klausel");
+  assert.ok(/legal review is required/i.test(ms.privacyNotice), "Privacy: 'legal review required' fehlt");
+  // Keine falsche Compliance-Garantie.
+  for (const bad of ["gdpr-ready", "hipaa-ready", "fully compliant", "guaranteed compliance", "medical compliance guaranteed"]) {
+    assert.equal((agb + " " + ms.privacyBody + " " + ms.privacyNotice).toLowerCase().includes(bad), false, `falsche Compliance-Aussage: ${bad}`);
+  }
+  // Legal-Komponenten rendern die Market-Scope-Notiz.
+  for (const f of ["components/legal/AgbContent.tsx", "components/legal/DatenschutzContent.tsx", "components/legal/ImpressumContent.tsx"]) {
+    assert.ok(read(f).includes("MarketScopeNotice"), `${f}: MarketScopeNotice fehlt`);
+  }
+  // Keine öffentliche Hochregulierungs-Zielmarktwerbung / keine Armuts-Wörter in der Landing-Copy.
+  for (const loc of locales) {
+    const blob = landingBlob(loc);
+    for (const bad of ["for eu clinics", "for german clinics", "for us clinics", "for uk clinics", "for canadian clinics", "for australian clinics", "for european healthcare", "third world", "poor clinics", "low-income", "developing countries", "schwellenländer", "arme kliniken"]) {
+      assert.equal(blob.includes(bad), false, `${loc}: unzulässige Marktaussage "${bad}"`);
+    }
+  }
+});
+
+// ─── 30. Booking Notice Guard ─────────────────────────────────────────────────
+
+test("Booking Notice Guard: Buchungsseite zeigt Selected-Markets-Hinweis", () => {
+  const tb = read("app/[locale]/termin-buchen/page.tsx");
+  assert.ok(tb.includes("getMarketScope") && tb.includes("bookingNotice"), "termin-buchen ohne Market-Scope-Hinweis");
+  const en = getMarketScope("en").bookingNotice.toLowerCase();
+  assert.ok(en.includes("selected markets") && en.includes("rejected"), "bookingNotice unklar");
 });

@@ -298,8 +298,10 @@ export default async function LocaleLandingPage({
               sizes="(min-width: 1024px) 50vw, 100vw"
               className="aspect-[4/5] w-full shadow-xl sm:aspect-[5/4] lg:aspect-[4/5]"
             >
-              {/* Floating availability card — real booking preview, no fake OS chrome */}
-              <div className="absolute right-3 top-3 z-10 w-56 rounded-2xl border bg-white/95 p-4 shadow-2xl ring-1 ring-black/5 backdrop-blur dark:bg-slate-900/90 sm:w-60" style={{ borderColor: "var(--color-border)" }}>
+              {/* Floating availability card — real booking preview, no fake OS chrome.
+                  Mobil unten platziert (über dem Tablet/Tisch, verdeckt nicht das Gesicht),
+                  ab sm oben rechts. */}
+              <div className="absolute bottom-3 left-3 z-10 w-52 rounded-2xl border bg-white/95 p-4 shadow-2xl ring-1 ring-black/5 backdrop-blur dark:bg-slate-900/90 sm:bottom-auto sm:left-auto sm:right-3 sm:top-3 sm:w-60" style={{ borderColor: "var(--color-border)" }}>
                 <div className="flex items-center justify-between">
                   <span className="inline-flex items-center gap-1.5 text-sm font-bold text-slate-900 dark:text-slate-100">
                     <span className="h-2 w-2 rounded-full" style={{ background: "var(--gradient-brand)" }} />
@@ -403,7 +405,7 @@ export default async function LocaleLandingPage({
               className="order-1 aspect-[3/2] w-full shadow-lg lg:order-2"
             >
               {/* Floating provider request preview — anonymized, no real data */}
-              <div className="absolute bottom-3 left-3 z-10 w-52 rounded-2xl border bg-white/95 p-3 shadow-lg backdrop-blur dark:bg-slate-900/90" style={{ borderColor: "var(--color-border)" }}>
+              <div className="absolute bottom-3 left-3 z-10 w-48 rounded-2xl border bg-white/95 p-3 shadow-lg backdrop-blur dark:bg-slate-900/90 sm:w-52" style={{ borderColor: "var(--color-border)" }}>
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-slate-900 dark:text-slate-100">{t("providerPreviewTitle")}</span>
                   <span className="rounded-full px-2 py-0.5 text-[10px] font-semibold text-white" style={{ background: "var(--gradient-brand)" }}>{t("providerPreviewNew")}</span>

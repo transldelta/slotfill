@@ -18,20 +18,19 @@ gerendert. Es wird **kein** Bild angefragt (keine 404, keine Console-Errors).
 - ❌ Keine echten Patientendaten / identifizierbaren Patienten ohne Einwilligung.
 - ❌ Keine medizinischen Versprechen, keine Notfall-/Garantie-Motive.
 
-## Benötigte Dateien
+## Aktuelle Dateien (ClinicSlotHub-Themenbilder, eingebunden)
 
-| Datei                          | Einsatz / Motiv                                              | Verhältnis | Mindestbreite |
-| ------------------------------ | ----------------------------------------------------------- | ---------- | ------------- |
-| `hero-doctor-consultation.png` | Hero – Arzt/Ärztin im freundlichen Gespräch (Tablet/Buchung)| 4:5 (hoch) | 1200 px       |
-| `patient-mobile-booking.png`   | Patient Booking Flow – Patient bucht per Smartphone         | 3:2        | 1200 px       |
-| `clinic-reception.png`         | Provider-/Clinic-Flow – Empfang / Praxisanmeldung           | 3:2        | 1200 px       |
-| `clinic-team.png`              | Use Case Klinik / Team / Verwaltung                         | 1:1        | 900 px        |
-| `dental-consultation.png`      | Use Case Zahnmedizin – Zahnarztberatung                     | 4:3        | 900 px        |
-| `therapy-session.png`          | Use Case Therapiezentrum – Therapie-/Reha-Szene             | 4:3        | 900 px        |
-| `diagnostic-center.png`        | Use Case Diagnostikzentrum – Untersuchungsumgebung          | 4:3        | 900 px        |
-| `healthcare-trust.png`         | Trust / Safety – vertrauensvolles Arzt-Patient-Gespräch     | 3:2        | 1200 px       |
+| Datei                                  | Einsatz |
+| -------------------------------------- | ------- |
+| `hero-doctor-appointment-tablet.png`   | Hero – Arzt/Patient mit Buchungs-Tablet |
+| `patient-mobile-booking-flow.png`      | Patient Booking Flow – Patientin bucht per Smartphone |
+| `clinic-reception-scheduling.png`      | Provider/Clinic Flow – Empfang / Terminplanung |
+| `clinic-team-trust.png`                | Online-Booking-Band / Team |
+| `dental-appointment-use-case.png`      | Use Case Zahnmedizin |
+| `physiotherapy-appointment-use-case.png` | Use Case Physiotherapie |
+| `diagnostics-appointment-use-case.png` | Use Case Diagnostik |
+| `trust-manual-confirmation.png`        | Trust / manuelle Bestätigung |
 
 Status: Fotos sind eingebunden (`enabled: true` in `lib/slotfill-images.ts`).
-
-Empfehlung: optimierte JPGs (< 300 KB), warme/ruhige Healthcare-Farben,
-echte Menschen, keine gestellte Stock-Künstlichkeit.
+Bilder mit fremder Marke / Marketing-Text wurden vor dem Import auf die saubere
+Bildfläche gecroppt (kein fremder App-Name sichtbar).

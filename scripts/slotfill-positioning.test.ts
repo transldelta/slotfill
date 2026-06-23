@@ -870,3 +870,41 @@ test("Mobile Header Guard: Hamburger neben sichtbarem Brand-Logo, Termin-buchen 
   assert.ok(home.includes('tNav("bookAppointment")') && home.includes("btn-brand ml-1"), "Termin-buchen-Button fehlt im Header");
   assert.ok(home.includes("<LanguageSwitcher"), "Sprachschalter fehlt im Header");
 });
+
+// ─── 47. Pricing Copy Risk Guard ──────────────────────────────────────────────
+
+test("Pricing Copy Risk Guard: keine MVZ-/Email-Automation-/Premium-/Trial-/ROI-Risiken in der Pricing-Copy", () => {
+  const pricingPage = read("app/[locale]/pricing/page.tsx");
+  // Öffentliche Pricing-Werte (DE/EN PLAN_CONTENT hardcoded) + Pricing-Message-Namespace.
+  const blobs = [pricingPage];
+  for (const loc of locales) blobs.push(JSON.stringify(msg(loc).pricing ?? {}));
+  const blob = blobs.join("\n");
+  const forbidden = [
+    "MVZ",
+    "German clinics",
+    "EU clinics",
+    "worldwide clinics",
+    "Vorbereitete E-Mail-Benachrichtigungen",
+    "Prepared email notifications",
+    "active email automation",
+    "Premium-Betriebsmodus",
+    "premium operating mode",
+    "Premium operating mode",
+    "guaranteed ROI",
+    "garantierter ROI",
+    "free trial",
+    "kostenlos testen",
+    "Stripe checkout",
+  ];
+  for (const bad of forbidden) {
+    assert.equal(blob.includes(bad), false, `Pricing-Copy enthält Risiko-Begriff: "${bad}"`);
+  }
+  // Neutrale Ersatz-Begriffe vorhanden.
+  assert.ok(/Gesundheitszentren/.test(pricingPage) && /healthcare centers/.test(pricingPage), "neutrale 'Gesundheitszentren'/'healthcare centers'-Formulierung fehlt");
+  assert.ok(/Benachrichtigungstexte/.test(pricingPage) && /notification templates/.test(pricingPage), "neutrale Benachrichtigungs-Formulierung fehlt");
+  // Preise 29/79/149 bleiben (Einzelquelle lib/pricing.ts).
+  const pr = read("lib/pricing.ts");
+  for (const price of ["29", "79", "149"]) {
+    assert.ok(pr.includes(price), `Preis ${price} fehlt in lib/pricing.ts`);
+  }
+});

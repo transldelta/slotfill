@@ -49,7 +49,7 @@ const PLAN_CONTENT: Record<string, Record<string, PlanMeta>> = {
         "Patientenanfragen ohne Login",
         "Einfache Warteliste",
         "Basis-Patientenverwaltung",
-        "Vorbereitete E-Mail-Benachrichtigungen",
+        "Vorbereitete Benachrichtigungstexte",
         "Die Praxis behält die Kontrolle",
         "Kein Patienten-Login nötig",
       ],
@@ -72,7 +72,7 @@ const PLAN_CONTENT: Record<string, Record<string, PlanMeta>> = {
     },
     praxis_plus: {
       subtitle:
-        "Für größere Praxen, MVZ, Kliniken oder Einrichtungen mit mehreren Behandlern und höherem Anfragevolumen.",
+        "Für größere Praxen, Gesundheitszentren, Kliniken oder Organisationen mit mehreren Behandlern und höherem Anfragevolumen.",
       badge: "Premium",
       badgeColor: "emerald",
       icon: Building2,
@@ -82,7 +82,7 @@ const PLAN_CONTENT: Record<string, Record<string, PlanMeta>> = {
         "Für mehrere Behandler und größere Organisationen",
         "Erweiterte Organisationsübersicht",
         "Vorrang bei Einrichtung und Support",
-        "Premium-Betriebsmodus für intensivere Nutzung",
+        "Erweiterter Einrichtungs- und Betriebsrahmen für intensivere Nutzung",
       ],
     },
   },
@@ -96,7 +96,7 @@ const PLAN_CONTENT: Record<string, Record<string, PlanMeta>> = {
         "Patient requests without login",
         "Basic waitlist management",
         "Patient management",
-        "Prepared email notifications",
+        "Prepared notification templates",
         "Your clinic stays in control",
         "No patient login required",
       ],
@@ -119,7 +119,7 @@ const PLAN_CONTENT: Record<string, Record<string, PlanMeta>> = {
     },
     praxis_plus: {
       subtitle:
-        "For larger practices, MVZ, clinics or organizations with multiple practitioners and higher request volumes.",
+        "For larger practices, healthcare centers, clinics or organizations with multiple practitioners and higher request volumes.",
       badge: "Premium",
       badgeColor: "emerald",
       icon: Building2,
@@ -129,7 +129,7 @@ const PLAN_CONTENT: Record<string, Record<string, PlanMeta>> = {
         "For multiple practitioners and larger organizations",
         "Extended organizational overview",
         "Priority setup and support",
-        "Premium operating mode for intensive use",
+        "Extended setup and operations framework for intensive use",
       ],
     },
   },

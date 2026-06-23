@@ -338,10 +338,10 @@ export default async function LocaleLandingPage({
               objectPosition="50% 28%"
               className="aspect-[4/3] w-full shadow-xl sm:aspect-[5/4] lg:aspect-[4/5]"
             >
-              {/* Floating availability card — real booking preview, no fake OS chrome.
-                  Auf Mobile ausgeblendet, damit das Arztgesicht frei bleibt;
-                  ab sm dezent oben rechts auf ruhiger Bildfläche. */}
-              <div className="absolute right-3 top-3 z-10 hidden w-56 rounded-2xl border bg-white/95 p-4 shadow-2xl ring-1 ring-black/5 backdrop-blur dark:bg-slate-900/90 sm:block lg:w-60" style={{ borderColor: "var(--color-border)" }}>
+              {/* Floating availability card — auf allen Breakpoints ausgeblendet (CEO-Wunsch:
+                  ruhiges, menschliches Hero-Bild ohne überlagernde Karte). Markup bleibt als
+                  anonyme, PII-freie Buchungsvorschau erhalten, wird aber nicht angezeigt. */}
+              <div className="absolute right-3 top-3 z-10 hidden w-56 rounded-2xl border bg-white/95 p-4 shadow-2xl ring-1 ring-black/5 backdrop-blur dark:bg-slate-900/90 lg:w-60" style={{ borderColor: "var(--color-border)" }}>
                 <div className="flex items-center justify-between">
                   <span className="inline-flex items-center gap-1.5 text-sm font-bold text-slate-900 dark:text-slate-100">
                     <span className="h-2 w-2 rounded-full" style={{ background: "var(--gradient-brand)" }} />

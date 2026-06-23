@@ -628,10 +628,12 @@ test("Hero Funnel Polish Guard: Arztgesicht frei (object-position), Demo-Karte m
   assert.ok(home.includes('objectPosition="50% 28%"'), "Hero-Bild ohne gesichtsfreundliche object-position");
   // Hero-Bild nutzt mobil ein flacheres Seitenverhältnis (weniger harter Crop).
   assert.ok(home.includes("aspect-[4/3] w-full shadow-xl sm:aspect-[5/4] lg:aspect-[4/5]"), "Hero-Bild ohne entschärften Mobile-Crop");
-  // Schwebende Demo-/Kalenderkarte ist auf Mobile ausgeblendet (verdeckt kein Gesicht), ab sm sichtbar.
-  assert.ok(home.includes("z-10 hidden w-56") && home.includes("sm:block"), "Demo-Karte ist auf Mobile nicht ausgeblendet");
-  // Karte bleibt im DOM (echte Buchungsvorschau, keine Fake-OS-Chrome) — Slots weiterhin vorhanden.
-  assert.ok(home.includes('t("previewClinic")') && home.includes('"09:00"'), "Hero-Vorschaukarte (previewClinic/Slots) entfernt");
+  // Schwebende Demo-/Kalenderkarte ist auf ALLEN Breakpoints ausgeblendet (CEO-Wunsch: ruhiges Hero-Bild).
+  const cardClass = (home.match(/z-10 hidden w-56[^"]*/) ?? [""])[0];
+  assert.ok(cardClass.length > 0, "Demo-Karte (z-10 hidden w-56) nicht gefunden");
+  assert.equal(/\bsm:block\b|\bmd:block\b|\blg:block\b|\bsm:flex\b/.test(cardClass), false, "Demo-Karte wird auf größeren Screens wieder eingeblendet");
+  // Karte bleibt als PII-freies Vorschau-Markup im DOM (kein Anzeige-Flag) — keine Fake-OS-Chrome.
+  assert.ok(home.includes('t("previewClinic")') && home.includes('"09:00"'), "Hero-Vorschau-Markup (previewClinic/Slots) entfernt");
   // Keine Garantie-/Notfall-Claims im Hero/Landing.
   for (const loc of locales) {
     const blob = landingBlob(loc);

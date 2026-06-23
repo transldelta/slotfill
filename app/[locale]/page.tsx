@@ -430,7 +430,8 @@ export default async function LocaleLandingPage({
           <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">{t("useCasesTitle")}</h2>
           <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">{t("useCasesSubline")}</p>
         </div>
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <p className="mt-8 text-center text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">{t("useCasesExamplesLabel")}</p>
+        <div className="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {verticalTiles.map((v) => (
             <HealthcareImage
               key={v.key}
@@ -465,6 +466,7 @@ export default async function LocaleLandingPage({
             </span>
           ))}
         </div>
+        <p className="mx-auto mt-6 max-w-2xl text-center text-sm text-slate-500 dark:text-slate-400">{t("useCasesMore")}</p>
       </section>
 
       {/* ─── ONLINE BOOKING — team photo + clear value ─── */}

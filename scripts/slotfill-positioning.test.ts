@@ -542,3 +542,37 @@ test("Healthcare Market Positioning Guard: 'selected international markets', kei
     assert.equal(badge.includes("emerging market"), false, `${loc}: 'emerging markets' im Badge`);
   }
 });
+
+// ─── 33. Audience Scope Guard ─────────────────────────────────────────────────
+
+test("Audience Scope Guard: Zielgruppe breit (viele Gesundheitsanbieter), Karten als Beispiele, keine Über-Reichweite", () => {
+  const breadth: Record<string, string> = { de: "viele arten", en: "many types", fr: "nombreux types", es: "muchos tipos", pt: "muitos tipos" };
+  const examples: Record<string, string> = { de: "beispiele", en: "examples", fr: "exemples", es: "ejemplos", pt: "exemplos" };
+  const review: Record<string, string> = { de: "prüfung", en: "subject to review", fr: "vérification", es: "revisión", pt: "análise" };
+  for (const loc of locales) {
+    const l = msg(loc).landing;
+    const title = (l.useCasesTitle ?? "").toLowerCase();
+    const sub = (l.useCasesSubline ?? "").toLowerCase();
+    // Überschrift signalisiert Breite (nicht nur drei Kategorien).
+    assert.ok(title.includes(breadth[loc]), `${loc}: useCasesTitle ohne Breiten-Signal "${breadth[loc]}"`);
+    // Karten sind als Beispiele markiert, Aktivierung nur nach Prüfung.
+    assert.ok(sub.includes(examples[loc]), `${loc}: useCasesSubline kennzeichnet Bereiche nicht als Beispiele`);
+    assert.ok(sub.includes(review[loc]), `${loc}: useCasesSubline ohne Aktivierung-nach-Prüfung`);
+    // Breite Zusatzliste + dezentes Beispiel-Label vorhanden.
+    assert.ok((l.useCasesMore ?? "").trim().length > 10, `${loc}: useCasesMore (breite Zielgruppe) fehlt`);
+    assert.ok((l.useCasesExamplesLabel ?? "").trim().length > 2, `${loc}: useCasesExamplesLabel fehlt`);
+    // Keine Über-Reichweite / falsche Compliance im Zielgruppen-Block.
+    const scopeBlob = [title, sub, l.useCasesMore ?? "", ...["useCase1", "useCase2", "useCase3", "useCase4", "useCase5", "useCase6"].map((k) => l[k] ?? "")].join(" ").toLowerCase();
+    for (const bad of ["worldwide", "all countries", "weltweit", "alle länder", "guaranteed compliance", "garantiert compliant", "only dental", "only therapy"]) {
+      assert.equal(scopeBlob.includes(bad), false, `${loc}: Über-Reichweite/Enge im Zielgruppen-Block: "${bad}"`);
+    }
+  }
+  // EN nennt klar breite Anbieter (Praxen + Kliniken).
+  const en = msg("en").landing;
+  assert.ok((en.useCasesSubline ?? "").toLowerCase().includes("medical practices"), "EN useCasesSubline nennt keine medical practices");
+  assert.ok((en.useCasesSubline ?? "").toLowerCase().includes("clinics"), "EN useCasesSubline nennt keine clinics");
+  // Homepage rendert das Beispiel-Label und die breite Zusatzzeile.
+  const home = read(PAGE);
+  assert.ok(home.includes('t("useCasesExamplesLabel")'), "Homepage rendert useCasesExamplesLabel nicht");
+  assert.ok(home.includes('t("useCasesMore")'), "Homepage rendert useCasesMore nicht");
+});

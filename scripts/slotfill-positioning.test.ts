@@ -796,3 +796,20 @@ test("Honeypot Invisibility Guard: off-screen, nicht fokussierbar, ohne grepbare
   // Kein Hinweis-Text via placeholder/aria-label/title (würde ebenfalls im HTML landen).
   assert.equal(/placeholder=|aria-label=|\btitle=/.test(stripped), false, "Honeypot nutzt placeholder/aria-label/title (grepbarer Hinweis)");
 });
+
+// ─── 44. Booking Page Public Copy Guard ───────────────────────────────────────
+
+test("Booking Page Public Copy Guard: /termin-buchen ohne Auto-Confirm-/Honeypot-Hinweistext, manuelle Bestätigung klar", () => {
+  const page = read("app/[locale]/termin-buchen/page.tsx");
+  // Kein Auto-Confirm in der sichtbaren öffentlichen Copy (Logik-/Variablennamen wie
+  // `autoConfirmed`/data-testid bleiben erlaubt — Booking-Logik wird nicht geändert).
+  for (const bad of ["automatische Bestätigung erfolgt nur", "falls die Praxis dies ausdrücklich eingerichtet hat", "in der Regel manuell", "automatically confirmed without"]) {
+    assert.equal(page.includes(bad), false, `/termin-buchen wirbt mit Auto-Bestätigung: "${bad}"`);
+  }
+  // Klare manuelle Bestätigung + keine automatische Zusage ohne Freigabe.
+  assert.ok(/bestätigt den Termin manuell/.test(page), "/termin-buchen ohne klare manuelle Bestätigung");
+  assert.ok(/keine automatische Terminbestätigung ohne Freigabe/i.test(page), "/termin-buchen ohne 'keine automatische Terminbestätigung ohne Freigabe'");
+  // Kein sichtbarer Honeypot-Hinweistext; Bot-Schutz über die geteilte Komponente.
+  assert.equal(/Company website|leave this field empty|do not fill/i.test(page), false, "/termin-buchen zeigt Honeypot-Hinweistext");
+  assert.ok(page.includes("FormAntiSpamFields"), "/termin-buchen ohne Form-Abuse-Schutz (FormAntiSpamFields)");
+});

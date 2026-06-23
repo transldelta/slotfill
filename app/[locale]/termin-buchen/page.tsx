@@ -268,7 +268,7 @@ export default function TerminBuchenPage() {
           <p className="mt-1 text-slate-600 dark:text-slate-400">
             1. Füllen Sie das Formular aus und senden Sie Ihre Anfrage ab.
             <br />
-            2. Die Praxis prüft Ihre Anfrage und bestätigt den Termin in der Regel manuell. Eine automatische Bestätigung erfolgt nur, falls die Praxis dies ausdrücklich eingerichtet hat.
+            2. Die Praxis prüft Ihre Anfrage und bestätigt den Termin manuell. Es erfolgt keine automatische Terminbestätigung ohne Freigabe durch die Praxis.
             <br />
             3. Sie erhalten eine Rückmeldung der Praxis.
           </p>

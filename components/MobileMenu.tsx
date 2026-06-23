@@ -62,7 +62,7 @@ export function MobileMenu({ locale, labels }: { locale: string; labels: MobileM
       </button>
       {open && (
         <div
-          className="absolute right-0 z-50 mt-2 w-64 max-w-[calc(100vw-2rem)] rounded-xl border bg-white p-3 shadow-xl dark:bg-slate-900"
+          className="fixed inset-x-4 top-16 z-50 max-h-[calc(100vh-5rem)] overflow-y-auto rounded-xl border bg-white p-3 shadow-xl dark:bg-slate-900"
           style={{ borderColor: "var(--color-border)" }}
         >
           <p className="px-2 pb-1 text-[11px] font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">

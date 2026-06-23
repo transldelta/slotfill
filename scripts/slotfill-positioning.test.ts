@@ -832,9 +832,12 @@ test("Mobile Navigation Guard: kontrolliertes Mobile-Menü, schließt sauber, ke
   assert.ok((mm.match(/onClick=\{\(\) => setOpen\(false\)\}/g) ?? []).length >= 4, "Menü-Links schließen das Menü nicht per onClick");
   assert.ok(/addEventListener\("scroll"/.test(mm), "Menü schließt nicht beim Scrollen");
   assert.ok(/contains\(/.test(mm), "Menü schließt nicht bei Klick außerhalb");
-  // Kein horizontales Overflow (Box auf Viewport begrenzt, rechts verankert).
-  assert.ok(/max-w-\[calc\(100vw-2rem\)\]/.test(mm), "Mobile-Menü ohne Viewport-Begrenzung (Overflow-Risiko)");
-  assert.ok(/right-0/.test(mm), "Mobile-Menü nicht rechts verankert");
+  // Voller, viewport-breiter Drawer (inset-x-4 = links/rechts 1rem) unter dem Header —
+  // kein halbes/abgeschnittenes Fenster, kein horizontaler Overflow.
+  assert.ok(/inset-x-4/.test(mm), "Mobile-Menü-Drawer ohne inset-x-4 (Viewport-breit, kein Abschneiden)");
+  assert.ok(/\bfixed\b/.test(mm) && /\btop-16\b/.test(mm), "Mobile-Menü-Drawer nicht sauber unter dem Header fixiert");
+  // Keine feste Breite, die breiter als der Viewport werden kann.
+  assert.equal(/\bw-(64|72|80|96)\b/.test(mm), false, "Mobile-Menü nutzt feste Breite (Abschneide-/Overflow-Risiko)");
   // Nur sm:hidden (mobil), Desktop unberührt.
   assert.ok(/sm:hidden/.test(mm), "Mobile-Menü nicht auf Mobile beschränkt");
   // Korrekte Wege als Labels durchgereicht; keine Registrierung/Patient-Login/Demo-Praxis.

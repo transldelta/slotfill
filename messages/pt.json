@@ -412,7 +412,7 @@
     "login": "Entrar",
     "requestAccess": "Solicitar acesso",
     "getStarted": "Começar",
-    "bookAppointment": "Marcar consulta",
+    "bookAppointment": "Solicitar consulta",
     "feedback": "Feedback",
     "forClinics": "Para clínicas",
     "demoClinic": "Página de marcação exemplo",
@@ -421,7 +421,7 @@
   "landing": {
     "heroTitle": "Marque consultas médicas online e faça a gestão dos pedidos de consulta mais facilmente.",
     "heroSubtitle": "O ClinicSlotHub liga os pacientes aos horários disponíveis e ajuda consultórios, clínicas e centros de saúde a receber e confirmar pedidos de consulta online.",
-    "ctaPrimary": "Marcar consulta",
+    "ctaPrimary": "Solicitar consulta",
     "ctaSecondary": "Ver página de marcação exemplo",
     "comparePrices": "Comparar preços",
     "featuresTitle": "O que o ClinicSlotHub faz pela sua clínica",

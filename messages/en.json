@@ -413,7 +413,7 @@
     "login": "Practice Login",
     "requestAccess": "Request access",
     "getStarted": "Get started",
-    "bookAppointment": "Book appointment",
+    "bookAppointment": "Request appointment",
     "feedback": "Feedback",
     "forClinics": "For clinics",
     "demoClinic": "Example appointment page",
@@ -422,7 +422,7 @@
   "landing": {
     "heroTitle": "Book doctor appointments online and manage appointment requests more easily.",
     "heroSubtitle": "ClinicSlotHub helps patients find available appointment times and helps healthcare providers receive and confirm appointment requests online.",
-    "ctaPrimary": "Book appointment",
+    "ctaPrimary": "Request appointment",
     "ctaSecondary": "View example appointment page",
     "comparePrices": "Compare Prices",
     "featuresTitle": "What ClinicSlotHub does for your practice",

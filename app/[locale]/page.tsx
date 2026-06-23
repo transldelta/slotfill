@@ -248,12 +248,6 @@ export default async function LocaleLandingPage({
             >
               {tNav("pricing")}
             </a>
-            <Link
-              href="/book/testpraxis-delta"
-              className="hidden rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:inline"
-            >
-              {tNav("demoClinic")}
-            </Link>
             <a
               href="#faq"
               className="hidden rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:inline"
@@ -334,7 +328,7 @@ export default async function LocaleLandingPage({
               priority
               sizes="(min-width: 1024px) 50vw, 100vw"
               objectPosition="50% 20%"
-              className="aspect-[4/3] w-full shadow-xl sm:aspect-[5/4] lg:aspect-[4/5]"
+              className="aspect-[4/3] w-full shadow-xl sm:aspect-[5/4] lg:aspect-[4/3]"
             />{/* Hero-Bild ohne Overlay-Karte — kein Demo-/Slot-/Mockup-Element. */}
           </div>
         </section>

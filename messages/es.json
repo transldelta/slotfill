@@ -412,7 +412,7 @@
     "login": "Iniciar sesión",
     "requestAccess": "Solicitar acceso",
     "getStarted": "Comenzar",
-    "bookAppointment": "Reservar cita",
+    "bookAppointment": "Solicitar cita",
     "feedback": "Comentarios",
     "forClinics": "Para clínicas",
     "demoClinic": "Página de reserva de ejemplo",
@@ -421,7 +421,7 @@
   "landing": {
     "heroTitle": "Reserve citas médicas en línea y gestione las solicitudes de cita más fácilmente.",
     "heroSubtitle": "ClinicSlotHub conecta a los pacientes con los horarios disponibles y ayuda a consultorios, clínicas y centros de salud a recibir y confirmar solicitudes de cita en línea.",
-    "ctaPrimary": "Reservar cita",
+    "ctaPrimary": "Solicitar cita",
     "ctaSecondary": "Ver página de reserva de ejemplo",
     "comparePrices": "Comparar precios",
     "featuresTitle": "Qué hace ClinicSlotHub por tu consultorio",

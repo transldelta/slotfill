@@ -59,8 +59,9 @@ test("Public Brand Guard: öffentliche Marke ist ClinicSlotHub (CEO-Vereinheitli
 test("Patient Booking Positioning Guard: Slotfill = Online-Terminbuchung", () => {
   const en = msg("en");
   assert.ok(en.landing.heroTitle.toLowerCase().includes("book doctor appointments online"), "EN heroTitle fehlt Patienten-Buchungsbotschaft");
-  assert.ok(en.landing.ctaPrimary.toLowerCase().includes("book appointment"), "EN ctaPrimary ist nicht 'Book appointment'");
-  assert.ok((en.nav.bookAppointment || "").toLowerCase().includes("book appointment"), "nav.bookAppointment fehlt");
+  // CEO-Klarheit: Patienten-CTA ist eine ANFRAGE, kein verbindliches Buchen.
+  assert.ok(en.landing.ctaPrimary.toLowerCase().includes("request appointment"), "EN ctaPrimary ist nicht 'Request appointment'");
+  assert.ok((en.nav.bookAppointment || "").toLowerCase().includes("request appointment"), "nav.bookAppointment ist nicht 'Request appointment'");
   // Anfragelogik (kein Garantie-/Auto-Versprechen): Online-Booking-Sektion spricht von Anfrage + Bestätigung durch die Klinik.
   const b = landingBlob("en");
   assert.ok(b.includes("appointment request") || b.includes("appointment requests"), "EN Landing erwähnt keine appointment request");
@@ -250,11 +251,10 @@ test("Patient Navigation Guard: klarer Haupt-CTA, vereinfachte Navigation", () =
   // 'Loslegen'/getStarted und 'Preise vergleichen' aus den Patienten-CTAs entfernt.
   assert.equal(home.includes('tNav("getStarted")'), false, "verwirrender 'Loslegen'-CTA noch vorhanden");
   assert.equal(home.includes('t("comparePrices")'), false, "'Preise vergleichen' verwirrt Patienten noch");
-  // Neue, einfachere Nav-Items.
-  assert.ok(home.includes('tNav("forClinics")') && home.includes('tNav("demoClinic")'), "Nav-Items Für Praxen/Demo-Praxis fehlen");
+  // Einfachere Nav-Items (CEO-Klarheit: keine prominente 'Beispiel-Terminseite' in der Hauptnav).
+  assert.ok(home.includes('tNav("forClinics")'), "Nav-Item 'Für Praxen' fehlt");
   for (const loc of locales) {
     assert.ok((msg(loc).nav?.forClinics ?? "").trim().length > 1, `${loc}: nav.forClinics fehlt`);
-    assert.ok((msg(loc).nav?.demoClinic ?? "").trim().length > 1, `${loc}: nav.demoClinic fehlt`);
   }
 });
 
@@ -624,7 +624,7 @@ test("Hero Funnel Polish Guard: Arztgesicht frei (object-position), kein Hero-Ov
   // Hero-Bild setzt object-position, damit Kopf/Gesicht im Crop sichtbar bleiben.
   assert.ok(/objectPosition="50% (2[05]|1[5-9])%"/.test(home), "Hero-Bild ohne gesichtsfreundliche object-position (Kopf-Crop)");
   // Hero-Bild nutzt mobil ein flacheres Seitenverhältnis (weniger harter Crop).
-  assert.ok(home.includes("aspect-[4/3] w-full shadow-xl sm:aspect-[5/4] lg:aspect-[4/5]"), "Hero-Bild ohne entschärften Mobile-Crop");
+  assert.ok(home.includes("aspect-[4/3] w-full shadow-xl sm:aspect-[5/4] lg:aspect-[4/3]"), "Hero-Bild ohne entschärften Crop (Desktop lg:aspect-[4/3], kein rechter Anschnitt)");
   // KEIN Hero-Overlay/Floating-Demo-Card mehr (komplett entfernt, auch die Konstante).
   assert.equal(home.includes("SHOW_HERO_FLOATING_DEMO_CARD"), false, "Hero-Floating-Demo-Card-Konstante/Gate wieder vorhanden");
   assert.equal(home.includes('"09:00"') || home.includes('"10:30"'), false, "künstliche Slot-Uhrzeit im Hero/Quelltext");
@@ -983,4 +983,33 @@ test("AI Readiness — Sitemap Guard: öffentliche Routen inkl. /termin-buchen, 
   for (const priv of ["/dashboard/", "/admin/", "/api/", "/auth/"]) {
     assert.ok(rob.includes(priv), `robots.ts blockt ${priv} nicht`);
   }
+});
+
+// ─── 52. Patient CTA Guard ────────────────────────────────────────────────────
+
+test("Patient CTA Guard: Patienten-CTA ist eine Anfrage, kein verbindliches Buchen", () => {
+  for (const loc of locales) {
+    const m = msg(loc) as Record<string, Record<string, string>>;
+    for (const [k, v] of [["nav.bookAppointment", m.nav?.bookAppointment], ["landing.ctaPrimary", m.landing?.ctaPrimary]] as const) {
+      const s = (v ?? "").toLowerCase();
+      assert.equal(/termin buchen|book appointment|sofort buchen|instant booking|confirmed booking|book now/.test(s), false, `${loc}: ${k} suggeriert verbindliches Buchen: "${v}"`);
+      assert.ok((v ?? "").trim().length > 2, `${loc}: ${k} fehlt`);
+    }
+  }
+  // DE 'anfragen', EN 'request'.
+  assert.ok(/anfragen/i.test(msg("de").nav.bookAppointment), "DE Patienten-CTA nicht 'anfragen'");
+  assert.ok(/request/i.test(msg("en").nav.bookAppointment), "EN Patienten-CTA nicht 'request'");
+});
+
+// ─── 53. Navigation Guard ─────────────────────────────────────────────────────
+
+test("Navigation Guard: keine prominente 'Beispiel-Terminseite'/'Sample booking page' in Topnav/Mobile-Menü", () => {
+  const home = read(PAGE);
+  // Kein demoClinic-Nav-Link mehr in der Hauptnavigation.
+  assert.equal(home.includes('tNav("demoClinic")'), false, "Hauptnav rendert noch die Beispiel-Terminseite (demoClinic)");
+  // Mobile-Menü ohne Beispiel-/Sample-/Demo-Wording.
+  const mm = read("components/MobileMenu.tsx");
+  assert.equal(/Beispiel-Terminseite|Sample booking page|demoClinic|Demo-Praxis|Demo clinic/i.test(mm), false, "Mobile-Menü enthält Beispiel-/Sample-/Demo-Wording");
+  // Patientenweg bleibt im Funnel erreichbar (Termin anfragen → /termin-buchen).
+  assert.ok(home.includes("/termin-buchen"), "Patienten-Anfrageweg (/termin-buchen) fehlt");
 });

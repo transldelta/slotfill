@@ -413,7 +413,7 @@
     "login": "Praxis-Login",
     "requestAccess": "Praxiszugang anfragen",
     "getStarted": "Loslegen",
-    "bookAppointment": "Termin buchen",
+    "bookAppointment": "Termin anfragen",
     "feedback": "Feedback",
     "forClinics": "Für Praxen",
     "demoClinic": "Beispiel-Terminseite",
@@ -422,7 +422,7 @@
   "landing": {
     "heroTitle": "Arzttermine online buchen und Terminanfragen einfacher verwalten.",
     "heroSubtitle": "ClinicSlotHub verbindet Patienten mit verfügbaren Terminen und hilft Praxen, Kliniken und Gesundheitszentren, Terminanfragen online zu erhalten und zu bestätigen.",
-    "ctaPrimary": "Termin buchen",
+    "ctaPrimary": "Termin anfragen",
     "ctaSecondary": "Beispiel-Terminseite ansehen",
     "comparePrices": "Preise vergleichen",
     "featuresTitle": "Was ClinicSlotHub für Ihre Praxis oder Klinik tut",

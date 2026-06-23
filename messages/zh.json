@@ -440,7 +440,7 @@
     "trialNote": "诊所显示可预约的时间，患者选择时间并发送申请。",
     "trialNoMessages": "提供演示诊所。",
     "heroBadge": "在线预约",
-    "onlineBookingBadge": "Online booking available",
+    "onlineBookingBadge": "Online appointment requests available",
     "onlineBookingTitle": "Receive appointment requests online",
     "onlineBookingDesc": "Patients can submit an appointment request online. The practice reviews each request and confirms the appointment manually. There is no automatic appointment confirmation without approval.",
     "onlineBookingBullet1": "Name, email, preferred time and reason",

@@ -440,7 +440,7 @@
     "trialNote": "تعرض العيادات المواعيد المتاحة. يختار المرضى وقتًا ويرسلون طلبًا.",
     "trialNoMessages": "عيادة تجريبية متاحة.",
     "heroBadge": "حجز المواعيد عبر الإنترنت",
-    "onlineBookingBadge": "Online booking available",
+    "onlineBookingBadge": "Online appointment requests available",
     "onlineBookingTitle": "Receive appointment requests online",
     "onlineBookingDesc": "Patients can submit an appointment request online. The practice reviews each request and confirms the appointment manually. There is no automatic appointment confirmation without approval.",
     "onlineBookingBullet1": "Name, email, preferred time and reason",

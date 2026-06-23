@@ -440,7 +440,7 @@
     "trialNote": "ক্লিনিকগুলি উপলব্ধ সময় দেখায়। রোগীরা একটি সময় বেছে নিয়ে অনুরোধ পাঠান।",
     "trialNoMessages": "ডেমো ক্লিনিক উপলব্ধ।",
     "heroBadge": "অনলাইন অ্যাপয়েন্টমেন্ট বুকিং",
-    "onlineBookingBadge": "Online booking available",
+    "onlineBookingBadge": "Online appointment requests available",
     "onlineBookingTitle": "Receive appointment requests online",
     "onlineBookingDesc": "Patients can submit an appointment request online. The practice reviews each request and confirms the appointment manually. There is no automatic appointment confirmation without approval.",
     "onlineBookingBullet1": "Name, email, preferred time and reason",

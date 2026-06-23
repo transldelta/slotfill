@@ -1025,3 +1025,21 @@ test("Navigation Guard: keine prominente 'Beispiel-Terminseite'/'Sample booking 
   // Patientenweg bleibt im Funnel erreichbar (Termin anfragen → /termin-buchen).
   assert.ok(home.includes("/termin-buchen"), "Patienten-Anfrageweg (/termin-buchen) fehlt");
 });
+
+// ─── 54. Body Copy Request Guard ──────────────────────────────────────────────
+
+test("Body Copy Request Guard: Startseiten-Body-Copy = Anfrage, keine verbindliche Buchung", () => {
+  for (const loc of locales) {
+    const blob = JSON.stringify(msg(loc).landing ?? {});
+    for (const bad of ["Einen Termin zu buchen", "Online-Terminbuchung verfügbar", "Online booking available", "Booking an appointment", "Booking a visit", "Healthcare booking", "Healthcare-Terminbuchung"]) {
+      assert.equal(blob.includes(bad), false, `${loc}: alte verbindliche Buchungs-Body-Copy: "${bad}"`);
+    }
+  }
+  // Anfrage-Terminologie vorhanden (DE/EN).
+  assert.ok(/Terminanfrage/i.test(msg("de").landing.patientFlowLead ?? ""), "DE patientFlowLead nicht auf Terminanfrage");
+  assert.ok(/Terminanfragen/i.test(msg("de").landing.onlineBookingBadge ?? ""), "DE onlineBookingBadge nicht auf Terminanfragen");
+  assert.ok(/appointment request/i.test(msg("en").landing.patientFlowLead ?? ""), "EN patientFlowLead nicht auf appointment request");
+  assert.ok(/appointment requests/i.test(msg("en").landing.onlineBookingBadge ?? ""), "EN onlineBookingBadge nicht auf appointment requests");
+  // Patient-CTA bleibt 'Termin anfragen'/'Request appointment'.
+  assert.ok(/anfragen/i.test(msg("de").nav.bookAppointment) && /request/i.test(msg("en").nav.bookAppointment), "Patient-CTA nicht mehr 'anfragen/request'");
+});

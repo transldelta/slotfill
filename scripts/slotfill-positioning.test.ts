@@ -628,12 +628,15 @@ test("Hero Funnel Polish Guard: Arztgesicht frei (object-position), Demo-Karte m
   assert.ok(home.includes('objectPosition="50% 28%"'), "Hero-Bild ohne gesichtsfreundliche object-position");
   // Hero-Bild nutzt mobil ein flacheres Seitenverhältnis (weniger harter Crop).
   assert.ok(home.includes("aspect-[4/3] w-full shadow-xl sm:aspect-[5/4] lg:aspect-[4/5]"), "Hero-Bild ohne entschärften Mobile-Crop");
-  // Schwebende Demo-/Kalenderkarte ist auf ALLEN Breakpoints ausgeblendet (CEO-Wunsch: ruhiges Hero-Bild).
-  const cardClass = (home.match(/z-10 hidden w-56[^"]*/) ?? [""])[0];
-  assert.ok(cardClass.length > 0, "Demo-Karte (z-10 hidden w-56) nicht gefunden");
-  assert.equal(/\bsm:block\b|\bmd:block\b|\blg:block\b|\bsm:flex\b/.test(cardClass), false, "Demo-Karte wird auf größeren Screens wieder eingeblendet");
-  // Karte bleibt als PII-freies Vorschau-Markup im DOM (kein Anzeige-Flag) — keine Fake-OS-Chrome.
-  assert.ok(home.includes('t("previewClinic")') && home.includes('"09:00"'), "Hero-Vorschau-Markup (previewClinic/Slots) entfernt");
+  // Hero-Floating-Demo-Card ist HART aus dem Render genommen (Konstante false), nicht nur per CSS versteckt.
+  assert.ok(/const SHOW_HERO_FLOATING_DEMO_CARD\s*=\s*false/.test(home), "Hero-Floating-Demo-Card nicht hart per Konstante deaktiviert");
+  assert.ok(home.includes("SHOW_HERO_FLOATING_DEMO_CARD && ("), "Hero-Floating-Demo-Card-JSX ist nicht durch die Konstante gegated");
+  // Kein Breakpoint-Reveal für die Hero-Karte (selbst wenn die Konstante je true würde).
+  const cardOpen = (home.match(/SHOW_HERO_FLOATING_DEMO_CARD && \(\s*<div className="([^"]*)"/) ?? ["", ""])[1];
+  assert.ok(cardOpen.length > 0, "Hero-Karten-JSX nach dem Konstanten-Gate nicht gefunden");
+  assert.equal(/\bsm:block\b|\bmd:block\b|\blg:block\b/.test(cardOpen), false, "Hero-Karte hat einen Breakpoint-Reveal");
+  // Vorschau-Markup bleibt PII-frei im Quelltext (nur gerendert, wenn Konstante true) — keine Fake-OS-Chrome.
+  assert.ok(home.includes('t("previewClinic")') && home.includes('"09:00"'), "Hero-Vorschau-Markup (previewClinic/Slots) fehlt im Quelltext");
   // Keine Garantie-/Notfall-Claims im Hero/Landing.
   for (const loc of locales) {
     const blob = landingBlob(loc);

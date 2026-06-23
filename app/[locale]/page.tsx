@@ -193,8 +193,8 @@ export default async function LocaleLandingPage({
         }}
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <SlotFillLogo href={`/${locale}`} size={40} hideWordmarkOnMobile priority />
-          <nav className="flex items-center gap-1 text-sm">
+          {/* Left: hamburger (mobile) direkt neben dem Marken-Logo — Brand bleibt sichtbar */}
+          <div className="flex items-center gap-1.5">
             {/* Mobile menu — controlled client component (closes on link click, scroll, outside click) */}
             <MobileMenu
               locale={locale}
@@ -208,6 +208,9 @@ export default async function LocaleLandingPage({
                 patientCta: t("audienceSplitPatientCta"),
               }}
             />
+            <SlotFillLogo href={`/${locale}`} size={40} hideWordmarkOnMobile priority />
+          </div>
+          <nav className="flex items-center gap-1 text-sm">
             <a
               href="#how-patients"
               className="hidden rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:inline"

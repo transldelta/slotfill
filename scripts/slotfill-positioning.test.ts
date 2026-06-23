@@ -850,3 +850,23 @@ test("Mobile Navigation Guard: kontrolliertes Mobile-Menü, schließt sauber, ke
     assert.equal(mm.includes(bad), false, `Mobile-Menü enthält verbotene Copy/Link: "${bad}"`);
   }
 });
+
+// ─── 46. Mobile Header Guard ──────────────────────────────────────────────────
+
+test("Mobile Header Guard: Hamburger neben sichtbarem Brand-Logo, Termin-buchen + Sprachschalter erreichbar", () => {
+  const home = read(PAGE);
+  // Marke bleibt im Header sichtbar (Logo nutzt die öffentliche Marke; auf Mobile Icon).
+  assert.ok(home.includes("<SlotFillLogo"), "Brand-Logo fehlt im Header");
+  const logo = read("components/ui/SlotFillLogo.tsx");
+  assert.ok(logo.includes("PUBLIC_BRAND_NAME"), "Logo nutzt die öffentliche Marke nicht");
+  assert.ok(/inline-flex sm:hidden/.test(logo), "Brand-Icon wird auf Mobile nicht angezeigt (Marke verschwindet)");
+  // Hamburger steht in derselben linken Gruppe direkt vor dem Logo (nahe der Marke).
+  const headerStart = home.indexOf("max-w-6xl items-center justify-between");
+  const leftGroup = home.slice(headerStart, headerStart + 1200);
+  const iMenu = leftGroup.indexOf("<MobileMenu");
+  const iLogo = leftGroup.indexOf("<SlotFillLogo");
+  assert.ok(iMenu > -1 && iLogo > -1 && iMenu < iLogo, "Hamburger sitzt nicht direkt neben/vor dem Logo");
+  // Termin-buchen-Button + Sprachschalter weiterhin im Header.
+  assert.ok(home.includes('tNav("bookAppointment")') && home.includes("btn-brand ml-1"), "Termin-buchen-Button fehlt im Header");
+  assert.ok(home.includes("<LanguageSwitcher"), "Sprachschalter fehlt im Header");
+});

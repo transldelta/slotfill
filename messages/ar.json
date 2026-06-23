@@ -442,7 +442,7 @@
     "heroBadge": "حجز المواعيد عبر الإنترنت",
     "onlineBookingBadge": "Online booking available",
     "onlineBookingTitle": "Receive appointment requests online",
-    "onlineBookingDesc": "Patients can submit an appointment request online. The practice confirms manually or – if explicitly enabled – automatically by secure rules.",
+    "onlineBookingDesc": "Patients can submit an appointment request online. The practice reviews each request and confirms the appointment manually. There is no automatic appointment confirmation without approval.",
     "onlineBookingBullet1": "Name, email, preferred time and reason",
     "onlineBookingBullet2": "Privacy notice as required field",
     "onlineBookingBullet3": "No automatic confirmation without practice approval",

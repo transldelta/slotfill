@@ -21,7 +21,7 @@ const read = (p: string) => readFileSync(join(ROOT, p), "utf8");
 const ACTIONS = ["app/kontakt/actions.ts", "app/termin-buchen/actions.ts", "app/feedback/actions.ts"];
 const FORMS = [
   "app/[locale]/kontakt/LocaleContactPageClient.tsx",
-  "app/[locale]/termin-buchen/page.tsx",
+  "app/[locale]/termin-buchen/TerminBuchenClient.tsx",
   "app/book/[slug]/page.tsx",
   "app/[locale]/feedback/page.tsx",
 ];

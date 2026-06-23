@@ -3187,7 +3187,7 @@ test("AutoConfirm: Admin zeigt auto-bestätigte Buchungen im Tab Bestätigt mit 
 test("AutoConfirm: Patientenerfolg-Seite zeigt Auto-Confirm-Text wenn automatisch bestätigt", () => {
   const { readFileSync, existsSync } = require("fs");
   const { resolve } = require("path");
-  const p = resolve(process.cwd(), "app/[locale]/termin-buchen/page.tsx");
+  const p = resolve(process.cwd(), "app/[locale]/termin-buchen/TerminBuchenClient.tsx");
   if (!existsSync(p)) return;
   const src: string = readFileSync(p, "utf8");
   // autoConfirmed State muss vorhanden sein

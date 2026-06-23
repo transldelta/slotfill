@@ -512,7 +512,7 @@ test("Market Scope Guard: Legal-Markthinweise vorhanden, keine EU/US-Zielmarktwe
 // ─── 30. Booking Notice Guard ─────────────────────────────────────────────────
 
 test("Booking Notice Guard: Buchungsseite zeigt Selected-Markets-Hinweis", () => {
-  const tb = read("app/[locale]/termin-buchen/page.tsx");
+  const tb = read("app/[locale]/termin-buchen/TerminBuchenClient.tsx");
   assert.ok(tb.includes("getMarketScope") && tb.includes("bookingNotice"), "termin-buchen ohne Market-Scope-Hinweis");
   const en = getMarketScope("en").bookingNotice.toLowerCase();
   assert.ok(en.includes("selected markets") && en.includes("rejected"), "bookingNotice unklar");
@@ -799,17 +799,24 @@ test("Honeypot Invisibility Guard: off-screen, nicht fokussierbar, ohne grepbare
 
 // ─── 44. Booking Page Public Copy Guard ───────────────────────────────────────
 
-test("Booking Page Public Copy Guard: /termin-buchen ohne Auto-Confirm-/Honeypot-Hinweistext, manuelle Bestätigung klar", () => {
-  const page = read("app/[locale]/termin-buchen/page.tsx");
+test("Booking Page Public Copy Guard: /termin-buchen force-dynamic, Marker, manuelle Bestätigung, kein Auto-Confirm", () => {
+  const wrapper = read("app/[locale]/termin-buchen/page.tsx");
+  const client = read("app/[locale]/termin-buchen/TerminBuchenClient.tsx");
+  // Route ist erzwungen dynamisch (kein altes SSG-Artefakt).
+  assert.ok(/export const dynamic\s*=\s*["']force-dynamic["']/.test(wrapper), "/termin-buchen ohne force-dynamic");
+  assert.ok(/export const revalidate\s*=\s*0/.test(wrapper), "/termin-buchen ohne revalidate = 0");
+  // Eindeutiger Live-Parity-Marker.
+  assert.ok(client.includes('data-booking-copy-version="manual-confirmation-only-v2"'), "Live-Marker manual-confirmation-only-v2 fehlt");
   // Kein Auto-Confirm in der sichtbaren öffentlichen Copy (Logik-/Variablennamen wie
   // `autoConfirmed`/data-testid bleiben erlaubt — Booking-Logik wird nicht geändert).
-  for (const bad of ["automatische Bestätigung erfolgt nur", "falls die Praxis dies ausdrücklich eingerichtet hat", "in der Regel manuell", "automatically confirmed without"]) {
-    assert.equal(page.includes(bad), false, `/termin-buchen wirbt mit Auto-Bestätigung: "${bad}"`);
+  for (const bad of ["automatische Bestätigung erfolgt nur", "falls die Praxis dies ausdrücklich eingerichtet hat", "in der Regel manuell", "automatically confirmed without", "if explicitly enabled", "automatically according to safe rules"]) {
+    assert.equal(client.includes(bad), false, `/termin-buchen wirbt mit Auto-Bestätigung: "${bad}"`);
   }
-  // Klare manuelle Bestätigung + keine automatische Zusage ohne Freigabe.
-  assert.ok(/bestätigt den Termin manuell/.test(page), "/termin-buchen ohne klare manuelle Bestätigung");
-  assert.ok(/keine automatische Terminbestätigung ohne Freigabe/i.test(page), "/termin-buchen ohne 'keine automatische Terminbestätigung ohne Freigabe'");
+  // Klare manuelle Bestätigung (DE) + EN-Safe-Copy + keine automatische Zusage ohne Freigabe.
+  assert.ok(/bestätigt den Termin manuell/.test(client), "/termin-buchen ohne klare manuelle Bestätigung (DE)");
+  assert.ok(/keine automatische Terminbestätigung ohne Freigabe/i.test(client), "/termin-buchen ohne 'keine automatische Terminbestätigung ohne Freigabe'");
+  assert.ok(/no automatic appointment confirmation without approval/i.test(client), "/termin-buchen ohne EN-Safe-Copy");
   // Kein sichtbarer Honeypot-Hinweistext; Bot-Schutz über die geteilte Komponente.
-  assert.equal(/Company website|leave this field empty|do not fill/i.test(page), false, "/termin-buchen zeigt Honeypot-Hinweistext");
-  assert.ok(page.includes("FormAntiSpamFields"), "/termin-buchen ohne Form-Abuse-Schutz (FormAntiSpamFields)");
+  assert.equal(/Company website|leave this field empty|do not fill/i.test(client), false, "/termin-buchen zeigt Honeypot-Hinweistext");
+  assert.ok(client.includes("FormAntiSpamFields"), "/termin-buchen ohne Form-Abuse-Schutz (FormAntiSpamFields)");
 });

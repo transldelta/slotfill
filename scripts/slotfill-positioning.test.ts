@@ -778,11 +778,21 @@ test("Public Auto-Confirmation Guard: öffentliche Copy suggeriert keine automat
 
 // ─── 43. Honeypot Invisibility Guard ──────────────────────────────────────────
 
-test("Honeypot Invisibility Guard: off-screen, nicht fokussierbar, ohne sichtbare Beschriftung", () => {
+test("Honeypot Invisibility Guard: off-screen, nicht fokussierbar, ohne grepbaren Hinweistext", () => {
   const comp = read("components/ui/FormAntiSpamFields.tsx");
   assert.ok(comp.includes("HONEYPOT_FIELD") && comp.includes("TIMESTAMP_FIELD"), "Anti-Spam-Felder unvollständig (Bot-Schutz)");
   assert.ok(comp.includes('aria-hidden="true"'), "Honeypot-Wrapper nicht aria-hidden");
   assert.ok(comp.includes("tabIndex={-1}"), "Honeypot-Input ist fokussierbar (tabIndex fehlt)");
   assert.ok(comp.includes('left: "-9999px"'), "Honeypot nicht off-screen positioniert");
-  assert.equal(/Company website|leave this field empty|leave empty|dieses Feld leer/i.test(comp), false, "Honeypot zeigt noch eine sichtbare Beschriftung/Instruktion");
+  // Technischer Feldname bleibt erhalten (Bots finden das Feld weiterhin).
+  assert.ok(read("lib/form-abuse.ts").includes('HONEYPOT_FIELD = "company_url"'), "technischer Honeypot-Feldname company_url entfernt");
+  // Kein menschenlesbarer/grepbarer Hinweistext im ausgelieferten JSX (Kommentare + technische
+  // Variablennamen wie HONEYPOT_FIELD ausgenommen — die rendern als name="company_url", nicht als Text).
+  const stripped = comp
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .replace(/(^|[^:])\/\/.*$/gm, "$1")
+    .replace(/HONEYPOT_FIELD|TIMESTAMP_FIELD/g, "");
+  assert.equal(/Company website|leave this field empty|leave empty|do not fill|dieses Feld leer/i.test(stripped), false, "Honeypot zeigt grepbaren Hinweistext im HTML");
+  // Kein Hinweis-Text via placeholder/aria-label/title (würde ebenfalls im HTML landen).
+  assert.equal(/placeholder=|aria-label=|\btitle=/.test(stripped), false, "Honeypot nutzt placeholder/aria-label/title (grepbarer Hinweis)");
 });

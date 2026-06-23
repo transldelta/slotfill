@@ -237,7 +237,7 @@ test("Visual Hero Guard: anonyme Termin-Vorschaukarte im Hero (keine echten Date
   assert.equal(/Sarah|Ahmed|Maria|Fatima|Mohammed|diagnosis|symptom/i.test(home), false, "mögliche PII/Diagnose im Homepage-Quelltext");
   // DE-Vorschaukarte trägt die geforderten lokalisierten Begriffe.
   const de = msg("de").landing;
-  assert.ok(de.previewClinic.includes("Demo-Praxis"), "DE previewClinic");
+  assert.ok(de.previewClinic.includes("Beispiel-Terminseite"), "DE previewClinic (neutralisiert)");
   assert.ok(de.previewAvailable.includes("Verfügbar"), "DE previewAvailable");
   assert.ok(de.previewRequest.includes("Terminanfrage"), "DE previewRequest");
   assert.ok(de.previewPending.includes("Bestätigung der Praxis ausstehend"), "DE previewPending");
@@ -709,4 +709,29 @@ test("Pricing Value Claim Guard: kein ROI-/Umsatz-/Gewinn-Versprechen in valuePr
       assert.equal(vp.includes(bad), false, `${loc}: valueProposition mit ROI-/Umsatz-Versprechen: "${bad}"`);
     }
   }
+});
+
+// ─── 40. Public Demo Wording Guard ────────────────────────────────────────────
+
+test("Public Demo Wording Guard: keine öffentliche Demo-/Mockup-Sprache auf der Homepage", () => {
+  const home = read(PAGE);
+  // Künstliche Ticketnummer + 'Neu'-SaaS-Badge aus der öffentlichen Provider-Karte entfernt.
+  assert.equal(home.includes("#1042"), false, "Künstliche Ticketnummer #1042 auf der Homepage");
+  assert.equal(home.includes('t("providerPreviewNew")'), false, "'Neu'-SaaS-Badge wird noch auf der Homepage gerendert");
+  // Öffentlich gerenderte Demo-Wording-Keys sind neutralisiert (kein 'Demo-Praxis'/'Demo clinic'/'clínica demo' …).
+  const demoRx = /demo[- ]?praxis|demo clinic|clinique démo|clinique de démonstr|clínica demo|clínica de demonstr/i;
+  for (const loc of locales) {
+    const m = msg(loc);
+    for (const [k, v] of [["nav.demoClinic", m.nav?.demoClinic], ["landing.cta3", m.landing?.cta3], ["landing.ctaSecondary", m.landing?.ctaSecondary]] as const) {
+      assert.equal(demoRx.test(v ?? ""), false, `${loc}: ${k} ist nicht neutralisiert (Demo-Sprache): "${v}"`);
+      assert.ok((v ?? "").trim().length > 3, `${loc}: ${k} fehlt`);
+    }
+    // Neutrale Workflow-Zeilen (kein Mockup, keine Fake-Daten) vorhanden.
+    for (const k of ["providerWorkflow1", "providerWorkflow2", "providerWorkflow3"]) {
+      assert.ok((m.landing?.[k] ?? "").trim().length > 4, `${loc}: landing.${k} (neutrale Workflow-Zeile) fehlt`);
+    }
+  }
+  // Provider-Karte rendert die neutralen Workflow-Zeilen; Beispiel-Buchungsroute bleibt erhalten.
+  assert.ok(home.includes('t("providerWorkflow1")'), "Provider-Karte rendert keine neutrale Workflow-Zeile");
+  assert.ok(home.includes("/book/testpraxis-delta"), "Beispiel-Buchungsroute /book/testpraxis-delta wurde entfernt");
 });

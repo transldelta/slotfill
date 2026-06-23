@@ -495,19 +495,21 @@ export default async function LocaleLandingPage({
               tone="teal"
               className="order-1 aspect-[3/2] w-full shadow-lg lg:order-2"
             >
-              {/* Floating provider request preview — anonymized, no real data */}
-              <div className="absolute bottom-3 left-3 z-10 w-48 rounded-2xl border bg-white/95 p-3 shadow-lg backdrop-blur dark:bg-slate-900/90 sm:w-52" style={{ borderColor: "var(--color-border)" }}>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-slate-900 dark:text-slate-100">{t("providerPreviewTitle")}</span>
-                  <span className="rounded-full px-2 py-0.5 text-[10px] font-semibold text-white" style={{ background: "var(--gradient-brand)" }}>{t("providerPreviewNew")}</span>
-                </div>
+              {/* Neutral workflow card — kein Mockup, keine Ticketnummer/Uhrzeit, keine Fake-Daten */}
+              <div className="absolute bottom-3 left-3 z-10 w-52 rounded-2xl border bg-white/95 p-3 shadow-lg backdrop-blur dark:bg-slate-900/90 sm:w-56" style={{ borderColor: "var(--color-border)" }}>
+                <span className="text-xs font-semibold text-slate-900 dark:text-slate-100">{t("providerPreviewTitle")}</span>
                 <p className="mt-2 text-[10px] font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">{t("providerPreviewRequests")}</p>
-                <div className="mt-1.5 flex items-center justify-between gap-2 rounded-lg border px-2.5 py-1.5" style={{ borderColor: "var(--color-border)" }}>
-                  <span className="truncate text-[11px] font-medium text-slate-700 dark:text-slate-300">#1042 · 09:00</span>
-                  <span className="flex shrink-0 gap-1">
-                    <span className="rounded-md bg-emerald-100 px-1.5 py-0.5 text-[9px] font-semibold text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">{t("providerPreviewConfirm")}</span>
-                    <span className="rounded-md bg-slate-100 px-1.5 py-0.5 text-[9px] font-semibold text-slate-500 dark:bg-slate-800 dark:text-slate-400">{t("providerPreviewDecline")}</span>
-                  </span>
+                <ul className="mt-1.5 space-y-1.5">
+                  {[t("providerWorkflow1"), t("providerWorkflow2"), t("providerWorkflow3")].map((w) => (
+                    <li key={w} className="flex items-start gap-1.5 text-[11px] font-medium text-slate-700 dark:text-slate-300">
+                      <CheckCircle2 className="mt-0.5 h-3 w-3 shrink-0" style={{ color: "var(--color-accent)" }} />
+                      {w}
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-2 flex gap-1">
+                  <span className="rounded-md bg-emerald-100 px-1.5 py-0.5 text-[9px] font-semibold text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">{t("providerPreviewConfirm")}</span>
+                  <span className="rounded-md bg-slate-100 px-1.5 py-0.5 text-[9px] font-semibold text-slate-500 dark:bg-slate-800 dark:text-slate-400">{t("providerPreviewDecline")}</span>
                 </div>
               </div>
             </HealthcareImage>

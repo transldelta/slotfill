@@ -479,7 +479,7 @@ test("SaaS Completeness Guard: Homepage zeigt vollständigen SaaS-Auftritt", () 
 
 test("Visual Product Guard: Patient- + Provider-Vorschau und Use-Cases sichtbar", () => {
   const home = read(PAGE);
-  for (const ref of ["previewClinic", "previewAvailable", "providerPreviewTitle", "providerPreviewConfirm", "useCases"]) {
+  for (const ref of ["previewClinic", "previewAvailable", "providerPreviewTitle", "providerWorkflow1", "useCases"]) {
     assert.ok(home.includes(ref), `Homepage rendert Visual ${ref} nicht`);
   }
   assert.equal(/Sarah|Ahmed|Maria|Fatima|Mohammed|diagnosis|symptom/i.test(home), false, "PII/Diagnose im Homepage-Visual");
@@ -734,4 +734,16 @@ test("Public Demo Wording Guard: keine öffentliche Demo-/Mockup-Sprache auf der
   // Provider-Karte rendert die neutralen Workflow-Zeilen; Beispiel-Buchungsroute bleibt erhalten.
   assert.ok(home.includes('t("providerWorkflow1")'), "Provider-Karte rendert keine neutrale Workflow-Zeile");
   assert.ok(home.includes("/book/testpraxis-delta"), "Beispiel-Buchungsroute /book/testpraxis-delta wurde entfernt");
+  // WICHTIG: next-intl shippt alle Message-Werte ins HTML (i18n-JSON). Daher dürfen die
+  // öffentlich ausgelieferten Namespaces (landing/nav/pricing) KEINE Demo-/Dashboard-/
+  // Mockup-Strings enthalten — sonst sind sie per HTML-Grep auffindbar.
+  const shippedRx = /Demo-Praxis|Demo clinic|Demo Clinic|Praxis-Dashboard|Eingehende Terminanfragen|#1042/i;
+  for (const loc of locales) {
+    const m = msg(loc) as Record<string, Record<string, string>>;
+    for (const ns of ["landing", "nav", "pricing"]) {
+      const blob = JSON.stringify(m[ns] ?? {});
+      const hit = blob.match(shippedRx);
+      assert.equal(hit, null, `${loc}: Namespace '${ns}' shippt verbotenen Demo-/Mockup-String: "${hit?.[0]}"`);
+    }
+  }
 });

@@ -12,12 +12,12 @@
     "passwordResetSent": "Falls ein Konto mit dieser E‑Mail existiert, wurde ein Link gesendet.",
     "invalidCredentials": "E‑Mail oder Passwort ungültig.",
     "emailTaken": "Diese E‑Mail wird bereits verwendet.",
-    "registrationSuccess": "Konto erfolgreich erstellt. Du kannst dich jetzt anmelden.",
+    "registrationSuccess": "Konto erfolgreich erstellt. Sie können sich jetzt anmelden.",
     "confirmEmail": "Bitte bestätigen Sie Ihre E-Mail-Adresse. Wir haben Ihnen einen Bestätigungslink gesendet.",
     "signupError": "Registrierung fehlgeschlagen. Bitte versuche es später erneut.",
     "weakPassword": "Das Passwort ist zu schwach (mindestens 6 Zeichen).",
     "rateLimited": "Zu viele Versuche. Bitte warte einen Moment und versuche es erneut.",
-    "practiceCreateError": "Dein Konto wurde erstellt, aber die Praxis konnte nicht angelegt werden. Bitte melde dich an – wir richten sie automatisch ein.",
+    "practiceCreateError": "Ihr Konto wurde erstellt, aber die Praxis konnte nicht angelegt werden. Bitte melden Sie sich an – wir richten sie automatisch ein.",
     "logout": "Abmelden"
   },
   "dashboard": {
@@ -338,8 +338,8 @@
     "trial": "Für Praxen und Kliniken",
     "monthly": "/Monat",
     "ctaStarter": "Praxiszugang anfragen",
-    "ctaProfessional": "Professional testen",
-    "ctaPraxisPlus": "Praxis Plus testen",
+    "ctaProfessional": "Practice anfragen",
+    "ctaPraxisPlus": "Clinic anfragen",
     "features": "Enthaltene Funktionen",
     "currentPlan": "Aktueller Plan",
     "plansLoaded": "Pläne erfolgreich geladen",
@@ -353,7 +353,7 @@
       "everythingInStarter": "Alles in Starter",
       "advancedStatistics": "Erweiterte Statistiken",
       "multipleUsers": "Mehrere Benutzer",
-      "everythingInProfessional": "Alles in Professional",
+      "everythingInProfessional": "Alles in Practice",
       "unlimitedPatients": "Unbegrenzt Patienten",
       "prioritySupport": "Vorrangsupport"
     },
@@ -366,7 +366,7 @@
     "enterpriseName": "Enterprise",
     "enterprisePriceLabel": "Preis auf Anfrage",
     "popularBadge": "Empfohlen",
-    "valueProposition": "Schon ein einziger gefüllter Termin kann den Monatsbetrag rechtfertigen.",
+    "valueProposition": "Bereits wenige besser organisierte Terminanfragen können den Verwaltungsaufwand spürbar reduzieren.",
     "stripeNotLive": "Auf dieser Website wird keine Zahlung verarbeitet. Anfragen werden über unsere Kontaktseite bearbeitet; die Aktivierung erfolgt nach Prüfung.",
     "priceNote": "Preise können je nach Land oder Markt angepasst werden.",
     "ctaClinicPlus": "Praxiszugang anfragen"
@@ -469,6 +469,7 @@
     "clinic3": "Weniger Telefonaufwand",
     "clinic4": "Praxis bestätigt Termine",
     "ctaForClinics": "Für Praxen ansehen",
+    "ctaHowItWorks": "So funktioniert es",
     "cta3": "Demo-Praxis öffnen",
     "audienceSplitTitle": "Zwei klare Wege",
     "audienceSplitSubline": "Praxen und Kliniken verwalten Termine — Patienten fragen Termine an. Keine Patientenregistrierung, keine Zahlung auf der Website.",
@@ -582,9 +583,9 @@
     "success": "Vielen Dank! Ihre Nachricht ist bei uns eingegangen.",
     "error": "Ihre Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.",
     "whatHappensTitle": "Was passiert nach dem Absenden?",
-    "whatHappens1": "Wir erhalten deine Anfrage und melden uns persönlich zurück.",
+    "whatHappens1": "Wir erhalten Ihre Anfrage und melden uns persönlich zurück.",
     "whatHappens2": "Keine automatische Kaltakquise. Kein automatischer Versand von Nachrichten.",
-    "whatHappens3": "Wir begleiten dich persönlich bei der Einrichtung der ersten Testpraxis."
+    "whatHappens3": "Wir begleiten Sie persönlich bei der Einrichtung der ersten Testpraxis."
   },
   "legal": {
     "draftNotice": "Hinweis: Dieser Text ist ein vorläufiger Entwurf und wurde noch nicht rechtlich geprüft. Vor dem Produktivstart muss er durch finale, rechtlich geprüfte Texte ersetzt werden.",
@@ -766,7 +767,7 @@
     "backupDocumentation": "Backup-Dokumentation vorhanden."
   },
   "errors": {
-    "practiceNotFound": "Es konnte keine Praxis für dein Konto gefunden werden.",
+    "practiceNotFound": "Es konnte keine Praxis für Ihr Konto gefunden werden.",
     "validationError": "Die eingegebenen Daten sind ungültig.",
     "databaseInsertFailed": "Speichern fehlgeschlagen. Bitte später erneut versuchen.",
     "patientCreated": "Patient wurde angelegt.",

@@ -310,9 +310,9 @@ export default async function LocaleLandingPage({
               <Link href={`/${locale}/termin-buchen`} className="btn-brand px-7 py-3.5 text-base">
                 {t("ctaPrimary")}
               </Link>
-              <Link href="/book/testpraxis-delta" className="btn-outline-brand px-7 py-3.5 text-base">
-                {t("ctaSecondary")}
-              </Link>
+              <a href="#how-patients" className="btn-outline-brand px-7 py-3.5 text-base">
+                {t("ctaHowItWorks")}
+              </a>
             </div>
             {/* Patient journey — quiet inline row, not boxes */}
             <div className="mt-9 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:justify-center lg:justify-start">
@@ -340,7 +340,7 @@ export default async function LocaleLandingPage({
               tone="mixed"
               priority
               sizes="(min-width: 1024px) 50vw, 100vw"
-              objectPosition="50% 28%"
+              objectPosition="50% 20%"
               className="aspect-[4/3] w-full shadow-xl sm:aspect-[5/4] lg:aspect-[4/5]"
             >
               {/* Floating availability card — hart deaktiviert via SHOW_HERO_FLOATING_DEMO_CARD.

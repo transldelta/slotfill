@@ -624,8 +624,8 @@ test("Hero Funnel Polish Guard: Arztgesicht frei (object-position), Demo-Karte m
   const hc = read("components/ui/HealthcareImage.tsx");
   assert.ok(hc.includes("objectPosition"), "HealthcareImage hat keine objectPosition-Steuerung");
   assert.ok(hc.includes("style={{ objectPosition }}"), "HealthcareImage wendet objectPosition nicht auf das <Image> an");
-  // Hero-Bild setzt object-position, damit das Gesicht im mobilen Crop sichtbar bleibt.
-  assert.ok(home.includes('objectPosition="50% 28%"'), "Hero-Bild ohne gesichtsfreundliche object-position");
+  // Hero-Bild setzt object-position, damit Kopf/Gesicht im Crop sichtbar bleiben.
+  assert.ok(/objectPosition="50% (2[05]|1[5-9])%"/.test(home), "Hero-Bild ohne gesichtsfreundliche object-position (Kopf-Crop)");
   // Hero-Bild nutzt mobil ein flacheres Seitenverhältnis (weniger harter Crop).
   assert.ok(home.includes("aspect-[4/3] w-full shadow-xl sm:aspect-[5/4] lg:aspect-[4/5]"), "Hero-Bild ohne entschärften Mobile-Crop");
   // Hero-Floating-Demo-Card ist HART aus dem Render genommen (Konstante false), nicht nur per CSS versteckt.
@@ -642,6 +642,71 @@ test("Hero Funnel Polish Guard: Arztgesicht frei (object-position), Demo-Karte m
     const blob = landingBlob(loc);
     for (const bad of ["automatic confirmation guaranteed", "automatische bestätigung garantiert", "guaranteed appointment", "garantierter termin", "instant appointment", "soforttermin"]) {
       assert.equal(blob.includes(bad), false, `${loc}: Garantie-/Notfall-Claim in Landing-Copy: "${bad}"`);
+    }
+  }
+});
+
+// ─── 36. Hero CTA Separation Guard ────────────────────────────────────────────
+
+test("Hero CTA Separation Guard: Hero ist patientenorientiert, kein Demo-/Praxis-/Login-CTA daneben", () => {
+  const home = read(PAGE);
+  // Hero-CTA-Block (von ctaPrimary bis zur Patient-Journey-Reihe).
+  const heroCta = (home.match(/\{t\("ctaPrimary"\)\}[\s\S]*?Patient journey/) ?? [""])[0];
+  assert.ok(heroCta.length > 0, "Hero-CTA-Block nicht gefunden");
+  // Sekundärer Hero-CTA ist 'So funktioniert es' → #how-patients (Patientenfluss).
+  assert.ok(heroCta.includes('t("ctaHowItWorks")') && heroCta.includes("#how-patients"), "Hero-Sekundär-CTA ist nicht 'So funktioniert es' → #how-patients");
+  // Kein Praxis-/Demo-/Login-CTA direkt im Hero-CTA-Block.
+  for (const bad of ["/auth/login", "/book/testpraxis-delta", 't("ctaSecondary")', 'tNav("login")', 'tNav("demoClinic")', 'tNav("requestAccess")']) {
+    assert.equal(heroCta.includes(bad), false, `Hero-CTA mischt Patient + Praxis/Demo/Login: "${bad}"`);
+  }
+  // ctaHowItWorks in allen Locales vorhanden.
+  for (const loc of locales) {
+    assert.ok((msg(loc).landing?.ctaHowItWorks ?? "").trim().length > 2, `${loc}: landing.ctaHowItWorks fehlt`);
+  }
+});
+
+// ─── 37. Pricing Plan Naming Consistency Guard ────────────────────────────────
+
+test("Pricing Plan Naming Consistency Guard: Plannamen Starter/Practice/Clinic, kein 'Professional', keine Trial-CTA", () => {
+  const pricingPage = read("app/[locale]/pricing/page.tsx");
+  assert.equal(/aus Professional|in Professional/.test(pricingPage), false, "Pricing-Features referenzieren noch 'Professional' statt 'Practice'");
+  for (const loc of locales) {
+    const p = msg(loc).pricing ?? {};
+    const ev = p.featureKeys?.everythingInProfessional ?? "";
+    assert.equal(/Professional/.test(ev), false, `${loc}: featureKeys.everythingInProfessional referenziert noch 'Professional'`);
+    for (const k of ["ctaProfessional", "ctaPraxisPlus"]) {
+      const v = p[k] ?? "";
+      assert.equal(/Professional/.test(v), false, `${loc}: pricing.${k} referenziert 'Professional'`);
+      assert.equal(/\btest|\btry |essayer|probar|testar/i.test(v), false, `${loc}: pricing.${k} nutzt Trial-Sprache`);
+    }
+  }
+});
+
+// ─── 38. Formal Address Guard (DE B2B) ────────────────────────────────────────
+
+test("Formal Address Guard: deutsche Copy nutzt durchgehend 'Sie', kein informelles 'du'", () => {
+  const informal = /\b(du|dein|deine|deiner|deinem|deinen|dich|dir)\b/i;
+  const walk = (obj: Record<string, unknown>, path: string) => {
+    for (const [k, v] of Object.entries(obj)) {
+      const p = path ? `${path}.${k}` : k;
+      if (typeof v === "string") {
+        assert.equal(informal.test(v), false, `DE ${p} nutzt informelles 'du' statt formellem 'Sie': "${v}"`);
+      } else if (v && typeof v === "object") {
+        walk(v as Record<string, unknown>, p);
+      }
+    }
+  };
+  walk(msg("de") as Record<string, unknown>, "");
+});
+
+// ─── 39. Pricing Value Claim Guard ────────────────────────────────────────────
+
+test("Pricing Value Claim Guard: kein ROI-/Umsatz-/Gewinn-Versprechen in valueProposition", () => {
+  for (const loc of locales) {
+    const vp = (msg(loc).pricing?.valueProposition ?? "").toLowerCase();
+    assert.ok(vp.length > 5, `${loc}: valueProposition fehlt`);
+    for (const bad of ["justify the monthly", "monatsbetrag rechtfertig", "justifier le coût", "justificarse el coste", "justificar o custo", "filled appointment", "gefüllter termin", "rendez-vous comblé", "cita rellenada", "consulta preenchida", "roi", "garantiert"]) {
+      assert.equal(vp.includes(bad), false, `${loc}: valueProposition mit ROI-/Umsatz-Versprechen: "${bad}"`);
     }
   }
 });

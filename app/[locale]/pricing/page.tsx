@@ -77,7 +77,7 @@ const PLAN_CONTENT: Record<string, Record<string, PlanMeta>> = {
       badgeColor: "emerald",
       icon: Building2,
       features: [
-        "Alles aus Professional",
+        "Alles aus Practice",
         "Geeignet für größere Wartelisten und höheres Anfragevolumen",
         "Für mehrere Behandler und größere Organisationen",
         "Erweiterte Organisationsübersicht",
@@ -124,7 +124,7 @@ const PLAN_CONTENT: Record<string, Record<string, PlanMeta>> = {
       badgeColor: "emerald",
       icon: Building2,
       features: [
-        "Everything in Professional",
+        "Everything in Practice",
         "Suited for larger waitlists and higher request volumes",
         "For multiple practitioners and larger organizations",
         "Extended organizational overview",

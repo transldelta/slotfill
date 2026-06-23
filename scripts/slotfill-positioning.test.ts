@@ -58,7 +58,9 @@ test("Public Brand Guard: öffentliche Marke ist ClinicSlotHub (CEO-Vereinheitli
 
 test("Patient Booking Positioning Guard: Slotfill = Online-Terminbuchung", () => {
   const en = msg("en");
-  assert.ok(en.landing.heroTitle.toLowerCase().includes("book doctor appointments online"), "EN heroTitle fehlt Patienten-Buchungsbotschaft");
+  // CEO-Klarheit: Hero ist Anfrage-/Verwaltungs-Workflow, kein verbindliches Buchen.
+  assert.ok(en.landing.heroTitle.toLowerCase().includes("appointment requests"), "EN heroTitle ohne 'appointment requests'");
+  assert.equal(/book .*appointments online/i.test(en.landing.heroTitle), false, "EN heroTitle suggeriert verbindliches Online-Buchen");
   // CEO-Klarheit: Patienten-CTA ist eine ANFRAGE, kein verbindliches Buchen.
   assert.ok(en.landing.ctaPrimary.toLowerCase().includes("request appointment"), "EN ctaPrimary ist nicht 'Request appointment'");
   assert.ok((en.nav.bookAppointment || "").toLowerCase().includes("request appointment"), "nav.bookAppointment ist nicht 'Request appointment'");
@@ -178,16 +180,17 @@ test("Duplicate Logic Guard: ein Produkt, eine Haupt-H1, keine Board+Booking-Mis
 
 // ─── 12. Natural Patient Copy Guard ───────────────────────────────────────────
 
-test("Natural Patient Copy Guard: natürliche Patienten-Hauptbotschaft je Sprache", () => {
+test("Natural Patient Copy Guard: Anfrage-/Verwaltungs-Hauptbotschaft je Sprache (kein verbindliches Buchen)", () => {
   const expect: Record<string, string> = {
-    en: "book doctor appointments online",
-    de: "arzttermine online buchen",
-    fr: "rendez-vous médic",
-    es: "médic",
-    pt: "médic",
+    en: "appointment requests",
+    de: "terminanfragen",
+    fr: "demandes de rendez-vous",
+    es: "solicitudes de cita",
+    pt: "solicitações de consulta",
   };
   for (const [loc, frag] of Object.entries(expect)) {
     assert.ok(msg(loc).landing.heroTitle.toLowerCase().includes(frag), `${loc}: heroTitle ohne "${frag}"`);
+    assert.equal(/online buchen|book .*appointments online/i.test(msg(loc).landing.heroTitle), false, `${loc}: heroTitle suggeriert verbindliches Online-Buchen`);
   }
 });
 

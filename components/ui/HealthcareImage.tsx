@@ -33,6 +33,8 @@ export interface HealthcareImageProps {
   priority?: boolean;
   /** next/image sizes-Hinweis für responsive Auslieferung. */
   sizes?: string;
+  /** object-position für den object-cover-Crop (hält Gesichter sichtbar, z. B. "50% 25%"). */
+  objectPosition?: string;
   /** Über dem Bild liegende Elemente (z. B. schwebende Chips). */
   children?: ReactNode;
 }
@@ -54,6 +56,7 @@ export function HealthcareImage({
   rounded = "rounded-3xl",
   priority = false,
   sizes = "(min-width: 1024px) 50vw, 100vw",
+  objectPosition = "center",
   children,
 }: HealthcareImageProps) {
   const meta = SLOTFILL_IMAGES[imageKey];
@@ -72,6 +75,7 @@ export function HealthcareImage({
           sizes={sizes}
           priority={priority}
           className="-z-10 object-cover"
+          style={{ objectPosition }}
         />
       ) : (
         <>

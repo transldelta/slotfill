@@ -301,19 +301,13 @@ export default async function LocaleLandingPage({
             <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-slate-600 dark:text-slate-300 sm:text-lg lg:mx-0">
               {t("heroSubtitle")}
             </p>
-            <div className="mt-9 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center lg:justify-start">
+            <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center lg:justify-start">
               <Link href={`/${locale}/termin-buchen`} className="btn-brand px-7 py-3.5 text-base">
                 {t("ctaPrimary")}
               </Link>
               <Link href="/book/testpraxis-delta" className="btn-outline-brand px-7 py-3.5 text-base">
                 {t("ctaSecondary")}
               </Link>
-              <a
-                href="#for-providers"
-                className="inline-flex items-center justify-center gap-1.5 rounded-lg px-4 py-3.5 text-base font-semibold text-slate-700 underline-offset-4 transition hover:underline dark:text-slate-300"
-              >
-                {t("ctaForClinics")} <ArrowRight className="h-4 w-4" />
-              </a>
             </div>
             {/* Patient journey — quiet inline row, not boxes */}
             <div className="mt-9 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:justify-center lg:justify-start">
@@ -341,12 +335,13 @@ export default async function LocaleLandingPage({
               tone="mixed"
               priority
               sizes="(min-width: 1024px) 50vw, 100vw"
-              className="aspect-[4/5] w-full shadow-xl sm:aspect-[5/4] lg:aspect-[4/5]"
+              objectPosition="50% 28%"
+              className="aspect-[4/3] w-full shadow-xl sm:aspect-[5/4] lg:aspect-[4/5]"
             >
               {/* Floating availability card — real booking preview, no fake OS chrome.
-                  Mobil unten platziert (über dem Tablet/Tisch, verdeckt nicht das Gesicht),
-                  ab sm oben rechts. */}
-              <div className="absolute bottom-3 left-3 z-10 w-52 rounded-2xl border bg-white/95 p-4 shadow-2xl ring-1 ring-black/5 backdrop-blur dark:bg-slate-900/90 sm:bottom-auto sm:left-auto sm:right-3 sm:top-3 sm:w-60" style={{ borderColor: "var(--color-border)" }}>
+                  Auf Mobile ausgeblendet, damit das Arztgesicht frei bleibt;
+                  ab sm dezent oben rechts auf ruhiger Bildfläche. */}
+              <div className="absolute right-3 top-3 z-10 hidden w-56 rounded-2xl border bg-white/95 p-4 shadow-2xl ring-1 ring-black/5 backdrop-blur dark:bg-slate-900/90 sm:block lg:w-60" style={{ borderColor: "var(--color-border)" }}>
                 <div className="flex items-center justify-between">
                   <span className="inline-flex items-center gap-1.5 text-sm font-bold text-slate-900 dark:text-slate-100">
                     <span className="h-2 w-2 rounded-full" style={{ background: "var(--gradient-brand)" }} />

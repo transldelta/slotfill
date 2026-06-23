@@ -615,3 +615,28 @@ test("Provider/Patient Funnel Guard: Käuferweg (Preise/Zugang/Login) und Patien
   // Register bleibt gesperrt (Redirect zu /de/kontakt) — kein erneutes Öffnen.
   assert.ok(/redirect\(\s*["']\/de\/kontakt["']\s*\)/.test(read("app/auth/register/page.tsx")), "Register-Redirect zu /de/kontakt nicht mehr vorhanden");
 });
+
+// ─── 35. Hero Funnel Polish Guard ─────────────────────────────────────────────
+
+test("Hero Funnel Polish Guard: Arztgesicht frei (object-position), Demo-Karte mobil ausgeblendet, ruhiger Hero", () => {
+  const home = read(PAGE);
+  // HealthcareImage unterstützt einen gesichtsfreundlichen object-position-Crop.
+  const hc = read("components/ui/HealthcareImage.tsx");
+  assert.ok(hc.includes("objectPosition"), "HealthcareImage hat keine objectPosition-Steuerung");
+  assert.ok(hc.includes("style={{ objectPosition }}"), "HealthcareImage wendet objectPosition nicht auf das <Image> an");
+  // Hero-Bild setzt object-position, damit das Gesicht im mobilen Crop sichtbar bleibt.
+  assert.ok(home.includes('objectPosition="50% 28%"'), "Hero-Bild ohne gesichtsfreundliche object-position");
+  // Hero-Bild nutzt mobil ein flacheres Seitenverhältnis (weniger harter Crop).
+  assert.ok(home.includes("aspect-[4/3] w-full shadow-xl sm:aspect-[5/4] lg:aspect-[4/5]"), "Hero-Bild ohne entschärften Mobile-Crop");
+  // Schwebende Demo-/Kalenderkarte ist auf Mobile ausgeblendet (verdeckt kein Gesicht), ab sm sichtbar.
+  assert.ok(home.includes("z-10 hidden w-56") && home.includes("sm:block"), "Demo-Karte ist auf Mobile nicht ausgeblendet");
+  // Karte bleibt im DOM (echte Buchungsvorschau, keine Fake-OS-Chrome) — Slots weiterhin vorhanden.
+  assert.ok(home.includes('t("previewClinic")') && home.includes('"09:00"'), "Hero-Vorschaukarte (previewClinic/Slots) entfernt");
+  // Keine Garantie-/Notfall-Claims im Hero/Landing.
+  for (const loc of locales) {
+    const blob = landingBlob(loc);
+    for (const bad of ["automatic confirmation guaranteed", "automatische bestätigung garantiert", "guaranteed appointment", "garantierter termin", "instant appointment", "soforttermin"]) {
+      assert.equal(blob.includes(bad), false, `${loc}: Garantie-/Notfall-Claim in Landing-Copy: "${bad}"`);
+    }
+  }
+});

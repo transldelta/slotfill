@@ -576,3 +576,42 @@ test("Audience Scope Guard: Zielgruppe breit (viele Gesundheitsanbieter), Karten
   assert.ok(home.includes('t("useCasesExamplesLabel")'), "Homepage rendert useCasesExamplesLabel nicht");
   assert.ok(home.includes('t("useCasesMore")'), "Homepage rendert useCasesMore nicht");
 });
+
+// ─── 34. Provider/Patient Funnel Guard ────────────────────────────────────────
+
+test("Provider/Patient Funnel Guard: Käuferweg (Preise/Zugang/Login) und Patientenweg (Anfrage ohne Login) klar getrennt", () => {
+  const noLogin: Record<string, string> = { de: "ohne login", en: "no login", fr: "connexion", es: "inicio de sesión", pt: "início de sessão" };
+  const review: Record<string, string> = { de: "prüfung", en: "after review", fr: "vérification", es: "revisión", pt: "análise" };
+  for (const loc of locales) {
+    const m = msg(loc);
+    const l = m.landing;
+    // Beide Wege als Copy vorhanden.
+    assert.ok((m.nav?.requestAccess ?? "").trim().length > 2, `${loc}: nav.requestAccess (Praxiszugang anfragen) fehlt`);
+    for (const k of ["audienceSplitTitle", "audienceSplitSubline", "audienceSplitProviderTitle", "audienceSplitProviderNote", "audienceSplitPatientTitle", "audienceSplitPatientNote", "audienceSplitPatientCta"]) {
+      assert.ok((l[k] ?? "").trim().length > 2, `${loc}: landing.${k} fehlt`);
+    }
+    // Patientenweg: ausdrücklich ohne Login. Praxisweg: Zugang nur nach Prüfung.
+    assert.ok((l.audienceSplitPatientNote ?? "").toLowerCase().includes(noLogin[loc]), `${loc}: Patient-Note ohne 'kein Login'-Hinweis`);
+    assert.ok((l.audienceSplitProviderNote ?? "").toLowerCase().includes(review[loc]), `${loc}: Provider-Note ohne 'Zugang nur nach Prüfung'`);
+    // Keine Selfservice-/Registrierungs-/Patient-Login-Copy im öffentlichen Funnel.
+    const funnelBlob = [l.audienceSplitTitle, l.audienceSplitSubline, l.audienceSplitProviderTitle, l.audienceSplitProviderNote, l.audienceSplitPatientTitle, l.audienceSplitPatientNote, l.audienceSplitPatientCta, m.nav?.requestAccess]
+      .map((s) => (s ?? "")).join(" ").toLowerCase();
+    for (const bad of ["kostenlos registrieren", "konto erstellen", "patient login", "patientenkonto", "sofort aktivieren", "free trial", "14 tage", "weltweit", "all countries", "guaranteed compliance", "create account", "sign up free", "register now"]) {
+      assert.equal(funnelBlob.includes(bad), false, `${loc}: verbotene Funnel-Copy "${bad}"`);
+    }
+  }
+  // Homepage rendert beide Wege + sichere Ziele.
+  const home = read(PAGE);
+  for (const ref of ["audienceSplitTitle", "audienceSplitProviderTitle", "audienceSplitPatientTitle", "audienceSplitProviderNote", "audienceSplitPatientNote", "audienceSplitPatientCta"]) {
+    assert.ok(home.includes(`t("${ref}")`), `Homepage rendert ${ref} nicht`);
+  }
+  assert.ok(home.includes('tNav("requestAccess")'), "Homepage rendert Praxiszugang-anfragen-CTA nicht");
+  assert.ok(home.includes('tNav("login")') && home.includes('/auth/login'), "Praxis-Login im Funnel fehlt");
+  assert.ok(home.includes('tNav("pricing")') && home.includes('#pricing'), "Preise im Funnel fehlen");
+  assert.ok(home.includes("/termin-buchen"), "Patienten-Anfrageweg (/termin-buchen) fehlt");
+  // Käuferweg führt zur geprüften Zugangsanfrage (Kontakt), kein Selfservice-Signup.
+  assert.ok(home.includes('/kontakt'), "Praxiszugang-Anfrage zeigt nicht auf /kontakt");
+  assert.equal(home.includes("/auth/register"), false, "Homepage verlinkt wieder auf /auth/register (Selfservice-Signup)");
+  // Register bleibt gesperrt (Redirect zu /de/kontakt) — kein erneutes Öffnen.
+  assert.ok(/redirect\(\s*["']\/de\/kontakt["']\s*\)/.test(read("app/auth/register/page.tsx")), "Register-Redirect zu /de/kontakt nicht mehr vorhanden");
+});

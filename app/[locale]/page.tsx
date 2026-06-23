@@ -16,6 +16,8 @@ import {
   Zap,
   TrendingUp,
   Check,
+  Menu,
+  LogIn,
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { headers } from "next/headers";
@@ -194,6 +196,42 @@ export default async function LocaleLandingPage({
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <SlotFillLogo href={`/${locale}`} size={40} hideWordmarkOnMobile priority />
           <nav className="flex items-center gap-1 text-sm">
+            {/* Mobile menu — pure HTML <details>, two clearly separated paths, no JS */}
+            <details className="relative sm:hidden">
+              <summary
+                className="flex cursor-pointer list-none items-center rounded-md px-2 py-1.5 text-slate-600 transition hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                aria-label={tNav("forClinics")}
+              >
+                <Menu className="h-5 w-5" />
+              </summary>
+              <div
+                className="absolute right-0 z-50 mt-2 w-64 rounded-xl border bg-white p-3 shadow-xl dark:bg-slate-900"
+                style={{ borderColor: "var(--color-border)" }}
+              >
+                <p className="px-2 pb-1 text-[11px] font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+                  {t("audienceSplitProviderTitle")}
+                </p>
+                <a href="#pricing" className="block rounded-md px-2 py-2 text-sm text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
+                  {tNav("pricing")}
+                </a>
+                <Link href={`/${locale}/kontakt`} className="block rounded-md px-2 py-2 text-sm text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
+                  {tNav("requestAccess")}
+                </Link>
+                <Link href="/auth/login" className="block rounded-md px-2 py-2 text-sm text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
+                  {tNav("login")}
+                </Link>
+                <div className="my-2 border-t" style={{ borderColor: "var(--color-border)" }} />
+                <p className="px-2 pb-1 text-[11px] font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+                  {t("audienceSplitPatientTitle")}
+                </p>
+                <Link
+                  href={`/${locale}/termin-buchen`}
+                  className="block rounded-md px-2 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-100 dark:text-slate-100 dark:hover:bg-slate-800"
+                >
+                  {t("audienceSplitPatientCta")}
+                </Link>
+              </div>
+            </details>
             <a
               href="#how-patients"
               className="hidden rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:inline"
@@ -229,6 +267,13 @@ export default async function LocaleLandingPage({
               className="hidden rounded-md px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:inline"
             >
               {tNav("login")}
+            </Link>
+            <Link
+              href={`/${locale}/kontakt`}
+              className="ml-1 hidden rounded-md border px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800 lg:inline-flex"
+              style={{ borderColor: "var(--color-border)" }}
+            >
+              {tNav("requestAccess")}
             </Link>
             <Link href={`/${locale}/termin-buchen`} className="btn-brand ml-1 px-4 py-2 text-xs">
               {tNav("bookAppointment")}
@@ -333,6 +378,51 @@ export default async function LocaleLandingPage({
           </div>
         </section>
       </div>
+
+      {/* ─── TWO PATHS — provider (buyer) vs patient, clearly separated ─── */}
+      <section aria-labelledby="two-paths" className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 id="two-paths" className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">{t("audienceSplitTitle")}</h2>
+          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">{t("audienceSplitSubline")}</p>
+        </div>
+        <div className="mt-8 grid gap-5 md:grid-cols-2">
+          {/* Provider / buyer path */}
+          <div className="flex flex-col rounded-2xl border p-6" style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}>
+            <div className="flex items-center gap-3">
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-white" style={{ background: "var(--gradient-brand)" }}>
+                <Building2 className="h-5 w-5" />
+              </span>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t("audienceSplitProviderTitle")}</h3>
+            </div>
+            <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">{t("audienceSplitProviderNote")}</p>
+            <div className="mt-5 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center">
+              <a href="#pricing" className="btn-brand px-5 py-2.5 text-sm">{tNav("pricing")}</a>
+              <Link href={`/${locale}/kontakt`} className="btn-outline-brand px-5 py-2.5 text-sm">{tNav("requestAccess")}</Link>
+              <Link
+                href="/auth/login"
+                className="inline-flex items-center justify-center gap-1.5 rounded-lg px-4 py-2.5 text-sm font-semibold text-slate-700 underline-offset-4 transition hover:underline dark:text-slate-300"
+              >
+                <LogIn className="h-4 w-4" /> {tNav("login")}
+              </Link>
+            </div>
+          </div>
+          {/* Patient path */}
+          <div className="flex flex-col rounded-2xl border p-6" style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}>
+            <div className="flex items-center gap-3">
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-white" style={{ background: "var(--gradient-brand)" }}>
+                <Smartphone className="h-5 w-5" />
+              </span>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t("audienceSplitPatientTitle")}</h3>
+            </div>
+            <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">{t("audienceSplitPatientNote")}</p>
+            <div className="mt-5">
+              <Link href={`/${locale}/termin-buchen`} className="btn-brand px-5 py-2.5 text-sm">
+                {t("audienceSplitPatientCta")} <ArrowRight className="ml-1.5 h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* ─── PATIENT BOOKING FLOW — image / text editorial row ─── */}
       <section id="how-patients" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-16 sm:py-20">
@@ -741,6 +831,12 @@ export default async function LocaleLandingPage({
             </Link>
             <Link href={`/${locale}/pricing`} className="transition hover:text-slate-900 dark:hover:text-slate-100">
               {tNav("pricing")}
+            </Link>
+            <Link href={`/${locale}/kontakt`} className="transition hover:text-slate-900 dark:hover:text-slate-100">
+              {tNav("requestAccess")}
+            </Link>
+            <Link href="/auth/login" className="transition hover:text-slate-900 dark:hover:text-slate-100">
+              {tNav("login")}
             </Link>
             <Link href={`/${locale}/blog`} className="transition hover:text-slate-900 dark:hover:text-slate-100">
               {tNav("blog")}

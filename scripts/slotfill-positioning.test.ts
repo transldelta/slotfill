@@ -820,3 +820,30 @@ test("Booking Page Public Copy Guard: /termin-buchen force-dynamic, Marker, manu
   assert.equal(/Company website|leave this field empty|do not fill/i.test(client), false, "/termin-buchen zeigt Honeypot-Hinweistext");
   assert.ok(client.includes("FormAntiSpamFields"), "/termin-buchen ohne Form-Abuse-Schutz (FormAntiSpamFields)");
 });
+
+// ─── 45. Mobile Navigation Guard ──────────────────────────────────────────────
+
+test("Mobile Navigation Guard: kontrolliertes Mobile-Menü, schließt sauber, kein Overflow, korrekte Wege", () => {
+  const mm = read("components/MobileMenu.tsx");
+  // Kontrollierte Client-Komponente (kein offenes <details> mehr).
+  assert.ok(mm.includes('"use client"'), "MobileMenu ist keine Client-Komponente");
+  assert.ok(/useState/.test(mm) && /setOpen/.test(mm), "MobileMenu ohne kontrollierten open-State");
+  // Schließt bei Link-Klick, Scroll, Klick außerhalb, Escape.
+  assert.ok((mm.match(/onClick=\{\(\) => setOpen\(false\)\}/g) ?? []).length >= 4, "Menü-Links schließen das Menü nicht per onClick");
+  assert.ok(/addEventListener\("scroll"/.test(mm), "Menü schließt nicht beim Scrollen");
+  assert.ok(/contains\(/.test(mm), "Menü schließt nicht bei Klick außerhalb");
+  // Kein horizontales Overflow (Box auf Viewport begrenzt, rechts verankert).
+  assert.ok(/max-w-\[calc\(100vw-2rem\)\]/.test(mm), "Mobile-Menü ohne Viewport-Begrenzung (Overflow-Risiko)");
+  assert.ok(/right-0/.test(mm), "Mobile-Menü nicht rechts verankert");
+  // Nur sm:hidden (mobil), Desktop unberührt.
+  assert.ok(/sm:hidden/.test(mm), "Mobile-Menü nicht auf Mobile beschränkt");
+  // Korrekte Wege als Labels durchgereicht; keine Registrierung/Patient-Login/Demo-Praxis.
+  const home = read(PAGE);
+  assert.ok(home.includes("<MobileMenu"), "Homepage rendert MobileMenu nicht");
+  for (const ref of ['tNav("requestAccess")', 'tNav("login")', 'tNav("pricing")', 't("audienceSplitProviderTitle")', 't("audienceSplitPatientCta")']) {
+    assert.ok(home.includes(ref), `MobileMenu-Label ${ref} fehlt`);
+  }
+  for (const bad of ["/auth/register", "kostenlos registrieren", "Konto erstellen", "Patient Login", "Demo-Praxis", "Demo clinic"]) {
+    assert.equal(mm.includes(bad), false, `Mobile-Menü enthält verbotene Copy/Link: "${bad}"`);
+  }
+});

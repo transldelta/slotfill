@@ -22,14 +22,20 @@ export function FormAntiSpamFields() {
   return (
     <>
       <input type="hidden" name={TIMESTAMP_FIELD} value={ts} readOnly />
+      {/* Honeypot: off-screen + aria-hidden + nicht fokussierbar. Keine sichtbare
+          Beschriftung/Instruktion im HTML — Bots füllen das Feld dennoch, Menschen
+          und Screenreader erreichen es nicht. */}
       <div
         aria-hidden="true"
         style={{ position: "absolute", left: "-9999px", top: "auto", width: 1, height: 1, overflow: "hidden" }}
       >
-        <label>
-          Company website (leave this field empty)
-          <input type="text" name={HONEYPOT_FIELD} tabIndex={-1} autoComplete="off" defaultValue="" />
-        </label>
+        <input
+          type="text"
+          name={HONEYPOT_FIELD}
+          tabIndex={-1}
+          autoComplete="off"
+          defaultValue=""
+        />
       </div>
     </>
   );

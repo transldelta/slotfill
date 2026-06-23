@@ -532,14 +532,15 @@ test("Go-Live: Aufgabe 4 – ehrliche Patienten-Journey im Hero der Startseite",
     "utf8",
   );
   // Messaging-Ehrlichkeit: Der Hero verspricht keine garantierte/sofortige Bestätigung,
-  // sondern zeigt die 3-Schritte-Anfrage und einen "Bestätigung ausstehend"-Status.
+  // sondern zeigt die 3-Schritte-Anfrage; die manuelle Praxis-Bestätigung wird klar
+  // kommuniziert (Zwei-Wege-Karte: "Die Praxis prüft und bestätigt jede Anfrage").
   assert.ok(
     content.includes('t("journey3")'),
     'app/[locale]/page.tsx: Patienten-Journey (journey3 – Bestätigung der Praxis) fehlt im Hero',
   );
   assert.ok(
-    content.includes('t("previewPending")'),
-    'app/[locale]/page.tsx: ehrlicher "Bestätigung ausstehend"-Status fehlt im Hero',
+    content.includes('t("audienceSplitPatientNote")'),
+    'app/[locale]/page.tsx: ehrlicher Hinweis "Praxis prüft und bestätigt" fehlt',
   );
 });
 

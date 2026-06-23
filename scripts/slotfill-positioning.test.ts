@@ -224,23 +224,20 @@ test("Pricing Scope Guard: Pricing klar als Klinik-/Praxis-Sache markiert", () =
 
 // ─── 15. Visual Hero Guard ────────────────────────────────────────────────────
 
-test("Visual Hero Guard: anonyme Termin-Vorschaukarte im Hero (keine echten Daten)", () => {
-  const en = msg("en").landing;
-  for (const k of ["previewClinic", "previewToday", "previewAvailable", "previewRequest", "previewPending"]) {
-    assert.ok((en[k] ?? "").trim().length > 1, `EN ${k} fehlt`);
-  }
-  assert.ok(en.previewAvailable.toLowerCase().includes("available"), "previewAvailable");
-  assert.ok(en.previewRequest.toLowerCase().includes("appointment request"), "previewRequest");
-  assert.ok(en.previewPending.toLowerCase().includes("clinic confirmation pending"), "previewPending");
+test("Visual Hero Guard: kein Mockup-/Slot-Overlay im Hero, keine echten/künstlichen Daten", () => {
   const home = read(PAGE);
-  assert.ok(home.includes('t("previewClinic")') && home.includes('"09:00"') && home.includes('"10:30"'), "Hero-Vorschaukarte fehlt");
+  // Kein Hero-Overlay mit künstlichen Slots/Uhrzeiten/Demo-Daten mehr (Karte hart entfernt).
+  assert.equal(home.includes('"09:00"') || home.includes('"10:30"'), false, "künstliche Mockup-Uhrzeit im Hero/Quelltext");
+  assert.equal(home.includes("SHOW_HERO_FLOATING_DEMO_CARD"), false, "Hero-Floating-Demo-Card-Konstante wieder vorhanden");
+  // Keine PII/Diagnose im Quelltext.
   assert.equal(/Sarah|Ahmed|Maria|Fatima|Mohammed|diagnosis|symptom/i.test(home), false, "mögliche PII/Diagnose im Homepage-Quelltext");
-  // DE-Vorschaukarte trägt die geforderten lokalisierten Begriffe.
-  const de = msg("de").landing;
-  assert.ok(de.previewClinic.includes("Beispiel-Terminseite"), "DE previewClinic (neutralisiert)");
-  assert.ok(de.previewAvailable.includes("Verfügbar"), "DE previewAvailable");
-  assert.ok(de.previewRequest.includes("Terminanfrage"), "DE previewRequest");
-  assert.ok(de.previewPending.includes("Bestätigung der Praxis ausstehend"), "DE previewPending");
+  // Entfernte Mockup-Keys sind nicht mehr im (öffentlich ausgelieferten) landing-Namespace.
+  for (const loc of locales) {
+    const l = msg(loc).landing;
+    for (const k of ["previewClinic", "previewToday", "previewAvailable", "previewRequest", "previewPending", "providerPreviewConfirm", "providerPreviewDecline", "providerPreviewNew", "providerPreviewRequests"]) {
+      assert.equal(k in l, false, `${loc}: veralteter Mockup-Key landing.${k} noch vorhanden`);
+    }
+  }
 });
 
 // ─── 16. Patient Navigation Guard ─────────────────────────────────────────────
@@ -479,7 +476,7 @@ test("SaaS Completeness Guard: Homepage zeigt vollständigen SaaS-Auftritt", () 
 
 test("Visual Product Guard: Patient- + Provider-Vorschau und Use-Cases sichtbar", () => {
   const home = read(PAGE);
-  for (const ref of ["previewClinic", "previewAvailable", "providerPreviewTitle", "providerWorkflow1", "useCases"]) {
+  for (const ref of ["providerPreviewTitle", "providerWorkflow1", "patientFlowTitle", "useCases"]) {
     assert.ok(home.includes(ref), `Homepage rendert Visual ${ref} nicht`);
   }
   assert.equal(/Sarah|Ahmed|Maria|Fatima|Mohammed|diagnosis|symptom/i.test(home), false, "PII/Diagnose im Homepage-Visual");
@@ -618,7 +615,7 @@ test("Provider/Patient Funnel Guard: Käuferweg (Preise/Zugang/Login) und Patien
 
 // ─── 35. Hero Funnel Polish Guard ─────────────────────────────────────────────
 
-test("Hero Funnel Polish Guard: Arztgesicht frei (object-position), Demo-Karte mobil ausgeblendet, ruhiger Hero", () => {
+test("Hero Funnel Polish Guard: Arztgesicht frei (object-position), kein Hero-Overlay, ruhiger Hero", () => {
   const home = read(PAGE);
   // HealthcareImage unterstützt einen gesichtsfreundlichen object-position-Crop.
   const hc = read("components/ui/HealthcareImage.tsx");
@@ -628,15 +625,9 @@ test("Hero Funnel Polish Guard: Arztgesicht frei (object-position), Demo-Karte m
   assert.ok(/objectPosition="50% (2[05]|1[5-9])%"/.test(home), "Hero-Bild ohne gesichtsfreundliche object-position (Kopf-Crop)");
   // Hero-Bild nutzt mobil ein flacheres Seitenverhältnis (weniger harter Crop).
   assert.ok(home.includes("aspect-[4/3] w-full shadow-xl sm:aspect-[5/4] lg:aspect-[4/5]"), "Hero-Bild ohne entschärften Mobile-Crop");
-  // Hero-Floating-Demo-Card ist HART aus dem Render genommen (Konstante false), nicht nur per CSS versteckt.
-  assert.ok(/const SHOW_HERO_FLOATING_DEMO_CARD\s*=\s*false/.test(home), "Hero-Floating-Demo-Card nicht hart per Konstante deaktiviert");
-  assert.ok(home.includes("SHOW_HERO_FLOATING_DEMO_CARD && ("), "Hero-Floating-Demo-Card-JSX ist nicht durch die Konstante gegated");
-  // Kein Breakpoint-Reveal für die Hero-Karte (selbst wenn die Konstante je true würde).
-  const cardOpen = (home.match(/SHOW_HERO_FLOATING_DEMO_CARD && \(\s*<div className="([^"]*)"/) ?? ["", ""])[1];
-  assert.ok(cardOpen.length > 0, "Hero-Karten-JSX nach dem Konstanten-Gate nicht gefunden");
-  assert.equal(/\bsm:block\b|\bmd:block\b|\blg:block\b/.test(cardOpen), false, "Hero-Karte hat einen Breakpoint-Reveal");
-  // Vorschau-Markup bleibt PII-frei im Quelltext (nur gerendert, wenn Konstante true) — keine Fake-OS-Chrome.
-  assert.ok(home.includes('t("previewClinic")') && home.includes('"09:00"'), "Hero-Vorschau-Markup (previewClinic/Slots) fehlt im Quelltext");
+  // KEIN Hero-Overlay/Floating-Demo-Card mehr (komplett entfernt, auch die Konstante).
+  assert.equal(home.includes("SHOW_HERO_FLOATING_DEMO_CARD"), false, "Hero-Floating-Demo-Card-Konstante/Gate wieder vorhanden");
+  assert.equal(home.includes('"09:00"') || home.includes('"10:30"'), false, "künstliche Slot-Uhrzeit im Hero/Quelltext");
   // Keine Garantie-/Notfall-Claims im Hero/Landing.
   for (const loc of locales) {
     const blob = landingBlob(loc);
@@ -737,7 +728,7 @@ test("Public Demo Wording Guard: keine öffentliche Demo-/Mockup-Sprache auf der
   // WICHTIG: next-intl shippt alle Message-Werte ins HTML (i18n-JSON). Daher dürfen die
   // öffentlich ausgelieferten Namespaces (landing/nav/pricing) KEINE Demo-/Dashboard-/
   // Mockup-Strings enthalten — sonst sind sie per HTML-Grep auffindbar.
-  const shippedRx = /Demo-Praxis|Demo clinic|Demo Clinic|Praxis-Dashboard|Eingehende Terminanfragen|#1042/i;
+  const shippedRx = /Demo-Praxis|Demo clinic|Demo Clinic|Praxis-Dashboard|Practice dashboard|Eingehende Terminanfragen|Incoming appointment requests|#1042|09:00|10:30|sample booking page|demo booking page|practice\/demo|cabinet\/démo|consulta\/demo|consultório\/demo/i;
   for (const loc of locales) {
     const m = msg(loc) as Record<string, Record<string, string>>;
     for (const ns of ["landing", "nav", "pricing"]) {
@@ -746,4 +737,52 @@ test("Public Demo Wording Guard: keine öffentliche Demo-/Mockup-Sprache auf der
       assert.equal(hit, null, `${loc}: Namespace '${ns}' shippt verbotenen Demo-/Mockup-String: "${hit?.[0]}"`);
     }
   }
+});
+
+// ─── 41. i18n Public Shipping Guard ───────────────────────────────────────────
+
+test("i18n Public Shipping Guard: nur öffentliche Namespaces gehen an den Client (keine privaten im HTML)", () => {
+  const layout = read("app/[locale]/layout.tsx");
+  assert.equal(/messages=\{messages\}/.test(layout), false, "Layout shippt komplette messages (inkl. privater Namespaces) an den Client");
+  assert.ok(layout.includes("PUBLIC_NAMESPACES"), "Layout beschränkt nicht auf öffentliche Namespaces");
+  assert.ok(/messages=\{publicMessages\}/.test(layout), "Provider nutzt nicht die gefilterten publicMessages");
+  const m = layout.match(/PUBLIC_NAMESPACES\s*=\s*\[([^\]]*)\]/);
+  assert.ok(m, "PUBLIC_NAMESPACES-Whitelist nicht gefunden");
+  const list = m![1];
+  for (const priv of ["auth", "dashboard", "admin", "errors", "settings", "subscription", "patients", "waitlist"]) {
+    assert.equal(new RegExp(`["']${priv}["']`).test(list), false, `Privater Namespace '${priv}' wird öffentlich ausgeliefert`);
+  }
+});
+
+// ─── 42. Public Auto-Confirmation Guard ───────────────────────────────────────
+
+test("Public Auto-Confirmation Guard: öffentliche Copy suggeriert keine automatische Terminbestätigung als Standard", () => {
+  const collectPublic = (loc: string) => {
+    const m = msg(loc) as Record<string, Record<string, unknown>>;
+    const out: string[] = [];
+    const walk = (x: unknown) => {
+      if (typeof x === "string") out.push(x);
+      else if (x && typeof x === "object") Object.values(x).forEach(walk);
+    };
+    for (const ns of ["landing", "pricing", "contact"]) walk(m[ns]);
+    return out;
+  };
+  for (const loc of locales) {
+    for (const v of collectPublic(loc)) {
+      assert.equal(/oder[^.]{0,40}automatisch|or[^.]{0,40}automatically|automatisch nach|automatically (according|by)|automatically confirmed/i.test(v), false, `${loc}: öffentliche Auto-Bestätigungs-Suggestion: "${v}"`);
+    }
+  }
+  const en = msg("en").landing.onlineBookingDesc ?? "";
+  assert.ok(/manually/i.test(en) && /no automatic/i.test(en), "EN onlineBookingDesc nicht klar manuell");
+});
+
+// ─── 43. Honeypot Invisibility Guard ──────────────────────────────────────────
+
+test("Honeypot Invisibility Guard: off-screen, nicht fokussierbar, ohne sichtbare Beschriftung", () => {
+  const comp = read("components/ui/FormAntiSpamFields.tsx");
+  assert.ok(comp.includes("HONEYPOT_FIELD") && comp.includes("TIMESTAMP_FIELD"), "Anti-Spam-Felder unvollständig (Bot-Schutz)");
+  assert.ok(comp.includes('aria-hidden="true"'), "Honeypot-Wrapper nicht aria-hidden");
+  assert.ok(comp.includes("tabIndex={-1}"), "Honeypot-Input ist fokussierbar (tabIndex fehlt)");
+  assert.ok(comp.includes('left: "-9999px"'), "Honeypot nicht off-screen positioniert");
+  assert.equal(/Company website|leave this field empty|leave empty|dieses Feld leer/i.test(comp), false, "Honeypot zeigt noch eine sichtbare Beschriftung/Instruktion");
 });

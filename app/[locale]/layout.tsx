@@ -33,8 +33,19 @@ export default async function LocaleLayout({
 
   const messages = await getMessages();
 
+  // SICHERHEIT/SAUBERKEIT: Nur öffentliche Namespaces an den Client ausliefern.
+  // next-intl shippt alle übergebenen Message-Werte ins HTML/i18n-JSON. Private
+  // Namespaces (auth/dashboard/admin/errors/…) dürfen NICHT öffentlich im HTML
+  // landen. Öffentliche [locale]-Client-Komponenten nutzen nur diese Namespaces:
+  const PUBLIC_NAMESPACES = ["nav", "landing", "pricing", "contact", "common"] as const;
+  const publicMessages = Object.fromEntries(
+    PUBLIC_NAMESPACES.filter((ns) => ns in (messages as Record<string, unknown>)).map(
+      (ns) => [ns, (messages as Record<string, unknown>)[ns]],
+    ),
+  );
+
   return (
-    <NextIntlClientProvider messages={messages}>
+    <NextIntlClientProvider messages={publicMessages}>
       <LocaleHtmlLang locale={locale} />
       {children}
     </NextIntlClientProvider>

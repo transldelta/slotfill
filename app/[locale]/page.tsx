@@ -12,7 +12,6 @@ import {
   Microscope,
   Smile,
   ArrowRight,
-  Clock,
   Zap,
   TrendingUp,
   Check,
@@ -30,11 +29,6 @@ import { getMarketScope } from "@/lib/market-scope";
 import { PRICING_PLANS } from "@/lib/pricing";
 
 const APP_URL = CANONICAL_URL;
-
-// CEO-Entscheid: Die schwebende Demo-/Kalenderkarte im Hero wird öffentlich NICHT
-// angezeigt (ruhiges, menschliches Hero-Bild). Hart aus dem Render genommen — kein
-// Breakpoint darf sie einblenden. Markup bleibt nur als PII-freie Vorschau erhalten.
-const SHOW_HERO_FLOATING_DEMO_CARD = false;
 
 export async function generateMetadata({
   params,
@@ -342,40 +336,7 @@ export default async function LocaleLandingPage({
               sizes="(min-width: 1024px) 50vw, 100vw"
               objectPosition="50% 20%"
               className="aspect-[4/3] w-full shadow-xl sm:aspect-[5/4] lg:aspect-[4/5]"
-            >
-              {/* Floating availability card — hart deaktiviert via SHOW_HERO_FLOATING_DEMO_CARD.
-                  Wird im sichtbaren Hero NICHT gerendert. Markup nur als PII-freie Vorschau. */}
-              {SHOW_HERO_FLOATING_DEMO_CARD && (
-              <div className="absolute right-3 top-3 z-10 w-56 rounded-2xl border bg-white/95 p-4 shadow-2xl ring-1 ring-black/5 backdrop-blur dark:bg-slate-900/90 lg:w-60" style={{ borderColor: "var(--color-border)" }}>
-                <div className="flex items-center justify-between">
-                  <span className="inline-flex items-center gap-1.5 text-sm font-bold text-slate-900 dark:text-slate-100">
-                    <span className="h-2 w-2 rounded-full" style={{ background: "var(--gradient-brand)" }} />
-                    {t("previewClinic")}
-                  </span>
-                  <span className="inline-flex items-center gap-1 text-[10px] font-medium text-slate-500 dark:text-slate-400">
-                    <Clock className="h-3 w-3" style={{ color: "var(--color-accent)" }} />
-                    {t("previewToday")}
-                  </span>
-                </div>
-                <div className="mt-3 space-y-2">
-                  {["09:00", "10:30"].map((tm) => (
-                    <div key={tm} className="flex items-center justify-between rounded-lg border px-3 py-2" style={{ borderColor: "var(--color-border)" }}>
-                      <span className="text-[13px] font-semibold tabular-nums text-slate-800 dark:text-slate-200">{tm}</span>
-                      <span className="inline-flex items-center gap-1 text-[11px] font-semibold" style={{ color: "var(--color-accent)" }}>
-                        <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "var(--color-accent)" }} />
-                        {t("previewAvailable")}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-                {/* Honest status: a request waits for the practice to confirm — no guarantee. */}
-                <div className="mt-3 flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-[11px]" style={{ backgroundColor: "var(--color-surface-2)" }}>
-                  <span className="font-medium text-slate-600 dark:text-slate-300">{t("previewRequest")}</span>
-                  <span className="text-slate-400 dark:text-slate-500">{t("previewPending")}</span>
-                </div>
-              </div>
-              )}
-            </HealthcareImage>
+            />{/* Hero-Bild ohne Overlay-Karte — kein Demo-/Slot-/Mockup-Element. */}
           </div>
         </section>
       </div>

@@ -728,7 +728,7 @@ test("Public Demo Wording Guard: keine öffentliche Demo-/Mockup-Sprache auf der
   // WICHTIG: next-intl shippt alle Message-Werte ins HTML (i18n-JSON). Daher dürfen die
   // öffentlich ausgelieferten Namespaces (landing/nav/pricing) KEINE Demo-/Dashboard-/
   // Mockup-Strings enthalten — sonst sind sie per HTML-Grep auffindbar.
-  const shippedRx = /Demo-Praxis|Demo clinic|Demo Clinic|Praxis-Dashboard|Practice dashboard|Eingehende Terminanfragen|Incoming appointment requests|#1042|09:00|10:30|sample booking page|demo booking page|practice\/demo|cabinet\/démo|consulta\/demo|consultório\/demo/i;
+  const shippedRx = /Demo-Praxis|Demo clinic|Demo Clinic|Praxis-Dashboard|Practice dashboard|Eingehende Terminanfragen|Incoming appointment requests|#1042|09:00|10:30|sample booking page|demo booking page|practice\/demo|cabinet\/démo|consulta\/demo|consultório\/demo|Demo-Buchungsseite|Praxis-\/Demo/i;
   for (const loc of locales) {
     const m = msg(loc) as Record<string, Record<string, string>>;
     for (const ns of ["landing", "nav", "pricing"]) {
@@ -769,7 +769,7 @@ test("Public Auto-Confirmation Guard: öffentliche Copy suggeriert keine automat
   };
   for (const loc of locales) {
     for (const v of collectPublic(loc)) {
-      assert.equal(/oder[^.]{0,40}automatisch|or[^.]{0,40}automatically|automatisch nach|automatically (according|by)|automatically confirmed/i.test(v), false, `${loc}: öffentliche Auto-Bestätigungs-Suggestion: "${v}"`);
+      assert.equal(/oder[^.]{0,60}automatisch|or[^.]{0,60}automatically|automatisch nach|automatically (according|by)|automatically confirmed|falls ausdrücklich aktiviert|if explicitly enabled|auto-confirm/i.test(v), false, `${loc}: öffentliche Auto-Bestätigungs-Suggestion: "${v}"`);
     }
   }
   const en = msg("en").landing.onlineBookingDesc ?? "";

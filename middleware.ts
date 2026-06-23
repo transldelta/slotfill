@@ -141,8 +141,8 @@ export const config = {
      * - _next/static  (Next.js statische Build-Dateien)
      * - _next/image   (Next.js Bild-Optimierung)
      * - favicon.ico, robots.txt, sitemap.xml
-     * - Dateien mit Extension (.png, .jpg, .svg, .ico …)
+     * - Dateien mit Extension (.png, .jpg, .svg, .ico …, .txt, .md → public/llms.txt, public/ai-summary.md)
      */
-    "/((?!_next/static|_next/image|favicon\\.ico|robots\\.txt|sitemap\\.xml|.*\\.(?:png|jpg|jpeg|gif|svg|ico|webp|woff|woff2|ttf|eot)).*)",
+    "/((?!_next/static|_next/image|favicon\\.ico|robots\\.txt|sitemap\\.xml|.*\\.(?:png|jpg|jpeg|gif|svg|ico|webp|woff|woff2|ttf|eot|txt|md)).*)",
   ],
 };

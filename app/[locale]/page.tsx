@@ -57,17 +57,21 @@ export async function generateMetadata({
       siteName: PUBLIC_BRAND_NAME,
       locale: locale === "de" ? "de_DE" : locale,
       type: "website",
+      images: ["/brand/clinicslothub-logo.png"],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: ["/brand/clinicslothub-logo.png"],
     },
   };
 }
 
-// Schema.org JSON-LD – SoftwareApplication + Organization.
-function buildSchemaOrg(locale: string) {
+// Schema.org JSON-LD – SoftwareApplication + Organization + WebSite + FAQPage.
+// Starter-Preis kommt aus der zentralen Pricing-Einzelquelle (lib/pricing.ts),
+// damit strukturierte Daten und sichtbare Preise immer übereinstimmen.
+function buildSchemaOrg(locale: string, starterPrice: number, faqs: { q: string; a: string }[]) {
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -77,21 +81,35 @@ function buildSchemaOrg(locale: string) {
         applicationCategory: "BusinessApplication",
         operatingSystem: "Web",
         description:
-          "ClinicSlotHub helps patients book clinic appointments online. Clinics show available appointment options and receive patient requests in a simple, clear flow.",
+          "ClinicSlotHub helps selected healthcare providers manage appointment requests. Patients submit appointment requests; the provider reviews and confirms manually. No payment is processed on the website.",
         url: APP_URL,
         inLanguage: locale,
         offers: {
           "@type": "Offer",
-          price: "49",
+          price: String(starterPrice),
           priceCurrency: "EUR",
-          description: "Starter plan from €49/month. Pricing confirmed before activation.",
+          description: `Starter plan from €${starterPrice}/month. Final offer confirmed after review; no payment processed on the website.`,
         },
       },
       {
         "@type": "Organization",
         name: PUBLIC_BRAND_NAME,
         url: APP_URL,
-        description: "ClinicSlotHub – online clinic appointment booking for patients and clinics.",
+        description: "ClinicSlotHub – appointment request management for selected healthcare providers.",
+      },
+      {
+        "@type": "WebSite",
+        name: PUBLIC_BRAND_NAME,
+        url: APP_URL,
+        inLanguage: locale,
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: faqs.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: f.a },
+        })),
       },
     ],
   };
@@ -175,7 +193,8 @@ export default async function LocaleLandingPage({
     ...planMeta[p.key],
   }));
 
-  const schemaOrg = buildSchemaOrg(locale);
+  const starterPrice = PRICING_PLANS.find((p) => p.key === "starter")?.priceFrom ?? 29;
+  const schemaOrg = buildSchemaOrg(locale, starterPrice, faqs);
 
   return (
     <div className="min-h-screen text-slate-900 dark:text-slate-100" style={{ backgroundColor: "var(--color-bg)" }}>

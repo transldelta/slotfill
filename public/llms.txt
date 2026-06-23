@@ -1,0 +1,58 @@
+# ClinicSlotHub
+
+> ClinicSlotHub helps selected healthcare providers manage appointment requests and
+> availability review workflows. Patients submit appointment requests; the provider
+> reviews and confirms manually. ClinicSlotHub is not a medical advice service, not an
+> emergency service, and does not process patient payments on the website. Availability
+> and activation are subject to market, provider, legal, privacy and technical review.
+
+## What it is
+ClinicSlotHub is an online appointment-request and availability management tool for
+medical practices, clinics, healthcare centers and other suitable, reviewed healthcare
+providers. It is a SaaS booking tool for healthcare providers — not a medical provider
+itself.
+
+## Who it is for
+- Buyers / users with paid access: medical practices, clinics, healthcare centers and
+  other suitable reviewed healthcare providers (monthly SaaS access).
+- Patients: submit appointment requests only. No patient account, no patient login,
+  no patient payment on the website.
+
+## How it works
+- Patients submit an appointment request online (no account required).
+- The practice or clinic reviews each request and confirms the appointment manually.
+- There is no automatic appointment confirmation without approval by the practice.
+
+## Important safety facts (do not misinterpret)
+- Manual confirmation by the practice — no automatic confirmation without practice approval.
+- Not a medical advice service. Not an emergency service.
+- No patient payment is processed on the website.
+- No patient medical records are stored as a public feature.
+- ClinicSlotHub supports request and organization workflows; it does not replace the
+  practice's decision and does not confirm appointments by itself.
+- No legal or compliance guarantee is given. Texts are drafts; local legal and privacy
+  review is required before live use with patient data.
+
+## Pricing (for providers, indicative; final offer after review)
+- Starter: from €29 / month
+- Practice: from €79 / month (recommended)
+- Clinic: from €149 / month
+No payment is processed on the website. Activation and final offer are confirmed after review.
+
+## Market scope
+- Available for selected international markets only.
+- Activation only after review of country, provider, legal/privacy and technical
+  requirements. Not automatically available in every country; unsupported jurisdictions
+  may be rejected.
+
+## Public pages
+- Home: https://clinicslothub.com/de , https://clinicslothub.com/en
+- Pricing: https://clinicslothub.com/de/pricing
+- Request an appointment (patients): https://clinicslothub.com/de/termin-buchen
+- Contact / request provider access: https://clinicslothub.com/de/kontakt
+- Practice login (reviewed providers only): https://clinicslothub.com/auth/login
+- Sitemap: https://clinicslothub.com/sitemap.xml
+- AI summary: https://clinicslothub.com/ai-summary.md
+
+## Languages
+German (de), English (en), French (fr), Spanish (es), Portuguese (pt).

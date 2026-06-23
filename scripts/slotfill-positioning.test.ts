@@ -908,3 +908,79 @@ test("Pricing Copy Risk Guard: keine MVZ-/Email-Automation-/Premium-/Trial-/ROI-
     assert.ok(pr.includes(price), `Preis ${price} fehlt in lib/pricing.ts`);
   }
 });
+
+// ─── 48. AI Readiness — llms.txt Guard ────────────────────────────────────────
+
+const RISKY_AI_CLAIMS = [
+  "free trial", "kostenlos testen", "guaranteed compliance", "gdpr-ready", "dsgvo-sicher",
+  "hipaa-ready", "hipaa compliant", "fully compliant", "rechtssicher garantiert",
+  "worldwide", "all countries", "available everywhere", "automatically confirmed",
+  "automatic confirmation guaranteed", "automatisch bestätigt", "guaranteed roi",
+  "real customers", "fake users", "demo-praxis", "demo clinic", "dashboard-mockup",
+  "#1042", "09:00", "10:30", "patient pays", "pay now", "24h", "48h",
+];
+
+test("AI Readiness — llms.txt Guard: vorhanden, sichere Aussagen, keine riskanten Claims", () => {
+  assert.ok(existsSync(join(ROOT, "public/llms.txt")), "public/llms.txt fehlt");
+  const f = read("public/llms.txt");
+  assert.ok(f.includes("ClinicSlotHub"), "llms.txt nennt ClinicSlotHub nicht");
+  assert.ok(/no automatic appointment confirmation without approval|no automatic confirmation without practice approval/i.test(f), "llms.txt ohne manuelle-Bestätigung-Aussage");
+  assert.ok(/not an emergency service/i.test(f), "llms.txt ohne 'not an emergency service'");
+  assert.ok(/not a medical advice service/i.test(f), "llms.txt ohne 'not a medical advice service'");
+  assert.ok(/no payment is processed on the website|does not process patient payments/i.test(f), "llms.txt ohne 'no payment on the website'");
+  assert.ok(/subject to .*review|activation only after review/i.test(f), "llms.txt ohne 'activation subject to review'");
+  const low = f.toLowerCase();
+  for (const bad of RISKY_AI_CLAIMS) {
+    assert.equal(low.includes(bad), false, `llms.txt enthält riskanten Claim: "${bad}"`);
+  }
+});
+
+// ─── 49. AI Readiness — ai-summary.md Guard ───────────────────────────────────
+
+test("AI Readiness — ai-summary.md Guard: vorhanden, Preise 29/79/149, sicher, keine riskanten Claims", () => {
+  assert.ok(existsSync(join(ROOT, "public/ai-summary.md")), "public/ai-summary.md fehlt");
+  const f = read("public/ai-summary.md");
+  for (const p of ["29", "79", "149"]) assert.ok(f.includes(p), `ai-summary.md ohne Preis ${p}`);
+  assert.ok(/manual confirmation|confirms .*manually/i.test(f), "ai-summary.md ohne manuelle Bestätigung");
+  assert.ok(/no emergency service/i.test(f), "ai-summary.md ohne 'no emergency service'");
+  assert.ok(/no medical advice/i.test(f), "ai-summary.md ohne 'no medical advice'");
+  assert.ok(/no patient payment on the website/i.test(f), "ai-summary.md ohne 'no patient payment'");
+  assert.ok(/no\W*legal or compliance guarantee/i.test(f), "ai-summary.md ohne 'keine Compliance-Garantie'");
+  const low = f.toLowerCase();
+  for (const bad of RISKY_AI_CLAIMS) {
+    assert.equal(low.includes(bad), false, `ai-summary.md enthält riskanten Claim: "${bad}"`);
+  }
+});
+
+// ─── 50. AI Readiness — JSON-LD + FAQPage Guard ───────────────────────────────
+
+test("AI Readiness — JSON-LD Guard: Starter-Preis konsistent (29, kein 49), FAQPage + sichere Schema-Typen", () => {
+  const home = read(PAGE);
+  // Preis kommt aus der Pricing-Einzelquelle; kein hardcodierter 49er-Wert mehr.
+  assert.equal(/price:\s*"49"/.test(home), false, "JSON-LD enthält noch hardcodierten Starter-Preis 49");
+  assert.equal(home.includes("from €49"), false, "JSON-LD/Seite enthält noch '€49'");
+  assert.ok(/buildSchemaOrg\(locale,\s*starterPrice/.test(home), "JSON-LD nutzt nicht die Pricing-Einzelquelle (starterPrice)");
+  // Starter-Preis in lib/pricing.ts ist 29.
+  assert.ok(/key:\s*"starter"[^}]*priceFrom:\s*29/.test(read("lib/pricing.ts")), "Starter-priceFrom in lib/pricing.ts ist nicht 29");
+  // FAQPage + sichere Schema-Typen vorhanden, keine missverständlichen Healthcare-Betreiber-Typen.
+  for (const t of ['"@type": "FAQPage"', '"@type": "SoftwareApplication"', '"@type": "Organization"', '"@type": "WebSite"']) {
+    assert.ok(home.includes(t), `JSON-LD ohne ${t}`);
+  }
+  assert.equal(/"@type":\s*"MedicalBusiness"|"@type":\s*"Physician"|"@type":\s*"Hospital"/.test(home), false, "JSON-LD nutzt missverständlichen Healthcare-Betreiber-Typ");
+});
+
+// ─── 51. AI Readiness — Sitemap Guard ─────────────────────────────────────────
+
+test("AI Readiness — Sitemap Guard: öffentliche Routen inkl. /termin-buchen, keine privaten Routen", () => {
+  const sm = read("app/sitemap.ts");
+  assert.ok(/PUBLIC_PATHS\s*=\s*\[[^\]]*"\/termin-buchen"/.test(sm), "Sitemap nimmt /termin-buchen nicht auf");
+  for (const p of ['"/pricing"', '"/kontakt"']) assert.ok(sm.includes(p), `Sitemap ohne ${p}`);
+  for (const priv of ['"/admin', '"/dashboard', '"/api', '"/auth']) {
+    assert.equal(sm.includes(priv), false, `Sitemap enthält private Route ${priv}`);
+  }
+  // robots blockt private Bereiche weiter.
+  const rob = read("app/robots.ts");
+  for (const priv of ["/dashboard/", "/admin/", "/api/", "/auth/"]) {
+    assert.ok(rob.includes(priv), `robots.ts blockt ${priv} nicht`);
+  }
+});

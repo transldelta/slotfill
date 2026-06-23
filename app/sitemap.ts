@@ -9,7 +9,7 @@ const baseUrl = CANONICAL_URL;
 // Öffentliche Seiten, die für jede Locale generiert werden.
 // Alte Kampagnen-Routen (/launch, /public-launch, /share) sind nicht mehr Teil
 // der ClinicSlotHub-Positionierung und werden nicht indexiert.
-const PUBLIC_PATHS = ["/", "/pricing", "/blog", "/kontakt"];
+const PUBLIC_PATHS = ["/", "/pricing", "/blog", "/kontakt", "/termin-buchen"];
 
 // Statische Slug-Liste als Fallback (immer aktuell, da aus blog-data importiert)
 const STATIC_SLUGS = STATIC_BLOG_POSTS.map((p) => p.slug);

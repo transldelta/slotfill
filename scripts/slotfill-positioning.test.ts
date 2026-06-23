@@ -1010,6 +1010,15 @@ test("Navigation Guard: keine prominente 'Beispiel-Terminseite'/'Sample booking 
   // Mobile-Menü ohne Beispiel-/Sample-/Demo-Wording.
   const mm = read("components/MobileMenu.tsx");
   assert.equal(/Beispiel-Terminseite|Sample booking page|demoClinic|Demo-Praxis|Demo clinic/i.test(mm), false, "Mobile-Menü enthält Beispiel-/Sample-/Demo-Wording");
+  // KEIN 'Beispiel-Terminseite'/'Sample booking page'/'example appointment page' mehr in den
+  // öffentlich ausgelieferten Namespaces (landing/nav) — auch nicht in Content-CTAs/i18n-JSON.
+  const rx = /Beispiel-Terminseite|Sample booking page|example appointment page|réservation exemple|reserva de ejemplo|marcação exemplo/i;
+  for (const loc of locales) {
+    const m = msg(loc) as Record<string, Record<string, string>>;
+    for (const ns of ["landing", "nav"]) {
+      assert.equal(rx.test(JSON.stringify(m[ns] ?? {})), false, `${loc}: Namespace '${ns}' shippt noch Beispiel-/Sample-Terminseiten-Wording`);
+    }
+  }
   // Patientenweg bleibt im Funnel erreichbar (Termin anfragen → /termin-buchen).
   assert.ok(home.includes("/termin-buchen"), "Patienten-Anfrageweg (/termin-buchen) fehlt");
 });

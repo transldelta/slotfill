@@ -21,7 +21,7 @@
 
 | Claim | Evidence |
 |---|---|
-| 500+ passing tests | `npm test` → 501 pass / 0 fail (tsx --test, 17 suites), including security, form-abuse, no-fake-claims, SEO and legal-scope guards |
+| 500+ passing tests | `npm test` → 501 pass / 0 fail in the latest reported run (tsx --test, 17 suites), including security, form-abuse, no-fake-claims, SEO and legal-scope guards; buyer can re-run during due diligence |
 | Form protection | `lib/form-abuse.ts` + guards: honeypot, time-trap, rate limit, spam-text check; no file uploads |
 | No automatic patient email on submission | `app/termin-buchen/actions.ts`: submit stores the request and calls `sendBookingAdminNotification` only; patient emails require manual admin confirm/decline |
 | Auto-confirm off by default | `lib/auto-confirm.ts`: runs only if `practices.auto_confirm_bookings = true` plus slot/conflict/blocked-time checks; default is false |

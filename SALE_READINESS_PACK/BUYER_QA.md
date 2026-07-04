@@ -14,7 +14,7 @@ A: No. Zero revenue to date. The pricing page shows orientation pricing (â‚¬29/â
 A: No. Stripe integration code exists (checkout route with server-side price mapping, signature-verified webhook route), but it is deliberately inactive: no Stripe keys are configured, no products were created, and the pricing CTA routes to the contact form instead. Activating payments is the buyer's decision after their own legal review.
 
 **Q: What has been live-tested?**
-A: The public request flow on clinicslothub.com: a test appointment request was submitted through the public form, the admin notification email arrived via Resend, and no automatic email was sent to the patient on submission. Confirmation/decline emails to patients are triggered only by a manual admin action; these flows were also live-tested (documented in `docs/GO_LIVE_SAFETY_AUDIT.md`). Additionally, 500+ automated tests run green on every commit.
+A: The public request flow on clinicslothub.com: a test appointment request was submitted through the public form, the admin notification email arrived via Resend, and no automatic email was sent to the patient on submission. Confirmation/decline emails to patients are triggered only by a manual admin action; these flows were also live-tested (documented in `docs/GO_LIVE_SAFETY_AUDIT.md`). Additionally, the automated test suite (500+ tests) passed in the latest reported run; local pre-commit/pre-push gates re-run it before changes land, and the buyer can re-run it during due diligence.
 
 **Q: Is there patient data?**
 A: No real patient data. Test submissions are flagged as test data (`is_test`) and separated in the admin views. The buyer starts with their own fresh Supabase project; no production database with personal data is transferred.

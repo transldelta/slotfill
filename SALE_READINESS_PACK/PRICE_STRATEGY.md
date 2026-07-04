@@ -12,6 +12,8 @@
 | Bevorzugter Verhandlungskorridor | **€4.500 – €7.500** | hier aktiv verhandeln und abschließen |
 | Absolute Untergrenze | **€3.000** | darunter **nur mit ausdrücklicher CEO-Freigabe** — nicht automatisch akzeptieren |
 
+**Realistische Erwartung:** Der Asking Price ist eine Verhandlungsobergrenze, kein sicherer Erlös. Es gibt keine Garantie, dass €9.500 erzielt werden; ein Abschluss im Korridor €4.500–7.500 ist das realistische Ziel, und auch dieser hängt von Käuferlage und Marktumfeld ab.
+
 ## Wertbegründung (ehrlich, belegbar)
 
 1. **Domain inklusive** — clinicslothub.com, markttauglicher Name für die Nische

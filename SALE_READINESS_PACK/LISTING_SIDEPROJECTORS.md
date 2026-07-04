@@ -34,7 +34,7 @@ The product is best suited for selected international markets or clinic operator
 - Appointment request form with validation, honeypot, time-trap
 - Verified live request flow: request submitted → admin notification received → no automatic patient confirmation email
 - Three-tier pricing page: €29 / €79 / €149 orientation pricing (no payment processed on the website)
-- 500+ passing tests
+- 500+ automated tests, all passing in the latest reported run (buyer can re-run during due diligence)
 - SEO foundation (sitemap, robots, canonical, hreflang incl. x-default)
 - AI-crawler readiness (llms.txt, ai-summary.md)
 - Legal page structure (Impressum, privacy policy, terms, DPA — buyer must have them reviewed for their market)

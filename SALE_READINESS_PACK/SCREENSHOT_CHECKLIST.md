@@ -19,7 +19,7 @@
 
 ## Optional (stärkt das Listing)
 
-- [ ] **Testlauf-Ergebnis** — Terminal mit `npm test`-Ausgabe „501 pass / 0 fail" (keine Pfade mit Benutzernamen im Bild? Home-Pfad ist okay, aber prüfen)
+- [ ] **Testlauf-Ergebnis** — Terminal mit `npm test`-Ausgabe „501 pass / 0 fail"; vor dem Screenshot prüfen, dass keine sensiblen Pfade, Tokens oder fremden Daten im Terminalfenster sichtbar sind (der eigene Home-Ordnername ist unkritisch)
 - [ ] **Google Search Console** — Sitemap-Einreichung/Status, falls eingerichtet; Property-E-Mail schwärzen
 - [ ] **llms.txt im Browser** — https://clinicslothub.com/llms.txt als AI-Readiness-Beleg
 - [ ] **Mehrsprachigkeit** — dieselbe Seite in 2–3 Sprachen nebeneinander (z. B. /en, /es, /pt)

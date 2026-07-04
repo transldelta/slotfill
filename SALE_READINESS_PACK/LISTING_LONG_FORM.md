@@ -48,7 +48,7 @@ The product is best suited for selected international markets or clinic operator
 
 ## 3. Technical quality
 
-- **500+ passing automated tests** (`tsx --test`, 17 suites) including regression guards for security (register lock, auth protection), form-abuse protection, no-fake-claims wording, SEO foundation, legal market-scope wording, pricing consistency
+- **500+ automated tests, all passing in the latest reported run** (`tsx --test`, 17 suites; buyer can re-run during due diligence) including regression guards for security (register lock, auth protection), form-abuse protection, no-fake-claims wording, SEO foundation, legal market-scope wording, pricing consistency
 - TypeScript throughout; App Router; static prerendering where possible
 - SEO foundation: sitemap.xml (100 URLs across 5 locales), robots.txt with private-path disallow, canonical URLs, hreflang incl. x-default, Schema.org JSON-LD
 - AI-crawler readiness: `llms.txt` and `ai-summary.md` served from the live domain, aligned with the request-and-review positioning

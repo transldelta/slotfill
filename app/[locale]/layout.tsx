@@ -5,10 +5,45 @@ import { getMessages } from "next-intl/server";
 import { locales, type Locale } from "@/i18n/routing";
 import { LocaleHtmlLang } from "@/components/LocaleHtmlLang";
 
-export const metadata: Metadata = {
-  title: "ClinicSlotHub – Book clinic appointments online",
-  description: "ClinicSlotHub helps patients book clinic appointments online in a simple, clear flow. Clinics show available appointment options and receive patient requests — multilingual, GDPR-conscious.",
+// Lokalisierte Basis-Metadata für alle [locale]-Seiten ohne eigene Description.
+// Bewusst Anfrage-Sprache ("request"), keine Buchungs-/Bestätigungssprache.
+const LAYOUT_META: Record<string, { title: string; description: string }> = {
+  de: {
+    title: "ClinicSlotHub – Klinik-Termine online anfragen",
+    description:
+      "ClinicSlotHub ermöglicht Patient:innen, Termine bei Praxen und Kliniken online anzufragen. Die Einrichtung prüft jede Anfrage und bestätigt manuell – mehrsprachig und datenschutzbewusst.",
+  },
+  en: {
+    title: "ClinicSlotHub – Request clinic appointments online",
+    description:
+      "ClinicSlotHub lets patients request clinic appointments online in a simple, clear flow. Clinics review each request and confirm manually — multilingual and privacy-conscious.",
+  },
+  fr: {
+    title: "ClinicSlotHub – Demander un rendez-vous en clinique en ligne",
+    description:
+      "ClinicSlotHub permet aux patients de demander en ligne un rendez-vous auprès de cabinets et de cliniques. L'établissement examine chaque demande et confirme manuellement – multilingue et respectueux de la protection des données.",
+  },
+  es: {
+    title: "ClinicSlotHub – Solicite citas en clínicas en línea",
+    description:
+      "ClinicSlotHub permite a los pacientes solicitar citas en consultas y clínicas en línea. El centro revisa cada solicitud y la confirma manualmente – multilingüe y respetuoso con la protección de datos.",
+  },
+  pt: {
+    title: "ClinicSlotHub – Solicite consultas em clínicas online",
+    description:
+      "O ClinicSlotHub permite que pacientes solicitem consultas em clínicas e consultórios online. A instituição analisa cada solicitação e confirma manualmente – multilíngue e atento à proteção de dados.",
+  },
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const meta = LAYOUT_META[locale] ?? LAYOUT_META.en;
+  return { title: meta.title, description: meta.description };
+}
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));

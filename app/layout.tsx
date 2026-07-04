@@ -4,8 +4,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "ClinicSlotHub – Book clinic appointments online",
-  description: "ClinicSlotHub helps patients book clinic appointments online in a simple, clear flow. Clinics show available appointment options and receive patient requests — multilingual, GDPR-conscious.",
+  title: "ClinicSlotHub – Klinik-Termine online anfragen",
+  description: "ClinicSlotHub ermöglicht Patient:innen, Termine bei Praxen und Kliniken online anzufragen. Die Einrichtung prüft jede Anfrage und bestätigt manuell – mehrsprachig und datenschutzbewusst.",
 };
 
 // Setzt das Theme vor dem ersten Paint, um ein Aufblitzen zu vermeiden.

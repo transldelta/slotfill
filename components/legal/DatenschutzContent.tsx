@@ -108,12 +108,55 @@ export function DatenschutzContent({
 
           <section>
             <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">
-              4. Drittanbieter und Auftragsverarbeiter
+              4. Terminanfragen über das Anfrageformular
+            </h2>
+            <div className="mt-2 space-y-2 leading-relaxed">
+              <p>
+                Über das öffentliche Anfrageformular können Patient:innen eine Terminanfrage an
+                eine teilnehmende Praxis oder Klinik stellen. Dabei werden folgende Daten
+                verarbeitet: Name, E-Mail-Adresse, optional Telefonnummer, Wunschzeitraum sowie
+                eine optionale Nachricht.
+              </p>
+              <p>
+                <strong>Zweck:</strong> Weiterleitung der Anfrage an die jeweils angefragte
+                Praxis/Klinik zur manuellen Prüfung und Beantwortung. Es erfolgt keine
+                automatische Terminbestätigung und keine automatische E-Mail an Patient:innen;
+                die Einrichtung entscheidet über die Anfrage und meldet sich selbst zurück.
+              </p>
+              <p>
+                <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b DSGVO (Durchführung
+                vorvertraglicher Maßnahmen auf Anfrage der betroffenen Person).
+              </p>
+              <p>
+                <strong>Empfänger:</strong> die angefragte Einrichtung sowie technische
+                Dienstleister im Rahmen einer Auftragsverarbeitung (Supabase für Hosting/
+                Datenbank, Resend für die Admin-Benachrichtigung an die Einrichtung).
+              </p>
+              <p>
+                <strong>Speicherdauer:</strong> Anfragedaten werden nur so lange gespeichert,
+                wie es für die Bearbeitung der Anfrage erforderlich ist. Auf Anfrage an{" "}
+                <a href="mailto:transl.delta@gmail.com" className="text-blue-600 hover:underline dark:text-blue-400">
+                  transl.delta@gmail.com
+                </a>{" "}
+                werden die Daten gelöscht, sofern keine gesetzlichen Aufbewahrungspflichten
+                entgegenstehen.
+              </p>
+              <p>
+                <strong>Wichtiger Hinweis:</strong> Bitte geben Sie im Anfrageformular keine
+                Gesundheitsdaten oder medizinischen Details an. Besprechen Sie Ihr Anliegen
+                direkt mit der Praxis/Klinik.
+              </p>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">
+              5. Drittanbieter und Auftragsverarbeiter
             </h2>
             <ul className="mt-2 ml-4 list-disc space-y-1 leading-relaxed">
               <li><strong>Supabase</strong> (Datenbank, Authentifizierung) – gemäß Supabase-DPA.</li>
               <li><strong>Vercel</strong> (Hosting) – gemäß Vercel-DPA.</li>
-              <li><strong>Resend</strong> (transaktionale E-Mails: Kontaktbestätigungen, Buchungsbestätigungen) – gemäß Resend-DPA.</li>
+              <li><strong>Resend</strong> (transaktionale E-Mails: Kontaktbestätigungen, Admin-Benachrichtigungen an die angefragte Einrichtung bei Terminanfragen; es werden keine Bestätigungs-E-Mails an Patient:innen versendet) – gemäß Resend-DPA.</li>
               <li><strong>Stripe</strong> (Zahlungsabwicklung) – nur wenn von der Praxis aktiviert; aktuell nicht im Produktivbetrieb.</li>
               <li><strong>Twilio</strong> (optional, SMS/WhatsApp) – nur wenn von der Praxis bewusst konfiguriert. Separate DPA erforderlich.</li>
             </ul>
@@ -121,7 +164,7 @@ export function DatenschutzContent({
 
           <section>
             <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">
-              5. Ihre Rechte als betroffene Person
+              6. Ihre Rechte als betroffene Person
             </h2>
             <ul className="mt-2 ml-4 list-disc space-y-1 leading-relaxed">
               <li>Auskunft (Art. 15)</li>
@@ -142,7 +185,7 @@ export function DatenschutzContent({
 
           <section>
             <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">
-              6. Auftragsverarbeitungsvertrag (AVV)
+              7. Auftragsverarbeitungsvertrag (AVV)
             </h2>
             <p className="mt-2 leading-relaxed">
               Praxen, die Patientendaten eingeben, schließen einen AVV gemäß Art. 28 DSGVO ab.
@@ -155,7 +198,7 @@ export function DatenschutzContent({
 
           <section>
             <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">
-              7. Cookies und Tracking
+              8. Cookies und Tracking
             </h2>
             <p className="mt-2 leading-relaxed">
               ClinicSlotHub verwendet technisch notwendige Cookies (Sitzungscookies). Keine Tracking-

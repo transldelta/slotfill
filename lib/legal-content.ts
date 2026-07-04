@@ -102,7 +102,7 @@ export interface LegalLocaleData {
 const de: LegalLocaleData = {
   dir: "ltr",
   backLabel: "ClinicSlotHub",
-  standDate: "Stand: Mai 2026",
+  standDate: "Stand: Juli 2026",
   agbTitle: "Allgemeine Geschäftsbedingungen (AGB)",
   datenschutzTitle: "Datenschutzerklärung",
   impressumTitle: "Impressum",
@@ -160,7 +160,7 @@ const de: LegalLocaleData = {
 const en: LegalLocaleData = {
   dir: "ltr",
   backLabel: "ClinicSlotHub",
-  standDate: "As of: May 2026",
+  standDate: "As of: July 2026",
   agbTitle: "Terms and Conditions",
   datenschutzTitle: "Privacy Policy",
   impressumTitle: "Legal Notice (Impressum)",
@@ -219,7 +219,7 @@ const en: LegalLocaleData = {
 const fr: LegalLocaleData = {
   dir: "ltr",
   backLabel: "ClinicSlotHub",
-  standDate: "Date : mai 2026",
+  standDate: "Date : juillet 2026",
   agbTitle: "Conditions générales d'utilisation",
   datenschutzTitle: "Politique de confidentialité",
   impressumTitle: "Mentions légales",
@@ -278,7 +278,7 @@ const fr: LegalLocaleData = {
 const es: LegalLocaleData = {
   dir: "ltr",
   backLabel: "ClinicSlotHub",
-  standDate: "Fecha: mayo 2026",
+  standDate: "Fecha: julio 2026",
   agbTitle: "Términos y condiciones",
   datenschutzTitle: "Política de privacidad",
   impressumTitle: "Aviso legal",
@@ -337,7 +337,7 @@ const es: LegalLocaleData = {
 const ar: LegalLocaleData = {
   dir: "rtl",
   backLabel: "ClinicSlotHub",
-  standDate: "التاريخ: مايو 2026",
+  standDate: "التاريخ: يوليو 2026",
   agbTitle: "الشروط والأحكام",
   datenschutzTitle: "سياسة الخصوصية",
   impressumTitle: "الإشعار القانوني",
@@ -396,7 +396,7 @@ const ar: LegalLocaleData = {
 const pt: LegalLocaleData = {
   dir: "ltr",
   backLabel: "ClinicSlotHub",
-  standDate: "Data: maio de 2026",
+  standDate: "Data: julho de 2026",
   agbTitle: "Termos e condições",
   datenschutzTitle: "Política de privacidade",
   impressumTitle: "Aviso legal",
@@ -446,7 +446,7 @@ const pt: LegalLocaleData = {
 const ru: LegalLocaleData = {
   dir: "ltr",
   backLabel: "ClinicSlotHub",
-  standDate: "Дата: май 2026",
+  standDate: "Дата: июль 2026",
   agbTitle: "Условия использования",
   datenschutzTitle: "Политика конфиденциальности",
   impressumTitle: "Правовая информация",
@@ -495,7 +495,7 @@ const ru: LegalLocaleData = {
 const zh: LegalLocaleData = {
   dir: "ltr",
   backLabel: "ClinicSlotHub",
-  standDate: "日期：2026年5月",
+  standDate: "日期：2026年7月",
   agbTitle: "服务条款",
   datenschutzTitle: "隐私政策",
   impressumTitle: "法律声明",
@@ -536,7 +536,7 @@ const zh: LegalLocaleData = {
 const hi: LegalLocaleData = {
   dir: "ltr",
   backLabel: "ClinicSlotHub",
-  standDate: "तारीख: मई 2026",
+  standDate: "तारीख: जुलाई 2026",
   agbTitle: "नियम और शर्तें",
   datenschutzTitle: "गोपनीयता नीति",
   impressumTitle: "कानूनी सूचना",

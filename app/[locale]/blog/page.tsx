@@ -30,9 +30,12 @@ export async function generateMetadata({
     metadataBase: new URL(APP_URL),
     alternates: {
       canonical: `/${locale}/blog`,
-      languages: Object.fromEntries(
-        locales.map((l) => [l, `/${l}/blog`]),
-      ) as Record<string, string>,
+      languages: {
+        ...(Object.fromEntries(
+          locales.map((l) => [l, `/${l}/blog`]),
+        ) as Record<string, string>),
+        "x-default": "/en/blog",
+      },
     },
     openGraph: {
       title,

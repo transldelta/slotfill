@@ -24,9 +24,9 @@ test("Public Register Blocked Guard: signUp deaktiviert + Register-Seite leitet 
   assert.ok(/ENABLE_PUBLIC_SIGNUP/.test(actions), "signUp ohne ENABLE_PUBLIC_SIGNUP-Sperre");
   assert.ok(/REGISTRATION_DISABLED/.test(actions), "signUp ohne REGISTRATION_DISABLED-Rückgabe");
   assert.ok(/process\.env\.ENABLE_PUBLIC_SIGNUP\s*!==\s*"true"/.test(actions), "Kill-Switch nicht fail-closed");
-  // Register-Seite hat kein Formular mehr, sondern leitet zur Kontaktseite.
+  // Register-Seite hat kein Formular mehr, sondern leitet zur Kontaktseite (EN = Default-Locale).
   const reg = read("app/auth/register/page.tsx");
-  assert.ok(/redirect\(\s*["']\/de\/kontakt["']\s*\)/.test(reg), "Register-Seite leitet nicht zu /de/kontakt um");
+  assert.ok(/redirect\(\s*["']\/en\/kontakt["']\s*\)/.test(reg), "Register-Seite leitet nicht zu /en/kontakt um");
   assert.equal(/signUp|<form|"use client"/.test(reg), false, "Register-Seite enthält noch ein Konto-Formular");
 });
 

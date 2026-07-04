@@ -33,9 +33,12 @@ export async function generateMetadata({
     metadataBase: new URL(CANONICAL_URL),
     alternates: {
       canonical: `/${locale}/kontakt`,
-      languages: Object.fromEntries(
-        locales.map((l) => [l, `/${l}/kontakt`]),
-      ) as Record<string, string>,
+      languages: {
+        ...(Object.fromEntries(
+          locales.map((l) => [l, `/${l}/kontakt`]),
+        ) as Record<string, string>),
+        "x-default": "/en/kontakt",
+      },
     },
     openGraph: {
       title,

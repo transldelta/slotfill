@@ -5,7 +5,8 @@ import { routing, RETIRED_LOCALES } from "@/i18n/routing";
 
 // ── next-intl Middleware für öffentliche Locale-Routen ────────────────────────
 // Erkennt /de, /en, /es usw., setzt Locale-Header für getRequestConfig,
-// und leitet / auf /de (oder Accept-Language-Ergebnis) um.
+// und leitet / (und unprefixte Pfade) auf /en um (Default-Locale, keine
+// Accept-Language-Detection – siehe i18n/routing.ts).
 // Keine Cookies für Sprachpräferenz.
 const handleIntl = createIntlMiddleware(routing);
 
@@ -125,9 +126,9 @@ export async function middleware(request: NextRequest) {
   }
 
   // 3. Alle anderen (öffentlichen) Pfade: next-intl Locale-Routing
-  //    - / → redirect zu /de oder passend zu Accept-Language-Header
+  //    - / → redirect zu /en (Default-Locale, keine Sprach-Detection)
   //    - /en, /de etc. → Locale-Header setzen und durchlassen
-  //    - /pricing → redirect zu /de/pricing oder /en/pricing
+  //    - /pricing → redirect zu /en/pricing (bestehende /de/…-URLs bleiben direkt erreichbar)
   //    Keine Cookies gesetzt.
   return handleIntl(request);
 }

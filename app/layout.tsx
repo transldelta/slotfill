@@ -3,9 +3,11 @@ import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
+// Default-Locale ist EN – Root-Metadata daher englisch (Anfrage-Sprache);
+// das [locale]-Layout liefert weiterhin lokalisierte Metadata pro Sprache.
 export const metadata: Metadata = {
-  title: "ClinicSlotHub – Klinik-Termine online anfragen",
-  description: "ClinicSlotHub ermöglicht Patient:innen, Termine bei Praxen und Kliniken online anzufragen. Die Einrichtung prüft jede Anfrage und bestätigt manuell – mehrsprachig und datenschutzbewusst.",
+  title: "ClinicSlotHub – Request clinic appointments online",
+  description: "ClinicSlotHub lets patients request clinic appointments online in a simple, clear flow. Clinics review each request and confirm manually — multilingual and privacy-conscious.",
 };
 
 // Setzt das Theme vor dem ersten Paint, um ein Aufblitzen zu vermeiden.
@@ -18,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="de" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>

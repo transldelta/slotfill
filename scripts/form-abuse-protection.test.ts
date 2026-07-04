@@ -112,5 +112,5 @@ test("No New Service / No HTML Injection Guard", () => {
 test("Register Still Locked Guard: keine öffentliche Registrierung", () => {
   const actions = read("app/auth/actions.ts");
   assert.ok(/ENABLE_PUBLIC_SIGNUP/.test(actions) && /REGISTRATION_DISABLED/.test(actions), "P1-Sperre der Registrierung fehlt");
-  assert.ok(/redirect\(\s*["']\/de\/kontakt["']\s*\)/.test(read("app/auth/register/page.tsx")), "Register-Seite leitet nicht um");
+  assert.ok(/redirect\(\s*["']\/en\/kontakt["']\s*\)/.test(read("app/auth/register/page.tsx")), "Register-Seite leitet nicht um");
 });

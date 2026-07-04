@@ -10,5 +10,5 @@ export const metadata: Metadata = {
 };
 
 export default function RegisterPage() {
-  redirect("/de/kontakt");
+  redirect("/en/kontakt");
 }

@@ -24,33 +24,33 @@ test('i18n: pt-BR,pt;q=0.8 → pt', () => {
 });
 
 // Stillgelegte Sprachen (zh, hi, bn, ru) sind nicht mehr öffentlich aktiv →
-// Accept-Language fällt auf die defaultLocale (de) zurück.
-test('i18n: zh-CN,zh;q=0.8 → de (stillgelegt)', () => {
-  assert.equal(detectLocaleFromAcceptLanguage('zh-CN,zh;q=0.8'), 'de');
+// Accept-Language fällt auf die defaultLocale (en) zurück.
+test('i18n: zh-CN,zh;q=0.8 → en (stillgelegt)', () => {
+  assert.equal(detectLocaleFromAcceptLanguage('zh-CN,zh;q=0.8'), 'en');
 });
 
-test('i18n: hi-IN,hi;q=0.8 → de (stillgelegt)', () => {
-  assert.equal(detectLocaleFromAcceptLanguage('hi-IN,hi;q=0.8'), 'de');
+test('i18n: hi-IN,hi;q=0.8 → en (stillgelegt)', () => {
+  assert.equal(detectLocaleFromAcceptLanguage('hi-IN,hi;q=0.8'), 'en');
 });
 
-test('i18n: bn-BD,bn;q=0.8 → de (stillgelegt)', () => {
-  assert.equal(detectLocaleFromAcceptLanguage('bn-BD,bn;q=0.8'), 'de');
+test('i18n: bn-BD,bn;q=0.8 → en (stillgelegt)', () => {
+  assert.equal(detectLocaleFromAcceptLanguage('bn-BD,bn;q=0.8'), 'en');
 });
 
-test('i18n: ru-RU,ru;q=0.8 → de (stillgelegt)', () => {
-  assert.equal(detectLocaleFromAcceptLanguage('ru-RU,ru;q=0.8'), 'de');
+test('i18n: ru-RU,ru;q=0.8 → en (stillgelegt)', () => {
+  assert.equal(detectLocaleFromAcceptLanguage('ru-RU,ru;q=0.8'), 'en');
 });
 
 test('i18n: fr-FR,fr;q=0.8 → fr', () => {
   assert.equal(detectLocaleFromAcceptLanguage('fr-FR,fr;q=0.8'), 'fr');
 });
 
-test('i18n: unbekannter Header → de (defaultLocale)', () => {
-  assert.equal(detectLocaleFromAcceptLanguage('xx-XX,xx;q=0.9'), 'de');
+test('i18n: unbekannter Header → en (defaultLocale)', () => {
+  assert.equal(detectLocaleFromAcceptLanguage('xx-XX,xx;q=0.9'), 'en');
 });
 
-test('i18n: null → de (defaultLocale)', () => {
-  assert.equal(detectLocaleFromAcceptLanguage(null), 'de');
+test('i18n: null → en (defaultLocale)', () => {
+  assert.equal(detectLocaleFromAcceptLanguage(null), 'en');
 });
 
 // ── Locale-Konfiguration ────────────────────────────────────────────────────
@@ -59,8 +59,8 @@ test('i18n: genau 5 öffentliche Locales', () => {
   assert.equal(locales.length, 5);
 });
 
-test('i18n: de ist defaultLocale', () => {
-  assert.equal(defaultLocale, 'de');
+test('i18n: en ist defaultLocale (Zielmärkte international, kein DE-Default)', () => {
+  assert.equal(defaultLocale, 'en');
 });
 
 test('i18n: nur EN/DE/FR/ES/PT sind aktiv', () => {

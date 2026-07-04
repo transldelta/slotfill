@@ -3,7 +3,7 @@ import { locales, defaultLocale, type Locale } from '@/i18n/routing';
 /**
  * Parst den Accept-Language-Header und gibt die beste passende Locale zurück.
  * Keine Cookies. Keine Client-Detektoren.
- * Fallback: defaultLocale (de).
+ * Fallback: defaultLocale (en).
  */
 export function detectLocaleFromAcceptLanguage(header: string | null): Locale {
   if (!header) return defaultLocale;

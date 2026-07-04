@@ -612,8 +612,8 @@ test("Provider/Patient Funnel Guard: Käuferweg (Preise/Zugang/Login) und Patien
   // Käuferweg führt zur geprüften Zugangsanfrage (Kontakt), kein Selfservice-Signup.
   assert.ok(home.includes('/kontakt'), "Praxiszugang-Anfrage zeigt nicht auf /kontakt");
   assert.equal(home.includes("/auth/register"), false, "Homepage verlinkt wieder auf /auth/register (Selfservice-Signup)");
-  // Register bleibt gesperrt (Redirect zu /de/kontakt) — kein erneutes Öffnen.
-  assert.ok(/redirect\(\s*["']\/de\/kontakt["']\s*\)/.test(read("app/auth/register/page.tsx")), "Register-Redirect zu /de/kontakt nicht mehr vorhanden");
+  // Register bleibt gesperrt (Redirect zu /en/kontakt, EN = Default-Locale) — kein erneutes Öffnen.
+  assert.ok(/redirect\(\s*["']\/en\/kontakt["']\s*\)/.test(read("app/auth/register/page.tsx")), "Register-Redirect zu /en/kontakt nicht mehr vorhanden");
 });
 
 // ─── 35. Hero Funnel Polish Guard ─────────────────────────────────────────────

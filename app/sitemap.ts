@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase";
 import { locales } from "@/i18n/routing";
 import { CANONICAL_URL } from "@/lib/brand";
 import { STATIC_BLOG_POSTS } from "@/lib/blog-data";
+import { getLocalizedPost } from "@/lib/blog-translations";
 
 const baseUrl = CANONICAL_URL;
 
@@ -30,6 +31,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Blog-Beiträge: DB-Slugs + statische Fallback-Slugs (dedupliziert)
   let blogSlugs: string[] = [...STATIC_SLUGS];
+  const dbSlugs = new Set<string>();
   try {
     const admin = createClient();
     const { data } = await admin
@@ -37,6 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .select("slug, updated_at")
       .not("published_at", "is", null);
     for (const post of data ?? []) {
+      dbSlugs.add(post.slug);
       if (!blogSlugs.includes(post.slug)) {
         blogSlugs.push(post.slug);
       }
@@ -47,6 +50,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   for (const locale of locales) {
     for (const slug of blogSlugs) {
+      // Nur URLs aufnehmen, die tatsächlich 200 liefern: DB-Artikel werden in
+      // jeder Locale ausgeliefert, statische Artikel nur in Locales mit
+      // vorhandener Übersetzung – sonst rendert die Route ein 404.
+      if (!dbSlugs.has(slug) && getLocalizedPost(slug, locale) === null) {
+        continue;
+      }
       entries.push({
         url: `${baseUrl}/${locale}/blog/${slug}`,
         lastModified: new Date(),

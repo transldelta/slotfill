@@ -71,6 +71,17 @@ export async function generateMetadata({
   const title = `${post.title} – ClinicSlotHub`;
   const description = post.excerpt ?? "Praxistipps von ClinicSlotHub.";
 
+  // hreflang nur auf Sprachversionen zeigen, die tatsächlich existieren –
+  // statische Artikel sind nicht in jeder Locale übersetzt (sonst 404-Ziele).
+  // Reine DB-Artikel (keine statische Übersetzung) existieren in allen Locales.
+  const staticLocales = locales.filter(
+    (l) => getLocalizedPost(post.slug, l) !== null,
+  );
+  const availableLocales = staticLocales.length > 0 ? staticLocales : locales;
+  const xDefaultLocale = availableLocales.includes("en")
+    ? "en"
+    : availableLocales[0];
+
   return {
     title,
     description,
@@ -79,9 +90,9 @@ export async function generateMetadata({
       canonical: `/${locale}/blog/${post.slug}`,
       languages: {
         ...(Object.fromEntries(
-          locales.map((l) => [l, `/${l}/blog/${post.slug}`]),
+          availableLocales.map((l) => [l, `/${l}/blog/${post.slug}`]),
         ) as Record<string, string>),
-        "x-default": `/en/blog/${post.slug}`,
+        "x-default": `/${xDefaultLocale}/blog/${post.slug}`,
       },
     },
     openGraph: {

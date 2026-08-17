@@ -13,6 +13,7 @@ import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { locales } from "../i18n/routing";
+import { PAGE_SEO, type SeoPageKey } from "../lib/page-seo";
 
 const ROOT = process.cwd();
 const read = (p: string) => readFileSync(join(ROOT, p), "utf8");
@@ -22,6 +23,8 @@ const HOME = "app/[locale]/page.tsx";
 const PRICING_LAYOUT = "app/[locale]/pricing/layout.tsx";
 const KONTAKT = "app/[locale]/kontakt/page.tsx";
 const ROOT_LAYOUT = "app/[locale]/layout.tsx";
+const FEEDBACK_LAYOUT = "app/[locale]/feedback/layout.tsx";
+const BOOKING = "app/[locale]/termin-buchen/page.tsx";
 
 // ─── 1. SEO Foundation Guard ──────────────────────────────────────────────────
 
@@ -29,7 +32,7 @@ test("SEO Foundation Guard: robots + sitemap + lokalisierte Metadaten vorhanden"
   assert.ok(has("app/robots.ts"), "app/robots.ts fehlt");
   assert.ok(has("app/sitemap.ts"), "app/sitemap.ts fehlt");
   // Kernseiten liefern eigene Metadaten (Title/Description).
-  for (const f of [HOME, PRICING_LAYOUT, KONTAKT]) {
+  for (const f of [HOME, PRICING_LAYOUT, KONTAKT, FEEDBACK_LAYOUT, BOOKING]) {
     const src = read(f);
     assert.ok(/generateMetadata/.test(src), `${f}: kein generateMetadata`);
     assert.ok(src.includes("title") && src.includes("description"), `${f}: Title/Description fehlt`);
@@ -90,4 +93,48 @@ test("Pricing SEO Consistency Guard: Title + ab/from-Preise + Geldlogik je Local
   assert.ok(msg("de").landing.pricingMoneyNote.includes("Patienten zahlen nicht auf dieser Website"), "DE Geldlogik fehlt");
   assert.ok(/Prüfung/.test(msg("de").landing.pricingMoneyNote), "DE 'nach Prüfung' fehlt");
   assert.ok(msg("en").landing.pricingMoneyNote.toLowerCase().includes("patients do not pay"), "EN Geldlogik fehlt");
+});
+
+// ─── 5. Duplicate-Metadata Guard ──────────────────────────────────────────────
+//
+// Ursache der Search-Console-Meldung „Duplikat – vom Nutzer nicht als kanonisch
+// festgelegt" auf /feedback und /termin-buchen: beide Seiten hatten keine
+// eigenen Metadaten und erbten Title/Description aus dem [locale]-Layout. Der
+// Guard sichert, dass jede gepflegte Seite je Locale eigene, untereinander und
+// gegenüber dem Layout-Fallback verschiedene Texte behält.
+
+test("Duplicate-Metadata Guard: /feedback und /termin-buchen mit eigenem Title je Locale", () => {
+  const pages = Object.keys(PAGE_SEO) as SeoPageKey[];
+  const layoutSrc = read(ROOT_LAYOUT);
+  const seen = new Map<string, string>();
+
+  for (const page of pages) {
+    for (const loc of locales) {
+      const entry = PAGE_SEO[page][loc];
+      assert.ok(entry, `${page}/${loc}: SEO-Text fehlt`);
+
+      // Sinnvolle Länge für Suchergebnis-Snippets.
+      assert.ok(entry.title.length >= 15 && entry.title.length <= 65, `${page}/${loc}: Title-Länge ${entry.title.length} außerhalb 15–65`);
+      assert.ok(entry.description.length >= 80 && entry.description.length <= 180, `${page}/${loc}: Description-Länge ${entry.description.length} außerhalb 80–180`);
+
+      // Nicht identisch mit dem Layout-Fallback (der eigentliche Duplikat-Fall).
+      assert.equal(layoutSrc.includes(`title: "${entry.title}"`), false, `${page}/${loc}: Title identisch mit Layout-Fallback`);
+      assert.equal(layoutSrc.includes(entry.description), false, `${page}/${loc}: Description identisch mit Layout-Fallback`);
+
+      // Über alle Seiten und Sprachen paarweise verschieden.
+      for (const [text, owner] of [[entry.title, `${page}/${loc} (Title)`], [entry.description, `${page}/${loc} (Description)`]] as const) {
+        const prev = seen.get(text);
+        assert.equal(prev, undefined, `${owner}: Text identisch mit ${prev}`);
+        seen.set(text, owner);
+      }
+
+      // Markenschreibweise wie im restlichen Metadaten-Code.
+      assert.equal(/\bSlotfill\b/.test(entry.title + entry.description), false, `${page}/${loc}: altes 'Slotfill'`);
+      assert.equal((entry.title + entry.description).includes("ClinicsLotHub"), false, `${page}/${loc}: falsche Schreibweise`);
+    }
+  }
+
+  // Die Seiten lesen die Texte auch wirklich aus der Einzelquelle.
+  assert.ok(read(FEEDBACK_LAYOUT).includes('getPageSeo("feedback"'), "Feedback-Layout nutzt getPageSeo nicht");
+  assert.ok(read(BOOKING).includes('getPageSeo("booking"'), "Termin-buchen nutzt getPageSeo nicht");
 });

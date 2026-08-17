@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { locales } from "@/i18n/routing";
-import { CANONICAL_URL } from "@/lib/brand";
+import { CANONICAL_URL, PUBLIC_BRAND_NAME } from "@/lib/brand";
+import { getPageSeo } from "@/lib/page-seo";
 import TerminBuchenClient from "./TerminBuchenClient";
 
 // Server-Wrapper: erzwingt dynamisches Rendern (kein statisches SSG-Artefakt).
@@ -11,16 +12,24 @@ import TerminBuchenClient from "./TerminBuchenClient";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-// Canonical + hreflang, damit die fünf Sprachvarianten in der Search Console
-// nicht als „Duplikat ohne kanonische Seite" zusammenfallen (gleiches Muster
-// wie /kontakt und /pricing).
+// Title/Description + Canonical + hreflang, damit die fünf Sprachvarianten in
+// der Search Console nicht als „Duplikat ohne kanonische Seite" zusammenfallen
+// (gleiches Muster wie /kontakt und /pricing). Ohne eigenen Title/Description
+// erbte die Seite die Werte aus dem [locale]-Layout und war je Sprache
+// textgleich mit /feedback und der Startseite – die Duplikat-Meldung blieb
+// dadurch trotz korrekter Canonicals bestehen. Die seitenspezifischen Texte
+// stehen in lib/page-seo.ts.
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  const { title, description } = getPageSeo("booking", locale);
+
   return {
+    title,
+    description,
     metadataBase: new URL(CANONICAL_URL),
     alternates: {
       canonical: `/${locale}/termin-buchen`,
@@ -30,6 +39,13 @@ export async function generateMetadata({
         ) as Record<string, string>),
         "x-default": "/en/termin-buchen",
       },
+    },
+    openGraph: {
+      title,
+      description,
+      url: `/${locale}/termin-buchen`,
+      siteName: PUBLIC_BRAND_NAME,
+      type: "website",
     },
   };
 }
